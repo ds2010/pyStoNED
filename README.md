@@ -14,7 +14,7 @@
 - [ ] Multiplicative model
 - [ ] Z-variables
 - [ ] Convex quantile regression (`CQR`)
-- [ ] Convex expetile regression (`CER`)
+- [ ] Convex expectile regression (`CER`)
 - [ ] Isotonic CNLS (`ICNLS`)
 - [ ] Isotonic convex quantile regression (`ICQR`)
-- [ ] Isotonic convex expetile regression (`ICER`)
+- [ ] Isotonic convex expectile regression (`ICER`)
