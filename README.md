@@ -10,7 +10,7 @@
 - [ ] Additive model
    - [x] `CNLS`/`StoNED` (variables returns to scale (`VRS`) and constant returns to scale (`CRS`) models)
    - [x]  Residuals decomposition by method of moments(`MoM`) and quasi-likelihood estimation(`QLE`)
-   - [ ]  Residuals decomposition by Nonparametric kernel deconvolution (`NKD`)
+   - [ ]  Residuals decomposition by nonparametric kernel deconvolution (`NKD`)
 - [ ] Multiplicative model
 - [ ] Z-variables
 - [ ] Convex quantile regression (`CQR`)
