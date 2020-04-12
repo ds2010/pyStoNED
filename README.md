@@ -7,10 +7,13 @@
  + [Sheng Dai](https://www.researchgate.net/profile/Sheng_Dai8), Ph.D. candidate, Aalto University School of Business.
 
 # To do list
-- [x] `CNLS` (variables returns to scale (VRS) and constant returns to scale (CRS) models)
-- [x] `StoNED` model (residuals decomposition by method of moments(`MoM`) and quasi-likelihood estimation(`QLE`))
-- [ ] 
-- [ ] incomplete
-- [ ] completed
-
-# More introductions
+- [ ] Additive model
+   - [x] `CNLS`/`StoNED` (variables returns to scale (`VRS`) and constant returns to scale (`CRS`) models)
+   - [x]  Residuals decomposition by method of moments(`MoM`) and quasi-likelihood estimation(`QLE`)
+   - [ ]  Residuals decomposition by Nonparametric kernel deconvolution (`NKD`)
+- [ ] Multiplicative model
+- [ ] Convex quantile regression (`CQR`)
+- [ ] Convex expetile regression (`CER`)
+- [ ] Isotonic CNLS (`ICNLS`)
+- [ ] Isotonic convex quantile regression (`ICQR`)
+- [ ] Isotonic convex expetile regression (`ICER`)
