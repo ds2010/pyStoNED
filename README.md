@@ -12,6 +12,7 @@
    - [x]  Residuals decomposition by method of moments(`MoM`) and quasi-likelihood estimation(`QLE`)
    - [ ]  Residuals decomposition by Nonparametric kernel deconvolution (`NKD`)
 - [ ] Multiplicative model
+- [ ] Z-variables
 - [ ] Convex quantile regression (`CQR`)
 - [ ] Convex expetile regression (`CER`)
 - [ ] Isotonic CNLS (`ICNLS`)
