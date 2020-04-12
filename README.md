@@ -1,2 +1,2 @@
 # StoNED-Python
-Python codes for Stochastic nonparametric envelopment of data (StoNED) estiamtor
+Python codes for convex nonparametric least square (CNLS) and stochastic nonparametric envelopment of data (StoNED) models
