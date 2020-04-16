@@ -18,7 +18,7 @@ At present, we publish some functions and tutorials that can help users to calcu
    - [x] `CNLS`/`StoNED` (variables returns to scale (`VRS`) and constant returns to scale (`CRS`) models)
    - [x]  Residuals decomposition by method of moments(`MoM`) and quasi-likelihood estimation(`QLE`)
    - [ ]  Residuals decomposition by nonparametric kernel deconvolution (`NKD`)
-- [ ] Z-variables
+- [ ] `StoNEZD` (contextual variables)
 - [ ] Convex quantile regression (`CQR`)
 - [ ] Convex expectile regression (`CER`)
 - [ ] Isotonic CNLS (`ICNLS`)
