@@ -15,7 +15,8 @@ At present, we publish some functions and tutorials that can help users to calcu
    - [x] constant returns to scale (`CRS`) model
    - [x] Additive composite error term
    - [x] Multiplicative composite error term
-   - [x] Residuals decomposition by method of moments(`MoM`) and quasi-likelihood estimation(`QLE`)
+   - [x] Residuals decomposition by method of moments(`MoM`) 
+   - [x] Residuals decomposition by quasi-likelihood estimation(`QLE`)
    - [ ] Residuals decomposition by nonparametric kernel deconvolution (`NKD`)
 - [ ] `StoNEZD` (contextual variables)
 - [x] Convex quantile regression (`CQR`)
