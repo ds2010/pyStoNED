@@ -24,4 +24,4 @@ At present, we publish some functions and tutorials that can help users to calcu
 - [ ] Isotonic CNLS (`ICNLS`)
 - [ ] Isotonic convex quantile regression (`ICQR`)
 - [ ] Isotonic convex expectile regression (`ICER`)
-- [ ] Corrected convex Nonparametric Least Squares (C$^2$NLS)
+- [ ] Corrected convex Nonparametric Least Squares (C<sup>2</sup>NLS)
