@@ -10,18 +10,16 @@ At present, we publish some functions and tutorials that can help users to calcu
  + [Sheng Dai](https://www.researchgate.net/profile/Sheng_Dai8), Ph.D. candidate, Aalto University School of Business.
 
 # To do list
-- [ ] Additive model
+- [ ] CNLS/StoNED
    - [x] `CNLS`/`StoNED` (variables returns to scale (`VRS`) and constant returns to scale (`CRS`) models)
-   - [x]  Residuals decomposition by method of moments(`MoM`) and quasi-likelihood estimation(`QLE`)
-   - [ ]  Residuals decomposition by nonparametric kernel deconvolution (`NKD`)
-- [ ] Multiplicative model
-   - [x] `CNLS`/`StoNED` (variables returns to scale (`VRS`) and constant returns to scale (`CRS`) models)
-   - [x]  Residuals decomposition by method of moments(`MoM`) and quasi-likelihood estimation(`QLE`)
-   - [ ]  Residuals decomposition by nonparametric kernel deconvolution (`NKD`)
+   - [x] Additive composite error term
+   - [x] Multiplicative composite error term
+   - [x] Residuals decomposition by method of moments(`MoM`) and quasi-likelihood estimation(`QLE`)
+   - [ ] Residuals decomposition by nonparametric kernel deconvolution (`NKD`)
 - [ ] `StoNEZD` (contextual variables)
 - [x] Convex quantile regression (`CQR`)
 - [x] Convex expectile regression (`CER`)
 - [ ] Isotonic CNLS (`ICNLS`)
 - [ ] Isotonic convex quantile regression (`ICQR`)
 - [ ] Isotonic convex expectile regression (`ICER`)
-- [ ] Corrected convex Nonparametric Least Squares (C<sup>2</sup>NLS)
+- [ ] Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
