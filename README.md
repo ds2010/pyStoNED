@@ -10,7 +10,7 @@ At present, we publish some functions and tutorials that can help users to calcu
  + [Sheng Dai](https://www.researchgate.net/profile/Sheng_Dai8), Ph.D. candidate, Aalto University School of Business.
 
 # To do list
-- [ ]  `CNLS`/`StoNED`
+- [x]  `CNLS`/`StoNED`
    - [x] variables returns to scale (`VRS`) model
    - [x] constant returns to scale (`CRS`) model
    - [x] Additive composite error term
@@ -18,7 +18,7 @@ At present, we publish some functions and tutorials that can help users to calcu
    - [x] Residuals decomposition by method of moments(`MoM`) 
    - [x] Residuals decomposition by quasi-likelihood estimation(`QLE`)
    - [ ] Residuals decomposition by nonparametric kernel deconvolution (`NKD`)
-- [ ] `StoNEZD` (contextual variables)
+- [x] `StoNEZD` (contextual variables)
 - [x] Convex quantile regression (`CQR`)
 - [x] Convex expectile regression (`CER`)
 - [ ] Isotonic CNLS (`ICNLS`)
