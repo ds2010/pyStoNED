@@ -1,14 +1,14 @@
 """
-@Title   : Convex Nonparametric Least Square (CNLS)
+@Title   : Convex Nonparametric Least Square (CNLS) with z-variable
 @Author  : Sheng Dai, Timo Kuosmanen
 @Mail    : sheng.dai@aalto.fi (S. Dai); timo.kuosmanen@aalto.fi (T. Kuosmanen)  
-@Time    : 2020-04-16
+@Time    : 2020-04-18
 """
 
 # Import of the pyomo module
 from pyomo.environ import *
 
-def cnls(y, x, crt, func, pps):
+def cnlsz(y, x, z, crt, func, pps):
      # crt     = "addi" : Additive composite error term
      #         = "mult" : Multiplicative composite error term
      # func    = "prod" : production frontier
@@ -19,7 +19,7 @@ def cnls(y, x, crt, func, pps):
     # number of DMUS
     n = len(y)
      
-    # number of inputs
+    # number of inputs   
     if type(x[0]) == int or type(x[0]) == float:
         m = 1
     else:
@@ -40,6 +40,7 @@ def cnls(y, x, crt, func, pps):
     model.b = Var(model.i, model.j, bounds=(0.0,None), doc='beta')
     model.e = Var(model.i, doc='residuals')
     model.f = Var(model.i, bounds=(0.0,None), doc='estimated frontier')
+    model.d = Var()
     
     ###Additive composite error term###
     if (crt == "addi"):
@@ -55,7 +56,7 @@ def cnls(y, x, crt, func, pps):
                 #Constraints
                 def reg_rule(model, i):
                     arow   = x[i] 
-                    return y[i] == model.a[i] + sum(model.b[i, j]*arow[j] for j in model.j) + model.e[i]
+                    return  y[i] == model.a[i] + sum(model.b[i, j]*arow[j] for j in model.j) + z[i]*model.d + model.e[i]
                 model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
                     
                 def concav_rule(model, i, h):
@@ -67,7 +68,7 @@ def cnls(y, x, crt, func, pps):
                 #Constraints
                 def reg_rule(model, i):
                     arow   = x[i] 
-                    return y[i] == sum(model.b[i, j]*arow[j] for j in model.j) + model.e[i] 
+                    return   y[i] == sum(model.b[i, j]*arow[j] for j in model.j) + z[i]*model.d+ model.e[i]
                 model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
                     
                 def concav_rule(model, i, h):
@@ -87,7 +88,7 @@ def cnls(y, x, crt, func, pps):
                 #Constraints
                 def reg_rule(model, i):
                     arow   = x[i] 
-                    return y[i] == model.a[i] + sum(model.b[i, j]*arow[j] for j in model.j) + model.e[i] 
+                    return  y[i] == model.a[i] + sum(model.b[i, j]*arow[j] for j in model.j) + z[i]*model.d + model.e[i]
                 model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
                     
                 def concav_rule(model, i, h):
@@ -99,7 +100,7 @@ def cnls(y, x, crt, func, pps):
                 #Constraints
                 def reg_rule(model, i):
                     arow   = x[i] 
-                    return y[i] == sum(model.b[i, j]*arow[j] for j in model.j) + model.e[i]
+                    return y[i] == sum(model.b[i, j]*arow[j] for j in model.j) + z[i]*model.d + model.e[i]
                 model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
                     
                 def concav_rule(model, i, h):
@@ -120,7 +121,7 @@ def cnls(y, x, crt, func, pps):
             if (pps == "crs"):
                 #Constraints
                 def qreg_rule(model, i):
-                    return log(y[i]) == log(model.f[i] + 1) + model.e[i]
+                    return log(y[i]) == log(model.f[i] + 1) + z[i]*model.d + model.e[i]
                 model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression')
 
                 def qlog_rule(model, i):
@@ -144,7 +145,7 @@ def cnls(y, x, crt, func, pps):
             if (pps == "crs"):
                 #Constraints
                 def qreg_rule(model, i):
-                    return log(y[i]) == log(model.f[i] + 1) + model.e[i]
+                    return log(y[i]) == log(model.f[i] + 1) + z[i]*model.d + model.e[i]
                 model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression')
 
                 def qlog_rule(model, i):
