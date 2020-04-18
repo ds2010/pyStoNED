@@ -22,7 +22,10 @@ def cqer(y, x, tau, crt, func, pps, tile):
     n = len(y)
      
     # number of inputs
-    m = len(x[0])
+    if type(x[0]) == int or type(x[0]) == float:
+        m = 1
+    else:
+        m = len(x[0])
     
     #Creation of a Concrete Model
     model = ConcreteModel()
@@ -58,12 +61,11 @@ def cqer(y, x, tau, crt, func, pps, tile):
                     return tau*sum(model.ep[i]*model.ep[i] for i in model.i)+(1-tau)*sum(model.em[i]*model.em[i] for i in model.i)
                 model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function') 
 
-
             if (pps == "vrs"):
                 #Constraints
                 def reg_rule(model, i):
                     arow   = x[i] 
-                    return  model.a[i] + sum(model.b[i, j]*arow[j] for j in model.j) + model.ep[i] - model.em[i] == y[i]
+                    return  y[i] == model.a[i] + sum(model.b[i, j]*arow[j] for j in model.j) + model.ep[i] - model.em[i]
                 model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
                     
                 def concav_rule(model, i, h):
@@ -75,7 +77,7 @@ def cqer(y, x, tau, crt, func, pps, tile):
                 #Constraints
                 def reg_rule(model, i):
                     arow   = x[i] 
-                    return  sum(model.b[i, j]*arow[j] for j in model.j) + model.ep[i] - model.em[i] == y[i]
+                    return y[i] == sum(model.b[i, j]*arow[j] for j in model.j) + model.ep[i] - model.em[i]
                 model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
                     
                 def concav_rule(model, i, h):
@@ -102,7 +104,7 @@ def cqer(y, x, tau, crt, func, pps, tile):
                 #Constraints
                 def reg_rule(model, i):
                     arow   = x[i] 
-                    return  model.a[i] + sum(model.b[i, j]*arow[j] for j in model.j) + model.ep[i] - model.em[i] == y[i]
+                    return  y[i] == model.a[i] + sum(model.b[i, j]*arow[j] for j in model.j) + model.ep[i] - model.em[i]
                 model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
                     
                 def concav_rule(model, i, h):
@@ -114,7 +116,7 @@ def cqer(y, x, tau, crt, func, pps, tile):
                 #Constraints
                 def reg_rule(model, i):
                     arow   = x[i] 
-                    return  sum(model.b[i, j]*arow[j] for j in model.j) + model.ep[i] - model.em[i] == y[i]
+                    return y[i] == sum(model.b[i, j]*arow[j] for j in model.j) + model.ep[i] - model.em[i]
                 model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
                     
                 def concav_rule(model, i, h):
