@@ -29,3 +29,4 @@ At present, we publish some functions and tutorials that can help users to calcu
 - [ ] Representation of `StoNED`-related frontier/quantile function
    - [ ] one input and one output
    - [ ] two inputs and one output 
+   - [ ] three inputs and one output 
