@@ -27,3 +27,5 @@ At present, we publish some functions and tutorials that can help users to calcu
 - [x] Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
 - [ ] `StoNED` with multiple outputs
 - [ ] Representation of `StoNED`-related frontier/quantile function
+   - [ ] one input and one output
+   - [ ] two inputs and one output 
