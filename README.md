@@ -21,7 +21,7 @@ At present, we publish some functions and tutorials that can help users to calcu
 - [x] `StoNEZD` (contextual variables)
 - [x] Convex quantile regression (`CQR`)
 - [x] Convex expectile regression (`CER`)
-- [ ] Isotonic CNLS (`ICNLS`)
+- [x] Isotonic CNLS (`ICNLS`)
 - [ ] Isotonic convex quantile regression (`ICQR`)
 - [ ] Isotonic convex expectile regression (`ICER`)
 - [x] Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
