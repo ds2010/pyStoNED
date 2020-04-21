@@ -6,12 +6,14 @@
 """
 
 import numpy as np
-def  ccnls2(eps, alpha):
 
-     # CCNLS efficiency estimator :
-     eps_ccnls = eps - np.amax(eps)
-         
-     # adjusted CCNLS's intercept alpha
-     alpha_ccnls = alpha + np.amax(eps)
-         
-     return (eps_ccnls, alpha_ccnls)
+
+def ccnls2(eps, alpha):
+
+    # CCNLS efficiency estimator :
+    eps_ccnls = eps - np.amax(eps)
+
+    # adjusted CCNLS's intercept alpha
+    alpha_ccnls = alpha + np.amax(eps)
+
+    return eps_ccnls, alpha_ccnls
