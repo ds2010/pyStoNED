@@ -10,10 +10,7 @@ We have published a beta version [`pystoned`](https://pypi.org/project/pystoned/
 
     pip install pystoned
 
- 
-
-
-
+Some examples can be seen in [Tutorials](https://github.com/ds2010/StoNED-Python/tree/master/Tutorials). More detailed technical reports are currently under development.
 
 # Authors
 
