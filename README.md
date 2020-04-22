@@ -14,8 +14,8 @@ We have published a beta version [`pystoned`](https://pypi.org/project/pystoned/
 
 Some tutorials are provided as follows, and more detailed technical reports are currently under development.
   + CNLS
-  + Stochastic Nonparametric Envelopment of Data (`StoNED`)
-
+  + [Stochastic Nonparametric Envelopment of Data (`StoNED`)](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/StoNED.ipynb)
+  + [Convex quantile regession and Convex expectile regression](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/CQR_CER.ipynb)
 
 
 # Authors
