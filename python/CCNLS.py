@@ -50,6 +50,8 @@ def ccnls(y, x):
 
     def concav_rule(model, i, h):
         brow = x[i]
+        if i == h:
+            return Constraint.Skip
         return model.a[i] + sum(model.b[i, j] * brow[j] for j in model.j) <= model.a[h] + sum(
             model.b[h, j] * brow[j] for j in model.j)
 
