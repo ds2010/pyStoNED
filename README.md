@@ -12,12 +12,16 @@ We have published a beta version [`pystoned`](https://pypi.org/project/pystoned/
 
 # [Tutorials](https://github.com/ds2010/StoNED-Python/tree/master/Tutorials)
 
-Some tutorials are provided as follows, and more detailed technical reports are currently under development.
+`StoEND`-related tutorials are provided as follows, and more detailed technical reports are currently under development.
   + CNLS
   + [Stochastic Nonparametric Envelopment of Data (`StoNED`)](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/StoNED.ipynb)
-  + [Convex quantile regession and Convex expectile regression](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/CQR_CER.ipynb)
+  + [Convex quantile regession and Convex expectile regression (`CQR` and `CER`)](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/CQR_CER.ipynb)
 
-
+Additional tutorials:
+  + [Rewrite GAMS codes in Python](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/gams2python.ipynb)
+  + [A ConcreteModel for CNLS estimation](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/ConcreteModel.ipynb)
+  
+  
 # Authors
 
  + [Timo Kuosmanen](https://people.aalto.fi/timo.kuosmanen), Professor, Aalto University School of Business.
