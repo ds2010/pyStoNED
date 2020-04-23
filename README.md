@@ -31,6 +31,8 @@ Additional tutorials:
 
 # To do list
 - [x]  `CNLS`/`StoNED`
+   - [x] Production function estimation
+   - [x] Cost function estimation
    - [x] variables returns to scale (`VRS`) model
    - [x] constant returns to scale (`CRS`) model
    - [x] Additive composite error term
