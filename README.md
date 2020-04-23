@@ -4,7 +4,7 @@
 
 # Installation
 
-We have published a beta version [`pystoned`](https://pypi.org/project/pystoned/) package on PyPi. Please feel free to download and test it. We welcome any bug reports and feedback.
+We have published a beta version [`pystoned`](https://pypi.org/project/pystoned/) package on PyPI. Please feel free to download and test it. We welcome any bug reports and feedback.
 
 #### PyPI [![PyPI version](https://img.shields.io/pypi/v/pystoned.svg?maxAge=3600)](https://pypi.org/project/pystoned/) [![PyPI downloads](https://img.shields.io/pypi/dm/pystoned.svg?maxAge=21600)](https://pypistats.org/packages/pystoned)
 
