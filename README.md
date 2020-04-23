@@ -42,7 +42,7 @@ Additional tutorials:
 - [x] Isotonic CNLS (`ICNLS`)
 - [ ] Isotonic convex quantile regression (`ICQR`)
 - [ ] Isotonic convex expectile regression (`ICER`)
-- [ ] Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
+- [x] Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
 - [ ] `StoNED` with multiple outputs
 - [ ] Representation of `StoNED`-related frontier/quantile function
    - [ ] one input and one output
