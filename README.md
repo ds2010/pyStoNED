@@ -40,7 +40,7 @@ Additional tutorials:
 - [x] Convex quantile regression (`CQR`)
 - [x] Convex expectile regression (`CER`)
 - [x] Isotonic CNLS (`ICNLS`)
-- [x] Isotonic convex quantile regression (`ICQR`)
+- [ ] Isotonic convex quantile regression (`ICQR`)
 - [ ] Isotonic convex expectile regression (`ICER`)
 - [ ] Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
 - [ ] `StoNED` with multiple outputs
