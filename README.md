@@ -47,7 +47,7 @@ Additional tutorials:
 - [ ] Isotonic convex quantile regression (`ICQR`)
 - [ ] Isotonic convex expectile regression (`ICER`)
 - [x] Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
-- [ ] `StoNED` with multiple outputs (DDF formulation)
+- [x] `StoNED` with multiple outputs (DDF formulation)
 - [ ] Representation of `StoNED`-related frontier/quantile function
    - [ ] one input and one output
    - [ ] two inputs and one output 
