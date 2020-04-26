@@ -1,5 +1,15 @@
 # Change log
 
+## [0.2.2] - 2020-04-26
+
+### Added
+- `cnlsddf()`
+- `directV()`
+
+### Changed
+- Update functions: `cnls()`, `ceqr()`, `cnlsz()`, `icnls()`
+
+
 ## [0.2.1] - 2020-04-23
 
 ### Added
