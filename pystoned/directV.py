@@ -1,5 +1,5 @@
 """
-@title  : creat directional vectors (g_x, g_b, g_y)
+@title  : create directional vectors (g_x, g_b, g_y)
 @Author : Sheng Dai, Timo Kuosmanen
 @Mail   : sheng.dai@aalto.fi (S. Dai); timo.kuosmanen@aalto.fi (T. Kuosmanen)
 @Date   : 2020-04-25

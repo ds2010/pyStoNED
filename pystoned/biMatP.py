@@ -1,5 +1,5 @@
 """
-@title  : creat binary matrix P (dominance relation)
+@title  : create binary matrix P (dominance relation)
 @Author : Sheng Dai, Timo Kuosmanen
 @Mail   : sheng.dai@aalto.fi (S. Dai); timo.kuosmanen@aalto.fi (T. Kuosmanen)
 @Date   : 2020-04-21
