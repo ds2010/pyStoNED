@@ -49,11 +49,11 @@ def ccnls(y, x):
     model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
     def concav_rule(model, i, h):
-        brow = x[i]
+        arow = x[i]
         if i == h:
             return Constraint.Skip
-        return model.a[i] + sum(model.b[i, j] * brow[j] for j in model.j) <= model.a[h] + sum(
-            model.b[h, j] * brow[j] for j in model.j)
+        return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) <= model.a[h] + sum(
+            model.b[h, j] * arow[j] for j in model.j)
 
     model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
 

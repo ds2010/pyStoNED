@@ -7,6 +7,8 @@ from . import CCNLS
 from . import CCNLS2
 from . import biMatP
 from . import ICNLS
+from . import CNLSDDF
+from . import directV
 
 __all__ = [
     'CNLS',
@@ -17,5 +19,7 @@ __all__ = [
     'CCNLS',
     'CCNLS2',
     'biMatP',
-    'ICNLS'
+    'ICNLS',
+    'CNLSDDF',
+    'directV'
 ]
