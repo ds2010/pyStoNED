@@ -1,5 +1,5 @@
 """
-@Title   : Convex Nonparametric Least Square with multiple Outputs (without undesirable outputs)(DDF formulation)
+@Title   : Convex Nonparametric Least Square with multiple Outputs (without undesirable outputs and DDF formulation)
 @Author  : Sheng Dai, Timo Kuosmanen
 @Mail    : sheng.dai@aalto.fi (S. Dai); timo.kuosmanen@aalto.fi (T. Kuosmanen)
 @Date    : 2020-04-25
