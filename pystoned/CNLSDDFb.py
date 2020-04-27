@@ -1,5 +1,5 @@
 """
-@Title   : Convex Nonparametric Least Square with multiple Outputs (without undesirable outputs)(DDF formulation)
+@Title   : Convex Nonparametric Least Square with multiple Outputs (with undesirable outputs)(DDF formulation)
 @Author  : Sheng Dai, Timo Kuosmanen
 @Mail    : sheng.dai@aalto.fi (S. Dai); timo.kuosmanen@aalto.fi (T. Kuosmanen)
 @Date    : 2020-04-25
@@ -7,11 +7,11 @@
 
 # Import of the pyomo module
 from pyomo.environ import *
-from . import directV
+from . import directVb
 import numpy as np
 
 
-def cnlsddf(y, x, func, gx, gy):
+def cnlsddfb(y, x, b, func, gx, gb, gy):
     # func    = "prod" : production frontier
     #         = "cost" : cost frontier
 
@@ -30,13 +30,20 @@ def cnlsddf(y, x, func, gx, gy):
     else:
         p = len(y[0])
 
+    # number of undesirable outputs
+    if type(b[0]) == int or type(b[0]) == float:
+        q = 1
+    else:
+        q = len(b[0])
+
     # identity matrix
     id = np.repeat(1, n)
     id = id.tolist()
 
     # directional vectors
-    gx = directV.dv(gx, gy, n, m, p)[0]
-    gy = directV.dv(gx, gy, n, m, p)[2]
+    gx = directVb.dvb(gx, gb, gy, n, m, q, p)[0]
+    gb = directVb.dvb(gx, gb, gy, n, m, q, p)[1]
+    gy = directVb.dvb(gx, gb, gy, n, m, q, p)[2]
 
     # Creation of a Concrete Model
     model = ConcreteModel()
@@ -54,10 +61,11 @@ def cnlsddf(y, x, func, gx, gy):
     model.e = Var(model.i, doc='residuals')
     model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
-    if p == 1:
+    if q == 1 and p == 1:
 
         # Variables
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
+        model.d = Var(model.i, bounds=(0.0, None), doc='delta')
 
         # Objective function
         def objective_rule(model):
@@ -68,13 +76,14 @@ def cnlsddf(y, x, func, gx, gy):
         # Constraints
         def reg_rule(model, i):
             arow = x[i]
-            return model.g[i] * y[i] == model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - model.e[i]
+            return model.g[i] * y[i] == model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + \
+                   model.d[i] * b[i] - model.e[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
         def trans_rule(model, i):
             erow = gx[i]
-            return sum(model.b[i, j] * erow[j] for j in model.j) + model.g[i] * gy[i] == id[i]
+            return sum(model.b[i, j] * erow[j] for j in model.j) + model.g[i] * gy[i] + model.d[i] * gb[i] == id[i]
 
         model.trans = Constraint(model.i, rule=trans_rule, doc='translation property')
 
@@ -85,8 +94,9 @@ def cnlsddf(y, x, func, gx, gy):
                 arow = x[i]
                 if i == h:
                     return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - model.g[i] * y[
-                       i] <= model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) - model.g[h] * y[i]
+                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + model.d[i] * b[i] - model.g[i] * y[
+                       i] <= model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) + model.d[h] * b[i] - \
+                       model.g[h] * y[i]
 
             model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
 
@@ -97,18 +107,21 @@ def cnlsddf(y, x, func, gx, gy):
                 arow = x[i]
                 if i == h:
                     return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - model.g[i] * y[
-                       i] >= model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) - model.g[h] * y[i]
+                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + model.d[i] * b[i] - model.g[i] * y[
+                       i] >= model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) + model.d[h] * b[i] - \
+                       model.g[h] * y[i]
 
             model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
 
-    if p > 1:
+    if q > 1 and p > 1:
 
         # Set
         model.k = Set(initialize=range(p))
+        model.l = Set(initialize=range(q))
 
         # Variables
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
+        model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
 
         # Objective function
         def objective_rule(model):
@@ -120,15 +133,19 @@ def cnlsddf(y, x, func, gx, gy):
         def reg_rule(model, i):
             arow = x[i]
             brow = y[i]
+            crow = b[i]
             return sum(model.g[i, k] * brow[k] for k in model.k) == model.a[i] + sum(
-                   model.b[i, j] * arow[j] for j in model.j) - model.e[i]
+                   model.b[i, j] * arow[j] for j in model.j) + \
+                   sum(model.d[i, l] * crow[l] for l in model.l) - model.e[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
         def trans_rule(model, i):
             erow = gx[i]
             frow = gy[i]
-            return sum(model.b[i, j] * erow[j] for j in model.j) + sum(model.g[i, k] * frow[k] for k in model.k) == id[i]
+            grow = gb[i]
+            return sum(model.b[i, j] * erow[j] for j in model.j) + sum(model.g[i, k] * frow[k] for k in model.k) + \
+                   sum(model.d[i, l] * grow[l] for l in model.l) == id[i]
 
         model.trans = Constraint(model.i, rule=trans_rule, doc='translation property')
 
@@ -138,11 +155,14 @@ def cnlsddf(y, x, func, gx, gy):
             def concav_rule(model, i, h):
                 arow = x[i]
                 brow = y[i]
+                crow = b[i]
                 if i == h:
                     return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - \
+                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + sum(
+                       model.d[i, l] * crow[l] for l in model.l) - \
                        sum(model.g[i, k] * brow[k] for k in model.k) <= model.a[h] + sum(
-                       model.b[i, j] * arow[j] for j in model.j) - sum(model.g[h, k] * brow[k] for k in model.k)
+                       model.b[i, j] * arow[j] for j in model.j) + \
+                       sum(model.d[h, l] * crow[l] for l in model.l) - sum(model.g[h, k] * brow[k] for k in model.k)
 
             model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
 
@@ -152,11 +172,14 @@ def cnlsddf(y, x, func, gx, gy):
             def concav_rule(model, i, h):
                 arow = x[i]
                 brow = y[i]
+                crow = b[i]
                 if i == h:
                     return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j)  - \
+                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + sum(
+                       model.d[i, l] * crow[l] for l in model.l) - \
                        sum(model.g[i, k] * brow[k] for k in model.k) >= model.a[h] + sum(
-                       model.b[i, j] * arow[j] for j in model.j) - sum(model.g[h, k] * brow[k] for k in model.k)
+                       model.b[i, j] * arow[j] for j in model.j) + \
+                       sum(model.d[h, l] * crow[l] for l in model.l) - sum(model.g[h, k] * brow[k] for k in model.k)
 
             model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
 

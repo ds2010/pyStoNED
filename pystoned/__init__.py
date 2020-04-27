@@ -9,6 +9,8 @@ from . import biMatP
 from . import ICNLS
 from . import CNLSDDF
 from . import directV
+from . import CNLSDDFb
+from . import directVb
 
 __all__ = [
     'CNLS',
@@ -21,5 +23,7 @@ __all__ = [
     'biMatP',
     'ICNLS',
     'CNLSDDF',
-    'directV'
+    'directV',
+    'CNLSDDFb',
+    'directVb'
 ]

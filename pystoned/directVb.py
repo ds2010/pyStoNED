@@ -1,16 +1,16 @@
 """
-@title  : create directional vectors without undesirable outputs (g_x, g_y)
+@title  : create directional vectors with undesirable outputs (g_x, g_b, g_y)
 @Author : Sheng Dai, Timo Kuosmanen
 @Mail   : sheng.dai@aalto.fi (S. Dai); timo.kuosmanen@aalto.fi (T. Kuosmanen)
-@Date   : 2020-04-27
+@Date   : 2020-04-25
 """
 
 import numpy as np
 
 
-def dvb(gx, gy, n, m, p):
+def dvb(gx, gb, gy, n, m, q, p):
     # directional vectors
-
+    
     # g_x
     if m == 1:
         gx = np.repeat(gx, n)
@@ -33,6 +33,29 @@ def dvb(gx, gy, n, m, p):
         gx3 = np.asmatrix(gx3).T
         gx = np.concatenate((gx1, gx2, gx3), axis=1)
         gx = gx.tolist()
+
+    # g_b
+    if q == 1:
+        gb = np.repeat(gb, n)
+        gb = gb.tolist()
+
+    if q == 2:
+        gb1 = np.repeat(gb[0], n)
+        gb1 = np.asmatrix(gb1).T
+        gb2 = np.repeat(gb[1], n)
+        gb2 = np.asmatrix(gb2).T
+        gb = np.concatenate((gb1, gb2), axis=1)
+        gb = gb.tolist()
+
+    if q == 3:
+        gb1 = np.repeat(gb[0], n)
+        gb1 = np.asmatrix(gb1).T
+        gb2 = np.repeat(gb[1], n)
+        gb2 = np.asmatrix(gb2).T
+        gb3 = np.repeat(gb[2], n)
+        gb3 = np.asmatrix(gb3).T
+        gb = np.concatenate((gb1, gb2, gb3), axis=1)
+        gb = gb.tolist()
 
     # g_y
     if p == 1:
@@ -57,4 +80,4 @@ def dvb(gx, gy, n, m, p):
         gy = np.concatenate((gy1, gy2, gy3), axis=1)
         gy = gy.tolist()
 
-    return gx, gy
+    return gx, gb, gy
