@@ -2,5 +2,4 @@
 *.ipynb linguist-language=Python
 
 # documentation
-pvfactors/docs/* linguist-documentation
-notebooks/* linguist-documentation
+StoNED-Python/Tutorials/* linguist-documentation
