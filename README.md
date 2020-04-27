@@ -52,7 +52,7 @@ Additional tutorials:
 - [x] Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
 - [x] `StoNED` with multiple outputs (DDF formulation)
    - [x] with undesirable outputs
-   - [ ] without undesirable outputs
+   - [x] without undesirable outputs
 - [ ] Representation of `StoNED`-related frontier/quantile function
    - [ ] one input and one output
    - [ ] two inputs and one output 
