@@ -12,7 +12,7 @@ We have published a beta version [`pyStoNED`](https://pypi.org/project/pystoned/
 
 # [Tutorials](https://github.com/ds2010/StoNED-Python/tree/master/Tutorials)
 
-`StoEND`-related tutorials are provided as follows, and more detailed technical reports are currently under development.
+A number of `StoEND`-related tutorial examples are provided as follows, and more detailed technical reports are currently under development.
   + Convex Nonparametric Least Square (`CNLS`)
     + [production function estimation](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/CNLS_prod.ipynb) 
     + [cost function estimation](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/CNLS_cost.ipynb)    
