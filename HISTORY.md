@@ -1,5 +1,14 @@
 # Change log
 
+## [0.2.3] - 2020-04-27
+
+### Added
+- `cnlsddfb()`
+- `directVb()`
+
+### Changed
+- Update functions: `cnlsddf()`, `directV()`
+
 ## [0.2.2] - 2020-04-26
 
 ### Added
