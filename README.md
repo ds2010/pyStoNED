@@ -29,7 +29,7 @@ Additional tutorials:
  
 > **Note**
   1. The entire [function list](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/function_list.ipynb) and syntax in [`pyStoNED`](https://pypi.org/project/pystoned/) package can be seen from [Tutorials](https://github.com/ds2010/StoNED-Python/tree/master/Tutorials).
-  2. The list of abbreviations is available at [Abbreviations.md](https://github.com/ds2010/StoNED-Python/blob/master/Abbreviations.md).
+  2. The list of abbreviations and symbols is available at [Abbreviations.md](https://github.com/ds2010/StoNED-Python/blob/master/Abbreviations.md).
   
 # Authors
 
