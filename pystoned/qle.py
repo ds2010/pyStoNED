@@ -11,20 +11,33 @@ import math
 from scipy.stats import norm
 
 
-def qllf(lamda, eps):
-    # sigma2 Eq. (3.26) in Johnson and Kuosmanen (2015)
-    sigma2 = np.mean(eps ** 2) / (1 - 2 * lamda ** 2 / (math.pi * (1 + lamda ** 2)))
+def qllf(lamda, eps, func):
+    # func    = "prod": production frontier;
+    #         = "cost": cost frontier
+
+    # sigma Eq. (3.26) in Johnson and Kuosmanen (2015)
+    sigma = np.sqrt(np.mean(eps ** 2) / (1 - 2 * lamda ** 2 / (math.pi * (1 + lamda ** 2))))
 
     # bias adjusted residuals Eq. (3.25)
     # mean
-    mu = math.sqrt((2 * lamda ** 2 * sigma2) / (math.pi * (1 + lamda ** 2)))
+    mu = math.sqrt(2/math.pi) * sigma * lamda / math.sqrt(1 + lamda ** 2)
 
-    # adj. res.
-    epsilon = eps - mu
+    if func == "prod":
 
-    # log-likelihood function Eq. (3.24)
-    pn = norm.cdf(-epsilon * lamda / math.sqrt(sigma2))
-    logl = -len(eps) * math.log(math.sqrt(sigma2)) + np.sum(np.log(pn)) - 0.5 * np.sum(epsilon ** 2) / sigma2
-    neg_logl = -logl
+        # adj. res.
+        epsilon = eps - mu
 
-    return neg_logl
+        # log-likelihood function Eq. (3.24)
+        pn = norm.cdf(-epsilon * lamda / sigma)
+        logl = -len(eps) * math.log(sigma) + np.sum(np.log(pn)) - 0.5 * np.sum(epsilon ** 2) / sigma**2
+
+    if func == "cost":
+
+        # adj. res.
+        epsilon = eps + mu
+
+        # log-likelihood function Eq. (3.24)
+        pn = norm.cdf(epsilon * lamda / sigma)
+        logl = -len(eps) * math.log(sigma) + np.sum(np.log(pn)) - 0.5 * np.sum(epsilon ** 2) / sigma**2
+
+    return -logl

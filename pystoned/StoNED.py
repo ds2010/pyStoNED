@@ -12,7 +12,7 @@ from scipy.stats import norm
 import scipy.optimize as opt
 
 
-def stoned(eps, func, method, crt):
+def stoned(y, eps, func, method, crt):
     # func    = "prod": production frontier;
     #         = "cost": cost frontier
     # method  = "MOM" : Method of moments
@@ -34,28 +34,66 @@ def stoned(eps, func, method, crt):
         mM2 = np.mean(M2, axis=0)
         mM3 = np.mean(M3, axis=0)
 
-        if mM3 < 0:
-            mM3 = 0.00001
+        if func == "prod":
+            if mM3 > 0:
+                mM3 = 0.0
 
-        # standard deviation sigma_u
-        sigmau = (-mM3 / ((2 / math.pi) ** (1 / 2) * (1 - 4 / math.pi))) ** (1 / 3)
+            # standard deviation sigma_u, sigma_v, and sum of sigma
+            sigmau = (mM3 / ((2 / math.pi) ** (1 / 2) * (1 - 4 / math.pi))) ** (1 / 3)
+            sigmav = (mM2 - ((math.pi - 2) / math.pi) * sigmau ** 2) ** (1 / 2)
+            sigma2 = sigmau ** 2 + sigmav ** 2
 
-        # standard deviation sigma_v
-        sigmav = (mM2 - ((math.pi - 2) / math.pi) * sigmau ** 2) ** (1 / 2)
+            # signal to noise ratio (lambda)
+            lamda = sigmau / sigmav
 
-        # sum of sigma
-        sigma2 = sigmau ** 2 + sigmav ** 2
+            # mean (mu)
+            mu = (sigmau ** 2 * 2 / math.pi) ** (1 / 2)
 
-        # signal to noise ratio (lambda)
-        lamda = sigmau / sigmav
+            # bias adjusted residuals
+            epsilon = eps - mu
 
-        # mean (mu)
-        mu = (sigmau ** 2 * 2 / math.pi) ** (1 / 2)
+            # expected value of the inefficiency term u  Eq. (3.28) in Johnson and Kuosmanen (2015)
+            sigmart = sigmau * sigmav / math.sqrt(sigmau ** 2 + sigmav ** 2)
+            mus = epsilon * sigmau / (sigmav * math.sqrt(sigmau ** 2 + sigmav ** 2))
+            norpdf = 1 / math.sqrt(2 * math.pi) * np.exp(-mus ** 2 / 2)
 
-        # bias adjusted residuals
-        epsilon = eps - mu
+            # Conditional mean
+            Eu = sigmart * ((norpdf / (1 - norm.cdf(mus) + 0.000001)) - mus)
+
+            # technical inefficiency
+            Etheta = ((y-eps+mu) - Eu)/(y-eps+mu)
+
+        if func == "cost":
+            if mM3 < 0:
+                mM3 = 0.00001
+
+            # standard deviation sigma_u, sigma_v, and sum of sigma
+            sigmau = (-mM3 / ((2 / math.pi) ** (1 / 2) * (1 - 4 / math.pi))) ** (1 / 3)
+            sigmav = (mM2 - ((math.pi - 2) / math.pi) * sigmau ** 2) ** (1 / 2)
+            sigma2 = sigmau ** 2 + sigmav ** 2
+
+            # signal to noise ratio (lambda)
+            lamda = sigmau / sigmav
+
+            # mean (mu)
+            mu = (sigmau ** 2 * 2 / math.pi) ** (1 / 2)
+
+            # bias adjusted residuals
+            epsilon = eps + mu
+
+            # expected value of the inefficiency term u
+            sigmart = sigmau * sigmav / math.sqrt(sigmau ** 2 + sigmav ** 2)
+            mus = epsilon * sigmau / (sigmav * math.sqrt(sigmau ** 2 + sigmav ** 2))
+            norpdf = 1 / math.sqrt(2 * math.pi) * np.exp(-mus ** 2 / 2)
+
+            # Conditional mean
+            Eu = sigmart * ((norpdf / (1 - norm.cdf(-mus) + 0.000001)) + mus)
+
+            # technical inefficiency
+            Etheta = (Eu - (y-eps-mu))/(y-eps-mu)
 
     if method == "QLE":
+        
         # initial parameter (lambda)
         lamda = 1.0
 
@@ -64,38 +102,52 @@ def stoned(eps, func, method, crt):
 
         lamda = llres.x[0]
 
-        # sigmau and sigmav
-        sigma2 = (np.mean(eps ** 2)) / (1 - 2 * lamda ** 2 / (math.pi * (1 + lamda ** 2)))
+        # use estimate of lambda to calculate sigma2
+        sigma = math.sqrt((np.mean(eps) ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda ** 2))))
 
-        # bias adjusted residuals Eq. (3.25)
+        # calculate bias correction
         # mean
-        mu = math.sqrt((2 * lamda ** 2 * sigma2) / (math.pi * (1 + lamda ** 2)))
-        # adj. res.
-        epsilon = eps - mu
+        mu = math.sqrt(2) * sigma * lamda / math.sqrt(math.pi * (1 + lamda ** 2))
 
-        sigmau = (math.sqrt(sigma2) * lamda) / (1 + lamda)
-        sigmav = math.sqrt(sigma2) / (1 + lamda)
+        # calculate sigma.u and sigma.v
+        sigmau = sigma * lamda / (1+lamda)
+        sigmav = sigma /(1 + lamda)
 
-        # expected value of the inefficiency term u  Eq. (3.28) in Johnson and Kuosmanen (2015)
-    temp = (1 / (1 * (2 * math.pi) ** (1 / 2))) * np.exp((-((epsilon / (sigmav ** 2)) - 0) * \
-                                                          ((epsilon / (sigmav ** 2)) - 0)) / (2 * 1 ** 2))
-
-    # Conditional mean
-    Eu = (-epsilon * (sigmau ** 2) / sigma2) + \
-         (temp / ((1 - norm.cdf((epsilon / (sigmav ** 2)))) + 0.000001)) * \
-         (sigmau ** 2) * (sigmav ** 2) / sigma2
-
-    # Technical inefficiency
-    if crt == "addi":
         if func == "prod":
-            Etheta = -Eu
-        else:
-            Etheta = Eu
+
+            # adj. res.
+            epsilon = eps - mu
+
+            # expected value of the inefficiency term u  Eq. (3.28) in Johnson and Kuosmanen (2015)
+            sigmart = sigmau * sigmav / math.sqrt(sigmau ** 2 + sigmav ** 2)
+            mus = epsilon * sigmau / (sigmav * math.sqrt(sigmau ** 2 + sigmav ** 2))
+            norpdf = 1 / math.sqrt(2 * math.pi) * np.exp(-mus ** 2 / 2)
+
+            # Conditional mean
+            Eu = sigmart * ((norpdf / (1 - norm.cdf(mus) + 0.000001)) - mus)
+
+            # technical inefficiency
+            Etheta = ((y-eps+mu)-Eu)/(y-eps+mu)
+
+        if func == "cost":
+            # adj. res.
+            epsilon = eps + mu
+
+            # expected value of the inefficiency term u
+            sigmart = sigmau * sigmav / math.sqrt(sigmau ** 2 + sigmav ** 2)
+            mus = epsilon * sigmau / (sigmav * math.sqrt(sigmau ** 2 + sigmav ** 2))
+            norpdf = 1 / math.sqrt(2 * math.pi) * np.exp(-mus ** 2 / 2)
+
+            # Conditional mean
+            Eu = sigmart * ((norpdf / (1 - norm.cdf(-mus) + 0.000001)) + mus)
+
+            # technical inefficiency
+            Etheta = (Eu - (y-eps-mu))/(y-eps-mu)
+
+    if crt == "addi":
+       TE = Etheta
 
     if crt == "mult":
-        if func == "prod":
-            Etheta = np.exp(-Eu)
-        else:
-            Etheta = np.exp(Eu)
+       TE = np.exp(-Eu)
 
-    return Etheta
+    return Eu, TE
