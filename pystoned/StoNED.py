@@ -38,13 +38,9 @@ def stoned(y, eps, func, method, crt):
             if mM3 > 0:
                 mM3 = 0.0
 
-            # standard deviation sigma_u, sigma_v, and sum of sigma
+            # standard deviation sigma_u, sigma_v
             sigmau = (mM3 / ((2 / math.pi) ** (1 / 2) * (1 - 4 / math.pi))) ** (1 / 3)
             sigmav = (mM2 - ((math.pi - 2) / math.pi) * sigmau ** 2) ** (1 / 2)
-            sigma2 = sigmau ** 2 + sigmav ** 2
-
-            # signal to noise ratio (lambda)
-            lamda = sigmau / sigmav
 
             # mean (mu)
             mu = (sigmau ** 2 * 2 / math.pi) ** (1 / 2)
@@ -67,13 +63,9 @@ def stoned(y, eps, func, method, crt):
             if mM3 < 0:
                 mM3 = 0.00001
 
-            # standard deviation sigma_u, sigma_v, and sum of sigma
+            # standard deviation sigma_u, sigma_v
             sigmau = (-mM3 / ((2 / math.pi) ** (1 / 2) * (1 - 4 / math.pi))) ** (1 / 3)
             sigmav = (mM2 - ((math.pi - 2) / math.pi) * sigmau ** 2) ** (1 / 2)
-            sigma2 = sigmau ** 2 + sigmav ** 2
-
-            # signal to noise ratio (lambda)
-            lamda = sigmau / sigmav
 
             # mean (mu)
             mu = (sigmau ** 2 * 2 / math.pi) ** (1 / 2)
@@ -97,23 +89,23 @@ def stoned(y, eps, func, method, crt):
         # initial parameter (lambda)
         lamda = 1.0
 
-        # optimatization
-        llres = opt.minimize(qle.qllf, lamda, eps, method='BFGS')
-
-        lamda = llres.x[0]
-
-        # use estimate of lambda to calculate sigma2
-        sigma = math.sqrt((np.mean(eps) ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda ** 2))))
-
-        # calculate bias correction
-        # mean
-        mu = math.sqrt(2) * sigma * lamda / math.sqrt(math.pi * (1 + lamda ** 2))
-
-        # calculate sigma.u and sigma.v
-        sigmau = sigma * lamda / (1+lamda)
-        sigmav = sigma /(1 + lamda)
-
         if func == "prod":
+
+            # optimatization
+            llres = opt.minimize(qle.qllf, lamda, eps, method='BFGS')
+
+            lamda = llres.x[0]
+
+            # use estimate of lambda to calculate sigma2
+            sigma = math.sqrt((np.mean(eps) ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda ** 2))))
+
+            # calculate bias correction
+            # mean
+            mu = math.sqrt(2) * sigma * lamda / math.sqrt(math.pi * (1 + lamda ** 2))
+
+            # calculate sigma.u and sigma.v
+            sigmau = sigma * lamda / (1 + lamda)
+            sigmav = sigma / (1 + lamda)
 
             # adj. res.
             epsilon = eps - mu
@@ -130,6 +122,23 @@ def stoned(y, eps, func, method, crt):
             Etheta = ((y-eps+mu)-Eu)/(y-eps+mu)
 
         if func == "cost":
+
+            # optimization
+            llres = opt.minimize(qle.qllf, lamda, eps, method='BFGS')
+
+            lamda = llres.x[0]
+
+            # use estimate of lambda to calculate sigma2
+            sigma = math.sqrt((np.mean(eps) ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda ** 2))))
+
+            # calculate bias correction
+            # mean
+            mu = math.sqrt(2) * sigma * lamda / math.sqrt(math.pi * (1 + lamda ** 2))
+
+            # calculate sigma.u and sigma.v
+            sigmau = sigma * lamda / (1 + lamda)
+            sigmav = sigma / (1 + lamda)
+
             # adj. res.
             epsilon = eps + mu
 
