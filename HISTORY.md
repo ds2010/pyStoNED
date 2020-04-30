@@ -1,5 +1,10 @@
 # Change log
 
+## [0.2.4] - 2020-04-30
+
+### Changed
+- Extend functions: `qlle()`, `stoned()`
+
 ## [0.2.3] - 2020-04-27
 
 ### Added
