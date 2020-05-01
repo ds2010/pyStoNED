@@ -36,7 +36,7 @@ def cnlsddf(y, x, func, gx, gy):
 
     # directional vectors
     gx = directV.dv(gx, gy, n, m, p)[0]
-    gy = directV.dv(gx, gy, n, m, p)[2]
+    gy = directV.dv(gx, gy, n, m, p)[1]
 
     # Creation of a Concrete Model
     model = ConcreteModel()

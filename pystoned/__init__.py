@@ -10,7 +10,7 @@ from . import ICNLS
 from . import CNLSDDF
 from . import directV
 from . import CNLSDDFb
-from . import directVb
+from . import kde
 
 __all__ = [
     'CNLS',
@@ -25,5 +25,5 @@ __all__ = [
     'CNLSDDF',
     'directV',
     'CNLSDDFb',
-    'directVb'
+    'kde'
 ]

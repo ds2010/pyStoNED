@@ -1,5 +1,5 @@
 """
-@title  : quasi-Likelihood function for residuals (eps) given normal-half normal 
+@title  : quasi-Likelihood function for residual (eps) given normal-half normal
           distribution and parameter lambda
 @Author : Sheng Dai, Timo Kuosmanen
 @Mail   : sheng.dai@aalto.fi (S. Dai); timo.kuosmanen@aalto.fi (T. Kuosmanen)  

@@ -7,7 +7,7 @@
 
 # Import of the pyomo module
 from pyomo.environ import *
-from . import directVb
+from . import directV
 import numpy as np
 
 
@@ -41,9 +41,9 @@ def cnlsddfb(y, x, b, func, gx, gb, gy):
     id = id.tolist()
 
     # directional vectors
-    gx = directVb.dvb(gx, gb, gy, n, m, q, p)[0]
-    gb = directVb.dvb(gx, gb, gy, n, m, q, p)[1]
-    gy = directVb.dvb(gx, gb, gy, n, m, q, p)[2]
+    gx = directV.dvb(gx, gb, gy, n, m, q, p)[0]
+    gb = directV.dvb(gx, gb, gy, n, m, q, p)[1]
+    gy = directV.dvb(gx, gb, gy, n, m, q, p)[2]
 
     # Creation of a Concrete Model
     model = ConcreteModel()
