@@ -85,14 +85,14 @@ def stoned(y, eps, func, method, crt):
             Etheta = (Eu - (y-eps-mu))/(y-eps-mu)
 
     if method == "QLE":
-        
-        # initial parameter (lambda)
+
+        # initial parameters
         lamda = 1.0
 
         if func == "prod":
 
             # optimatization
-            llres = opt.minimize(qle.qllf, lamda, eps, method='BFGS')
+            llres = opt.minimize(qle.qlep, lamda, eps, method='BFGS')
 
             lamda = llres.x[0]
 
@@ -123,8 +123,8 @@ def stoned(y, eps, func, method, crt):
 
         if func == "cost":
 
-            # optimization
-            llres = opt.minimize(qle.qllf, lamda, eps, method='BFGS')
+            # optimatization
+            llres = opt.minimize(qle.qlec, lamda, eps, method='BFGS')
 
             lamda = llres.x[0]
 
