@@ -86,18 +86,18 @@ def stoned(y, eps, func, method, crt):
 
     if method == "QLE":
 
-        # initial parameters
+        # initial parameter lambda
         lamda = 1.0
 
         if func == "prod":
 
-            # optimatization
+            # optimization
             llres = opt.minimize(qle.qlep, lamda, eps, method='BFGS')
 
             lamda = llres.x[0]
 
-            # use estimate of lambda to calculate sigma2
-            sigma = math.sqrt((np.mean(eps) ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda ** 2))))
+            # use estimate of lambda to calculate sigma Eq. (3.26) in Johnson and Kuosmanen (2015)
+            sigma = math.sqrt((np.mean(eps) ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda))))
 
             # calculate bias correction
             # mean
@@ -123,13 +123,13 @@ def stoned(y, eps, func, method, crt):
 
         if func == "cost":
 
-            # optimatization
+            # optimization
             llres = opt.minimize(qle.qlec, lamda, eps, method='BFGS')
 
             lamda = llres.x[0]
 
-            # use estimate of lambda to calculate sigma2
-            sigma = math.sqrt((np.mean(eps) ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda ** 2))))
+            # use estimate of lambda to calculate sigma
+            sigma = math.sqrt((np.mean(eps) ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda))))
 
             # calculate bias correction
             # mean

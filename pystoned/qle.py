@@ -14,7 +14,7 @@ from scipy.stats import norm
 def qlep(lamda, eps):
 
     # sigma Eq. (3.26) in Johnson and Kuosmanen (2015)
-    sigma = np.sqrt(np.mean(eps ** 2) / (1 - 2 * lamda ** 2 / (math.pi * (1 + lamda ** 2))))
+    sigma = np.sqrt(np.mean(eps ** 2) / (1 - 2 * lamda ** 2 / (math.pi * (1 + lamda))))
 
     # bias adjusted residuals Eq. (3.25)
     # mean
@@ -33,7 +33,7 @@ def qlep(lamda, eps):
 def qlec(lamda, eps):
 
     # sigma Eq. (3.26) in Johnson and Kuosmanen (2015)
-    sigma = np.sqrt(np.mean(eps ** 2) / (1 - 2 * lamda ** 2 / (math.pi * (1 + lamda ** 2))))
+    sigma = np.sqrt(np.mean(eps ** 2) / (1 - 2 * lamda ** 2 / (math.pi * (1 + lamda))))
 
     # bias adjusted residuals Eq. (3.25)
     # mean
