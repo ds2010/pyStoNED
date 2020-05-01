@@ -17,7 +17,6 @@ def stoned(y, eps, func, method, crt):
     #         = "cost": cost frontier
     # method  = "MOM" : Method of moments
     #         = "QLE" : Quasi-likelihood estimation
-    #         = "NKD" : Nonparametric kernel deconvolution (TBA...)
     # crt     = "addi": Additive composite error term
     #         = "mult": Multiplicative composite error term
 
