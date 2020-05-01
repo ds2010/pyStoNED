@@ -46,7 +46,7 @@ Additional tutorials:
    - [x] Multiplicative composite error term
    - [x] Residuals decomposition by method of moments(`MoM`) 
    - [x] Residuals decomposition by quasi-likelihood estimation(`QLE`)
-   - [ ] Residuals decomposition by nonparametric kernel deconvolution (`NKD`)
+   - [x] Residuals decomposition by nonparametric kernel deconvolution (`NKD`)
 - [x] `StoNEZD` (contextual variables)
 - [x] Convex quantile regression (`CQR`)
 - [x] Convex expectile regression (`CER`)
