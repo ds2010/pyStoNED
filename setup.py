@@ -8,7 +8,7 @@ with open('HISTORY.md') as history_file:
 
 setup_args = dict(
     name='pystoned',
-    version='0.2.4',
+    version='0.2.5',
     description='A Package for Stochastic Nonparametric Envelopment of Data (StoNED) in Python',
     long_description_content_type="text/markdown",
     long_description=README + '\n\n' + HISTORY,
@@ -33,7 +33,8 @@ setup_args = dict(
 install_requires = [
     'pyomo',
     'numpy',
-    'scipy'
+    'scipy',
+    'scikit-learn'
 ]
 
 if __name__ == '__main__':

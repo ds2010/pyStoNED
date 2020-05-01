@@ -1,9 +1,23 @@
 # Change log
 
+## [0.2.5] - 2020-05-01
+### Added
+- `ked()`
+
+### Changed
+- `CNLSDDFb()`
+- `directV()`
+- `stoned()`
+- HISTORY.md
+
+### Removed
+- `directVb()`
+
 ## [0.2.4] - 2020-04-30
 
 ### Changed
-- Extend functions: `qlle()`, `stoned()`
+- `qlle()`
+- `stoned()`
 
 ## [0.2.3] - 2020-04-27
 
@@ -12,7 +26,8 @@
 - `directVb()`
 
 ### Changed
-- Update functions: `cnlsddf()`, `directV()`
+- `cnlsddf()`
+- `directV()`
 
 ## [0.2.2] - 2020-04-26
 
@@ -21,8 +36,10 @@
 - `directV()`
 
 ### Changed
-- Update functions: `cnls()`, `ceqr()`, `cnlsz()`, `icnls()`
-
+- `cnls()`
+- `ceqr()`
+- `cnlsz()`
+- `icnls()`
 
 ## [0.2.1] - 2020-04-23
 
@@ -31,8 +48,8 @@
 - `bimatp()`
 
 ### Changed
-- Update REDAME.md
-- Update all previous functions
+- REDAME.md
+- All functions
 
 ## [0.2.0] - 2020-04-19
 
@@ -42,13 +59,13 @@
 - `cnlsz()`
 
 ### Changed
-- Update REDAME.md
-- Update function `cqer()`
+- REDAME.md
+- `cqer()`
 
 ## [0.0.7] - 2020-04-18
 
 ### Changed
-- Update function `cnls()`
+- `cnls()`
 
 ## [0.0.6] - 2020-04-17
 
