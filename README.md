@@ -14,12 +14,12 @@ We have published a beta version [`pyStoNED`](https://pypi.org/project/pystoned/
 
 A number of `StoEND`-related tutorial examples are provided as follows, and more detailed technical reports are currently under development.
   + Convex Nonparametric Least Square (`CNLS`)
-    + [production function estimation](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/CNLS_prod.ipynb) 
-    + [cost function estimation](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/CNLS_cost.ipynb)    
+    + [Production function estimation](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/CNLS_prod.ipynb) 
+    + [Cost function estimation](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/CNLS_cost.ipynb)    
   + Stochastic Nonparametric Envelopment of Data (`StoNED`)
-    + [log-transformed cost function estimation and residual decomposition by MoM](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/StoNED.ipynb)
+    + [Log-transformed cost function estimation and residual decomposition by MoM](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/StoNED.ipynb)
     + [StoNED with Z-variable](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/StoNEZD.ipynb)
-    + estimating unconditional expected inefficiency ![equation](https://latex.codecogs.com/gif.latex?%5Cmu) by KDE
+    + Estimating unconditional expected inefficiency ![equation](https://latex.codecogs.com/gif.latex?%5Cmu) by KDE
   + [Convex quantile/expectile regression (`CQR` and `CER`)](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/CQR_CER.ipynb)
   + Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
   + Isotonic Convex Nonparametric Least Square (`ICNLS`)
