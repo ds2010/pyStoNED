@@ -19,7 +19,7 @@ A number of `StoEND`-related tutorial examples are provided as follows, and more
   + Stochastic Nonparametric Envelopment of Data (`StoNED`)
     + [log-transformed cost function estimation and residual decomposition by MoM](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/StoNED.ipynb)
     + [StoNED with Z-variable](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/StoNEZD.ipynb)
-    + estimating unconditional expected inefficiency ![equation](https://microsoft.codecogs.com/gif.latex?\dpi{400}\alpha&space;+&space;\frac{2\beta}{\gamma}) by KDE
+    + estimating unconditional expected inefficiency ![equation](https://latex.codecogs.com/gif.latex?%5Cmu) by KDE
   + [Convex quantile/expectile regression (`CQR` and `CER`)](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/CQR_CER.ipynb)
   + Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
   + Isotonic Convex Nonparametric Least Square (`ICNLS`)
