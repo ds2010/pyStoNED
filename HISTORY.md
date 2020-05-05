@@ -1,5 +1,11 @@
 # Change log
 
+## [0.2.6] - 2020-05-05
+### Changed
+- `qle()`
+- `stoned()`
+- LICENSE
+
 ## [0.2.5] - 2020-05-01
 ### Added
 - `ked()`
