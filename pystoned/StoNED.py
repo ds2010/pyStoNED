@@ -96,15 +96,15 @@ def stoned(y, eps, func, method, crt):
             lamda = llres.x[0]
 
             # use estimate of lambda to calculate sigma Eq. (3.26) in Johnson and Kuosmanen (2015)
-            sigma = math.sqrt((np.mean(eps) ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda))))
+            sigma = math.sqrt((np.mean(eps) ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda**2))))
 
             # calculate bias correction
             # mean
             mu = math.sqrt(2) * sigma * lamda / math.sqrt(math.pi * (1 + lamda ** 2))
 
             # calculate sigma.u and sigma.v
-            sigmau = sigma * lamda / (1 + lamda)
-            sigmav = sigma / (1 + lamda)
+            sigmav = (sigma ** 2 / (1 + lamda**2)) ** (1/2)
+            sigmau = sigmav * lamda
 
             # adj. res.
             epsilon = eps - mu
@@ -128,15 +128,15 @@ def stoned(y, eps, func, method, crt):
             lamda = llres.x[0]
 
             # use estimate of lambda to calculate sigma
-            sigma = math.sqrt((np.mean(eps) ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda))))
+            sigma = math.sqrt((np.mean(eps) ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda**2))))
 
             # calculate bias correction
             # mean
             mu = math.sqrt(2) * sigma * lamda / math.sqrt(math.pi * (1 + lamda ** 2))
 
             # calculate sigma.u and sigma.v
-            sigmau = sigma * lamda / (1 + lamda)
-            sigmav = sigma / (1 + lamda)
+            sigmav = (sigma ** 2 / (1 + lamda**2)) ** (1/2)
+            sigmau = sigmav * lamda
 
             # adj. res.
             epsilon = eps + mu
