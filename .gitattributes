@@ -1,4 +1,5 @@
-
+# mark iPython notebooks as Python files
+*.ipynb linguist-language=Python
 
 # documentation
 StoNED-Python/Tutorials/* linguist-documentation
