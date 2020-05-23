@@ -9,8 +9,8 @@ from sklearn.neighbors import KernelDensity
 import numpy as np
 from scipy import stats
 
-def kd(eps, func):
-    # func    = "prod" : production frontier
+def kd(eps, fun):
+    # fun    = "prod" : production frontier
     #         = "cost" : cost frontier
 
     # choose a bandwidth (rule-of-thumb, Eq. (3.29) in Silverman (1986))
@@ -44,10 +44,10 @@ def kd(eps, func):
         der[i + 1] = 0.2 * denD[i + 1] / epsD[i + 1]
 
     # expected inefficiency mu
-    if func == "prod":
+    if fun == "prod":
         mu = -np.max(der)
 
-    if func == "cost":
+    if fun == "cost":
         mu = np.max(der)
 
     return mu

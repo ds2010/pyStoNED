@@ -9,13 +9,13 @@
 from pyomo.environ import *
 
 
-def cnlsz(y, x, z, crt, func, pps):
-    # crt     = "addi" : Additive composite error term
+def cnlsz(y, x, z, cet, fun, rts):
+    # cet     = "addi" : Additive composite error term
     #         = "mult" : Multiplicative composite error term
-    # func    = "prod" : production frontier
+    # fun     = "prod" : production frontier
     #         = "cost" : cost frontier
-    # pps     = "vrs"  : variable returns to scale production possibility sets (pps)
-    #         = "crs"  : constant returns to scale pps
+    # rts     = "vrs"  : variable returns to scale
+    #         = "crs"  : constant returns to scale
 
     # number of DMUS
     n = len(y)
@@ -54,7 +54,7 @@ def cnlsz(y, x, z, crt, func, pps):
         model.d = Var()
 
         # Additive composite error term
-        if crt == "addi":
+        if cet == "addi":
 
             # Objective function
             def objective_rule(model):
@@ -62,7 +62,7 @@ def cnlsz(y, x, z, crt, func, pps):
 
             model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')
 
-            if pps == "vrs":
+            if rts == "vrs":
 
                 # Constraints
                 def reg_rule(model, i):
@@ -73,7 +73,7 @@ def cnlsz(y, x, z, crt, func, pps):
                 model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
                 # production model
-                if func == "prod":
+                if fun == "prod":
 
                     def concav_rule(model, i, h):
                         arow = x[i]
@@ -85,7 +85,7 @@ def cnlsz(y, x, z, crt, func, pps):
                     model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
 
                 # cost model
-                if func == "cost":
+                if fun == "cost":
 
                     def concav_rule(model, i, h):
                         arow = x[i]
@@ -97,7 +97,7 @@ def cnlsz(y, x, z, crt, func, pps):
                     model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
 
         # Multiplicative composite error term
-        if crt == "mult":
+        if cet == "mult":
 
             # Objective function
             def objective_rule(model):
@@ -105,7 +105,7 @@ def cnlsz(y, x, z, crt, func, pps):
 
             model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')
 
-            if pps == "vrs":
+            if rts == "vrs":
 
                 # Constraints
                 def qreg_rule(model, i):
@@ -120,7 +120,7 @@ def cnlsz(y, x, z, crt, func, pps):
                 model.qlog = Constraint(model.i, rule=qlog_rule, doc='cost function')
 
                 # production model
-                if func == "prod":
+                if fun == "prod":
 
                     def qconcav_rule(model, i, h):
                         arow = x[i]
@@ -132,7 +132,7 @@ def cnlsz(y, x, z, crt, func, pps):
                     model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
 
                 # cost model
-                if func == "cost":
+                if fun == "cost":
 
                     def qconcav_rule(model, i, h):
                         arow = x[i]
@@ -143,7 +143,7 @@ def cnlsz(y, x, z, crt, func, pps):
 
                     model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
 
-            if pps == "crs":
+            if rts == "crs":
 
                 # Constraints
                 def qreg_rule(model, i):
@@ -158,7 +158,7 @@ def cnlsz(y, x, z, crt, func, pps):
                 model.qlog = Constraint(model.i, rule=qlog_rule, doc='cost function')
 
                 # production model
-                if func == "prod":
+                if fun == "prod":
 
                     def qconcav_rule(model, i, h):
                         arow = x[i]
@@ -170,7 +170,7 @@ def cnlsz(y, x, z, crt, func, pps):
                     model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
 
                 # cost model
-                if func == "cost":
+                if fun == "cost":
 
                     def qconcav_rule(model, i, h):
                         arow = x[i]
@@ -190,7 +190,7 @@ def cnlsz(y, x, z, crt, func, pps):
         model.d = Var(model.k, doc='z-coeff')
 
         # Additive composite error term
-        if crt == "addi":
+        if cet == "addi":
 
             # Objective function
             def objective_rule(model):
@@ -198,7 +198,7 @@ def cnlsz(y, x, z, crt, func, pps):
 
             model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')
 
-            if pps == "vrs":
+            if rts == "vrs":
 
                 # Constraints
                 def reg_rule(model, i):
@@ -210,7 +210,7 @@ def cnlsz(y, x, z, crt, func, pps):
                 model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
                 # production model
-                if func == "prod":
+                if fun == "prod":
 
                     def concav_rule(model, i, h):
                         arow = x[i]
@@ -222,7 +222,7 @@ def cnlsz(y, x, z, crt, func, pps):
                     model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
 
                 # cost model
-                if func == "cost":
+                if fun == "cost":
 
                     def concav_rule(model, i, h):
                         arow = x[i]
@@ -234,7 +234,7 @@ def cnlsz(y, x, z, crt, func, pps):
                     model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
 
         # Multiplicative composite error term
-        if crt == "mult":
+        if cet == "mult":
 
             # Objective function
             def objective_rule(model):
@@ -242,7 +242,7 @@ def cnlsz(y, x, z, crt, func, pps):
 
             model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')
 
-            if pps == "vrs":
+            if rts == "vrs":
 
                 # Constraints
                 def qreg_rule(model, i):
@@ -258,7 +258,7 @@ def cnlsz(y, x, z, crt, func, pps):
                 model.qlog = Constraint(model.i, rule=qlog_rule, doc='cost function')
 
                 # production model
-                if func == "prod":
+                if fun == "prod":
 
                     def qconcav_rule(model, i, h):
                         arow = x[i]
@@ -270,7 +270,7 @@ def cnlsz(y, x, z, crt, func, pps):
                     model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
 
                 # cost model
-                if func == "cost":
+                if fun == "cost":
 
                     def qconcav_rule(model, i, h):
                         arow = x[i]
@@ -281,7 +281,7 @@ def cnlsz(y, x, z, crt, func, pps):
 
                     model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
 
-            if pps == "crs":
+            if rts == "crs":
 
                 # Constraints
                 def qreg_rule(model, i):
@@ -297,7 +297,7 @@ def cnlsz(y, x, z, crt, func, pps):
                 model.qlog = Constraint(model.i, rule=qlog_rule, doc='cost function')
 
                 # production model
-                if func == "prod":
+                if fun == "prod":
 
                     def qconcav_rule(model, i, h):
                         arow = x[i]
@@ -309,7 +309,7 @@ def cnlsz(y, x, z, crt, func, pps):
                     model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
 
                 # cost model
-                if func == "cost":
+                if fun == "cost":
 
                     def qconcav_rule(model, i, h):
                         arow = x[i]

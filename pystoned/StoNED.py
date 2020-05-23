@@ -12,12 +12,12 @@ from scipy.stats import norm
 import scipy.optimize as opt
 
 
-def stoned(y, eps, func, method, crt):
-    # func    = "prod": production frontier;
+def stoned(y, eps, fun, method, cet):
+    # fun     = "prod": production frontier;
     #         = "cost": cost frontier
     # method  = "MOM" : Method of moments
     #         = "QLE" : Quasi-likelihood estimation
-    # crt     = "addi": Additive composite error term
+    # cet     = "addi": Additive composite error term
     #         = "mult": Multiplicative composite error term
 
     if method == "MoM":
@@ -33,7 +33,7 @@ def stoned(y, eps, func, method, crt):
         mM2 = np.mean(M2, axis=0)
         mM3 = np.mean(M3, axis=0)
 
-        if func == "prod":
+        if fun == "prod":
             if mM3 > 0:
                 mM3 = 0.0
 
@@ -58,7 +58,7 @@ def stoned(y, eps, func, method, crt):
             # technical inefficiency
             Etheta = ((y-eps+mu) - Eu)/(y-eps+mu)
 
-        if func == "cost":
+        if fun == "cost":
             if mM3 < 0:
                 mM3 = 0.00001
 
@@ -88,7 +88,7 @@ def stoned(y, eps, func, method, crt):
         # initial parameter lambda
         lamda = 1.0
 
-        if func == "prod":
+        if fun == "prod":
 
             # optimization
             llres = opt.minimize(qle.qlep, lamda, eps, method='BFGS')
@@ -120,7 +120,7 @@ def stoned(y, eps, func, method, crt):
             # technical inefficiency
             Etheta = ((y-eps+mu)-Eu)/(y-eps+mu)
 
-        if func == "cost":
+        if fun == "cost":
 
             # optimization
             llres = opt.minimize(qle.qlec, lamda, eps, method='BFGS')
@@ -152,10 +152,10 @@ def stoned(y, eps, func, method, crt):
             # technical inefficiency
             Etheta = (Eu - (y-eps-mu))/(y-eps-mu)
 
-    if crt == "addi":
+    if cet == "addi":
        TE = Etheta
 
-    if crt == "mult":
+    if cet == "mult":
        TE = np.exp(-Eu)
 
     return Eu, TE

@@ -59,6 +59,7 @@ def dv(gx, gy, n, m, p):
 
     return gx, gy
 
+
 def dvb(gx, gb, gy, n, m, q, p):
     # directional vectors with undesirable outputs
 

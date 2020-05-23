@@ -9,8 +9,8 @@ from . import biMatP
 from . import ICNLS
 from . import CNLSDDF
 from . import directV
-from . import CNLSDDFb
 from . import kde
+from . import CNLSPLOT
 
 __all__ = [
     'CNLS',
@@ -24,6 +24,6 @@ __all__ = [
     'ICNLS',
     'CNLSDDF',
     'directV',
-    'CNLSDDFb',
-    'kde'
+    'kde',
+    'CNLSPLOT'
 ]
