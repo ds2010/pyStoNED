@@ -53,8 +53,8 @@ def cerddf(y, x, tau, fun, gx, gy):
         # Variables
         model.a = Var(model.i, doc='alpha')
         model.b = Var(model.i, bounds=(0.0, None), doc='beta')
-        model.ep = Var(model.i, doc='error term eplus')
-        model.em = Var(model.i, doc='error term eminus')
+        model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
+        model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
@@ -106,8 +106,8 @@ def cerddf(y, x, tau, fun, gx, gy):
         # Variables
         model.a = Var(model.i, doc='alpha')
         model.b = Var(model.i, bounds=(0.0, None), doc='beta')
-        model.ep = Var(model.i, doc='error term eplus')
-        model.em = Var(model.i, doc='error term eminus')
+        model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
+        model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
         model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
@@ -167,8 +167,8 @@ def cerddf(y, x, tau, fun, gx, gy):
         # Variables
         model.a = Var(model.i, doc='alpha')
         model.b = Var(model.i, model.j, bounds=(0.0, None), doc='beta')
-        model.ep = Var(model.i, doc='error term eplus')
-        model.em = Var(model.i, doc='error term eminus')
+        model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
+        model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
@@ -225,8 +225,8 @@ def cerddf(y, x, tau, fun, gx, gy):
         # Variables
         model.a = Var(model.i, doc='alpha')
         model.b = Var(model.i, model.j, bounds=(0.0, None), doc='beta')
-        model.ep = Var(model.i, doc='error term eplus')
-        model.em = Var(model.i, doc='error term eminus')
+        model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
+        model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
         model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
@@ -333,8 +333,8 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         # Variables
         model.a = Var(model.i, doc='alpha')
         model.b = Var(model.i, bounds=(0.0, None), doc='beta')
-        model.ep = Var(model.i, doc='error term eplus')
-        model.em = Var(model.i, doc='error term eminus')
+        model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
+        model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, bounds=(0.0, None), doc='delta')
         model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
@@ -390,8 +390,8 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         # Variables
         model.a = Var(model.i, doc='alpha')
         model.b = Var(model.i, bounds=(0.0, None), doc='beta')
-        model.ep = Var(model.i, doc='error term eplus')
-        model.em = Var(model.i, doc='error term eminus')
+        model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
+        model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
         model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
@@ -451,8 +451,8 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         # Variables
         model.a = Var(model.i, doc='alpha')
         model.b = Var(model.i, bounds=(0.0, None), doc='beta')
-        model.ep = Var(model.i, doc='error term eplus')
-        model.em = Var(model.i, doc='error term eminus')
+        model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
+        model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
         model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
@@ -513,8 +513,8 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         # Variables
         model.a = Var(model.i, doc='alpha')
         model.b = Var(model.i, bounds=(0.0, None), doc='beta')
-        model.ep = Var(model.i, doc='error term eplus')
-        model.em = Var(model.i, doc='error term eminus')
+        model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
+        model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
         model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
@@ -582,8 +582,8 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         # Variables
         model.a = Var(model.i, doc='alpha')
         model.b = Var(model.i, model.j, bounds=(0.0, None), doc='beta')
-        model.ep = Var(model.i, doc='error term eplus')
-        model.em = Var(model.i, doc='error term eminus')
+        model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
+        model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, bounds=(0.0, None), doc='delta')
         model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
@@ -644,8 +644,8 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         # Variables
         model.a = Var(model.i, doc='alpha')
         model.b = Var(model.i, model.j, bounds=(0.0, None), doc='beta')
-        model.ep = Var(model.i, doc='error term eplus')
-        model.em = Var(model.i, doc='error term eminus')
+        model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
+        model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, bounds=(0.0, None), doc='delta')
         model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
@@ -713,8 +713,8 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         # Variables
         model.a = Var(model.i, doc='alpha')
         model.b = Var(model.i, model.j, bounds=(0.0, None), doc='beta')
-        model.ep = Var(model.i, doc='error term eplus')
-        model.em = Var(model.i, doc='error term eminus')
+        model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
+        model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
         model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
@@ -783,8 +783,8 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         # Variables
         model.a = Var(model.i, doc='alpha')
         model.b = Var(model.i, model.j, bounds=(0.0, None), doc='beta')
-        model.ep = Var(model.i, doc='error term eplus')
-        model.em = Var(model.i, doc='error term eminus')
+        model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
+        model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
         model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
