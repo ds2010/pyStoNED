@@ -66,7 +66,7 @@ def cerddf(y, x, tau, fun, gx, gy):
 
         # Constraints
         def reg_rule(model, i):
-            return model.g[i] * y[i] == model.a[i] + model.b[i] * x[i] - model.ep[i] + model.em[i]
+            return model.g[i] * y[i] == model.a[i] + model.b[i] * x[i] + model.ep[i] - model.em[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
@@ -181,7 +181,8 @@ def cerddf(y, x, tau, fun, gx, gy):
         # Constraints
         def reg_rule(model, i):
             arow = x[i]
-            return model.g[i] * y[i] == model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - model.ep[i] + model.em[i]
+            return model.g[i] * y[i] == model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) \
+                   + model.ep[i] - model.em[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
@@ -241,7 +242,7 @@ def cerddf(y, x, tau, fun, gx, gy):
             arow = x[i]
             brow = y[i]
             return sum(model.g[i, k] * brow[k] for k in model.k) == model.a[i] + sum(
-                model.b[i, j] * arow[j] for j in model.j) - model.ep[i] + model.em[i]
+                model.b[i, j] * arow[j] for j in model.j) + model.ep[i] - model.em[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
@@ -347,7 +348,8 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
 
         # Constraints
         def reg_rule(model, i):
-            return model.g[i] * y[i] == model.a[i] + model.b[i] * x[i] + model.d[i] * b[i] - model.ep[i] + model.em[i]
+            return model.g[i] * y[i] == model.a[i] + model.b[i] * x[i] + model.d[i] * b[i] \
+                   + model.ep[i] - model.em[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
@@ -406,7 +408,7 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         def reg_rule(model, i):
             crow = b[i]
             return model.g[i] * y[i] == model.a[i] + model.b[i] * x[i] + \
-                   sum(model.d[i, l] * crow[l] for l in model.l) - model.ep[i] + model.em[i]
+                   sum(model.d[i, l] * crow[l] for l in model.l) + model.ep[i] - model.em[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
@@ -467,7 +469,7 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         def reg_rule(model, i):
             crow = b[i]
             return model.g[i] * y[i] == model.a[i] + model.b[i] * x[i] + \
-                   sum(model.d[i, l] * crow[l] for l in model.l) - model.ep[i] + model.em[i]
+                   sum(model.d[i, l] * crow[l] for l in model.l) + model.ep[i] - model.em[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
@@ -530,7 +532,7 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
             brow = y[i]
             crow = b[i]
             return sum(model.g[i, k] * brow[k] for k in model.k) == model.a[i] + model.b[i] * x[i] + \
-                   sum(model.d[i, l] * crow[l] for l in model.l) - model.ep[i] + model.em[i]
+                   sum(model.d[i, l] * crow[l] for l in model.l) + model.ep[i] - model.em[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
@@ -598,7 +600,7 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         def reg_rule(model, i):
             arow = x[i]
             return model.g[i] * y[i] == model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + \
-                   model.d[i] * b[i] - model.ep[i] + model.em[i]
+                   model.d[i] * b[i] + model.ep[i] - model.em[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
@@ -661,7 +663,7 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
             arow = x[i]
             brow = y[i]
             return sum(model.g[i, k] * brow[k] for k in model.k) == model.a[i] + \
-                   sum(model.b[i, j] * arow[j] for j in model.j) + model.d[i] * b[i] - model.ep[i] + model.em[i]
+                   sum(model.b[i, j] * arow[j] for j in model.j) + model.d[i] * b[i] + model.ep[i] - model.em[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
@@ -730,7 +732,7 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
             arow = x[i]
             crow = b[i]
             return model.g[i] * y[i] == model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + \
-                   sum(model.d[i, l] * crow[l] for l in model.l) - model.ep[i] + model.em[i]
+                   sum(model.d[i, l] * crow[l] for l in model.l) + model.ep[i] - model.em[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
@@ -802,7 +804,7 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
             crow = b[i]
             return sum(model.g[i, k] * brow[k] for k in model.k) == model.a[i] + sum(
                 model.b[i, j] * arow[j] for j in model.j) + \
-                   sum(model.d[i, l] * crow[l] for l in model.l) - model.ep[i] + model.em[i]
+                   sum(model.d[i, l] * crow[l] for l in model.l) + model.ep[i] - model.em[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
 
