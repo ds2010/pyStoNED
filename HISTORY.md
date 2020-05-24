@@ -1,5 +1,18 @@
 # Change log
 
+## [0.2.7] - 2020-05-24
+### Added
+- `CNLSPLOT()`
+
+### Changed
+- adjust the argument `pps` to `rts`
+- adjust the argument `func` to `fun`
+- adjust the argument `crt` to `cet`
+- `CNLSDDF()`
+
+### Removed
+- `CNLSDDFB()`
+
 ## [0.2.6] - 2020-05-05
 ### Changed
 - `qle()`
