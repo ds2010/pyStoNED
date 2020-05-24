@@ -58,9 +58,9 @@ Additional tutorials:
 - [x] Multiple outputs (CNLS-DDF formulation)
    - [x] with undesirable outputs
    - [x] without undesirable outputs
-- [ ] Multiple outputs (CQR/CER-DDF formulation)
-   - [ ] with undesirable outputs
-   - [ ] without undesirable outputs   
+- [x] Multiple outputs (CQR/CER-DDF formulation)
+   - [x] with undesirable outputs
+   - [x] without undesirable outputs   
 - [ ] Representation of `StoNED`-related frontier/quantile function
    - [x] one input and one output
    - [ ] two inputs and one output 

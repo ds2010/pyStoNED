@@ -1,29 +1,33 @@
-from . import CNLS
-from . import StoNED
-from . import CQER
-from . import qle
-from . import CNLSZ
+from . import biMatP
 from . import CCNLS
 from . import CCNLS2
-from . import biMatP
-from . import ICNLS
+from . import CERDDF
+from . import CNLS
 from . import CNLSDDF
+from . import CNLSPLOT
+from . import CNLSZ
+from . import CQER
+from . import CQRDDF
 from . import directV
 from . import kde
-from . import CNLSPLOT
+from . import qle
+from . import ICNLS
+from . import StoNED
 
 __all__ = [
-    'CNLS',
-    'StoNED',
-    'CQER',
-    'qle',
-    'CNLSZ',
+    'biMatP',
     'CCNLS',
     'CCNLS2',
-    'biMatP',
-    'ICNLS',
+    'CERDDF',
+    'CNLS',
     'CNLSDDF',
+    'CNLSPLOT',
+    'CNLSZ',
+    'CQER',
+    'CQRDDF',
     'directV',
     'kde',
-    'CNLSPLOT'
+    'qle',
+    'ICNLS',
+    'StoNED'
 ]

@@ -1,5 +1,10 @@
 # Change log
 
+## [0.2.8] - 2020-05-25
+### Added
+- `CQRDDF()`
+- `CERDDF()`
+
 ## [0.2.7] - 2020-05-24
 ### Added
 - `CNLSPLOT()`
