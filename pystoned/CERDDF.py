@@ -56,7 +56,6 @@ def cerddf(y, x, tau, fun, gx, gy):
         model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
         model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -110,7 +109,6 @@ def cerddf(y, x, tau, fun, gx, gy):
         model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
         model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -172,7 +170,6 @@ def cerddf(y, x, tau, fun, gx, gy):
         model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
         model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -232,7 +229,6 @@ def cerddf(y, x, tau, fun, gx, gy):
         model.ep = Var(model.i, bounds=(0.0, None), doc='error term plus')
         model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -342,7 +338,6 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -400,7 +395,6 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -462,7 +456,6 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -525,7 +518,6 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -595,7 +587,6 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -658,7 +649,6 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -728,7 +718,6 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -799,7 +788,6 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
         model.em = Var(model.i, bounds=(0.0, None), doc='error term minus')
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
