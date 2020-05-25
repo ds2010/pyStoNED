@@ -55,7 +55,6 @@ def cnlsddf(y, x, fun, gx, gy):
         model.b = Var(model.i, bounds=(0.0, None), doc='beta')
         model.e = Var(model.i, doc='residuals')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -107,7 +106,6 @@ def cnlsddf(y, x, fun, gx, gy):
         model.b = Var(model.i, bounds=(0.0, None), doc='beta')
         model.e = Var(model.i, doc='residuals')
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -167,7 +165,6 @@ def cnlsddf(y, x, fun, gx, gy):
         model.b = Var(model.i, model.j, bounds=(0.0, None), doc='beta')
         model.e = Var(model.i, doc='residuals')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -224,7 +221,6 @@ def cnlsddf(y, x, fun, gx, gy):
         model.b = Var(model.i, model.j, bounds=(0.0, None), doc='beta')
         model.e = Var(model.i, doc='residuals')
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -332,7 +328,6 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
         model.e = Var(model.i, doc='residuals')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -388,7 +383,6 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
         model.e = Var(model.i, doc='residuals')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -448,7 +442,6 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
         model.e = Var(model.i, doc='residuals')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -509,7 +502,6 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
         model.e = Var(model.i, doc='residuals')
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -577,7 +569,6 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
         model.e = Var(model.i, doc='residuals')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -638,7 +629,6 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
         model.e = Var(model.i, doc='residuals')
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -706,7 +696,6 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
         model.e = Var(model.i, doc='residuals')
         model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
@@ -775,7 +764,6 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
         model.e = Var(model.i, doc='residuals')
         model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
         model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
-        model.f = Var(model.i, bounds=(0.0, None), doc='estimated frontier')
 
         # Objective function
         def objective_rule(model):
