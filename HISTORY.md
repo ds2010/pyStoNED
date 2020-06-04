@@ -1,9 +1,12 @@
 # Change log
 
-## [0.2.8] - 2020-05-25
+## [0.2.8] - 2020-06-04
 ### Added
 - `CQRDDF()`
 - `CERDDF()`
+
+### Changed
+- `directV()`
 
 ## [0.2.7] - 2020-05-24
 ### Added

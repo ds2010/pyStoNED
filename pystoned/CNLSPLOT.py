@@ -20,7 +20,7 @@ def cnlsplot2d(x, y, eps):
     f = y - eps
     data = (np.stack([x, y, f], axis=0)).T
 
-    # sort the array by first coloum (x)
+    # sort the array by first column (x)
     col = 0
     data=data[np.argsort(data[:,col])].T
     

@@ -133,3 +133,20 @@ def dvb(gx, gb, gy, n, m, q, p):
         gy = gy.tolist()
 
     return gx, gb, gy
+
+
+def dvx(gx, n):
+    # directional vectors with vector X
+
+    gx1 = np.repeat(gx[0], n)
+    gx1 = np.asmatrix(gx1).T
+    gx2 = np.repeat(gx[1], n)
+    gx2 = np.asmatrix(gx2).T
+    gx3 = np.repeat(gx[2], n)
+    gx3 = np.asmatrix(gx3).T
+
+    gx = np.concatenate((gx1, gx2, gx3), axis=1)
+    gx = gx.tolist()
+
+    return gx
+
