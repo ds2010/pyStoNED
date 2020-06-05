@@ -27,6 +27,7 @@ A number of `StoEND`-related tutorial examples are provided as follows, and more
 Additional tutorials:
   + [Rewrite GAMS codes in Python](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/gams2python.ipynb)
   + [A ConcreteModel for CNLS estimation](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/ConcreteModel.ipynb)
+  + [Tutorials for Productivity and Efficiency Analysis](https://github.com/ds2010/Productivity-and-Efficiency-Analysis)
  
 > **Note**
   1. The entire [function list](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/function_list.ipynb) and syntax in [`pyStoNED`](https://pypi.org/project/pystoned/) package can be seen from [Tutorials](https://github.com/ds2010/StoNED-Python/tree/master/Tutorials).
