@@ -23,6 +23,9 @@ A number of `StoEND`-related tutorial examples are provided as follows, and more
   + [Convex quantile/expectile regression (`CQR` and `CER`)](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/CQR_CER.ipynb)
   + Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
   + Isotonic Convex Nonparametric Least Square (`ICNLS`)
+  + Basic Data Envelopment Analysis (DEA) models
+    + [Input oriented VRS model](https://github.com/ds2010/Productivity-and-Efficiency-Analysis/blob/master/DEA/DEA_VRS.ipynb) 
+    + Output oriented VRS model
 
 Additional tutorials:
   + [Rewrite GAMS codes in Python](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/gams2python.ipynb)
