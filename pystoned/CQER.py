@@ -17,6 +17,10 @@ def cqr(y, x, tau, cet, fun, rts):
     # rts     = "vrs"  : variable returns to scale
     #         = "crs"  : constant returns to scale
 
+    # transform data
+    x = x.tolist()
+    y = y.tolist()
+
     # number of DMUs
     n = len(y)
 
@@ -51,7 +55,7 @@ def cqr(y, x, tau, cet, fun, rts):
             def objective_rule(model):
                 return tau * sum(model.ep[i] for i in model.i) + (1 - tau) * sum(model.em[i] for i in model.i)
 
-            model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')
+            model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
 
             if rts == "vrs":
 
@@ -59,7 +63,7 @@ def cqr(y, x, tau, cet, fun, rts):
                 def reg_rule(model, i):
                     return y[i] == model.a[i] + model.b[i] * x[i] + model.ep[i] - model.em[i]
 
-                model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
+                model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
 
                 # production model
                 if fun == "prod":
@@ -74,12 +78,12 @@ def cqr(y, x, tau, cet, fun, rts):
                 # cost model
                 if fun == "cost":
 
-                    def concav_rule(model, i, h):
+                    def convex_rule(model, i, h):
                         if i == h:
                             return Constraint.Skip
                         return model.a[i] + model.b[i] * x[i] >= model.a[h] + model.b[h] * x[i]
 
-                    model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
+                    model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
 
         # Multiplicative composite error term
         if cet == "mult":
@@ -88,7 +92,7 @@ def cqr(y, x, tau, cet, fun, rts):
             def objective_rule(model):
                 return tau * sum(model.ep[i] for i in model.i) + (1 - tau) * sum(model.em[i] for i in model.i)
 
-            model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')
+            model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
 
             if rts == "vrs":
 
@@ -96,7 +100,7 @@ def cqr(y, x, tau, cet, fun, rts):
                 def qreg_rule(model, i):
                     return log(y[i]) == log(model.f[i] + 1) + model.ep[i] - model.em[i]
 
-                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression')
+                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression equation')
 
                 def qlog_rule(model, i):
                     return model.f[i] == model.a[i] + model.b[i] * x[i] - 1
@@ -116,12 +120,12 @@ def cqr(y, x, tau, cet, fun, rts):
                 # cost model
                 if fun == "cost":
 
-                    def qconcav_rule(model, i, h):
+                    def qconvex_rule(model, i, h):
                         if i == h:
                             return Constraint.Skip
                         return model.a[i] + model.b[i] * x[i] >= model.a[h] + model.b[h] * x[i]
 
-                    model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
+                    model.qconvex = Constraint(model.i, model.h, rule=qconvex_rule, doc='convexity constraint')
 
             if rts == "crs":
 
@@ -129,7 +133,7 @@ def cqr(y, x, tau, cet, fun, rts):
                 def qreg_rule(model, i):
                     return log(y[i]) == log(model.f[i] + 1) + model.ep[i] - model.em[i]
 
-                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression')
+                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression equation')
 
                 def qlog_rule(model, i):
                     return model.f[i] == model.b[i] * x[i] - 1
@@ -149,12 +153,12 @@ def cqr(y, x, tau, cet, fun, rts):
                 # cost model
                 if fun == "cost":
 
-                    def qconcav_rule(model, i, h):
+                    def qconvex_rule(model, i, h):
                         if i == h:
                             return Constraint.Skip
                         return model.b[i] * x[i] >= model.b[h] * x[i]
 
-                    model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
+                    model.qconvex = Constraint(model.i, model.h, rule=qconvex_rule, doc='convexity constraint')
 
     if m > 1:
 
@@ -179,7 +183,7 @@ def cqr(y, x, tau, cet, fun, rts):
             def objective_rule(model):
                 return tau * sum(model.ep[i] for i in model.i) + (1 - tau) * sum(model.em[i] for i in model.i)
 
-            model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')
+            model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
 
             if rts == "vrs":
 
@@ -188,7 +192,7 @@ def cqr(y, x, tau, cet, fun, rts):
                     arow = x[i]
                     return y[i] == model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + model.ep[i] - model.em[i]
 
-                model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
+                model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
 
                 # production model
                 if fun == "prod":
@@ -205,14 +209,14 @@ def cqr(y, x, tau, cet, fun, rts):
                 # cost model
                 if fun == "cost":
 
-                    def concav_rule(model, i, h):
+                    def convex_rule(model, i, h):
                         arow = x[i]
                         if i == h:
                             return Constraint.Skip
                         return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) >= model.a[h] + sum(
                                model.b[h, j] * arow[j] for j in model.j)
 
-                    model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
+                    model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
 
         # Multiplicative composite error term
         if cet == "mult":
@@ -221,7 +225,7 @@ def cqr(y, x, tau, cet, fun, rts):
             def objective_rule(model):
                 return tau * sum(model.ep[i] for i in model.i) + (1 - tau) * sum(model.em[i] for i in model.i)
 
-            model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')
+            model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
 
             if rts == "vrs":
 
@@ -229,7 +233,7 @@ def cqr(y, x, tau, cet, fun, rts):
                 def qreg_rule(model, i):
                     return log(y[i]) == log(model.f[i] + 1) + model.ep[i] - model.em[i]
 
-                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression')
+                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression equation')
 
                 def qlog_rule(model, i):
                     arow = x[i]
@@ -252,14 +256,14 @@ def cqr(y, x, tau, cet, fun, rts):
                 # cost model
                 if fun == "cost":
 
-                    def qconcav_rule(model, i, h):
+                    def qconvex_rule(model, i, h):
                         arow = x[i]
                         if i == h:
                             return Constraint.Skip
                         return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) >= model.a[h] + sum(
                                model.b[h, j] * arow[j] for j in model.j)
 
-                    model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
+                    model.qconvex = Constraint(model.i, model.h, rule=qconvex_rule, doc='convexity constraint')
 
             if rts == "crs":
 
@@ -267,7 +271,7 @@ def cqr(y, x, tau, cet, fun, rts):
                 def qreg_rule(model, i):
                     return log(y[i]) == log(model.f[i] + 1) + model.ep[i] - model.em[i]
 
-                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression')
+                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression equation')
 
                 def qlog_rule(model, i):
                     arow = x[i]
@@ -290,14 +294,14 @@ def cqr(y, x, tau, cet, fun, rts):
                 # cost model
                 if fun == "cost":
 
-                    def qconcav_rule(model, i, h):
+                    def qconvex_rule(model, i, h):
                         arow = x[i]
                         if i == h:
                             return Constraint.Skip
                         return sum(model.b[i, j] * arow[j] for j in model.j) >= sum(
                                 model.b[h, j] * arow[j] for j in model.j)
 
-                    model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
+                    model.qconvex = Constraint(model.i, model.h, rule=qconvex_rule, doc='convexity constraint')
 
     return model
 
@@ -345,7 +349,7 @@ def cer(y, x, tau, cet, fun, rts):
                 return tau * sum(model.ep[i] * model.ep[i] for i in model.i) + (1 - tau) * sum(
                     model.em[i] * model.em[i] for i in model.i)
 
-            model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')
+            model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
 
             if rts == "vrs":
 
@@ -353,7 +357,7 @@ def cer(y, x, tau, cet, fun, rts):
                 def reg_rule(model, i):
                     return y[i] == model.a[i] + model.b[i] * x[i] + model.ep[i] - model.em[i]
 
-                model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
+                model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
 
                 # production model
                 if fun == "prod":
@@ -368,12 +372,12 @@ def cer(y, x, tau, cet, fun, rts):
                 # cost model
                 if fun == "cost":
 
-                    def concav_rule(model, i, h):
+                    def convex_rule(model, i, h):
                         if i == h:
                             return Constraint.Skip
                         return model.a[i] + model.b[i] * x[i] >= model.a[h] + model.b[h] * x[i]
 
-                    model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
+                    model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
 
         # Multiplicative composite error term
         if cet == "mult":
@@ -383,7 +387,7 @@ def cer(y, x, tau, cet, fun, rts):
                 return tau * sum(model.ep[i] * model.ep[i] for i in model.i) + (1 - tau) * sum(
                     model.em[i] * model.em[i] for i in model.i)
 
-            model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')
+            model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
 
             if rts == "vrs":
 
@@ -391,7 +395,7 @@ def cer(y, x, tau, cet, fun, rts):
                 def qreg_rule(model, i):
                     return log(y[i]) == log(model.f[i] + 1) + model.ep[i] - model.em[i]
 
-                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression')
+                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression equation')
 
                 def qlog_rule(model, i):
                     return model.f[i] == model.a[i] + model.b[i] * x[i] - 1
@@ -411,12 +415,12 @@ def cer(y, x, tau, cet, fun, rts):
                 # cost model
                 if fun == "cost":
 
-                    def qconcav_rule(model, i, h):
+                    def qconvex_rule(model, i, h):
                         if i == h:
                             return Constraint.Skip
                         return model.a[i] + model.b[i] * x[i] >= model.a[h] + model.b[h] * x[i]
 
-                    model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
+                    model.qconvex = Constraint(model.i, model.h, rule=qconvex_rule, doc='convexity constraint')
 
             if rts == "crs":
 
@@ -424,7 +428,7 @@ def cer(y, x, tau, cet, fun, rts):
                 def qreg_rule(model, i):
                     return log(y[i]) == log(model.f[i] + 1) + model.ep[i] - model.em[i]
 
-                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression')
+                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression equation')
 
                 def qlog_rule(model, i):
                     return model.f[i] == model.b[i] * x[i] - 1
@@ -444,12 +448,12 @@ def cer(y, x, tau, cet, fun, rts):
                 # cost model
                 if fun == "cost":
 
-                    def qconcav_rule(model, i, h):
+                    def qconvex_rule(model, i, h):
                         if i == h:
                             return Constraint.Skip
                         return model.b[i] * x[i] >= model.b[h] * x[i]
 
-                    model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
+                    model.qconvex = Constraint(model.i, model.h, rule=qconvex_rule, doc='convexity constraint')
 
     if m > 1:
 
@@ -475,7 +479,7 @@ def cer(y, x, tau, cet, fun, rts):
                 return tau * sum(model.ep[i] * model.ep[i] for i in model.i) + (1 - tau) * sum(
                     model.em[i] * model.em[i] for i in model.i)
 
-            model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')
+            model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
 
             if rts == "vrs":
 
@@ -485,7 +489,7 @@ def cer(y, x, tau, cet, fun, rts):
                     return y[i] == model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + model.ep[i] - model.em[
                         i]
 
-                model.reg = Constraint(model.i, rule=reg_rule, doc='regression')
+                model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
 
                 # production model
                 if fun == "prod":
@@ -502,14 +506,14 @@ def cer(y, x, tau, cet, fun, rts):
                 # cost model
                 if fun == "cost":
 
-                    def concav_rule(model, i, h):
+                    def convex_rule(model, i, h):
                         arow = x[i]
                         if i == h:
                             return Constraint.Skip
                         return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) >= model.a[h] + sum(
                             model.b[h, j] * arow[j] for j in model.j)
 
-                    model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
+                    model.convex= Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
 
         # Multiplicative composite error term
         if cet == "mult":
@@ -519,7 +523,7 @@ def cer(y, x, tau, cet, fun, rts):
                 return tau * sum(model.ep[i] * model.ep[i] for i in model.i) + (1 - tau) * sum(
                     model.em[i] * model.em[i] for i in model.i)
 
-            model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')
+            model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
 
             if rts == "vrs":
 
@@ -527,7 +531,7 @@ def cer(y, x, tau, cet, fun, rts):
                 def qreg_rule(model, i):
                     return log(y[i]) == log(model.f[i] + 1) + model.ep[i] - model.em[i]
 
-                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression')
+                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression equation')
 
                 def qlog_rule(model, i):
                     arow = x[i]
@@ -550,14 +554,14 @@ def cer(y, x, tau, cet, fun, rts):
                 # cost model
                 if fun == "cost":
 
-                    def qconcav_rule(model, i, h):
+                    def qconvex_rule(model, i, h):
                         arow = x[i]
                         if i == h:
                             return Constraint.Skip
                         return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) >= model.a[h] + sum(
                             model.b[h, j] * arow[j] for j in model.j)
 
-                    model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
+                    model.qconvex = Constraint(model.i, model.h, rule=qconvex_rule, doc='convexity constraint')
 
             if rts == "crs":
 
@@ -565,7 +569,7 @@ def cer(y, x, tau, cet, fun, rts):
                 def qreg_rule(model, i):
                     return log(y[i]) == log(model.f[i] + 1) + model.ep[i] - model.em[i]
 
-                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression')
+                model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression equation')
 
                 def qlog_rule(model, i):
                     arow = x[i]
@@ -588,13 +592,13 @@ def cer(y, x, tau, cet, fun, rts):
                 # cost model
                 if fun == "cost":
 
-                    def qconcav_rule(model, i, h):
+                    def qconvex_rule(model, i, h):
                         arow = x[i]
                         if i == h:
                             return Constraint.Skip
                         return sum(model.b[i, j] * arow[j] for j in model.j) >= sum(
                             model.b[h, j] * arow[j] for j in model.j)
 
-                    model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
+                    model.qconvex = Constraint(model.i, model.h, rule=qconvex_rule, doc='convexity constraint')
 
     return model

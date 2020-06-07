@@ -23,14 +23,10 @@ A number of `StoEND`-related tutorial examples are provided as follows, and more
   + [Convex quantile/expectile regression (`CQR` and `CER`)](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/CQR_CER.ipynb)
   + Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
   + Isotonic Convex Nonparametric Least Square (`ICNLS`)
-  + Basic Data Envelopment Analysis (DEA) models
-    + [Input oriented VRS model](https://github.com/ds2010/Productivity-and-Efficiency-Analysis/blob/master/DEA/DEA_VRS.ipynb) 
-    + Output oriented VRS model
 
 Additional tutorials:
   + [Rewrite GAMS codes in Python](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/gams2python.ipynb)
   + [A ConcreteModel for CNLS estimation](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/ConcreteModel.ipynb)
-  + [Tutorials for Productivity and Efficiency Analysis](https://github.com/ds2010/Productivity-and-Efficiency-Analysis)
  
 > **Note**
   1. The entire [function list](https://github.com/ds2010/StoNED-Python/blob/master/Tutorials/function_list.ipynb) and syntax in [`pyStoNED`](https://pypi.org/project/pystoned/) package can be seen from [Tutorials](https://github.com/ds2010/StoNED-Python/tree/master/Tutorials).
@@ -65,6 +61,11 @@ Additional tutorials:
 - [x] Multiple outputs (CQR/CER-DDF formulation)
    - [x] with undesirable outputs
    - [x] without undesirable outputs   
+- [x] Basic Data Envelopment Analysis (`DEA`) models
+   - [x] Radial input oriented model: CRS and VRS
+   - [x] Radial output oriented model: CRS and VRS
+   - [ ] Directional model: CRS and VRS
+   - [ ] Directional model with undesirable outputs: CRS and VRS         
 - [ ] Representation of `StoNED`-related frontier/quantile function
    - [x] one input and one output
    - [ ] two inputs and one output 

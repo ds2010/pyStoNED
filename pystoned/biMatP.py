@@ -10,9 +10,6 @@ import numpy as np
 
 def bimatp(x):
 
-    # convert list to array
-    x = np.array(x)
-
     # number of DMUs
     n = len(x)
 

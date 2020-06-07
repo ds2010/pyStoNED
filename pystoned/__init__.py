@@ -8,6 +8,7 @@ from . import CNLSPLOT
 from . import CNLSZ
 from . import CQER
 from . import CQRDDF
+from . import DEA
 from . import directV
 from . import kde
 from . import qle
@@ -25,6 +26,7 @@ __all__ = [
     'CNLSZ',
     'CQER',
     'CQRDDF',
+    'DEA',
     'directV',
     'kde',
     'qle',
