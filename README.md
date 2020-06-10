@@ -64,8 +64,8 @@ Additional tutorials:
 - [x] Basic Data Envelopment Analysis (`DEA`) models
    - [x] Radial input oriented model: CRS and VRS
    - [x] Radial output oriented model: CRS and VRS
-   - [ ] Directional model: CRS and VRS
-   - [ ] Directional model with undesirable outputs: CRS and VRS         
+   - [x] Directional model: CRS and VRS
+   - [x] Directional model with undesirable outputs: CRS and VRS         
 - [ ] Representation of `StoNED`-related frontier/quantile function
    - [x] one input and one output
    - [ ] two inputs and one output 
