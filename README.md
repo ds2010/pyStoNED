@@ -12,7 +12,7 @@ We have published a beta version [`pyStoNED`](https://pypi.org/project/pystoned/
 
 # [Tutorials](https://github.com/ds2010/StoNED-Python/tree/master/Tutorials)
 
-A number of `StoEND`-related tutorial examples are provided as follows, and more detailed technical reports are currently under development.
+A number of Jupyter Notebooks are provided in the repository [pyStoNED-Tutorials](https://github.com/ds2010/pyStoNED-Tutorials), and more detailed technical reports are currently under development.
   
 # Authors
 
