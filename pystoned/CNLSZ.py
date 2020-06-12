@@ -20,6 +20,7 @@ def cnlsz(y, x, z, cet, fun, rts):
     # transform data
     x = x.tolist()
     y = y.tolist()
+    z = z.tolist()
 
     # number of DMUs
     n = len(y)

@@ -314,6 +314,10 @@ def cer(y, x, tau, cet, fun, rts):
     # rts     = "vrs"  : variable returns to scale
     #         = "crs"  : constant returns to scale
 
+    # transform data
+    x = x.tolist()
+    y = y.tolist()
+
     # number of DMUS
     n = len(y)
 

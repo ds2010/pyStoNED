@@ -294,6 +294,10 @@ def cerddfb(y, x, b, tau, fun, gx, gb, gy):
     # fun    = "prod" : production frontier
     #         = "cost" : cost frontier
 
+    # transform data
+    x = x.tolist()
+    y = y.tolist()
+
     # number of DMUS
     n = len(y)
 

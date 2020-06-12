@@ -12,7 +12,7 @@ import numpy as np
 
 
 # without undesirable outputs
-def cerddf(y, x, tau, fun, gx, gy):
+def cqrddf(y, x, tau, fun, gx, gy):
     # fun    = "prod" : production frontier
     #         = "cost" : cost frontier
 
@@ -286,9 +286,13 @@ def cerddf(y, x, tau, fun, gx, gy):
 
 
 # with undesirable outputs
-def cerddfb(y, x, b, tau, fun, gx, gb, gy):
+def cqrddfb(y, x, b, tau, fun, gx, gb, gy):
     # fun    = "prod" : production frontier
     #         = "cost" : cost frontier
+
+    # transform data
+    x = x.tolist()
+    y = y.tolist()
 
     # number of DMUS
     n = len(y)
