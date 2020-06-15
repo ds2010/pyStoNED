@@ -1,5 +1,5 @@
 """
-@title  : nonparametric kernel deconvolution for residual (eps) decomposition
+@title  : Nonparametric kernel deconvolution for residual (eps) decomposition
 @Author : Sheng Dai, Timo Kuosmanen
 @Mail   : sheng.dai@aalto.fi (S. Dai); timo.kuosmanen@aalto.fi (T. Kuosmanen)
 @Date   : 2020-05-01
@@ -11,7 +11,7 @@ from scipy import stats
 
 def kd(eps, fun):
     # fun    = "prod" : production frontier
-    #         = "cost" : cost frontier
+    #        = "cost" : cost frontier
 
     # choose a bandwidth (rule-of-thumb, Eq. (3.29) in Silverman (1986))
     std = np.std(eps, ddof=1)
