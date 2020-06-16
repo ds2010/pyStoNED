@@ -299,6 +299,7 @@ def cqrddfb(y, x, b, tau, fun, gx, gb, gy):
     # transform data
     x = x.tolist()
     y = y.tolist()
+    b = b.tolist()
 
     # number of DMUS
     n = len(y)
