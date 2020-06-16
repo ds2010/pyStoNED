@@ -1,5 +1,10 @@
 # Change log
 
+## [0.3.1] - 2020-06-16
+### Changed
+- `kde()`
+- `CNLSDDF()`
+
 ## [0.3.0] - 2020-06-12
 ### Changed
 - `DEA()`

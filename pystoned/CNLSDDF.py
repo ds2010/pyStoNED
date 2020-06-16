@@ -14,7 +14,7 @@ import numpy as np
 # without undesirable outputs
 def cnlsddf(y, x, fun, gx, gy):
     # fun    = "prod" : production frontier
-    #         = "cost" : cost frontier
+    #        = "cost" : cost frontier
 
     # transform data
     x = x.tolist()
@@ -196,8 +196,9 @@ def cnlsddf(y, x, fun, gx, gy):
                 arow = x[i]
                 if i == h:
                     return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - model.g[i] * y[
-                    i] <= model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) - model.g[h] * y[i]
+                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - \
+                       model.g[i] * y[i] <= model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) - \
+                       model.g[h] * y[i]
 
             model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
 
@@ -208,8 +209,9 @@ def cnlsddf(y, x, fun, gx, gy):
                 arow = x[i]
                 if i == h:
                     return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - model.g[i] * y[
-                    i] >= model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) - model.g[h] * y[i]
+                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - \
+                       model.g[i] * y[i] >= model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) - \
+                       model.g[h] * y[i]
 
             model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
 
@@ -236,8 +238,8 @@ def cnlsddf(y, x, fun, gx, gy):
         def reg_rule(model, i):
             arow = x[i]
             brow = y[i]
-            return sum(model.g[i, k] * brow[k] for k in model.k) == model.a[i] + sum(
-                model.b[i, j] * arow[j] for j in model.j) - model.e[i]
+            return sum(model.g[i, k] * brow[k] for k in model.k) == model.a[i] + \
+                   sum(model.b[i, j] * arow[j] for j in model.j) - model.e[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
 
@@ -258,8 +260,8 @@ def cnlsddf(y, x, fun, gx, gy):
                 if i == h:
                     return Constraint.Skip
                 return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - \
-                       sum(model.g[i, k] * brow[k] for k in model.k) <= model.a[h] + sum(
-                    model.b[h, j] * arow[j] for j in model.j) - sum(model.g[h, k] * brow[k] for k in model.k)
+                       sum(model.g[i, k] * brow[k] for k in model.k) <= model.a[h] + \
+                       sum(model.b[h, j] * arow[j] for j in model.j) - sum(model.g[h, k] * brow[k] for k in model.k)
 
             model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
 
@@ -272,8 +274,8 @@ def cnlsddf(y, x, fun, gx, gy):
                 if i == h:
                     return Constraint.Skip
                 return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - \
-                       sum(model.g[i, k] * brow[k] for k in model.k) >= model.a[h] + sum(
-                    model.b[h, j] * arow[j] for j in model.j) - sum(model.g[h, k] * brow[k] for k in model.k)
+                       sum(model.g[i, k] * brow[k] for k in model.k) >= model.a[h] + \
+                       sum(model.b[h, j] * arow[j] for j in model.j) - sum(model.g[h, k] * brow[k] for k in model.k)
 
             model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
 
@@ -283,7 +285,7 @@ def cnlsddf(y, x, fun, gx, gy):
 # with undesirable outputs
 def cnlsddfb(y, x, b, fun, gx, gb, gy):
     # fun    = "prod" : production frontier
-    #         = "cost" : cost frontier
+    #        = "cost" : cost frontier
 
     # transform data
     x = x.tolist()
@@ -784,8 +786,8 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
             arow = x[i]
             brow = y[i]
             crow = b[i]
-            return sum(model.g[i, k] * brow[k] for k in model.k) == model.a[i] + sum(
-                model.b[i, j] * arow[j] for j in model.j) + \
+            return sum(model.g[i, k] * brow[k] for k in model.k) == model.a[i] + \
+                   sum(model.b[i, j] * arow[j] for j in model.j) + \
                    sum(model.d[i, l] * crow[l] for l in model.l) - model.e[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
@@ -808,10 +810,10 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
                 crow = b[i]
                 if i == h:
                     return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + sum(
-                    model.d[i, l] * crow[l] for l in model.l) - \
-                       sum(model.g[i, k] * brow[k] for k in model.k) <= model.a[h] + sum(
-                    model.b[h, j] * arow[j] for j in model.j) + \
+                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + \
+                       sum(model.d[i, l] * crow[l] for l in model.l) - \
+                       sum(model.g[i, k] * brow[k] for k in model.k) <= model.a[h] + \
+                       sum(model.b[h, j] * arow[j] for j in model.j) + \
                        sum(model.d[h, l] * crow[l] for l in model.l) - sum(model.g[h, k] * brow[k] for k in model.k)
 
             model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
@@ -825,10 +827,10 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
                 crow = b[i]
                 if i == h:
                     return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + sum(
-                    model.d[i, l] * crow[l] for l in model.l) - \
-                       sum(model.g[i, k] * brow[k] for k in model.k) >= model.a[h] + sum(
-                    model.b[h, j] * arow[j] for j in model.j) + \
+                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + \
+                       sum(model.d[i, l] * crow[l] for l in model.l) - \
+                       sum(model.g[i, k] * brow[k] for k in model.k) >= model.a[h] + \
+                       sum(model.b[h, j] * arow[j] for j in model.j) + \
                        sum(model.d[h, l] * crow[l] for l in model.l) - sum(model.g[h, k] * brow[k] for k in model.k)
 
             model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
