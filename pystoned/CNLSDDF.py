@@ -105,6 +105,9 @@ def cnlsddf(y, x, fun, gx, gy):
         model.i = Set(initialize=range(n))
         model.k = Set(initialize=range(p))
 
+        # Alias
+        model.h = SetOf(model.i)
+
         # Variables
         model.a = Var(model.i, doc='alpha')
         model.b = Var(model.i, bounds=(0.0, None), doc='beta')
@@ -221,6 +224,9 @@ def cnlsddf(y, x, fun, gx, gy):
         model.i = Set(initialize=range(n))
         model.j = Set(initialize=range(m))
         model.k = Set(initialize=range(p))
+
+        # Alias
+        model.h = SetOf(model.i)
 
         # Variables
         model.a = Var(model.i, doc='alpha')
@@ -446,6 +452,9 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
         model.i = Set(initialize=range(n))
         model.l = Set(initialize=range(q))
 
+        # Alias
+        model.h = SetOf(model.i)
+
         # Variables
         model.a = Var(model.i, doc='alpha')
         model.b = Var(model.i, bounds=(0.0, None), doc='beta')
@@ -505,6 +514,9 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
         model.i = Set(initialize=range(n))
         model.k = Set(initialize=range(p))
         model.l = Set(initialize=range(q))
+
+        # Alias
+        model.h = SetOf(model.i)
 
         # Variables
         model.a = Var(model.i, doc='alpha')
@@ -633,6 +645,9 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
         model.j = Set(initialize=range(m))
         model.k = Set(initialize=range(p))
 
+        # Alias
+        model.h = SetOf(model.i)
+
         # Variables
         model.a = Var(model.i, doc='alpha')
         model.b = Var(model.i, model.j, bounds=(0.0, None), doc='beta')
@@ -699,6 +714,9 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
         model.i = Set(initialize=range(n))
         model.j = Set(initialize=range(m))
         model.l = Set(initialize=range(q))
+
+        # Alias
+        model.h = SetOf(model.i)
 
         # Variables
         model.a = Var(model.i, doc='alpha')
@@ -767,6 +785,9 @@ def cnlsddfb(y, x, b, fun, gx, gb, gy):
         model.j = Set(initialize=range(m))
         model.l = Set(initialize=range(q))
         model.k = Set(initialize=range(p))
+
+        # Alias
+        model.h = SetOf(model.i)
 
         # Variables
         model.a = Var(model.i, doc='alpha')

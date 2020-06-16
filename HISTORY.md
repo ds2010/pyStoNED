@@ -1,5 +1,11 @@
 # Change log
 
+## [0.3.2] - 2020-06-16
+### Changed
+- `CNLSDDF()`
+- `CQRDDF()`
+- `CERDDF()`
+
 ## [0.3.1] - 2020-06-16
 ### Changed
 - `kde()`
