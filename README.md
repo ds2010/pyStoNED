@@ -19,36 +19,34 @@ A number of Jupyter Notebooks are provided in the repository [pyStoNED-Tutorials
  + [Timo Kuosmanen](https://people.aalto.fi/timo.kuosmanen), Professor, Aalto University School of Business.
  + [Sheng Dai](https://www.researchgate.net/profile/Sheng_Dai8), Ph.D. candidate, Aalto University School of Business.
 
-# To do list
-- [x]  `CNLS`/`StoNED`
-   - [x] Production function estimation
-   - [x] Cost function estimation
-   - [x] variables returns to scale (`VRS`) model
-   - [x] constant returns to scale (`CRS`) model
-   - [x] Additive composite error term
-   - [x] Multiplicative composite error term
-   - [x] Residuals decomposition by method of moments(`MoM`) 
-   - [x] Residuals decomposition by quasi-likelihood estimation(`QLE`)
-   - [x] Residuals decomposition by nonparametric kernel deconvolution (`NKD`)
-- [x] `StoNEZD` (contextual variables)
-- [x] Convex quantile regression (`CQR`)
-- [x] Convex expectile regression (`CER`)
-- [x] Isotonic CNLS (`ICNLS`)
-- [ ] Isotonic convex quantile regression (`ICQR`)
-- [ ] Isotonic convex expectile regression (`ICER`)
-- [x] Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
-- [x] Multiple outputs (CNLS-DDF formulation)
-   - [x] with undesirable outputs
-   - [x] without undesirable outputs
-- [x] Multiple outputs (CQR/CER-DDF formulation)
-   - [x] with undesirable outputs
-   - [x] without undesirable outputs   
-- [x] Basic Data Envelopment Analysis (`DEA`) models
-   - [x] Radial input oriented model: CRS and VRS
-   - [x] Radial output oriented model: CRS and VRS
-   - [x] Directional model: CRS and VRS
-   - [x] Directional model with undesirable outputs: CRS and VRS         
-- [ ] Representation of `StoNED`-related frontier/quantile function
-   - [x] one input and one output
-   - [ ] two inputs and one output 
-   - [ ] three inputs and one output 
+# Available models
+- `CNLS`/`StoNED`
+  - Production function estimation
+  - Cost function estimation
+  - variables returns to scale (`VRS`) model
+  - constant returns to scale (`CRS`) model
+  - Additive composite error term
+  - Multiplicative composite error term
+  - Residuals decomposition by method of moments(`MoM`) 
+  - Residuals decomposition by quasi-likelihood estimation(`QLE`)
+  - Residuals decomposition by nonparametric kernel deconvolution (`NKD`)
+- `StoNEZD` (contextual variables)
+- Convex quantile regression (`CQR`)
+- Convex expectile regression (`CER`)
+- Isotonic CNLS (`ICNLS`)
+- Isotonic convex quantile regression (`ICQR`)
+- Isotonic convex expectile regression (`ICER`)
+- Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
+- Multiple outputs (CNLS-DDF formulation)
+  - with undesirable outputs
+  - without undesirable outputs
+- Multiple outputs (CQR/CER-DDF formulation)
+  - with undesirable outputs
+  - without undesirable outputs   
+- Basic Data Envelopment Analysis (`DEA`) models
+  - Radial input oriented model: CRS and VRS
+  - Radial output oriented model: CRS and VRS
+  - Directional model: CRS and VRS
+  - Directional model with undesirable outputs: CRS and VRS         
+- Representation of `StoNED`-related frontier/quantile function
+  - one input and one output 
