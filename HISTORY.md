@@ -1,5 +1,12 @@
 # Change log
 
+## [0.3.4] - 2020-06-17
+### Added
+- `DEA2CNLS()`
+
+### Removed
+- `CCNLS2()`
+
 ## [0.3.3] - 2020-06-16
 ### Changed
 - `CNLSDDF()`

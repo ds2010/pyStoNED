@@ -1,6 +1,5 @@
 from . import biMatP
 from . import CCNLS
-from . import CCNLS2
 from . import CERDDF
 from . import CNLS
 from . import CNLSDDF
@@ -9,6 +8,7 @@ from . import CNLSZ
 from . import CQER
 from . import CQRDDF
 from . import DEA
+from . import DEA2CNLS
 from . import directV
 from . import kde
 from . import qle
@@ -18,7 +18,6 @@ from . import StoNED
 __all__ = [
     'biMatP',
     'CCNLS',
-    'CCNLS2',
     'CERDDF',
     'CNLS',
     'CNLSDDF',
@@ -27,6 +26,7 @@ __all__ = [
     'CQER',
     'CQRDDF',
     'DEA',
+    'DEA2CNLS',
     'directV',
     'kde',
     'qle',
