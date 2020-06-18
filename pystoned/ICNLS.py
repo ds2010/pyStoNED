@@ -7,6 +7,7 @@
 
 # Import of the pyomo module
 from pyomo.environ import *
+from . import biMatP
 
 
 def icnls(y, x, p, cet, fun, rts):
@@ -29,6 +30,9 @@ def icnls(y, x, p, cet, fun, rts):
         m = 1
     else:
         m = len(x[0])
+
+    # creat the binary matrix P
+    p = biMatP.bimatp(x)
 
     # Creation of a Concrete Model
     model = ConcreteModel()

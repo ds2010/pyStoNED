@@ -10,6 +10,9 @@ import numpy as np
 
 def bimatp(x):
 
+    # transform data
+    x = np.array(x)
+
     # number of DMUs
     n = len(x)
 
@@ -39,4 +42,5 @@ def bimatp(x):
             p[i, :] = np.where((x[i, 0] <= x[:, 0]) & (x[i, 1] <= x[:, 1]) & (x[i, 2] <= x[:, 2]) & (x[i, 3] <= x[:, 3]), 1, 0)
 
     p = p.tolist()
+
     return p

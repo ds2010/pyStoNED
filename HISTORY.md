@@ -1,5 +1,13 @@
 # Change log
 
+## [0.3.5] - 2020-06-18
+### Added
+- `FDH()`
+- `FDH2ICNLS()`
+
+### Changed
+- `ICNLS()`
+
 ## [0.3.4] - 2020-06-17
 ### Added
 - `DEA2CNLS()`

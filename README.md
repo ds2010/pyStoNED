@@ -43,11 +43,14 @@ A number of Jupyter Notebooks are provided in the repository [pyStoNED-Tutorials
 - [x] Multiple outputs (CQR/CER-DDF formulation)
    - [x] with undesirable outputs
    - [x] without undesirable outputs   
-- [x] Basic Data Envelopment Analysis (`DEA`) models
+- [x] Data Envelopment Analysis (`DEA`)
    - [x] Radial input oriented model: CRS and VRS
    - [x] Radial output oriented model: CRS and VRS
    - [x] Directional model: CRS and VRS
-   - [x] Directional model with undesirable outputs: CRS and VRS         
+   - [x] Directional model with undesirable outputs: CRS and VRS
+- [x] Free Disposal Hull (`FDH`) Analysis 
+   - [x] Radial input oriented model
+   - [x] Radial output oriented model            
 - [ ] Representation of `StoNED`-related frontier/quantile function
    - [x] one input and one output
    - [ ] two inputs and one output 

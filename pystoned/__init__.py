@@ -10,6 +10,8 @@ from . import CQRDDF
 from . import DEA
 from . import DEA2CNLS
 from . import directV
+from . import FDH
+from . import FDH2ICNLS
 from . import kde
 from . import qle
 from . import ICNLS
@@ -28,6 +30,8 @@ __all__ = [
     'DEA',
     'DEA2CNLS',
     'directV',
+    'FDH',
+    'FDH2ICNLS',
     'kde',
     'qle',
     'ICNLS',
