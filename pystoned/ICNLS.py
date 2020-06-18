@@ -10,7 +10,7 @@ from pyomo.environ import *
 from . import biMatP
 
 
-def icnls(y, x, p, cet, fun, rts):
+def icnls(y, x, cet, fun, rts):
     # cet     = "addi" : Additive composite error term
     #         = "mult" : Multiplicative composite error term
     # fun     = "prod" : production frontier
