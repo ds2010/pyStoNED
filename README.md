@@ -49,8 +49,8 @@ A number of Jupyter Notebooks are provided in the repository [pyStoNED-Tutorials
    - [x] Directional model: CRS and VRS
    - [x] Directional model with undesirable outputs: CRS and VRS
 - [x] Free Disposal Hull (`FDH`) Analysis 
-   - [x] Radial input oriented model
-   - [x] Radial output oriented model            
+   - [x] Radial input oriented FDH model
+   - [x] Radial output oriented FDH model            
 - [ ] Representation of `StoNED`-related frontier/quantile function
    - [x] one input and one output
    - [ ] two inputs and one output 
