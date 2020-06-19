@@ -41,7 +41,8 @@ def stoned(y, eps, fun, method, cet):
             sigmau = (mM3 / ((2 / math.pi) ** (1 / 2) * (1 - 4 / math.pi))) ** (1 / 3)
             sigmav = (mM2 - ((math.pi - 2) / math.pi) * sigmau ** 2) ** (1 / 2)
 
-            # mean (mu)
+            # calculate bias correction
+            # (unconditional) mean (mu)
             mu = (sigmau ** 2 * 2 / math.pi) ** (1 / 2)
 
             # bias adjusted residuals
@@ -66,7 +67,8 @@ def stoned(y, eps, fun, method, cet):
             sigmau = (-mM3 / ((2 / math.pi) ** (1 / 2) * (1 - 4 / math.pi))) ** (1 / 3)
             sigmav = (mM2 - ((math.pi - 2) / math.pi) * sigmau ** 2) ** (1 / 2)
 
-            # mean (mu)
+            # calculate bias correction
+            # (unconditional) mean (mu)
             mu = (sigmau ** 2 * 2 / math.pi) ** (1 / 2)
 
             # bias adjusted residuals
@@ -99,7 +101,7 @@ def stoned(y, eps, fun, method, cet):
             sigma = math.sqrt((np.mean(eps) ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda**2))))
 
             # calculate bias correction
-            # mean
+            # (unconditional) mean
             mu = math.sqrt(2) * sigma * lamda / math.sqrt(math.pi * (1 + lamda ** 2))
 
             # calculate sigma.u and sigma.v
@@ -131,7 +133,7 @@ def stoned(y, eps, fun, method, cet):
             sigma = math.sqrt((np.mean(eps) ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda**2))))
 
             # calculate bias correction
-            # mean
+            # (unconditional) mean
             mu = math.sqrt(2) * sigma * lamda / math.sqrt(math.pi * (1 + lamda ** 2))
 
             # calculate sigma.u and sigma.v
