@@ -108,6 +108,7 @@ def cnls(y, x, cet, fun, rts):
 
                 # production model
                 if fun == "prod":
+
                     def qconcav_rule(model, i, h):
                         if i == h:
                             return Constraint.Skip
@@ -140,6 +141,7 @@ def cnls(y, x, cet, fun, rts):
 
                 # production model
                 if fun == "prod":
+
                     def qconcav_rule(model, i, h):
                         if i == h:
                             return Constraint.Skip
@@ -239,6 +241,7 @@ def cnls(y, x, cet, fun, rts):
 
                 # production model
                 if fun == "prod":
+
                     def qconcav_rule(model, i, h):
                         arow = x[i]
                         if i == h:
@@ -276,6 +279,7 @@ def cnls(y, x, cet, fun, rts):
 
                 # production model
                 if fun == "prod":
+
                     def qconcav_rule(model, i, h):
                         arow = x[i]
                         if i == h:
