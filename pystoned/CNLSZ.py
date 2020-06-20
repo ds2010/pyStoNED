@@ -330,7 +330,7 @@ def cnlsz(y, x, z, cet, fun, rts):
                 def reg_rule(model, i):
                     arow = x[i]
                     return y[i] == model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + z[i] * model.d + \
-                            model.e[i]
+                           model.e[i]
 
                 model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
 

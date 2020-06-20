@@ -8,7 +8,7 @@ with open('HISTORY.md') as history_file:
 
 setup_args = dict(
     name='pystoned',
-    version='0.3.5',
+    version='0.3.6',
     description='A Package for Stochastic Nonparametric Envelopment of Data (StoNED) in Python',
     long_description_content_type="text/markdown",
     long_description=README + '\n\n' + HISTORY,

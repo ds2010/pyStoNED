@@ -199,8 +199,8 @@ def cnls(y, x, cet, fun, rts):
                         arow = x[i]
                         if i == h:
                             return Constraint.Skip
-                        return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) <= model.a[h] + sum(
-                            model.b[h, j] * arow[j] for j in model.j)
+                        return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) <= model.a[h] + \
+                               sum(model.b[h, j] * arow[j] for j in model.j)
 
                     model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
 
@@ -211,8 +211,8 @@ def cnls(y, x, cet, fun, rts):
                         arow = x[i]
                         if i == h:
                             return Constraint.Skip
-                        return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) >= model.a[h] + sum(
-                            model.b[h, j] * arow[j] for j in model.j)
+                        return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) >= model.a[h] + \
+                               sum(model.b[h, j] * arow[j] for j in model.j)
 
                     model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
 
@@ -246,8 +246,8 @@ def cnls(y, x, cet, fun, rts):
                         arow = x[i]
                         if i == h:
                             return Constraint.Skip
-                        return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) <= model.a[h] + sum(
-                            model.b[h, j] * arow[j] for j in model.j)
+                        return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) <= model.a[h] + \
+                               sum(model.b[h, j] * arow[j] for j in model.j)
 
                     model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
 
@@ -258,8 +258,8 @@ def cnls(y, x, cet, fun, rts):
                         arow = x[i]
                         if i == h:
                             return Constraint.Skip
-                        return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) >= model.a[h] + sum(
-                            model.b[h, j] * arow[j] for j in model.j)
+                        return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) >= model.a[h] + \
+                               sum(model.b[h, j] * arow[j] for j in model.j)
 
                     model.qconvex = Constraint(model.i, model.h, rule=qconvex_rule, doc='convexity constraint')
 
@@ -284,8 +284,8 @@ def cnls(y, x, cet, fun, rts):
                         arow = x[i]
                         if i == h:
                             return Constraint.Skip
-                        return sum(model.b[i, j] * arow[j] for j in model.j) <= sum(
-                            model.b[h, j] * arow[j] for j in model.j)
+                        return sum(model.b[i, j] * arow[j] for j in model.j) <= \
+                               sum(model.b[h, j] * arow[j] for j in model.j)
 
                     model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
 
@@ -296,8 +296,8 @@ def cnls(y, x, cet, fun, rts):
                         arow = x[i]
                         if i == h:
                             return Constraint.Skip
-                        return sum(model.b[i, j] * arow[j] for j in model.j) >= sum(
-                            model.b[h, j] * arow[j] for j in model.j)
+                        return sum(model.b[i, j] * arow[j] for j in model.j) >= \
+                               sum(model.b[h, j] * arow[j] for j in model.j)
 
                     model.qconvex = Constraint(model.i, model.h, rule=qconvex_rule, doc='convexity constraint')
 
