@@ -122,14 +122,14 @@ def stoned(y, eps, fun, method, cet):
             # Conditional mean
             Eu = sigmart * ((norpdf / (1 - norm.cdf(mus) + 0.000001)) - mus)
             # technical inefficiency
-            TE = (y - eps - Eu)/(y-eps)
+            TE = ((y - eps + mu) - Eu) / (y - eps + mu)
 
         if fun == "cost":
 
             # Conditional mean
             Eu = sigmart * ((norpdf / (1 - norm.cdf(-mus) + 0.000001)) + mus)
             # technical inefficiency
-            TE = (y - eps + Eu)/(y-eps)
+            TE = ((y - eps - mu) + Eu) / (y - eps - mu)
             TE = 1/TE
 
     if cet == "mult":
