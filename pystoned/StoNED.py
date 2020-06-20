@@ -48,17 +48,6 @@ def stoned(y, eps, fun, method, cet):
             # bias adjusted residuals
             epsilon = eps - mu
 
-            # expected value of the inefficiency term u  Eq. (3.28) in Johnson and Kuosmanen (2015)
-            sigmart = sigmau * sigmav / math.sqrt(sigmau ** 2 + sigmav ** 2)
-            mus = epsilon * sigmau / (sigmav * math.sqrt(sigmau ** 2 + sigmav ** 2))
-            norpdf = 1 / math.sqrt(2 * math.pi) * np.exp(-mus ** 2 / 2)
-
-            # Conditional mean
-            Eu = sigmart * ((norpdf / (1 - norm.cdf(mus) + 0.000001)) - mus)
-
-            # technical inefficiency
-            Etheta = ((y-eps+mu) - Eu)/(y-eps+mu)
-
         if fun == "cost":
             if mM3 < 0:
                 mM3 = 0.00001
@@ -73,17 +62,6 @@ def stoned(y, eps, fun, method, cet):
 
             # bias adjusted residuals
             epsilon = eps + mu
-
-            # expected value of the inefficiency term u
-            sigmart = sigmau * sigmav / math.sqrt(sigmau ** 2 + sigmav ** 2)
-            mus = epsilon * sigmau / (sigmav * math.sqrt(sigmau ** 2 + sigmav ** 2))
-            norpdf = 1 / math.sqrt(2 * math.pi) * np.exp(-mus ** 2 / 2)
-
-            # Conditional mean
-            Eu = sigmart * ((norpdf / (1 - norm.cdf(-mus) + 0.000001)) + mus)
-
-            # technical inefficiency
-            Etheta = (Eu - (y-eps-mu))/(y-eps-mu)
 
     if method == "QLE":
 
@@ -111,17 +89,6 @@ def stoned(y, eps, fun, method, cet):
             # adj. res.
             epsilon = eps - mu
 
-            # expected value of the inefficiency term u  Eq. (3.28) in Johnson and Kuosmanen (2015)
-            sigmart = sigmau * sigmav / math.sqrt(sigmau ** 2 + sigmav ** 2)
-            mus = epsilon * sigmau / (sigmav * math.sqrt(sigmau ** 2 + sigmav ** 2))
-            norpdf = 1 / math.sqrt(2 * math.pi) * np.exp(-mus ** 2 / 2)
-
-            # Conditional mean
-            Eu = sigmart * ((norpdf / (1 - norm.cdf(mus) + 0.000001)) - mus)
-
-            # technical inefficiency
-            Etheta = ((y-eps+mu)-Eu)/(y-eps+mu)
-
         if fun == "cost":
 
             # optimization
@@ -143,21 +110,36 @@ def stoned(y, eps, fun, method, cet):
             # adj. res.
             epsilon = eps + mu
 
-            # expected value of the inefficiency term u
-            sigmart = sigmau * sigmav / math.sqrt(sigmau ** 2 + sigmav ** 2)
-            mus = epsilon * sigmau / (sigmav * math.sqrt(sigmau ** 2 + sigmav ** 2))
-            norpdf = 1 / math.sqrt(2 * math.pi) * np.exp(-mus ** 2 / 2)
+    # expected value of the inefficiency term u
+    sigmart = sigmau * sigmav / math.sqrt(sigmau ** 2 + sigmav ** 2)
+    mus = epsilon * sigmau / (sigmav * math.sqrt(sigmau ** 2 + sigmav ** 2))
+    norpdf = 1 / math.sqrt(2 * math.pi) * np.exp(-mus ** 2 / 2)
+
+    # technical inefficiency
+    if cet == "addi":
+
+        if fun == "prod":
+
+            # Conditional mean
+            Eu = sigmart * ((norpdf / (1 - norm.cdf(mus) + 0.000001)) - mus)
+            TE = (y - eps - Eu)/(y-eps)
+
+        if fun == "cost":
 
             # Conditional mean
             Eu = sigmart * ((norpdf / (1 - norm.cdf(-mus) + 0.000001)) + mus)
-
-            # technical inefficiency
-            Etheta = (Eu - (y-eps-mu))/(y-eps-mu)
-
-    if cet == "addi":
-       TE = Etheta
+            TE = (y - eps + Eu)/(y-eps)
+            TE = 1/TE
 
     if cet == "mult":
-       TE = np.exp(-Eu)
 
-    return Eu, TE
+        if fun == "prod":
+
+            TE = np.exp(-Eu)
+
+        if fun == "cost":
+
+            TE = np.exp(Eu)
+            TE = 1/TE
+
+    return TE
