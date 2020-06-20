@@ -115,19 +115,20 @@ def stoned(y, eps, fun, method, cet):
     mus = epsilon * sigmau / (sigmav * math.sqrt(sigmau ** 2 + sigmav ** 2))
     norpdf = 1 / math.sqrt(2 * math.pi) * np.exp(-mus ** 2 / 2)
 
-    # technical inefficiency
     if cet == "addi":
 
         if fun == "prod":
 
             # Conditional mean
             Eu = sigmart * ((norpdf / (1 - norm.cdf(mus) + 0.000001)) - mus)
+            # technical inefficiency
             TE = (y - eps - Eu)/(y-eps)
 
         if fun == "cost":
 
             # Conditional mean
             Eu = sigmart * ((norpdf / (1 - norm.cdf(-mus) + 0.000001)) + mus)
+            # technical inefficiency
             TE = (y - eps + Eu)/(y-eps)
             TE = 1/TE
 
@@ -135,10 +136,16 @@ def stoned(y, eps, fun, method, cet):
 
         if fun == "prod":
 
+            # Conditional mean
+            Eu = sigmart * ((norpdf / (1 - norm.cdf(mus) + 0.000001)) - mus)
+            # technical inefficiency
             TE = np.exp(-Eu)
 
         if fun == "cost":
 
+            # Conditional mean
+            Eu = sigmart * ((norpdf / (1 - norm.cdf(-mus) + 0.000001)) + mus)
+            # technical inefficiency
             TE = np.exp(Eu)
             TE = 1/TE
 
