@@ -10,7 +10,7 @@ We have published a beta version [`pyStoNED`](https://pypi.org/project/pystoned/
 
     pip install pystoned
 
-# [Tutorials](https://github.com/ds2010/StoNED-Python/tree/master/Tutorials)
+# [Tutorials](https://github.com/ds2010/pyStoNED-Tutorials)
 
 A number of Jupyter Notebooks are provided in the repository [pyStoNED-Tutorials](https://github.com/ds2010/pyStoNED-Tutorials), and more detailed technical reports are currently under development.
   
