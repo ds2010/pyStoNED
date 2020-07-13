@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your contribution to the pyStoNED!
+Thanks for your contribution to the [pyStoNED](https://github.com/ds2010/StoNED-Python)!
 Please first discuss the change the developers of this repository by creating an issue before making a change.
 
 ## Style
