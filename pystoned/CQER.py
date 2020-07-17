@@ -138,7 +138,7 @@ def cqr(y, x, tau, cet, fun, rts):
                 def qlog_rule(model, i):
                     return model.f[i] == model.b[i] * x[i] - 1
 
-                model.qlog = Constraint(model.i, rule=qlog_rule, doc='cost function')
+                model.qlog = Constraint(model.i, rule=qlog_rule, doc='regression function')
 
                 # production model
                 if fun == "prod":
@@ -239,7 +239,7 @@ def cqr(y, x, tau, cet, fun, rts):
                     arow = x[i]
                     return model.f[i] == model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - 1
 
-                model.qlog = Constraint(model.i, rule=qlog_rule, doc='cost function')
+                model.qlog = Constraint(model.i, rule=qlog_rule, doc='regression function')
 
                 # production model
                 if fun == "prod":
@@ -277,7 +277,7 @@ def cqr(y, x, tau, cet, fun, rts):
                     arow = x[i]
                     return model.f[i] == sum(model.b[i, j] * arow[j] for j in model.j) - 1
 
-                model.qlog = Constraint(model.i, rule=qlog_rule, doc='cost function')
+                model.qlog = Constraint(model.i, rule=qlog_rule, doc='regression function')
 
                 # production model
                 if fun == "prod":
@@ -404,7 +404,7 @@ def cer(y, x, tau, cet, fun, rts):
                 def qlog_rule(model, i):
                     return model.f[i] == model.a[i] + model.b[i] * x[i] - 1
 
-                model.qlog = Constraint(model.i, rule=qlog_rule, doc='cost function')
+                model.qlog = Constraint(model.i, rule=qlog_rule, doc='regression function')
 
                 # production model
                 if fun == "prod":
@@ -437,7 +437,7 @@ def cer(y, x, tau, cet, fun, rts):
                 def qlog_rule(model, i):
                     return model.f[i] == model.b[i] * x[i] - 1
 
-                model.qlog = Constraint(model.i, rule=qlog_rule, doc='cost function')
+                model.qlog = Constraint(model.i, rule=qlog_rule, doc='regression function')
 
                 # production model
                 if fun == "prod":
@@ -541,7 +541,7 @@ def cer(y, x, tau, cet, fun, rts):
                     arow = x[i]
                     return model.f[i] == model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - 1
 
-                model.qlog = Constraint(model.i, rule=qlog_rule, doc='cost function')
+                model.qlog = Constraint(model.i, rule=qlog_rule, doc='regression function')
 
                 # production model
                 if fun == "prod":
@@ -579,7 +579,7 @@ def cer(y, x, tau, cet, fun, rts):
                     arow = x[i]
                     return model.f[i] == sum(model.b[i, j] * arow[j] for j in model.j) - 1
 
-                model.qlog = Constraint(model.i, rule=qlog_rule, doc='cost function')
+                model.qlog = Constraint(model.i, rule=qlog_rule, doc='regression function')
 
                 # production model
                 if fun == "prod":
