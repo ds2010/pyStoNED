@@ -15,6 +15,7 @@ from . import FDH2ICNLS
 from . import kde
 from . import qle
 from . import ICNLS
+from . import ICQER
 from . import StoNED
 
 __all__ = [
@@ -35,5 +36,6 @@ __all__ = [
     'kde',
     'qle',
     'ICNLS',
+    'ICQER',
     'StoNED'
 ]

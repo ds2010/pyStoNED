@@ -70,6 +70,7 @@ def icnls(y, x, cet, fun, rts):
 
                 # production model
                 if fun == "prod":
+
                     def concav_rule(model, i, h):
                         brow = p[i]
                         if i == h:
@@ -219,6 +220,7 @@ def icnls(y, x, cet, fun, rts):
 
                 # production model
                 if fun == "prod":
+
                     def concav_rule(model, i, h):
                         arow = x[i]
                         brow = p[i]

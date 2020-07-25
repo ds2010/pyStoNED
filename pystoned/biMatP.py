@@ -41,6 +41,16 @@ def bimatp(x):
         for i in range(n):
             p[i, :] = np.where((x[i, 0] <= x[:, 0]) & (x[i, 1] <= x[:, 1]) & (x[i, 2] <= x[:, 2]) & (x[i, 3] <= x[:, 3]), 1, 0)
 
+    if m == 5:
+        for i in range(n):
+            p[i, :] = np.where((x[i, 0] <= x[:, 0]) & (x[i, 1] <= x[:, 1]) & (x[i, 2] <= x[:, 2]) & (x[i, 3] <= x[:, 3]) & \
+                               (x[i, 4] <= x[:, 4]), 1, 0)
+
+    if m == 6:
+        for i in range(n):
+            p[i, :] = np.where((x[i, 0] <= x[:, 0]) & (x[i, 1] <= x[:, 1]) & (x[i, 2] <= x[:, 2]) & (x[i, 3] <= x[:, 3]) & \
+                               (x[i, 4] <= x[:, 4]) & (x[i, 5] <= x[:, 5]), 1, 0)
+
     p = p.tolist()
 
     return p
