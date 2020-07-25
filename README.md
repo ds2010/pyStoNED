@@ -36,8 +36,8 @@ A number of Jupyter Notebooks are provided in the repository [pyStoNED-Tutorials
 - [x] Convex quantile regression (`CQR`)
 - [x] Convex expectile regression (`CER`)
 - [x] Isotonic CNLS (`ICNLS`)
-- [ ] Isotonic convex quantile regression (`ICQR`)
-- [ ] Isotonic convex expectile regression (`ICER`)
+- [x] Isotonic convex quantile regression (`ICQR`)
+- [x] Isotonic convex expectile regression (`ICER`)
 - [x] Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
 - [x] Multiple outputs (CNLS-DDF formulation)
    - [x] with undesirable outputs

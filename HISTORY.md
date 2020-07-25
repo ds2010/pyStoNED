@@ -1,5 +1,9 @@
 # Change log
 
+## [0.3.7] - 2020-07-25
+### Added
+- `ICQER()`
+
 ## [0.3.6] - 2020-06-20
 ### Changed
 - `StoNED()`
