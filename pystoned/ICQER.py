@@ -1,5 +1,5 @@
 """
-@Title   : Isotonic Convex quantile/expectile regression (ICQR/ICER)
+@Title   : Isotonic convex quantile/expectile regression (ICQR/ICER)
 @Author  : Sheng Dai, Timo Kuosmanen
 @Mail    : sheng.dai@aalto.fi (S. Dai); timo.kuosmanen@aalto.fi (T. Kuosmanen)
 @Date    : 2020-07-25
