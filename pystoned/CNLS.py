@@ -27,7 +27,9 @@ class CNLS:
         self.rts = rts
 
         if type(self.x[0]) != list:
-            self.x = [x.tolist()]
+            self.x = []
+            for x_value in x.tolist():
+                self.x.append([x_value])
 
         # Initialize the CNLS model
         self.__model__ = ConcreteModel()
