@@ -27,7 +27,9 @@ class CNLS:
         self.rts = rts
 
         if type(self.x[0]) != list:
-            self.x = [x.tolist()]
+            self.x = []
+            for x_value in x.tolist():
+                self.x.append([x_value])
 
         # Initialize the CNLS model
         self.__model__ = ConcreteModel()
@@ -231,13 +233,13 @@ class CNLS:
         """Return alpha value by list"""
         if self.optimization_status == 0:
             self.optimize()
-        return list(self.__model__.alpah[:].value)
+        return list(self.__model__.alpha[:].value)
 
     def get_beta(self):
         """Return beta value by list"""
         if self.optimization_status == 0:
             self.optimize()
-        return list(self.__model__.beta[:].value)
+        return list(self.__model__.beta[:,:].value)
 
     def get_residual(self):
         """Return residual value by list"""
