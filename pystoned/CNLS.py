@@ -239,7 +239,7 @@ class CNLS:
         """Return beta value by list"""
         if self.optimization_status == 0:
             self.optimize()
-        return list(self.__model__.beta[:].value)
+        return list(self.__model__.beta[:,:].value)
 
     def get_residual(self):
         """Return residual value by list"""
