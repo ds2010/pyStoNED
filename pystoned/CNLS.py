@@ -13,10 +13,10 @@ class CNLS:
             x : Input variables
             cet  = "addi" : Additive composite error term
                  = "mult" : Multiplicative composite error term
-            fun  = "prod" : production frontier
-                 = "cost" : cost frontier
-            rts  = "vrs"  : variable returns to scale
-                 = "crs"  : constant returns to scale
+            fun  = "prod" : Production frontier
+                 = "cost" : Cost frontier
+            rts  = "vrs"  : Variable returns to scale
+                 = "crs"  : Constant returns to scale
         """
 
         ## TODO(error/warning handling): Check the configuration of the model exist
