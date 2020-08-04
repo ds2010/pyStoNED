@@ -233,7 +233,7 @@ class CNLS:
         """Return alpha value by list"""
         if self.optimization_status == 0:
             self.optimize()
-        return list(self.__model__.alpah[:].value)
+        return list(self.__model__.alpha[:].value)
 
     def get_beta(self):
         """Return beta value by list"""
