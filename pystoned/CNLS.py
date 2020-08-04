@@ -5,18 +5,18 @@ from pyomo.core.expr.numvalue import NumericValue
 
 
 class CNLS:
-	 """Convex Nonparametric Least Square (CNLS)"""
+    """Convex Nonparametric Least Square (CNLS)"""
 
     def __init__(self, y, x, cet='addi', fun='prod', rts='vrs'):
-        """ 
-           y : Output variable
-           x : Input variables
-           cet  = "addi" : Additive composite error term
-                = "mult" : Multiplicative composite error term
-           fun  = "prod" : production frontier
-                = "cost" : cost frontier
-           rts  = "vrs"  : variable returns to scale
-                = "crs"  : constant returns to scale
+        """
+            y : Output variable
+            x : Input variables
+            cet  = "addi" : Additive composite error term
+                 = "mult" : Multiplicative composite error term
+            fun  = "prod" : production frontier
+                 = "cost" : cost frontier
+            rts  = "vrs"  : variable returns to scale
+                 = "crs"  : constant returns to scale
         """
 
         ## TODO(error/warning handling): Check the configuration of the model exist
