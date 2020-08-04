@@ -1,18 +1,22 @@
 # Import pyomo module
-from pyomo.environ import ConcreteModel, Set, SetOf, Var, Objective, minimize, Constraint, log
+from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint, log
 from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
 
 
 class CNLS:
-    """Convex Nonparametric Least Square (CNLS)"""
     def __init__(self, y, x, cet='addi', fun='prod', rts='vrs'):
-        # cet     = "addi" : Additive composite error term
-        #         = "mult" : Multiplicative composite error term
-        # fun     = "prod" : production frontier
-        #         = "cost" : cost frontier
-        # rts     = "vrs"  : variable returns to scale
-        #         = "crs"  : constant returns to scale
+        """
+        Convex Nonparametric Least Square (CNLS)
+            y : Output variable
+            x : Input variables
+            cet  = "addi" : Additive composite error term
+                 = "mult" : Multiplicative composite error term
+            fun  = "prod" : production frontier
+                 = "cost" : cost frontier
+            rts  = "vrs"  : variable returns to scale
+                 = "crs"  : constant returns to scale
+        """
 
         ## TODO(error/warning handling): Check the configuration of the model exist
         self.x = x.tolist()
@@ -24,8 +28,10 @@ class CNLS:
         if type(self.x[0]) != list:
             self.x = [x.tolist()]
 
-        # Initialize the pyomo model
+        # Initialize the CNLS model
         self.__model__ = ConcreteModel()
+
+        # Initialize the sets
         self.__model__.I = Set(initialize=range(len(self.y)))
         self.__model__.J = Set(initialize=range(len(self.x[0])))
 
@@ -35,24 +41,22 @@ class CNLS:
                                   self.__model__.J,
                                   bounds=(0.0, None),
                                   doc='beta')
-        self.__model__.epsilon = Var(self.__model__.I, doc='residuals')
+        self.__model__.epsilon = Var(self.__model__.I, doc='residual')
         self.__model__.frontier = Var(self.__model__.I,
                                       bounds=(0.0, None),
                                       doc='estimated frontier')
 
-        # Setup the objective function and constraints for model
+        # Setup the objective function and constraints
         self.__model__.objective = Objective(rule=self.__objective_rule(),
                                              sense=minimize,
                                              doc='Objective function')
-        self.__model__.regression_rule = Constraint(
-            self.__model__.I,
-            rule=self.__regression_rule(),
-            doc='Regression equation')
+        self.__model__.regression_rule = Constraint(self.__model__.I,
+                                                    rule=self.__regression_rule(),
+                                                    doc='Regression equation')
         if self.cet == "mult":
-            self.__model__.log_rule = Constraint(
-                self.__model__.I,
-                rule=self.__log_rule(),
-                doc="Log-transformed regression equation")
+            self.__model__.log_rule = Constraint(self.__model__.I,
+                                                 rule=self.__log_rule(),
+                                                 doc='Log-transformed regression equation')
         self.__model__.afriat_rule = Constraint(self.__model__.I,
                                                 self.__model__.I,
                                                 rule=self.__afriat_rule(),
@@ -145,7 +149,7 @@ class CNLS:
         return False
 
     def __afriat_rule(self, ):
-        """Return the proper concav/convex (afriat) constraint for config"""
+        """Return the proper afriat inequality constraint for config"""
         if self.fun == "prod":
             __operator = NumericValue.__le__
         elif self.fun == "cost":
