@@ -52,18 +52,18 @@ class CNLS:
         # Setup the objective function and constraints
         self.__model__.objective = Objective(rule=self.__objective_rule(),
                                              sense=minimize,
-                                             doc='Objective function')
+                                             doc='objective function')
         self.__model__.regression_rule = Constraint(self.__model__.I,
                                                     rule=self.__regression_rule(),
-                                                    doc='Regression equation')
+                                                    doc='regression equation')
         if self.cet == "mult":
             self.__model__.log_rule = Constraint(self.__model__.I,
                                                  rule=self.__log_rule(),
-                                                 doc='Log-transformed regression equation')
+                                                 doc='log-transformed regression equation')
         self.__model__.afriat_rule = Constraint(self.__model__.I,
                                                 self.__model__.I,
                                                 rule=self.__afriat_rule(),
-                                                doc='Afriat inequality')
+                                                doc='afriat inequality')
 
         # Optimize model
         self.optimization_status = 0
@@ -98,14 +98,14 @@ class CNLS:
             self.optimization_status = 1
 
     def __objective_rule(self):
-        """Return the proper objective function for config"""
+        """Return the proper objective function"""
         def objective_rule(model):
             return sum(model.epsilon[i]**2 for i in model.I)
 
         return objective_rule
 
     def __regression_rule(self):
-        """Return the proper regression constraint for config"""
+        """Return the proper regression constraint"""
         if self.cet == "addi":
             if self.rts == "vrs":
 
@@ -131,7 +131,7 @@ class CNLS:
         return False
 
     def __log_rule(self):
-        """Return the proper log constraint for config"""
+        """Return the proper log constraint"""
         if self.cet == "mult":
             if self.rts == "vrs":
 
@@ -152,7 +152,7 @@ class CNLS:
         return False
 
     def __afriat_rule(self, ):
-        """Return the proper afriat inequality constraint for config"""
+        """Return the proper afriat inequality constraint"""
         if self.fun == "prod":
             __operator = NumericValue.__le__
         elif self.fun == "cost":
