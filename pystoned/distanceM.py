@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def dmdc(y, x):
+def dmdc(x):
     """distance matrix and distance cut"""
 
     # transform data
