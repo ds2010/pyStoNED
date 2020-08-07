@@ -2,6 +2,8 @@
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint, log
 from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
+import numpy as np
+import pandas as pd
 
 
 class CNLS:
@@ -19,7 +21,7 @@ class CNLS:
                  = "crs"  : Constant returns to scale
         """
 
-        ## TODO(error/warning handling): Check the configuration of the model exist
+        # TODO(error/warning handling): Check the configuration of the model exist
         self.x = x.tolist()
         self.y = y.tolist()
         self.cet = cet
@@ -71,7 +73,7 @@ class CNLS:
 
     def optimize(self, remote=True):
         """Optimize the function by requested method"""
-        ## TODO(error/warning handling): Check problem status after optimization
+        # TODO(error/warning handling): Check problem status after optimization
         if remote == False:
             if self.cet == "addi":
                 solver = SolverFactory("mosek")
@@ -79,7 +81,7 @@ class CNLS:
                 self.optimization_status = 1
 
             elif self.cet == "mult":
-                ## TODO(warning handling): Use log system instead of print()
+                # TODO(warning handling): Use log system instead of print()
                 print(
                     "Estimating the multiplicative model will be available in near future."
                 )
@@ -99,8 +101,9 @@ class CNLS:
 
     def __objective_rule(self):
         """Return the proper objective function"""
+
         def objective_rule(model):
-            return sum(model.epsilon[i]**2 for i in model.I)
+            return sum(model.epsilon[i] ** 2 for i in model.I)
 
         return objective_rule
 
@@ -111,23 +114,22 @@ class CNLS:
 
                 def regression_rule(model, i):
                     return self.y[i] == model.alpha[i] \
-                        + sum(model.beta[i, j] * self.x[i][j] for j in model.J)\
-                        + model.epsilon[i]
+                           + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                           + model.epsilon[i]
 
                 return regression_rule
             elif self.rts == "crs":
-                ## TODO(warning handling): replace with model requested not exist
+                # TODO(warning handling): replace with model requested not exist
                 return False
 
         elif self.cet == "mult":
 
             def regression_rule(model, i):
-                return log(
-                    self.y[i]) == log(model.frontier[i] + 1) + model.epsilon[i]
+                return log(self.y[i]) == log(model.frontier[i] + 1) + model.epsilon[i]
 
             return regression_rule
 
-        ## TODO(error handling): replace with undefined model attribute
+        # TODO(error handling): replace with undefined model attribute
         return False
 
     def __log_rule(self):
@@ -148,7 +150,7 @@ class CNLS:
 
                 return log_rule
 
-        ## TODO(error handling): replace with undefined model attribute
+        # TODO(error handling): replace with undefined model attribute
         return False
 
     def __afriat_rule(self, ):
@@ -172,7 +174,7 @@ class CNLS:
 
                 return afriat_rule
             elif self.rts == "crs":
-                ## TODO(warning handling): replace with model requested not exist
+                # TODO(warning handling): replace with model requested not exist
                 return False
         elif self.cet == "mult":
             if self.rts == "vrs":
@@ -198,7 +200,7 @@ class CNLS:
 
                 return afriat_rule
 
-        ## TODO(error handling): replace with undefined model attribute
+        # TODO(error handling): replace with undefined model attribute
         return False
 
     def display_status(self):
@@ -233,16 +235,22 @@ class CNLS:
         """Return alpha value by list"""
         if self.optimization_status == 0:
             self.optimize()
-        return list(self.__model__.alpha[:].value)
+        alpha = list(self.__model__.alpha[:].value)
+        return np.asarray(alpha)
 
     def get_beta(self):
         """Return beta value by list"""
         if self.optimization_status == 0:
             self.optimize()
-        return list(self.__model__.beta[:,:].value)
+        beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
+                                                          list(self.__model__.beta[:, :].value))])
+        beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
+        beta = beta.pivot(index='Name', columns='Key', values='Value')
+        return beta.to_numpy()
 
     def get_residual(self):
         """Return residual value by list"""
         if self.optimization_status == 0:
             self.optimize()
-        return list(self.__model__.epsilon[:].value)
+        residual = list(self.__model__.epsilon[:].value)
+        return np.asarray(residual)
