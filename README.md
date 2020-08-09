@@ -36,6 +36,7 @@ A number of Jupyter Notebooks are provided in the repository [pyStoNED-Tutorials
    - [x] Residuals decomposition by method of moments(`MoM`) 
    - [x] Residuals decomposition by quasi-likelihood estimation(`QLE`)
    - [x] Residuals decomposition by nonparametric kernel deconvolution (`NKD`)
+- [x] A more efficient algorithm for CNLS (`CNLSG`)  
 - [x] `StoNEZD` (contextual variables)
 - [x] Convex quantile regression (`CQR`)
 - [x] Convex expectile regression (`CER`)
