@@ -3,6 +3,9 @@ from . import CCNLS
 from . import CERDDF
 from . import CNLS
 from . import CNLSDDF
+from . import CNLSG
+from . import CNLSG1
+from . import CNLSG2
 from . import CNLSPLOT
 from . import CNLSZ
 from . import CQER
@@ -17,6 +20,7 @@ from . import qle
 from . import ICNLS
 from . import ICQER
 from . import StoNED
+from . import sweet
 
 __all__ = [
     'biMatP',
@@ -24,6 +28,9 @@ __all__ = [
     'CERDDF',
     'CNLS',
     'CNLSDDF',
+    'CNLSG',
+    'CNLSG1',
+    'CNLSG2',
     'CNLSPLOT',
     'CNLSZ',
     'CQER',
@@ -37,5 +44,6 @@ __all__ = [
     'qle',
     'ICNLS',
     'ICQER',
-    'StoNED'
+    'StoNED',
+    'sweet'
 ]
