@@ -1,5 +1,12 @@
 # Change log
 
+## [0.3.8] - 2020-08-09
+### Added
+- `CNLSG()`
+- `CNLSG1()`
+- `CNLSG2()`
+- `sweet()`
+
 ## [0.3.7] - 2020-07-25
 ### Added
 - `ICQER()`
