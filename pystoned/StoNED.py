@@ -98,7 +98,7 @@ def stoned(y, resid, fun, method, cet):
         # values of residual
         if fun == "prod":
             eps = resid
-            
+
         if fun == "cost":
             eps = -resid
 
@@ -121,7 +121,8 @@ def stoned(y, resid, fun, method, cet):
         # adj. res.
         if fun == "prod":
            epsilon = resid - mu
-        else:
+
+        if fun == "cost":
            epsilon = resid + mu
 
     # expected value of the inefficiency term u
