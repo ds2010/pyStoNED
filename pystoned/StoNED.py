@@ -98,7 +98,8 @@ def stoned(y, resid, fun, method, cet):
         # values of residual
         if fun == "prod":
             eps = resid
-        else:
+            
+        if fun == "cost":
             eps = -resid
 
         # optimization
