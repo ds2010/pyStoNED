@@ -344,14 +344,14 @@ class CNLSG2:
         return self.optimization_status
 
     def get_alpha2(self):
-        """Return alpha value by list"""
+        """Return alpha value by array"""
         if self.optimization_status == 0:
             self.optimize()
         alpha2 = list(self.__model__.alpha2[:].value)
         return np.asarray(alpha2)
 
     def get_beta2(self):
-        """Return beta value by list"""
+        """Return beta value by array"""
         if self.optimization_status == 0:
             self.optimize()
         beta2 = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta2),
@@ -361,7 +361,7 @@ class CNLSG2:
         return beta2.to_numpy()
 
     def get_residual2(self):
-        """Return residual value by list"""
+        """Return residual value by array"""
         if self.optimization_status == 0:
             self.optimize()
         residual2 = list(self.__model__.epsilon2[:].value)

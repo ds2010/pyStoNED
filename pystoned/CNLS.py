@@ -232,14 +232,14 @@ class CNLS:
         return self.optimization_status
 
     def get_alpha(self):
-        """Return alpha value by list"""
+        """Return alpha value by array"""
         if self.optimization_status == 0:
             self.optimize()
         alpha = list(self.__model__.alpha[:].value)
         return np.asarray(alpha)
 
     def get_beta(self):
-        """Return beta value by list"""
+        """Return beta value by array"""
         if self.optimization_status == 0:
             self.optimize()
         beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
@@ -249,7 +249,7 @@ class CNLS:
         return beta.to_numpy()
 
     def get_residual(self):
-        """Return residual value by list"""
+        """Return residual value by array"""
         if self.optimization_status == 0:
             self.optimize()
         residual = list(self.__model__.epsilon[:].value)
