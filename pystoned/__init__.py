@@ -16,7 +16,6 @@ from . import directV
 from . import FDH
 from . import FDH2ICNLS
 from . import kde
-from . import qle
 from . import ICNLS
 from . import ICQER
 from . import StoNED
@@ -41,7 +40,6 @@ __all__ = [
     'FDH',
     'FDH2ICNLS',
     'kde',
-    'qle',
     'ICNLS',
     'ICQER',
     'StoNED',
