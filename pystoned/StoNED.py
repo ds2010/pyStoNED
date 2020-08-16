@@ -205,6 +205,6 @@ def stoned(y, resid, fun, method, cet):
             TE = np.exp(Eu)
 
     if method == "KDE":
-        return print("Unconditional Expected Inefficiency.", mu)
+        return print("Unconditional Expected Inefficiency:", mu)
     else:
-        return print("Conditional Expected Inefficiency.", TE)
+        return print("Conditional Expected Inefficiency:", TE)
