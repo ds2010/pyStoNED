@@ -8,7 +8,9 @@
 import numpy as np
 import math
 from scipy.stats import norm
+from scipy import stats
 import scipy.optimize as opt
+from sklearn.neighbors import KernelDensity
 
 
 def stoned(y, resid, fun, method, cet):
@@ -16,6 +18,7 @@ def stoned(y, resid, fun, method, cet):
     #         = "cost": cost frontier
     # method  = "MOM" : Method of moments
     #         = "QLE" : Quasi-likelihood estimation
+    #         = "KDE" : kernel deconvolution estimation
     # cet     = "addi": Additive composite error term
     #         = "mult": Multiplicative composite error term
 
@@ -88,7 +91,7 @@ def stoned(y, resid, fun, method, cet):
 
             # log-likelihood function Eq. (3.24)
             pn = norm.cdf(-epsilon * lamda / sigma)
-            logl= -len(eps) * math.log(sigma) + np.sum(np.log(pn)) - 0.5 * np.sum(epsilon ** 2) / sigma ** 2
+            logl= -len(epsilon) * math.log(sigma) + np.sum(np.log(pn)) - 0.5 * np.sum(epsilon ** 2) / sigma ** 2
 
             return -logl
 
@@ -108,7 +111,7 @@ def stoned(y, resid, fun, method, cet):
         lamda = ll_res.x[0]
 
         # use estimate of lambda to calculate sigma Eq. (3.26) in Johnson and Kuosmanen (2015)
-        sigma = math.sqrt((np.mean(resid) ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda**2))))
+        sigma = math.sqrt(np.mean(resid ** 2) / (1 - (2 * lamda ** 2) / (math.pi * (1 + lamda**2))))
 
         # calculate bias correction
         # (unconditional) mean
@@ -124,6 +127,45 @@ def stoned(y, resid, fun, method, cet):
 
         if fun == "cost":
            epsilon = resid + mu
+
+    if method == "KDE":
+
+        # choose a bandwidth (rule-of-thumb, Eq. (3.29) in Silverman (1986))
+        std = np.std(resid, ddof=1)
+        iqr = stats.iqr(resid, interpolation='midpoint')
+
+        if std < iqr:
+            sigmahat = std
+        else:
+            sigmahat = iqr / 1.349
+        bw = 1.06 * sigmahat * len(resid) ** (-1 / 5)
+
+        # reshape the array resid
+        resid = resid.reshape(-1, 1)
+
+        # fit the KDE model
+        kde = KernelDensity(bandwidth=bw, kernel='gaussian')
+        kde.fit(resid)
+
+        # score_samples returns the log of the probability density
+        logprob = kde.score_samples(resid)
+        den = np.exp(logprob)
+
+        # first derivative of density function
+        residD = np.zeros((len(resid), 1))
+        denD = np.zeros((len(resid), 1))
+        der = np.zeros((len(resid), 1))
+        for i in range(len(resid) - 1):
+            residD[i + 1] = resid[i + 1] - resid[i]
+            denD[i + 1] = den[i + 1] - den[i]
+            der[i + 1] = denD[i + 1] / residD[i + 1]
+
+        # expected inefficiency mu
+        if fun == "prod":
+            mu = -np.max(der)
+
+        if fun == "cost":
+            mu = np.max(der)
 
     # expected value of the inefficiency term u
     sigmart = sigmau * sigmav / math.sqrt(sigmau ** 2 + sigmav ** 2)
@@ -146,7 +188,6 @@ def stoned(y, resid, fun, method, cet):
             # technical inefficiency
             TE = ((y - resid - mu) + Eu) / (y - resid - mu)
 
-
     if cet == "mult":
 
         if fun == "prod":
@@ -163,4 +204,7 @@ def stoned(y, resid, fun, method, cet):
             # technical inefficiency
             TE = np.exp(Eu)
 
-    return TE
+    if method == "KDE":
+        return print("Unconditional Expected Inefficiency.", mu)
+    else:
+        return print("Conditional Expected Inefficiency.", TE)
