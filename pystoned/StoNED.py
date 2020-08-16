@@ -165,13 +165,13 @@ def stoned(y, resid, fun, method, cet):
         densityV = np.sum(f, axis=0)
 
         # unconditional expected inefficiency mu
-        xd = np.zeros((n, 1))
-        densityd = np.zeros((n, 1))
+        xD = np.zeros((n, 1))
+        densityD = np.zeros((n, 1))
         derivative = np.zeros((n, 1))
         for i in range(n - 1):
-            xd[i + 1] = x[i + 1] - x[i]
-            densityd[i + 1] = densityV[i + 1] - densityV[i]
-            derivative[i + 1] = 0.2 * densityd[i + 1] / xd[i + 1]
+            xD[i + 1] = x[i + 1] - x[i]
+            densityD[i + 1] = densityV[i + 1] - densityV[i]
+            derivative[i + 1] = 0.2 * densityD[i + 1] / xD[i + 1]
 
         # expected inefficiency mu
         mu = np.max(np.abs(derivative))
