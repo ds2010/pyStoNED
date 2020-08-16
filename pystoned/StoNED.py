@@ -138,7 +138,6 @@ def stoned(y, resid, fun, method, cet):
 
         # transform data
         x = np.array(resid)
-        xx = x.T
 
         # number of DMUs
         n = len(x)
@@ -156,9 +155,10 @@ def stoned(y, resid, fun, method, cet):
         # n by n kernel matrix
         g = np.zeros((n, n))
         f = np.zeros((n, n))
+
         for i in range(n):
             for j in range(n):
-                g[i, j] = x[i, :] - xx[:, j]
+                g[i, j] = x[i] - x[j]
                 f[i, j] = kk(g=g[i, j] / h) / (n * h)
 
         # kernel density values
@@ -168,52 +168,54 @@ def stoned(y, resid, fun, method, cet):
         xD = np.zeros((n, 1))
         densityD = np.zeros((n, 1))
         derivative = np.zeros((n, 1))
+
         for i in range(n - 1):
             xD[i + 1] = x[i + 1] - x[i]
             densityD[i + 1] = densityV[i + 1] - densityV[i]
             derivative[i + 1] = 0.2 * densityD[i + 1] / xD[i + 1]
 
         # expected inefficiency mu
-        mu = np.max(np.abs(derivative))
-
-    # expected value of the inefficiency term u
-    sigmart = sigmau * sigmav / math.sqrt(sigmau ** 2 + sigmav ** 2)
-    mus = epsilon * sigmau / (sigmav * math.sqrt(sigmau ** 2 + sigmav ** 2))
-    norpdf = (1 / math.sqrt(2 * math.pi)) * np.exp(-mus ** 2 / 2)
-
-    if cet == "addi":
-
         if fun == "prod":
-
-            # Conditional mean
-            Eu = sigmart * ((norpdf / (1 - norm.cdf(mus) + 0.000001)) - mus)
-            # technical inefficiency
-            TE = ((y - resid + mu) - Eu) / (y - resid + mu)
-
+            mu = -np.max(derivative)
         if fun == "cost":
-
-            # Conditional mean
-            Eu = sigmart * ((norpdf / (1 - norm.cdf(-mus) + 0.000001)) + mus)
-            # technical inefficiency
-            TE = ((y - resid - mu) + Eu) / (y - resid - mu)
-
-    if cet == "mult":
-
-        if fun == "prod":
-
-            # Conditional mean
-            Eu = sigmart * ((norpdf / (1 - norm.cdf(mus) + 0.000001)) - mus)
-            # technical inefficiency
-            TE = np.exp(-Eu)
-
-        if fun == "cost":
-
-            # Conditional mean
-            Eu = sigmart * ((norpdf / (1 - norm.cdf(-mus) + 0.000001)) + mus)
-            # technical inefficiency
-            TE = np.exp(Eu)
+            mu = np.max(derivative)
 
     if method == "KDE":
         return print("Unconditional Expected Inefficiency:", mu)
+
     else:
+
+        # expected value of the inefficiency term u
+        sigmart = sigmau * sigmav / math.sqrt(sigmau ** 2 + sigmav ** 2)
+        mus = epsilon * sigmau / (sigmav * math.sqrt(sigmau ** 2 + sigmav ** 2))
+        norpdf = (1 / math.sqrt(2 * math.pi)) * np.exp(-mus ** 2 / 2)
+
+        if cet == "addi":
+
+            if fun == "prod":
+                # Conditional mean
+                Eu = sigmart * ((norpdf / (1 - norm.cdf(mus) + 0.000001)) - mus)
+                # technical inefficiency
+                TE = ((y - resid + mu) - Eu) / (y - resid + mu)
+
+            if fun == "cost":
+                # Conditional mean
+                Eu = sigmart * ((norpdf / (1 - norm.cdf(-mus) + 0.000001)) + mus)
+                # technical inefficiency
+                TE = ((y - resid - mu) + Eu) / (y - resid - mu)
+
+        if cet == "mult":
+
+            if fun == "prod":
+                # Conditional mean
+                Eu = sigmart * ((norpdf / (1 - norm.cdf(mus) + 0.000001)) - mus)
+                # technical inefficiency
+                TE = np.exp(-Eu)
+
+            if fun == "cost":
+                # Conditional mean
+                Eu = sigmart * ((norpdf / (1 - norm.cdf(-mus) + 0.000001)) + mus)
+                # technical inefficiency
+                TE = np.exp(Eu)
+
         return print("Conditional Expected Inefficiency:", TE)
