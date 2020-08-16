@@ -10,7 +10,6 @@ import math
 from scipy.stats import norm
 from scipy import stats
 import scipy.optimize as opt
-from sklearn.neighbors import KernelDensity
 
 
 def stoned(y, resid, fun, method, cet):
@@ -130,47 +129,57 @@ def stoned(y, resid, fun, method, cet):
 
     if method == "KDE":
 
+        def kk(g):
+            """Gaussian kernel estimator"""
+
+            kk = (1 / math.sqrt(2 * math.pi)) * np.exp(-0.5 * g ** 2)
+
+            return kk
+
+        # transform data
+        x = np.array(resid)
+        xx = x.T
+
+        # number of DMUs
+        n = len(x)
+
         # choose a bandwidth (rule-of-thumb, Eq. (3.29) in Silverman (1986))
-        std = np.std(resid, ddof=1)
-        iqr = stats.iqr(resid, interpolation='midpoint')
+        std = np.std(x, ddof=1)
+        iqr = stats.iqr(x, interpolation='midpoint')
 
         if std < iqr:
             sigmahat = std
         else:
             sigmahat = iqr / 1.349
-        bw = 1.06 * sigmahat * len(resid) ** (-1 / 5)
+        h = 1.06 * sigmahat * len(x) ** (-1 / 5)
 
-        # reshape the array resid
-        resid = resid.reshape(-1, 1)
+        # n by n kernel matrix
+        g = np.zeros((n, n))
+        f = np.zeros((n, n))
+        for i in range(n):
+            for j in range(n):
+                g[i, j] = x[i, :] - xx[:, j]
+                f[i, j] = kk(g=g[i, j] / h) / (n * h)
 
-        # fit the KDE model
-        kde = KernelDensity(bandwidth=bw, kernel='gaussian')
-        kde.fit(resid)
+        # kernel density values
+        densityV = np.sum(f, axis=0)
 
-        # score_samples returns the log of the probability density
-        logprob = kde.score_samples(resid)
-        den = np.exp(logprob)
-
-        # first derivative of density function
-        residD = np.zeros((len(resid), 1))
-        denD = np.zeros((len(resid), 1))
-        der = np.zeros((len(resid), 1))
-        for i in range(len(resid) - 1):
-            residD[i + 1] = resid[i + 1] - resid[i]
-            denD[i + 1] = den[i + 1] - den[i]
-            der[i + 1] = denD[i + 1] / residD[i + 1]
+        # unconditional expected inefficiency mu
+        xd = np.zeros((n, 1))
+        densityd = np.zeros((n, 1))
+        derivative = np.zeros((n, 1))
+        for i in range(n - 1):
+            xd[i + 1] = x[i + 1] - x[i]
+            densityd[i + 1] = densityV[i + 1] - densityV[i]
+            derivative[i + 1] = 0.2 * densityd[i + 1] / xd[i + 1]
 
         # expected inefficiency mu
-        if fun == "prod":
-            mu = -np.max(der)
-
-        if fun == "cost":
-            mu = np.max(der)
+        mu = np.max(np.abs(derivative))
 
     # expected value of the inefficiency term u
     sigmart = sigmau * sigmav / math.sqrt(sigmau ** 2 + sigmav ** 2)
     mus = epsilon * sigmau / (sigmav * math.sqrt(sigmau ** 2 + sigmav ** 2))
-    norpdf = 1 / math.sqrt(2 * math.pi) * np.exp(-mus ** 2 / 2)
+    norpdf = (1 / math.sqrt(2 * math.pi)) * np.exp(-mus ** 2 / 2)
 
     if cet == "addi":
 
