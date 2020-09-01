@@ -254,3 +254,11 @@ class CNLS:
             self.optimize()
         residual = list(self.__model__.epsilon[:].value)
         return np.asarray(residual)
+    
+    def get_adjusted_residual(self):
+        """Return the shifted residuals(epsilon) tern by CCNLS"""
+        return self.get_residual() - np.amax(self.get_residual())
+
+    def get_adjusted_alpha(self):
+        """Return the shifted constatnt(alpha) term by CCNLS"""
+        return self.get_alpha() + np.amax(self.get_residual())
