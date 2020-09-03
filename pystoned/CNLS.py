@@ -4,6 +4,7 @@ from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 class CNLS:
@@ -114,8 +115,8 @@ class CNLS:
 
                 def regression_rule(model, i):
                     return self.y[i] == model.alpha[i] \
-                           + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
-                           + model.epsilon[i]
+                        + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                        + model.epsilon[i]
 
                 return regression_rule
             elif self.rts == "crs":
@@ -153,7 +154,7 @@ class CNLS:
         # TODO(error handling): replace with undefined model attribute
         return False
 
-    def __afriat_rule(self, ):
+    def __afriat_rule(self):
         """Return the proper afriat inequality constraint"""
         if self.fun == "prod":
             __operator = NumericValue.__le__
@@ -254,7 +255,7 @@ class CNLS:
             self.optimize()
         residual = list(self.__model__.epsilon[:].value)
         return np.asarray(residual)
-    
+
     def get_adjusted_residual(self):
         """Return the shifted residuals(epsilon) tern by CCNLS"""
         return self.get_residual() - np.amax(self.get_residual())
@@ -262,3 +263,40 @@ class CNLS:
     def get_adjusted_alpha(self):
         """Return the shifted constatnt(alpha) term by CCNLS"""
         return self.get_alpha() + np.amax(self.get_residual())
+
+    def plot2d(self, xselect, fig_name=None):
+        """Plot with selected x"""
+        x = np.array(self.x).T[xselect]
+        y = np.array(self.y).T
+        f = y - self.get_residual()
+        data = (np.stack([x, y, f], axis=0)).T
+
+        # sort
+        data = data[np.argsort(data[:, 0])].T
+
+        x, y, f = data[0], data[1], data[2]
+
+        # create figure and axes objects
+        fig, ax = plt.subplots()
+        dp = ax.scatter(x, y, color="k", marker='x')
+        fl = ax.plot(x, f, color="r", label="CNLS")
+
+        # add legend
+        legend = plt.legend([dp, fl[0]],
+                            ['Data points', 'CNLS'],
+                            loc='upper left',
+                            ncol=1,
+                            fontsize=10,
+                            frameon=False)
+
+        # add x, y label
+        ax.set_xlabel("Input $x$%d" % (xselect))
+        ax.set_ylabel("Output $y$")
+
+        # Remove top and right axes
+        ax.spines["right"].set_visible(False)
+        ax.spines["top"].set_visible(False)
+        if fig_name == None:
+            plt.show()
+        else:
+            plt.savefig(fig_name)
