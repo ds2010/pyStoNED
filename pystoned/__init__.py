@@ -5,7 +5,6 @@ from . import CNLSDDF
 from . import CNLSG
 from . import CNLSG1
 from . import CNLSG2
-from . import CNLSPLOT
 from . import CNLSZ
 from . import CQER
 from . import CQRDDF
@@ -27,7 +26,6 @@ __all__ = [
     'CNLSG',
     'CNLSG1',
     'CNLSG2',
-    'CNLSPLOT',
     'CNLSZ',
     'CQER',
     'CQRDDF',
