@@ -300,3 +300,4 @@ class CNLS:
             plt.show()
         else:
             plt.savefig(fig_name)
+            
