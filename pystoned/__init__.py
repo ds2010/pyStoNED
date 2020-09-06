@@ -1,4 +1,3 @@
-from . import biMatP
 from . import CERDDF
 from . import CNLS
 from . import CNLSDDF
@@ -19,7 +18,6 @@ from . import StoNED
 from . import sweet
 
 __all__ = [
-    'biMatP',
     'CERDDF',
     'CNLS',
     'CNLSDDF',
