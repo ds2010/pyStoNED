@@ -8,6 +8,7 @@ from . import CNLSG2
 from . import CNLSZ
 from . import CQER
 from . import CQRDDF
+from . import dataset
 from . import DEA
 from . import DEA2CNLS
 from . import directV
@@ -29,6 +30,7 @@ __all__ = [
     'CNLSZ',
     'CQER',
     'CQRDDF',
+    'dataset',
     'DEA',
     'DEA2CNLS',
     'directV',
