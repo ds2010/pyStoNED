@@ -337,3 +337,29 @@ class CQR:
             plt.show()
         else:
             plt.savefig(fig_name)
+
+class CER(CQR):
+    """Convex expectile regression (CER)"""
+
+    def __init__(self, y, x, tau, cet='addi', fun='prod', rts='vrs'):
+        """
+            y : Output variable
+            x : Input variables
+            cet  = "addi" : Additive composite error term
+                 = "mult" : Multiplicative composite error term
+            fun  = "prod" : Production frontier
+                 = "cost" : Cost frontier
+            rts  = "vrs"  : Variable returns to scale
+                 = "crs"  : Constant returns to scale
+        """
+        super().__init__(y, x, tau, cet, fun, rts)
+        self.__model__.objective.deactivate()
+        self.__model__.squared_objective = Objective(
+            rule=self.__squared_objective_rule(), sense=minimize, doc='squared objective rule')
+
+    def __squared_objective_rule(self):
+        def squared_objective_rule(model):
+            return self.tau * sum(model.epsilon_plus[i] ** 2 for i in model.I)\
+                + (1 - self.tau) * \
+                sum(model.epsilon_minus[i] ** 2 for i in model.I)
+        return squared_objective_rule
