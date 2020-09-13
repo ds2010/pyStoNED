@@ -11,7 +11,6 @@ from . import DEA
 from . import DEA2CNLS
 from . import directV
 from . import FDH
-from . import FDH2ICNLS
 from . import ICNLS
 from . import ICQER
 from . import StoNED
@@ -31,8 +30,7 @@ __all__ = [
     'DEA2CNLS',
     'directV',
     'FDH',
-    'FDH2ICNLS',
-    'ICNLS',
+    'ICNLS', 
     'ICQER',
     'StoNED',
     'sweet'
