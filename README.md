@@ -22,7 +22,7 @@ A number of Jupyter Notebooks are provided in the repository [pyStoNED-Tutorials
 
  + [Timo Kuosmanen](https://people.aalto.fi/timo.kuosmanen), Professor, Aalto University School of Business.
  + [Sheng Dai](https://www.researchgate.net/profile/Sheng_Dai8), Ph.D. candidate, Aalto University School of Business.
- + [Chia-Yen Lee](https://scholar.google.com/citations?user=M_DB0CQAAAAJ&hl=en), Professor, College of Management, National Taiwan University.
+ + [Chia-Yen Lee](http://polab.im.ntu.edu.tw/), Professor, College of Management, National Taiwan University.
  + [Yu-Hsueh Fang](https://github.com/JulianATA), Computer Engineer, Institute of Manufacturing Information and Systems, National Cheng Kung University.
 
 # To do list
