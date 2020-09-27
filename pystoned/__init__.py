@@ -9,7 +9,6 @@ from . import CQER
 from . import CQRDDF
 from . import DEA
 from . import DEA2CNLS
-from . import directV
 from . import FDH
 from . import ICNLS
 from . import ICQER
@@ -28,7 +27,6 @@ __all__ = [
     'CQRDDF',
     'DEA',
     'DEA2CNLS',
-    'directV',
     'FDH',
     'ICNLS', 
     'ICQER',
