@@ -1,860 +1,222 @@
-"""
-@Title   : Convex Nonparametric Least Square with multiple Outputs (DDF formulation)
-@Author  : Sheng Dai, Timo Kuosmanen
-@Mail    : sheng.dai@aalto.fi (S. Dai); timo.kuosmanen@aalto.fi (T. Kuosmanen)
-@Date    : 2020-04-25
-"""
+from . import CNLS
 
-# Import of the pyomo module
-from pyomo.environ import *
-from . import directV
+from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint, log
+from pyomo.opt import SolverFactory, SolverManagerFactory
+from pyomo.core.expr.numvalue import NumericValue
+
 import numpy as np
 
+class CNLSDDF(CNLS.CNLS):
+    """Convex Nonparametric Least Square with multiple Outputs (DDF formulation)"""
+    def __init__(self, y, x,  b=None, gy=[1], gx=[1], gb=None, fun='prod'):
+        """
+            y : Output data
+            x : Input data
+            b : Undesirable output data
+            gy : The direction of output data
+            gx : The direction of input data
+            gb : The direction of undesirable output datadata
+            fun  = "prod" : Production frontier
+                 = "cost" : Cost frontier
+        """
 
-# without undesirable outputs
-def cnlsddf(y, x, fun, gx, gy):
-    # fun    = "prod" : production frontier
-    #        = "cost" : cost frontier
+        # TODO(error/warning handling): Check the configuration of the model exist
+        self.y = y.tolist()
+        self.x = x.tolist()
+        self.b = b
+        self.gy = self.__to_1d_list(gy)
+        self.gx = self.__to_1d_list(gx)
+        self.gb = self.__to_1d_list(gb)
 
-    # transform data
-    x = x.tolist()
-    y = y.tolist()
+        self.fun = fun
 
-    # number of DMUs
-    n = len(y)
+        if type(self.x[0]) != list:
+            self.x = []
+            for x_value in x.tolist():
+                self.x.append([x_value])
 
-    # number of inputs
-    if type(x[0]) == int or type(x[0]) == float:
-        m = 1
-    else:
-        m = len(x[0])
+        if type(self.y[0]) != list:
+            self.y = []
+            for y_value in y.tolist():
+                self.y.append([y_value])
 
-    # number of outputs
-    if type(y[0]) == int or type(y[0]) == float:
-        p = 1
-    else:
-        p = len(y[0])
+        self.__model__ = ConcreteModel()
 
-    # identity matrix
-    id = np.repeat(1, n)
-    id = id.tolist()
+        # Initialize the sets
+        self.__model__.I = Set(initialize=range(len(self.y)))
+        self.__model__.J = Set(initialize=range(len(self.x[0])))
+        self.__model__.K = Set(initialize=range(len(self.y[0])))
 
-    # directional vectors
-    gx = directV.dv(gx, gy, n, m, p)[0]
-    gy = directV.dv(gx, gy, n, m, p)[1]
+        # Initialize the variables
+        self.__model__.alpha = Var(self.__model__.I, doc='alpha')
+        self.__model__.beta = Var(self.__model__.I, self.__model__.J, bounds=(0.0, None), doc='beta')
+        self.__model__.epsilon = Var(self.__model__.I, doc='residuals')
+        self.__model__.gamma = Var(self.__model__.I, self.__model__.K, bounds=(0.0, None), doc='gamma')
+        
+        if type(self.b) != type(None):
+            self.b = b.tolist()
+            self.gb = self.__to_1d_list(gb)
 
-    # Creation of a Concrete Model
-    model = ConcreteModel()
+            if type(self.b[0]) != list:
+                self.b = [] 
+                for b_value in b.tolist():
+                    self.b.append([b_value])
 
-    if m == 1 and p == 1:
+            self.__model__.L = Set(initialize=range(len(self.b[0])))
+            self.__model__.delta = Var(self.__model__.I, self.__model__.L, bounds=(0.0, None), doc='delta')
 
-        # Set
-        model.i = Set(initialize=range(n))
+        # Setup the objective function and constraints
+        self.__model__.objective = Objective(rule=self._CNLS__objective_rule(),
+                                             sense=minimize,
+                                             doc='objective function')
+        self.__model__.regression_rule = Constraint(self.__model__.I,
+                                                    rule=self.__regression_rule(),
+                                                    doc='regression equation')
+        self.__model__.translation_rule = Constraint(self.__model__.I, 
+                                                     rule=self.__translation_property(),
+                                                     doc='translation property')
+        self.__model__.afriat_rule = Constraint(self.__model__.I,
+                                                self.__model__.I,
+                                                rule=self.__afriat_rule(),
+                                                doc='afriat inequality')
 
-        # Alias
-        model.h = SetOf(model.i)
+        # Optimize model
+        self.optimization_status = 0
+        self.problem_status = 0
 
-        # Variables
-        model.a = Var(model.i, doc='alpha')
-        model.b = Var(model.i, bounds=(0.0, None), doc='beta')
-        model.e = Var(model.i, doc='residuals')
-        model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
+    def optimize(self, remote=True):
+        """Optimize the function by requested method"""
+        # TODO(error/warning handling): Check problem status after optimization
+        if remote == False:
+            solver = SolverFactory("mosek")
+            self.problem_status = solver.solve(self.__model__,
+                                               tee=True)
+            print(self.problem_status)
+            self.optimization_status = 1
 
-        # Objective function
-        def objective_rule(model):
-            return sum(model.e[i] * model.e[i] for i in model.i)
+        else:
+            solver = SolverManagerFactory('neos')
+            self.problem_status = solver.solve(self.__model__,
+                                               tee=True,
+                                               opt="mosek")
+            print(self.problem_status)
+            self.optimization_status = 1
 
-        model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
+    def __to_1d_list(self, l):
+        if type(l) == int or type(l) == float:
+            return [l]
+        else:
+            return l
 
-        # Constraints
-        def reg_rule(model, i):
-            return model.g[i] * y[i] == model.a[i] + model.b[i] * x[i] - model.e[i]
+    def __regression_rule(self):
+        """Return the proper regression constraint"""
+        if type(self.b) == type(None):
+            def regression_rule(model, i):
+                return sum(model.gamma[i, k] * self.y[i][k] for k in model.K)\
+                       ==  model.alpha[i]\
+                       + sum(model.beta[i, j] * self.x[i][j] for j in model.J)\
+                       - model.epsilon[i]
 
-        model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
+            return regression_rule
 
-        def trans_rule(model, i):
-            return model.b[i] * gx[i] + model.g[i] * gy[i] == id[i]
+        def regression_rule(model, i):
+            return sum(model.gamma[i, k] * self.y[i][k] for k in model.K)\
+                   ==  model.alpha[i]\
+                   + sum(model.beta[i, j] * self.x[i][j] for j in model.J)\
+                   + sum(model.delta[i, l] * self.b[i][l] for l in model.L)\
+                   - model.epsilon[i]
 
-        model.trans = Constraint(model.i, rule=trans_rule, doc='translation property')
+        return regression_rule
 
-        # production model
-        if fun == "prod":
+    def __translation_property(self):
+        """Return the proper translation property"""
+        if type(self.b) == type(None):
+            def translation_rule(model, i):
+                return sum(model.beta[i, j] * self.gx[j] for j in model.J) \
+                       + sum(model.gamma[i, k] * self.gy[k] for k in model.K) == 1
+            return translation_rule
+        
+        def translation_rule(model, i):
+            return sum(model.beta[i, j] * self.gx[j] for j in model.J) \
+                   + sum(model.gamma[i, k] * self.gy[k] for k in model.K) \
+                   + sum(model.delta[i, l] * self.gb[l] for l in model.L) == 1
 
-            def concav_rule(model, i, h):
+        return translation_rule
+    
+    def __afriat_rule(self):
+        """Return the proper afriat inequality constraint"""
+        if self.fun == "prod":
+            __operator = NumericValue.__le__
+        elif self.fun == "cost":
+            __operator = NumericValue.__ge__
+
+        if type(self.b) == type(None):
+            def afriat_rule(model, i, h):
                 if i == h:
                     return Constraint.Skip
-                return model.a[i] + model.b[i] * x[i] - model.g[i] * y[i] <= \
-                       model.a[h] + model.b[h] * x[i] - model.g[h] * y[i]
-
-            model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
-
-        # cost model
-        if fun == "cost":
-
-            def convex_rule(model, i, h):
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + model.b[i] * x[i] - model.g[i] * y[i] >= \
-                       model.a[h] + model.b[h] * x[i] - model.g[h] * y[i]
-
-            model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
-
-    if m == 1 and p > 1:
-
-        # Set
-        model.i = Set(initialize=range(n))
-        model.k = Set(initialize=range(p))
-
-        # Alias
-        model.h = SetOf(model.i)
-
-        # Variables
-        model.a = Var(model.i, doc='alpha')
-        model.b = Var(model.i, bounds=(0.0, None), doc='beta')
-        model.e = Var(model.i, doc='residuals')
-        model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
-
-        # Objective function
-        def objective_rule(model):
-            return sum(model.e[i] * model.e[i] for i in model.i)
-
-        model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
-
-        # Constraints
-        def reg_rule(model, i):
-            brow = y[i]
-            return sum(model.g[i, k] * brow[k] for k in model.k) == \
-                   model.a[i] + model.b[i] * x[i] - model.e[i]
-
-        model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
-
-        def trans_rule(model, i):
-            frow = gy[i]
-            return model.b[i] * gx[i] + sum(model.g[i, k] * frow[k] for k in model.k) == id[i]
-
-        model.trans = Constraint(model.i, rule=trans_rule, doc='translation property')
-
-        # production model
-        if fun == "prod":
-
-            def concav_rule(model, i, h):
-                brow = y[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + model.b[i] * x[j] - sum(model.g[i, k] * brow[k] for k in model.k) <= \
-                       model.a[h] + model.b[h] * x[i] - sum(model.g[h, k] * brow[k] for k in model.k)
-
-            model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
-
-        # cost model
-        if fun == "cost":
-
-            def convex_rule(model, i, h):
-                brow = y[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + model.b[i] * x[i] - sum(model.g[i, k] * brow[k] for k in model.k) >= \
-                       model.a[h] + model.b[h] * x[i] - sum(model.g[h, k] * brow[k] for k in model.k)
-
-            model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
-
-    if m > 1 and p == 1:
-
-        # Set
-        model.i = Set(initialize=range(n))
-        model.j = Set(initialize=range(m))
-
-        # Alias
-        model.h = SetOf(model.i)
-
-        # Variables
-        model.a = Var(model.i, doc='alpha')
-        model.b = Var(model.i, model.j, bounds=(0.0, None), doc='beta')
-        model.e = Var(model.i, doc='residuals')
-        model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
-
-        # Objective function
-        def objective_rule(model):
-            return sum(model.e[i] * model.e[i] for i in model.i)
-
-        model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
-
-        # Constraints
-        def reg_rule(model, i):
-            arow = x[i]
-            return model.g[i] * y[i] == model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - model.e[i]
-
-        model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
-
-        def trans_rule(model, i):
-            erow = gx[i]
-            return sum(model.b[i, j] * erow[j] for j in model.j) + model.g[i] * gy[i] == id[i]
-
-        model.trans = Constraint(model.i, rule=trans_rule, doc='translation property')
-
-        # production model
-        if fun == "prod":
-
-            def concav_rule(model, i, h):
-                arow = x[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - \
-                       model.g[i] * y[i] <= model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) - \
-                       model.g[h] * y[i]
-
-            model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
-
-        # cost model
-        if fun == "cost":
-
-            def convex_rule(model, i, h):
-                arow = x[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - \
-                       model.g[i] * y[i] >= model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) - \
-                       model.g[h] * y[i]
-
-            model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
-
-    if m > 1 and p > 1:
-
-        # Set
-        model.i = Set(initialize=range(n))
-        model.j = Set(initialize=range(m))
-        model.k = Set(initialize=range(p))
-
-        # Alias
-        model.h = SetOf(model.i)
-
-        # Variables
-        model.a = Var(model.i, doc='alpha')
-        model.b = Var(model.i, model.j, bounds=(0.0, None), doc='beta')
-        model.e = Var(model.i, doc='residuals')
-        model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
-
-        # Objective function
-        def objective_rule(model):
-            return sum(model.e[i] * model.e[i] for i in model.i)
-
-        model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
-
-        # Constraints
-        def reg_rule(model, i):
-            arow = x[i]
-            brow = y[i]
-            return sum(model.g[i, k] * brow[k] for k in model.k) == model.a[i] + \
-                   sum(model.b[i, j] * arow[j] for j in model.j) - model.e[i]
-
-        model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
-
-        def trans_rule(model, i):
-            erow = gx[i]
-            frow = gy[i]
-            return sum(model.b[i, j] * erow[j] for j in model.j) + sum(model.g[i, k] * frow[k] for k in model.k) == \
-                   id[i]
-
-        model.trans = Constraint(model.i, rule=trans_rule, doc='translation property')
-
-        # production model
-        if fun == "prod":
-
-            def concav_rule(model, i, h):
-                arow = x[i]
-                brow = y[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - \
-                       sum(model.g[i, k] * brow[k] for k in model.k) <= model.a[h] + \
-                       sum(model.b[h, j] * arow[j] for j in model.j) - sum(model.g[h, k] * brow[k] for k in model.k)
-
-            model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
-
-        # cost model
-        if fun == "cost":
-
-            def convex_rule(model, i, h):
-                arow = x[i]
-                brow = y[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) - \
-                       sum(model.g[i, k] * brow[k] for k in model.k) >= model.a[h] + \
-                       sum(model.b[h, j] * arow[j] for j in model.j) - sum(model.g[h, k] * brow[k] for k in model.k)
-
-            model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
-
-    return model
-
-
-# with undesirable outputs
-def cnlsddfb(y, x, b, fun, gx, gb, gy):
-    # fun    = "prod" : production frontier
-    #        = "cost" : cost frontier
-
-    # transform data
-    x = x.tolist()
-    y = y.tolist()
-    b = b.tolist()
-
-    # number of DMUS
-    n = len(y)
-
-    # number of inputs
-    if type(x[0]) == int or type(x[0]) == float:
-        m = 1
-    else:
-        m = len(x[0])
-
-    # number of outputs
-    if type(y[0]) == int or type(y[0]) == float:
-        p = 1
-    else:
-        p = len(y[0])
-
-    # number of undesirable outputs
-    if type(b[0]) == int or type(b[0]) == float:
-        q = 1
-    else:
-        q = len(b[0])
-
-    # identity matrix
-    id = np.repeat(1, n)
-    id = id.tolist()
-
-    # directional vectors
-    gx = directV.dvb(gx, gb, gy, n, m, q, p)[0]
-    gb = directV.dvb(gx, gb, gy, n, m, q, p)[1]
-    gy = directV.dvb(gx, gb, gy, n, m, q, p)[2]
-
-    # Creation of a Concrete Model
-    model = ConcreteModel()
-
-    if m == 1 and q == 1 and p == 1:
-
-        # Set
-        model.i = Set(initialize=range(n))
-
-        # Alias
-        model.h = SetOf(model.i)
-
-        # Variables
-        model.a = Var(model.i, doc='alpha')
-        model.b = Var(model.i, bounds=(0.0, None), doc='beta')
-        model.e = Var(model.i, doc='residuals')
-        model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
-        model.d = Var(model.i, bounds=(0.0, None), doc='delta')
-
-        # Objective function
-        def objective_rule(model):
-            return sum(model.e[i] * model.e[i] for i in model.i)
-
-        model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
-
-        # Constraints
-        def reg_rule(model, i):
-            return model.g[i] * y[i] == model.a[i] + model.b[i] * x[i] + model.d[i] * b[i] - model.e[i]
-
-        model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
-
-        def trans_rule(model, i):
-            return model.b[i] * gx[i] + model.g[i] * gy[i] + model.d[i] * gb[i] == id[i]
-
-        model.trans = Constraint(model.i, rule=trans_rule, doc='translation property')
-
-        # production model
-        if fun == "prod":
-
-            def concav_rule(model, i, h):
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + model.b[i] * x[i] + model.d[i] * b[i] - model.g[i] * y[i] <= \
-                       model.a[h] + model.b[h] * x[i] + model.d[h] * b[i] - model.g[h] * y[i]
-
-            model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
-
-        # cost model
-        if fun == "cost":
-
-            def concav_rule(model, i, h):
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + model.b[i] * x[i] + model.d[i] * b[i] - model.g[i] * y[i] >= \
-                       model.a[h] + model.b[h] * x[i] + model.d[h] * b[i] - model.g[h] * y[i]
-
-            model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
-
-    if m == 1 and q == 1 and p > 1:
-
-        # Set
-        model.i = Set(initialize=range(n))
-        model.l = Set(initialize=range(q))
-
-        # Alias
-        model.h = SetOf(model.i)
-
-        # Variables
-        model.a = Var(model.i, doc='alpha')
-        model.b = Var(model.i, bounds=(0.0, None), doc='beta')
-        model.e = Var(model.i, doc='residuals')
-        model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
-        model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
-
-        # Objective function
-        def objective_rule(model):
-            return sum(model.e[i] * model.e[i] for i in model.i)
-
-        model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
-
-        # Constraints
-        def reg_rule(model, i):
-            crow = b[i]
-            return model.g[i] * y[i] == model.a[i] + model.b[i] * x[i] + \
-                   sum(model.d[i, l] * crow[l] for l in model.l) - model.e[i]
-
-        model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
-
-        def trans_rule(model, i):
-            grow = gb[i]
-            return model.b[i] * gx[i] + model.g[i] * gy[i] + sum(model.d[i, l] * grow[l] for l in model.l) == id[i]
-
-        model.trans = Constraint(model.i, rule=trans_rule, doc='translation property')
-
-        # production model
-        if fun == "prod":
-
-            def concav_rule(model, i, h):
-                crow = b[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + model.b[i] * x[i] + sum(model.d[i, l] * crow[l] for l in model.l) - \
-                       model.g[i] * y[i] <= model.a[h] + model.b[h] * x[i] + \
-                       sum(model.d[h, l] * crow[l] for l in model.l) - model.g[h] * y[i]
-
-            model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
-
-        # cost model
-        if fun == "cost":
-
-            def concav_rule(model, i, h):
-                crow = b[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + model.b[i] * x[i] + sum(model.d[i, l] * crow[l] for l in model.l) - \
-                       model.g[i] * y[i] >= model.a[h] + model.b[h] * x[i] + \
-                       sum(model.d[h, l] * crow[l] for l in model.l) - model.g[h] * y[i]
-
-            model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
-
-    if m == 1 and q > 1 and p == 1:
-
-        # Set
-        model.i = Set(initialize=range(n))
-        model.l = Set(initialize=range(q))
-
-        # Alias
-        model.h = SetOf(model.i)
-
-        # Variables
-        model.a = Var(model.i, doc='alpha')
-        model.b = Var(model.i, bounds=(0.0, None), doc='beta')
-        model.e = Var(model.i, doc='residuals')
-        model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
-        model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
-
-        # Objective function
-        def objective_rule(model):
-            return sum(model.e[i] * model.e[i] for i in model.i)
-
-        model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
-
-        # Constraints
-        def reg_rule(model, i):
-            crow = b[i]
-            return model.g[i] * y[i] == model.a[i] + model.b[i] * x[i] + \
-                   sum(model.d[i, l] * crow[l] for l in model.l) - model.e[i]
-
-        model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
-
-        def trans_rule(model, i):
-            grow = gb[i]
-            return model.b[i] * gx[i] + model.g[i] * gy[i] + sum(model.d[i, l] * grow[l] for l in model.l) == id[i]
-
-        model.trans = Constraint(model.i, rule=trans_rule, doc='translation property')
-
-        # production model
-        if fun == "prod":
-
-            def concav_rule(model, i, h):
-                crow = b[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + model.b[i] * x[i] + sum(model.d[i, l] * crow[l] for l in model.l) - \
-                       model.g[i] * y[i] <= model.a[h] + model.b[h] * x[i] + \
-                       sum(model.d[h, l] * crow[l] for l in model.l) - model.g[h] * y[i]
-
-            model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
-
-        # cost model
-        if fun == "cost":
-
-            def convex_rule(model, i, h):
-                crow = b[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + model.b[i] * x[i] + sum(model.d[i, l] * crow[l] for l in model.l) - \
-                       model.g[i] * y[i] >= model.a[h] + model.b[h] * x[i] + \
-                       sum(model.d[h, l] * crow[l] for l in model.l) - model.g[h] * y[i]
-
-            model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
-
-    if m == 1 and q > 1 and p > 1:
-
-        # Set
-        model.i = Set(initialize=range(n))
-        model.k = Set(initialize=range(p))
-        model.l = Set(initialize=range(q))
-
-        # Alias
-        model.h = SetOf(model.i)
-
-        # Variables
-        model.a = Var(model.i, doc='alpha')
-        model.b = Var(model.i, bounds=(0.0, None), doc='beta')
-        model.e = Var(model.i, doc='residuals')
-        model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
-        model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
-
-        # Objective function
-        def objective_rule(model):
-            return sum(model.e[i] * model.e[i] for i in model.i)
-
-        model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
-
-        # Constraints
-        def reg_rule(model, i):
-            brow = y[i]
-            crow = b[i]
-            return sum(model.g[i, k] * brow[k] for k in model.k) == model.a[i] + model.b[i] * x[i] + \
-                   sum(model.d[i, l] * crow[l] for l in model.l) - model.e[i]
-
-        model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
-
-        def trans_rule(model, i):
-            frow = gy[i]
-            grow = gb[i]
-            return model.b[i] * gx[i] + sum(model.g[i, k] * frow[k] for k in model.k) + \
-                   sum(model.d[i, l] * grow[l] for l in model.l) == id[i]
-
-        model.trans = Constraint(model.i, rule=trans_rule, doc='translation property')
-
-        # production model
-        if fun == "prod":
-
-            def concav_rule(model, i, h):
-                brow = y[i]
-                crow = b[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + model.b[i] * x[i] + sum(model.d[i, l] * crow[l] for l in model.l) - \
-                       sum(model.g[i, k] * brow[k] for k in model.k) <= model.a[h] + model.b[h] * x[i] + \
-                       sum(model.d[h, l] * crow[l] for l in model.l) - sum(model.g[h, k] * brow[k] for k in model.k)
-
-            model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
-
-        # cost model
-        if fun == "cost":
-
-            def convex_rule(model, i, h):
-                brow = y[i]
-                crow = b[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + model.b[i] * x[i] + sum(model.d[i, l] * crow[l] for l in model.l) - \
-                       sum(model.g[i, k] * brow[k] for k in model.k) >= model.a[h] + model.b[h] * x[i] + \
-                       sum(model.d[h, l] * crow[l] for l in model.l) - sum(model.g[h, k] * brow[k] for k in model.k)
-
-            model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
-
-    if m > 1 and q == 1 and p == 1:
-
-        # Set
-        model.i = Set(initialize=range(n))
-        model.j = Set(initialize=range(m))
-
-        # Alias
-        model.h = SetOf(model.i)
-
-        # Variables
-        model.a = Var(model.i, doc='alpha')
-        model.b = Var(model.i, model.j, bounds=(0.0, None), doc='beta')
-        model.e = Var(model.i, doc='residuals')
-        model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
-        model.d = Var(model.i, bounds=(0.0, None), doc='delta')
-
-        # Objective function
-        def objective_rule(model):
-            return sum(model.e[i] * model.e[i] for i in model.i)
-
-        model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
-
-        # Constraints
-        def reg_rule(model, i):
-            arow = x[i]
-            return model.g[i] * y[i] == model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + \
-                   model.d[i] * b[i] - model.e[i]
-
-        model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
-
-        def trans_rule(model, i):
-            erow = gx[i]
-            return sum(model.b[i, j] * erow[j] for j in model.j) + model.g[i] * gy[i] + model.d[i] * gb[i] == id[i]
-
-        model.trans = Constraint(model.i, rule=trans_rule, doc='translation property')
-
-        # production model
-        if fun == "prod":
-
-            def concav_rule(model, i, h):
-                arow = x[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + model.d[i] * b[i] - model.g[i] * \
-                       y[i] <= model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) + model.d[h] * b[i] - \
-                       model.g[h] * y[i]
-
-            model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
-
-        # cost model
-        if fun == "cost":
-
-            def concav_rule(model, i, h):
-                arow = x[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + model.d[i] * b[i] - model.g[i] * \
-                       y[i] >= model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) + model.d[h] * b[i] - \
-                       model.g[h] * y[i]
-
-            model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
-
-    if m > 1 and q == 1 and p > 1:
-
-        # Set
-        model.i = Set(initialize=range(n))
-        model.j = Set(initialize=range(m))
-        model.k = Set(initialize=range(p))
-
-        # Alias
-        model.h = SetOf(model.i)
-
-        # Variables
-        model.a = Var(model.i, doc='alpha')
-        model.b = Var(model.i, model.j, bounds=(0.0, None), doc='beta')
-        model.e = Var(model.i, doc='residuals')
-        model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
-        model.d = Var(model.i, bounds=(0.0, None), doc='delta')
-
-        # Objective function
-        def objective_rule(model):
-            return sum(model.e[i] * model.e[i] for i in model.i)
-
-        model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
-
-        # Constraints
-        def reg_rule(model, i):
-            arow = x[i]
-            brow = y[i]
-            return sum(model.g[i, k] * brow[k] for k in model.k) == model.a[i] + \
-                   sum(model.b[i, j] * arow[j] for j in model.j) + model.d[i] * b[i] - model.e[i]
-
-        model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
-
-        def trans_rule(model, i):
-            erow = gx[i]
-            frow = gy[i]
-            return sum(model.b[i, j] * erow[j] for j in model.j) + sum(model.g[i, k] * frow[k] for k in model.k) + \
-                   model.d[i] * gb[i] == id[i]
-
-        model.trans = Constraint(model.i, rule=trans_rule, doc='translation property')
-
-        # production model
-        if fun == "prod":
-
-            def concav_rule(model, i, h):
-                arow = x[i]
-                brow = y[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + model.d[i] * b[i] - \
-                       sum(model.g[i, k] * brow[k] for k in model.k) <= \
-                       model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) + model.d[h] * b[i] - \
-                       sum(model.g[h, k] * brow[k] for k in model.k)
-
-            model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
-
-        # cost model
-        if fun == "cost":
-
-            def convex_rule(model, i, h):
-                arow = x[i]
-                brow = y[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + model.d[i] * b[i] - \
-                       sum(model.g[i, k] * brow[k] for k in model.k) >= \
-                       model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) + model.d[h] * b[i] - \
-                       sum(model.g[h, k] * brow[k] for k in model.k)
-
-            model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
-
-    if m > 1 and q > 1 and p == 1:
-
-        # Set
-        model.i = Set(initialize=range(n))
-        model.j = Set(initialize=range(m))
-        model.l = Set(initialize=range(q))
-
-        # Alias
-        model.h = SetOf(model.i)
-
-        # Variables
-        model.a = Var(model.i, doc='alpha')
-        model.b = Var(model.i, model.j, bounds=(0.0, None), doc='beta')
-        model.e = Var(model.i, doc='residuals')
-        model.g = Var(model.i, bounds=(0.0, None), doc='gamma')
-        model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
-
-        # Objective function
-        def objective_rule(model):
-            return sum(model.e[i] * model.e[i] for i in model.i)
-
-        model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
-
-        # Constraints
-        def reg_rule(model, i):
-            arow = x[i]
-            crow = b[i]
-            return model.g[i] * y[i] == model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + \
-                   sum(model.d[i, l] * crow[l] for l in model.l) - model.e[i]
-
-        model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
-
-        def trans_rule(model, i):
-            erow = gx[i]
-            grow = gb[i]
-            return model.b[i] * gy[i] + sum(model.g[i, k] * frow[k] for k in model.k) + \
-                   sum(model.d[i, l] * grow[l] for l in model.l) == id[i]
-
-        model.trans = Constraint(model.i, rule=trans_rule, doc='translation property')
-
-        # production model
-        if fun == "prod":
-
-            def concav_rule(model, i, h):
-                arow = x[i]
-                crow = b[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + \
-                       sum(model.d[i, l] * crow[l] for l in model.l) - model.g[i] * y[i] <= \
-                       model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) + \
-                       sum(model.d[h, l] * crow[l] for l in model.l) - model.g[h] * y[i]
-
-            model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
-
-        # cost model
-        if fun == "cost":
-
-            def convex_rule(model, i, h):
-                arow = x[i]
-                crow = b[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + \
-                       sum(model.d[i, l] * crow[l] for l in model.l) - model.g[i] * y[i] >= \
-                       model.a[h] + sum(model.b[h, j] * arow[j] for j in model.j) + \
-                       sum(model.d[h, l] * crow[l] for l in model.l) - model.g[h] * y[i]
-
-            model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
-
-    if m > 1 and q > 1 and p > 1:
-
-        # Set
-        model.i = Set(initialize=range(n))
-        model.j = Set(initialize=range(m))
-        model.l = Set(initialize=range(q))
-        model.k = Set(initialize=range(p))
-
-        # Alias
-        model.h = SetOf(model.i)
-
-        # Variables
-        model.a = Var(model.i, doc='alpha')
-        model.b = Var(model.i, model.j, bounds=(0.0, None), doc='beta')
-        model.e = Var(model.i, doc='residuals')
-        model.g = Var(model.i, model.k, bounds=(0.0, None), doc='gamma')
-        model.d = Var(model.i, model.l, bounds=(0.0, None), doc='delta')
-
-        # Objective function
-        def objective_rule(model):
-            return sum(model.e[i] * model.e[i] for i in model.i)
-
-        model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
-
-        # Constraints
-        def reg_rule(model, i):
-            arow = x[i]
-            brow = y[i]
-            crow = b[i]
-            return sum(model.g[i, k] * brow[k] for k in model.k) == model.a[i] + \
-                   sum(model.b[i, j] * arow[j] for j in model.j) + \
-                   sum(model.d[i, l] * crow[l] for l in model.l) - model.e[i]
-
-        model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
-
-        def trans_rule(model, i):
-            erow = gx[i]
-            frow = gy[i]
-            grow = gb[i]
-            return sum(model.b[i, j] * erow[j] for j in model.j) + sum(model.g[i, k] * frow[k] for k in model.k) + \
-                   sum(model.d[i, l] * grow[l] for l in model.l) == id[i]
-
-        model.trans = Constraint(model.i, rule=trans_rule, doc='translation property')
-
-        # production model
-        if fun == "prod":
-
-            def concav_rule(model, i, h):
-                arow = x[i]
-                brow = y[i]
-                crow = b[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + \
-                       sum(model.d[i, l] * crow[l] for l in model.l) - \
-                       sum(model.g[i, k] * brow[k] for k in model.k) <= model.a[h] + \
-                       sum(model.b[h, j] * arow[j] for j in model.j) + \
-                       sum(model.d[h, l] * crow[l] for l in model.l) - sum(model.g[h, k] * brow[k] for k in model.k)
-
-            model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
-
-        # cost model
-        if fun == "cost":
-
-            def convex_rule(model, i, h):
-                arow = x[i]
-                brow = y[i]
-                crow = b[i]
-                if i == h:
-                    return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + \
-                       sum(model.d[i, l] * crow[l] for l in model.l) - \
-                       sum(model.g[i, k] * brow[k] for k in model.k) >= model.a[h] + \
-                       sum(model.b[h, j] * arow[j] for j in model.j) + \
-                       sum(model.d[h, l] * crow[l] for l in model.l) - sum(model.g[h, k] * brow[k] for k in model.k)
-
-            model.convex = Constraint(model.i, model.h, rule=convex_rule, doc='convexity constraint')
-
-    return model
+                return __operator(model.alpha[i]\
+                                  + sum(model.beta[i, j] * self.x[i][j] for j in model.J)\
+                                  - sum(model.gamma[i, k] * self.y[i][k] for k in model.K),
+                                  model.alpha[h]\
+                                  + sum(model.beta[h, j] * self.x[i][j] for j in model.J)\
+                                  - sum(model.gamma[h, k] * self.y[i][k] for k in model.K))
+            
+            return afriat_rule
+    
+
+        def afriat_rule(model, i, h):
+            if i == h:
+                return Constraint.Skip
+            return __operator(model.epsilon[i],
+                              model.alpha[h]\
+                              + sum(model.beta[h, j] * self.x[i][j] for j in model.J) \
+                              + sum(model.delta[h, l] * self.b[i][l] for l in model.L) \
+                              - sum(model.gamma[h, k] * self.y[i][k] for k in model.K))
+
+        return afriat_rule
+
+    def display_gamma(self):
+        """Display gamma value"""
+        if self.optimization_status == 0:
+            self.optimize()
+
+        self.__model__.gamma.display()
+
+    def display_delta(self):
+        """Display delta value"""
+        if self.optimization_status == 0:
+            self.optimize()
+
+        if type(self.b) == type(None):
+            # TODO(warning handling): replace print to warning
+            print("No undesirable output given.")
+            return False
+
+        self.__model__.delta.display()
+
+    def get_gamma(self):
+        """Return gamma value by array"""
+        if self.optimization_status == 0:
+            self.optimize()
+
+        gamma = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.gamma),
+                                                           list(self.__model__.gamma[:, :].value))])
+        gamma = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
+        gamma = gamma.pivot(index='Name', columns='Key', values='Value')
+        return gamma.to_numpy()
+
+    def get_delta(self):
+        """Return delta value by array"""
+        if self.optimization_status == 0:
+            self.optimize()
+
+        if type(self.b) == type(None):
+            # TODO(warning handling): replace print to warning
+            print("No undesirable output given.")
+            return False
+
+        delta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.delta),
+                                                           list(self.__model__.delta[:, :].value))])
+        delta = pd.DataFrame(delta, columns=['Name', 'Key', 'Value'])
+        delta = delta.pivot(index='Name', columns='Key', values='Value')
+        return delta.to_numpy()
