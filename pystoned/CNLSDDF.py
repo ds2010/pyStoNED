@@ -1,21 +1,22 @@
 from . import CNLS
 
-from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint, log
+from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint
 from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
-
+import pandas as pd
 import numpy as np
+
 
 class CNLSDDF(CNLS.CNLS):
     """Convex Nonparametric Least Square with multiple Outputs (DDF formulation)"""
     def __init__(self, y, x,  b=None, gy=[1], gx=[1], gb=None, fun='prod'):
         """
-            y : Output data
-            x : Input data
-            b : Undesirable output data
-            gy : The direction of output data
-            gx : The direction of input data
-            gb : The direction of undesirable output datadata
+            y : Output
+            x : Input
+            b : Undesirable output
+            gy : The direction of output
+            gx : The direction of input
+            gb : The direction of undesirable output
             fun  = "prod" : Production frontier
                  = "cost" : Cost frontier
         """
@@ -113,7 +114,7 @@ class CNLSDDF(CNLS.CNLS):
         if type(self.b) == type(None):
             def regression_rule(model, i):
                 return sum(model.gamma[i, k] * self.y[i][k] for k in model.K)\
-                       ==  model.alpha[i]\
+                       == model.alpha[i]\
                        + sum(model.beta[i, j] * self.x[i][j] for j in model.J)\
                        - model.epsilon[i]
 
@@ -162,7 +163,6 @@ class CNLSDDF(CNLS.CNLS):
                                   - sum(model.gamma[h, k] * self.y[i][k] for k in model.K))
             
             return afriat_rule
-    
 
         def afriat_rule(model, i, h):
             if i == h:
@@ -201,7 +201,7 @@ class CNLSDDF(CNLS.CNLS):
 
         gamma = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.gamma),
                                                            list(self.__model__.gamma[:, :].value))])
-        gamma = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
+        gamma = pd.DataFrame(gamma, columns=['Name', 'Key', 'Value'])
         gamma = gamma.pivot(index='Name', columns='Key', values='Value')
         return gamma.to_numpy()
 
