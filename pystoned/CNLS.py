@@ -256,6 +256,13 @@ class CNLS:
         residual = list(self.__model__.epsilon[:].value)
         return np.asarray(residual)
 
+    def get_frontier(self):
+        """Return estimated frontier value by array"""
+        if self.optimization_status == 0:
+            self.optimize()
+        frontier = list(self.__model__.frontier[:].value)
+        return np.asarray(frontier)
+
     def get_adjusted_residual(self):
         """Return the shifted residuals(epsilon) tern by CCNLS"""
         return self.get_residual() - np.amax(self.get_residual())
