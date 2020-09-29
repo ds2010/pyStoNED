@@ -301,6 +301,13 @@ class CQR:
         residual_minus = list(self.__model__.epsilon_minus[:].value)
         return np.asarray(residual_minus)
 
+    def get_frontier(self):
+        """Return estimated frontier value by array"""
+        if self.optimization_status == 0:
+            self.optimize()
+        frontier = list(self.__model__.frontier[:].value)
+        return np.asarray(frontier)
+
     def plot2d(self, xselect, fig_name=None):
         """Plot with selected x"""
         x = np.array(self.x).T[xselect]
