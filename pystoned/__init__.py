@@ -1,4 +1,3 @@
-from . import CERDDF
 from . import CNLS
 from . import CNLSDDF
 from . import CNLSG
@@ -6,7 +5,7 @@ from . import CNLSG1
 from . import CNLSG2
 from . import CNLSZ
 from . import CQER
-from . import CQRDDF
+from . import CQERDDF
 from . import DEA
 from . import DEA2CNLS
 from . import FDH
@@ -16,7 +15,6 @@ from . import StoNED
 from . import sweet
 
 __all__ = [
-    'CERDDF',
     'CNLS',
     'CNLSDDF',
     'CNLSG',
@@ -24,11 +22,11 @@ __all__ = [
     'CNLSG2',
     'CNLSZ',
     'CQER',
-    'CQRDDF',
+    'CQERDDF',
     'DEA',
     'DEA2CNLS',
     'FDH',
-    'ICNLS', 
+    'ICNLS',
     'ICQER',
     'StoNED',
     'sweet'
