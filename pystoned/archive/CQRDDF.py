@@ -820,8 +820,8 @@ def cqrddfb(y, x, b, tau, fun, gx, gb, gy):
             arow = x[i]
             brow = y[i]
             crow = b[i]
-            return sum(model.g[i, k] * brow[k] for k in model.k) == model.a[i] + sum(
-                model.b[i, j] * arow[j] for j in model.j) + \
+            return sum(model.g[i, k] * brow[k] for k in model.k) == model.a[i] + \
+                   sum(model.b[i, j] * arow[j] for j in model.j) + \
                    sum(model.d[i, l] * crow[l] for l in model.l) + model.ep[i] - model.em[i]
 
         model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
@@ -844,11 +844,11 @@ def cqrddfb(y, x, b, tau, fun, gx, gb, gy):
                 crow = b[i]
                 if i == h:
                     return Constraint.Skip
-                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + sum(
-                    model.d[i, l] * crow[l] for l in model.l) - \
-                       sum(model.g[i, k] * brow[k] for k in model.k) <= model.a[h] + sum(
-                    model.b[h, j] * arow[j] for j in model.j) + \
-                       sum(model.d[h, l] * crow[l] for l in model.l) - sum(model.g[h, k] * brow[k] for k in model.k)
+                return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + 
+                    sum(model.d[i, l] * crow[l] for l in model.l) - \
+                    sum(model.g[i, k] * brow[k] for k in model.k) <= model.a[h] + 
+                    sum(model.b[h, j] * arow[j] for j in model.j) + \
+                    sum(model.d[h, l] * crow[l] for l in model.l) - sum(model.g[h, k] * brow[k] for k in model.k)
 
             model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
 
@@ -862,7 +862,7 @@ def cqrddfb(y, x, b, tau, fun, gx, gb, gy):
                 if i == h:
                     return Constraint.Skip
                 return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + sum(
-                    model.d[i, l] * crow[l] for l in model.l) - \
+                        model.d[i, l] * crow[l] for l in model.l) - \
                        sum(model.g[i, k] * brow[k] for k in model.k) >= model.a[h] + sum(
                     model.b[h, j] * arow[j] for j in model.j) + \
                        sum(model.d[h, l] * crow[l] for l in model.l) - sum(model.g[h, k] * brow[k] for k in model.k)
