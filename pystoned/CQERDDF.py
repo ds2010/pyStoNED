@@ -159,3 +159,28 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
 
         return afriat_rule
 
+class CERDDF(CQRDDF):
+    """Convex expectile regression with multiple Outputs (DDF formulation)"""
+
+    def __init__(self, y, x,  b=None, gy=[1], gx=[1], gb=None, fun='prod', tau=0.9):
+        """
+            y : Output
+            x : Input
+            b : Undesirable output
+            gy : The direction of output
+            gx : The direction of input
+            gb : The direction of undesirable output
+            fun  = "prod" : Production frontier
+                 = "cost" : Cost frontier
+        """
+        super().__init__(y, x,  b, gy, gx, gb, fun, tau)
+        self.__model__.objective.deactivate()
+        self.__model__.squared_objective = Objective(
+            rule=self.__squared_objective_rule(), sense=minimize, doc='squared objective rule')
+
+    def __squared_objective_rule(self):
+        def squared_objective_rule(model):
+            return self.tau * sum(model.epsilon_plus[i] ** 2 for i in model.I)\
+                + (1 - self.tau) * \
+                sum(model.epsilon_minus[i] ** 2 for i in model.I)
+        return squared_objective_rule
