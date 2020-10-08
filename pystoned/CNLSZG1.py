@@ -11,8 +11,9 @@ class CNLSZG1:
 
     def __init__(self, y, x, z, Cutactive, cet='addi', fun='prod', rts='vrs'):
         """
-            y : Output variable
-            x : Input variables
+            y : Output
+            x : Input
+            z : Contexutal variable
             cet  = "addi" : Additive composite error term
                  = "mult" : Multiplicative composite error term
             fun  = "prod" : Production frontier
