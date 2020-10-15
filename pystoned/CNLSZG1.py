@@ -38,7 +38,7 @@ class CNLSZG1:
         if type(self.z[0]) != list:
             self.z = []
             for z_value in z.tolist():
-                self.z.append([z_value])       
+                self.z.append([z_value])
 
         self.Cutactive = Cutactive
 
@@ -100,7 +100,7 @@ class CNLSZG1:
                     "Estimating the multiplicative model will be available in near future."
                 )
                 return False
-                
+
         else:
             if self.cet == "addi":
                 opt = "mosek"
@@ -129,12 +129,13 @@ class CNLSZG1:
 
                 def regression_rule1(model, i):
                     return self.y[i] == model.alpha1[i] \
-                           + sum(model.beta1[i, j] * self.x[i][j] for j in model.J) \
-                           + sum(model.lamda1[k] * self.z[i][k] for k in model.K) + model.epsilon1[i]
+                        + sum(model.beta1[i, j] * self.x[i][j] for j in model.J) \
+                        + sum(model.lamda1[k] * self.z[i][k]
+                              for k in model.K) + model.epsilon1[i]
 
                 return regression_rule1
             elif self.rts == "crs":
-                ## TODO(warning handling): replace with model requested not exist
+                # TODO(warning handling): replace with model requested not exist
                 return False
 
         elif self.cet == "mult":
@@ -325,4 +326,3 @@ class CNLSZG1:
             self.optimize()
         lamda1 = list(self.__model__.lamda1[:].value)
         return np.asarray(lamda1)
-        

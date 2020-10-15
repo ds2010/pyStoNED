@@ -345,6 +345,7 @@ class CQR:
         else:
             plt.savefig(fig_name)
 
+
 class CER(CQR):
     """Convex expectile regression (CER)"""
 

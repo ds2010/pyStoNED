@@ -34,7 +34,7 @@ class CNLSG2:
                 self.x.append([x_value])
 
         self.Cutactive = Cutactive
-        self.Active = Active        
+        self.Active = Active
 
         # Initialize the CNLS model
         self.__model__ = ConcreteModel()
@@ -91,7 +91,7 @@ class CNLSG2:
                 self.optimization_status = 1
 
             elif self.cet == "mult":
-                ## TODO(warning handling): Use log system instead of print()
+                # TODO(warning handling): Use log system instead of print()
                 print(
                     "Estimating the multiplicative model will be available in near future."
                 )
@@ -124,8 +124,8 @@ class CNLSG2:
 
                 def regression_rule2(model, i):
                     return self.y[i] == model.alpha2[i] + \
-                           sum(model.beta2[i, j] * self.x[i][j] for j in model.J) + \
-                           model.epsilon2[i]
+                        sum(model.beta2[i, j] * self.x[i][j] for j in model.J) + \
+                        model.epsilon2[i]
 
                 return regression_rule2
             elif self.rts == "crs":

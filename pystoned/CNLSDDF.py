@@ -9,6 +9,7 @@ import numpy as np
 
 class CNLSDDF(CNLS.CNLS):
     """Convex Nonparametric Least Square with multiple Outputs (DDF formulation)"""
+
     def __init__(self, y, x,  b=None, gy=[1], gx=[1], gb=None, fun='prod'):
         """
             y : Output
@@ -50,21 +51,24 @@ class CNLSDDF(CNLS.CNLS):
 
         # Initialize the variables
         self.__model__.alpha = Var(self.__model__.I, doc='alpha')
-        self.__model__.beta = Var(self.__model__.I, self.__model__.J, bounds=(0.0, None), doc='beta')
+        self.__model__.beta = Var(
+            self.__model__.I, self.__model__.J, bounds=(0.0, None), doc='beta')
         self.__model__.epsilon = Var(self.__model__.I, doc='residuals')
-        self.__model__.gamma = Var(self.__model__.I, self.__model__.K, bounds=(0.0, None), doc='gamma')
-        
+        self.__model__.gamma = Var(
+            self.__model__.I, self.__model__.K, bounds=(0.0, None), doc='gamma')
+
         if type(self.b) != type(None):
             self.b = b.tolist()
             self.gb = self.__to_1d_list(gb)
 
             if type(self.b[0]) != list:
-                self.b = [] 
+                self.b = []
                 for b_value in b.tolist():
                     self.b.append([b_value])
 
             self.__model__.L = Set(initialize=range(len(self.b[0])))
-            self.__model__.delta = Var(self.__model__.I, self.__model__.L, bounds=(0.0, None), doc='delta')
+            self.__model__.delta = Var(
+                self.__model__.I, self.__model__.L, bounds=(0.0, None), doc='delta')
 
         # Setup the objective function and constraints
         self.__model__.objective = Objective(rule=self._CNLS__objective_rule(),
@@ -73,7 +77,7 @@ class CNLSDDF(CNLS.CNLS):
         self.__model__.regression_rule = Constraint(self.__model__.I,
                                                     rule=self.__regression_rule(),
                                                     doc='regression equation')
-        self.__model__.translation_rule = Constraint(self.__model__.I, 
+        self.__model__.translation_rule = Constraint(self.__model__.I,
                                                      rule=self.__translation_property(),
                                                      doc='translation property')
         self.__model__.afriat_rule = Constraint(self.__model__.I,
@@ -114,18 +118,18 @@ class CNLSDDF(CNLS.CNLS):
         if type(self.b) == type(None):
             def regression_rule(model, i):
                 return sum(model.gamma[i, k] * self.y[i][k] for k in model.K)\
-                       == model.alpha[i]\
-                       + sum(model.beta[i, j] * self.x[i][j] for j in model.J)\
-                       - model.epsilon[i]
+                    == model.alpha[i]\
+                    + sum(model.beta[i, j] * self.x[i][j] for j in model.J)\
+                    - model.epsilon[i]
 
             return regression_rule
 
         def regression_rule(model, i):
             return sum(model.gamma[i, k] * self.y[i][k] for k in model.K)\
-                   ==  model.alpha[i]\
-                   + sum(model.beta[i, j] * self.x[i][j] for j in model.J)\
-                   + sum(model.delta[i, l] * self.b[i][l] for l in model.L)\
-                   - model.epsilon[i]
+                == model.alpha[i]\
+                + sum(model.beta[i, j] * self.x[i][j] for j in model.J)\
+                + sum(model.delta[i, l] * self.b[i][l] for l in model.L)\
+                - model.epsilon[i]
 
         return regression_rule
 
@@ -134,16 +138,16 @@ class CNLSDDF(CNLS.CNLS):
         if type(self.b) == type(None):
             def translation_rule(model, i):
                 return sum(model.beta[i, j] * self.gx[j] for j in model.J) \
-                       + sum(model.gamma[i, k] * self.gy[k] for k in model.K) == 1
+                    + sum(model.gamma[i, k] * self.gy[k] for k in model.K) == 1
             return translation_rule
-        
+
         def translation_rule(model, i):
             return sum(model.beta[i, j] * self.gx[j] for j in model.J) \
-                   + sum(model.gamma[i, k] * self.gy[k] for k in model.K) \
-                   + sum(model.delta[i, l] * self.gb[l] for l in model.L) == 1
+                + sum(model.gamma[i, k] * self.gy[k] for k in model.K) \
+                + sum(model.delta[i, l] * self.gb[l] for l in model.L) == 1
 
         return translation_rule
-    
+
     def __afriat_rule(self):
         """Return the proper afriat inequality constraint"""
         if self.fun == "prod":
@@ -155,22 +159,27 @@ class CNLSDDF(CNLS.CNLS):
             def afriat_rule(model, i, h):
                 if i == h:
                     return Constraint.Skip
-                return __operator(model.alpha[i]\
-                                  + sum(model.beta[i, j] * self.x[i][j] for j in model.J)\
-                                  - sum(model.gamma[i, k] * self.y[i][k] for k in model.K),
-                                  model.alpha[h]\
-                                  + sum(model.beta[h, j] * self.x[i][j] for j in model.J)\
+                return __operator(model.alpha[i]
+                                  + sum(model.beta[i, j] * self.x[i][j]
+                                        for j in model.J)
+                                  - sum(model.gamma[i, k] * self.y[i][k]
+                                        for k in model.K),
+                                  model.alpha[h]
+                                  + sum(model.beta[h, j] * self.x[i][j]
+                                        for j in model.J)
                                   - sum(model.gamma[h, k] * self.y[i][k] for k in model.K))
-            
+
             return afriat_rule
 
         def afriat_rule(model, i, h):
             if i == h:
                 return Constraint.Skip
             return __operator(model.epsilon[i],
-                              model.alpha[h]\
-                              + sum(model.beta[h, j] * self.x[i][j] for j in model.J) \
-                              + sum(model.delta[h, l] * self.b[i][l] for l in model.L) \
+                              model.alpha[h]
+                              + sum(model.beta[h, j] * self.x[i][j]
+                                    for j in model.J)
+                              + sum(model.delta[h, l] * self.b[i][l]
+                                    for l in model.L)
                               - sum(model.gamma[h, k] * self.y[i][k] for k in model.K))
 
         return afriat_rule
