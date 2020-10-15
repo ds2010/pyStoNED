@@ -43,20 +43,23 @@ def dea2cnls(y, x):
         def objective_rule(model):
             return sum(model.e[i] * model.e[i] for i in model.i)
 
-        model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
+        model.objective = Objective(
+            rule=objective_rule, sense=minimize, doc='objective function')
 
         # Constraints
         def reg_rule(model, i):
             return y[i] == model.a[i] + model.b[i] * x[i] + model.e[i]
 
-        model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
+        model.reg = Constraint(model.i, rule=reg_rule,
+                               doc='regression equation')
 
         def concav_rule(model, i, h):
             if i == h:
-               return Constraint.Skip
+                return Constraint.Skip
             return model.a[i] + model.b[i] * x[i] <= model.a[h] + model.b[h] * x[i]
 
-        model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
+        model.concav = Constraint(
+            model.i, model.h, rule=concav_rule, doc='concavity constraint')
 
     if m > 1:
 
@@ -76,22 +79,25 @@ def dea2cnls(y, x):
         def objective_rule(model):
             return sum(model.e[i] * model.e[i] for i in model.i)
 
-        model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
+        model.objective = Objective(
+            rule=objective_rule, sense=minimize, doc='objective function')
 
         # Constraints
         def reg_rule(model, i):
             arow = x[i]
             return y[i] == model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) + model.e[i]
 
-        model.reg = Constraint(model.i, rule=reg_rule, doc='regression equation')
+        model.reg = Constraint(model.i, rule=reg_rule,
+                               doc='regression equation')
 
         def concav_rule(model, i, h):
             arow = x[i]
             if i == h:
-               return Constraint.Skip
+                return Constraint.Skip
             return model.a[i] + sum(model.b[i, j] * arow[j] for j in model.j) <= model.a[h] + sum(
-                    model.b[h, j] * arow[j] for j in model.j)
+                model.b[h, j] * arow[j] for j in model.j)
 
-        model.concav = Constraint(model.i, model.h, rule=concav_rule, doc='concavity constraint')
+        model.concav = Constraint(
+            model.i, model.h, rule=concav_rule, doc='concavity constraint')
 
     return model

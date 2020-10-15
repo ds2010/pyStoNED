@@ -50,60 +50,65 @@ def fdh(y, x, orient):
 
     # Variables
     model.theta = Var(model.io, doc='efficiency')
-    model.lamda = Var(model.io, model.i, within=Binary, doc='intensity variables')
+    model.lamda = Var(model.io, model.i, within=Binary,
+                      doc='intensity variables')
 
     if orient == "io":
-        
+
         # objective
         def objective_rule(model):
             return sum(model.theta[io] for io in model.io)
 
-        model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
+        model.objective = Objective(
+            rule=objective_rule, sense=minimize, doc='objective function')
 
         # Constraints
         def input_rule(model, io, j):
             arow = x[j]
             return (model.theta[io] * arow[io]) >= sum(model.lamda[io, i] * arow[i] for i in model.i)
 
-        model.input = Constraint(model.io, model.j, rule=input_rule, doc='input constraints')
+        model.input = Constraint(
+            model.io, model.j, rule=input_rule, doc='input constraints')
 
         def output_rule(model, io, k):
             brow = y[k]
             return sum(model.lamda[io, i] * brow[i] for i in model.i) >= brow[io]
 
-        model.output = Constraint(model.io, model.k, rule=output_rule, doc='output constraints')
+        model.output = Constraint(
+            model.io, model.k, rule=output_rule, doc='output constraints')
 
         def vrs_rule(model, io):
             return sum(model.lamda[io, i] for i in model.i) == 1
 
         model.vrs = Constraint(model.io, rule=vrs_rule, doc='VRS constraints')
-           
 
     if orient == "oo":
 
-       # objective
-       def objective_rule(model):
-           return sum(model.theta[io] for io in model.io)
+        # objective
+        def objective_rule(model):
+            return sum(model.theta[io] for io in model.io)
 
-       model.objective = Objective(rule=objective_rule, sense=maximize, doc='objective function')
+        model.objective = Objective(
+            rule=objective_rule, sense=maximize, doc='objective function')
 
-       # Constraints
-       def input_rule(model, io, j):
-           arow = x[j]
-           return sum(model.lamda[io, i] * arow[i] for i in model.i) <= arow[io]
+        # Constraints
+        def input_rule(model, io, j):
+            arow = x[j]
+            return sum(model.lamda[io, i] * arow[i] for i in model.i) <= arow[io]
 
-       model.input = Constraint(model.io, model.j, rule=input_rule, doc='input constraints')
+        model.input = Constraint(
+            model.io, model.j, rule=input_rule, doc='input constraints')
 
-       def output_rule(model, io, k):
-           brow = y[k]
-           return model.theta[io] * brow[io] <= sum(model.lamda[io, i] * brow[i] for i in model.i)
+        def output_rule(model, io, k):
+            brow = y[k]
+            return model.theta[io] * brow[io] <= sum(model.lamda[io, i] * brow[i] for i in model.i)
 
-       model.output = Constraint(model.io, model.k, rule=output_rule, doc='output constraints')
+        model.output = Constraint(
+            model.io, model.k, rule=output_rule, doc='output constraints')
 
-       def vrs_rule(model, io):
-           return sum(model.lamda[io, i] for i in model.i) == 1
+        def vrs_rule(model, io):
+            return sum(model.lamda[io, i] for i in model.i) == 1
 
-       model.vrs = Constraint(model.io, rule=vrs_rule, doc='VRS constraints')
-
+        model.vrs = Constraint(model.io, rule=vrs_rule, doc='VRS constraints')
 
     return model

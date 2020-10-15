@@ -4,8 +4,10 @@ from pyomo.environ import Constraint
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 
+
 class ICQR(ICNLS.ICNLS, CQER.CQR):
     """Isotonic convex quantile regression (ICQR)"""
+
     def __init__(self, y, x, tau, cet='addi', fun='prod', rts='vrs'):
         """
             y : Output variable
@@ -26,8 +28,10 @@ class ICQR(ICNLS.ICNLS, CQER.CQR):
                                                          rule=self._ICNLS__isotonic_afriat_rule(),
                                                          doc='isotonic afriat inequality')
 
+
 class ICER(ICNLS.ICNLS, CQER.CER):
     """Isotonic convex expectile regression (ICER)"""
+
     def __init__(self, y, x, tau, cet='addi', fun='prod', rts='vrs'):
         """
             y : Output variable

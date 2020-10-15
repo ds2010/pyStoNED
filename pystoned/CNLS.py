@@ -10,10 +10,11 @@ import matplotlib.pyplot as plt
 class CNLS:
     """Convex Nonparametric Least Square (CNLS)"""
 
-    def __init__(self, y, x, cet='addi', fun='prod', rts='vrs'):
+    def __init__(self, y, x, z=None, cet='addi', fun='prod', rts='vrs'):
         """
             y : Output variable
             x : Input variables
+            z : Contexutal variable
             cet  = "addi" : Additive composite error term
                  = "mult" : Multiplicative composite error term
             fun  = "prod" : Production frontier
@@ -25,6 +26,7 @@ class CNLS:
         # TODO(error/warning handling): Check the configuration of the model exist
         self.x = x.tolist()
         self.y = y.tolist()
+        self.z = z
         self.cet = cet
         self.fun = fun
         self.rts = rts
@@ -36,6 +38,19 @@ class CNLS:
 
         # Initialize the CNLS model
         self.__model__ = ConcreteModel()
+
+        if type(self.z) != type(None):
+            self.z = z.tolist()
+            if type(self.z[0]) != list:
+                self.z = []
+                for z_value in z.tolist():
+                    self.z.append([z_value])
+
+            # Initialize the set of z
+            self.__model__.K = Set(initialize=range(len(self.z[0])))
+
+            # Initialize the variables for z variable
+            self.__model__.lamda = Var(self.__model__.K, doc='z coefficient')
 
         # Initialize the sets
         self.__model__.I = Set(initialize=range(len(self.y)))
@@ -112,6 +127,13 @@ class CNLS:
         """Return the proper regression constraint"""
         if self.cet == "addi":
             if self.rts == "vrs":
+                if type(self.z) != type(None):
+                    def regression_rule(model, i):
+                        return self.y[i] == model.alpha[i] \
+                            + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                            + sum(model.lamda[k] * self.z[i][k]
+                                  for k in model.K) + model.epsilon[i]
+                    return regression_rule
 
                 def regression_rule(model, i):
                     return self.y[i] == model.alpha[i] \
@@ -124,10 +146,15 @@ class CNLS:
                 return False
 
         elif self.cet == "mult":
+            if type(self.z) != type(None):
+                def regression_rule(model, i):
+                    return log(self.y[i]) == log(model.frontier[i] + 1) \
+                        + sum(model.lamda[k] * self.z[i][k]
+                              for k in model.K) + model.epsilon[i]
+                return regression_rule
 
             def regression_rule(model, i):
                 return log(self.y[i]) == log(model.frontier[i] + 1) + model.epsilon[i]
-
             return regression_rule
 
         # TODO(error handling): replace with undefined model attribute
@@ -222,6 +249,17 @@ class CNLS:
             self.optimize()
         self.__model__.beta.display()
 
+    def display_lamda(self):
+        """Display lamda value"""
+        if self.optimization_status == 0:
+            self.optimize()
+
+        if type(self.z) == type(None):
+            # TODO: Replace print by warning
+            print("Without z variable")
+            return
+        self.__model__.lamda.display()
+
     def display_residual(self):
         """Dispaly residual value"""
         if self.optimization_status == 0:
@@ -307,4 +345,3 @@ class CNLS:
             plt.show()
         else:
             plt.savefig(fig_name)
-            

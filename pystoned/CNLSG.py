@@ -11,7 +11,7 @@ def CNLSG(y, x, cet, fun, rts):
     #         = "crs"  : constant returns to scale
 
     Cutactive = sweet.sweet(x)
-        
+
     # solve the initial CNLS+G model to obtain initial solution
     model1 = CNLSG1.CNLSG1(y, x, Cutactive, cet, fun, rts)
     model1.optimize(remote=False)
@@ -29,39 +29,39 @@ def CNLSG(y, x, cet, fun, rts):
     Activetmp1 = 0.0
     for i in range(len(x)):
         Activetmp = 0.0
-        # go into the sub-loop and find the violated concavity constraints   
+        # go into the sub-loop and find the violated concavity constraints
         for j in range(len(x)):
-            if cet == "addi":            
+            if cet == "addi":
                 if rts == "vrs":
                     if fun == "prod":
-                         Active2[i, j] = alpha1[i] + np.sum(beta1[i, :] * x[i, :]) - \
-                                         alpha1[j] - np.sum(beta1[j, :] * x[i, :])
+                        Active2[i, j] = alpha1[i] + np.sum(beta1[i, :] * x[i, :]) - \
+                            alpha1[j] - np.sum(beta1[j, :] * x[i, :])
                     elif fun == "cost":
-                         Active2[i, j] = - alpha1[i] - np.sum(beta1[i, :] * x[i, :]) + \
-                                           alpha1[j] + np.sum(beta1[j, :] * x[i, :])
+                        Active2[i, j] = - alpha1[i] - np.sum(beta1[i, :] * x[i, :]) + \
+                            alpha1[j] + np.sum(beta1[j, :] * x[i, :])
             if cet == "mult":
                 if rts == "vrs":
                     if fun == "prod":
-                         Active2[i, j] = alpha1[i] + np.sum(beta1[i, :] * x[i, :]) - \
-                                         alpha1[j] - np.sum(beta1[j, :] * x[i, :])
+                        Active2[i, j] = alpha1[i] + np.sum(beta1[i, :] * x[i, :]) - \
+                            alpha1[j] - np.sum(beta1[j, :] * x[i, :])
                     elif fun == "cost":
-                         Active2[i, j] = - alpha1[i] - np.sum(beta1[i, :] * x[i, :]) + \
-                                           alpha1[j] + np.sum(beta1[j, :] * x[i, :])
-                if rts == "crs":  
+                        Active2[i, j] = - alpha1[i] - np.sum(beta1[i, :] * x[i, :]) + \
+                            alpha1[j] + np.sum(beta1[j, :] * x[i, :])
+                if rts == "crs":
                     if fun == "prod":
-                         Active2[i, j] = np.sum(beta1[i, :] * x[i, :]) - \
-                                         np.sum(beta1[j, :] * x[i, :])
+                        Active2[i, j] = np.sum(beta1[i, :] * x[i, :]) - \
+                            np.sum(beta1[j, :] * x[i, :])
                     elif fun == "cost":
-                         Active2[i, j] = - np.sum(beta1[i, :] * x[i, :]) + \
-                                           np.sum(beta1[j, :] * x[i, :])    
+                        Active2[i, j] = - np.sum(beta1[i, :] * x[i, :]) + \
+                            np.sum(beta1[j, :] * x[i, :])
             if Active2[i, j] > Activetmp:
                 Activetmp = Active2[i, j]
-        for j in range(len(x)):        
-            if Active2[i,j] >= Activetmp and Activetmp >0:
+        for j in range(len(x)):
+            if Active2[i, j] >= Activetmp and Activetmp > 0:
                 Active[i, j] = 1
         # find the maximal violated constraint in sub-loop and added into the active matrix
         if Activetmp > Activetmp1:
-              Activetmp1 = Activetmp
+            Activetmp1 = Activetmp
 
     # solve the CNLS+G model iteratively
     """the stopping criteria of algorithm i.e. there is no violated constraint, 0.0001 is for rounding error."""
@@ -85,25 +85,25 @@ def CNLSG(y, x, cet, fun, rts):
                     if rts == "vrs":
                         if fun == "prod":
                             Active2[i, j] = alpha2[i] + np.sum(beta2[i, :] * x[i, :]) - \
-                                            alpha2[j] - np.sum(beta2[j, :] * x[i, :])
+                                alpha2[j] - np.sum(beta2[j, :] * x[i, :])
                         elif fun == "cost":
                             Active2[i, j] = - alpha2[i] - np.sum(beta2[i, :] * x[i, :]) + \
-                                              alpha2[j] + np.sum(beta2[j, :] * x[i, :])
+                                alpha2[j] + np.sum(beta2[j, :] * x[i, :])
                 if cet == "mult":
                     if rts == "vrs":
                         if fun == "prod":
                             Active2[i, j] = alpha2[i] + np.sum(beta2[i, :] * x[i, :]) - \
-                                            alpha2[j] - np.sum(beta2[j, :] * x[i, :])
+                                alpha2[j] - np.sum(beta2[j, :] * x[i, :])
                         elif fun == "cost":
                             Active2[i, j] = - alpha2[i] - np.sum(beta2[i, :] * x[i, :]) + \
-                                              alpha2[j] + np.sum(beta2[j, :] * x[i, :])
+                                alpha2[j] + np.sum(beta2[j, :] * x[i, :])
                     if rts == "crs":
                         if fun == "prod":
                             Active2[i, j] = np.sum(beta2[i, :] * x[i, :]) - \
-                                            np.sum(beta2[j, :] * x[i, :])
+                                np.sum(beta2[j, :] * x[i, :])
                         elif fun == "cost":
                             Active2[i, j] = - np.sum(beta2[i, :] * x[i, :]) + \
-                                              np.sum(beta2[j, :] * x[i, :])
+                                np.sum(beta2[j, :] * x[i, :])
                 if Active2[i, j] > Activetmp:
                     Activetmp = Active2[i, j]
             # find the maximal violated constraint in sub-loop and added into the active matrix
@@ -112,7 +112,7 @@ def CNLSG(y, x, cet, fun, rts):
                     Active[i, j] = 1
             if Activetmp > Activetmp1:
                 Activetmp1 = Activetmp
-       
+
     epsilon2 = model2.get_residual2()
-    
+
     return alpha2, beta2, epsilon2

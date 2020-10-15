@@ -119,12 +119,12 @@ class CNLSG1:
 
                 def regression_rule1(model, i):
                     return self.y[i] == model.alpha1[i] \
-                           + sum(model.beta1[i, j] * self.x[i][j] for j in model.J) \
-                           + model.epsilon1[i]
+                        + sum(model.beta1[i, j] * self.x[i][j] for j in model.J) \
+                        + model.epsilon1[i]
 
                 return regression_rule1
             elif self.rts == "crs":
-                ## TODO(warning handling): replace with model requested not exist
+                # TODO(warning handling): replace with model requested not exist
                 return False
 
         elif self.cet == "mult":

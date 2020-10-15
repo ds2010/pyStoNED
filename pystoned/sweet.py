@@ -15,7 +15,8 @@ def sweet(x):
     for i in range(len(df)):
         for j in range(len(df)):
             if i != j:
-                distance[i, j] = np.sqrt(np.sum(np.square(df[i, :] - df[j, :])))
+                distance[i, j] = np.sqrt(
+                    np.sum(np.square(df[i, :] - df[j, :])))
             if distance[i, j] > distmax:
                 distmax = distance[i, j]
             if distance[i, j] < distmin:

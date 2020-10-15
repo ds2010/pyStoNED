@@ -159,6 +159,7 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
 
         return afriat_rule
 
+
 class CERDDF(CQRDDF):
     """Convex expectile regression with multiple Outputs (DDF formulation)"""
 

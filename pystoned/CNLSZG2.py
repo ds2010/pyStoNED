@@ -41,7 +41,7 @@ class CNLSZG2:
                 self.z.append([z_value])
 
         self.Cutactive = Cutactive
-        self.Active = Active        
+        self.Active = Active
 
         # Initialize the CNLS model
         self.__model__ = ConcreteModel()
@@ -57,7 +57,7 @@ class CNLSZG2:
                                    self.__model__.J,
                                    bounds=(0.0, None),
                                    doc='beta2')
-        self.__model__.lamda2 = Var(self.__model__.K, doc='zvalue2')        
+        self.__model__.lamda2 = Var(self.__model__.K, doc='zvalue2')
         self.__model__.epsilon2 = Var(self.__model__.I, doc='residual2')
         self.__model__.frontier2 = Var(self.__model__.I,
                                        bounds=(0.0, None),
@@ -105,7 +105,7 @@ class CNLSZG2:
                     "Estimating the multiplicative model will be available in near future."
                 )
                 return False
-                
+
         else:
             if self.cet == "addi":
                 opt = "mosek"
@@ -134,8 +134,9 @@ class CNLSZG2:
 
                 def regression_rule2(model, i):
                     return self.y[i] == model.alpha2[i] + \
-                           sum(model.beta2[i, j] * self.x[i][j] for j in model.J) + \
-                           sum(model.lamda2[k] * self.z[i][k] for k in model.K) + model.epsilon2[i]
+                        sum(model.beta2[i, j] * self.x[i][j] for j in model.J) + \
+                        sum(model.lamda2[k] * self.z[i][k]
+                            for k in model.K) + model.epsilon2[i]
 
                 return regression_rule2
             elif self.rts == "crs":
@@ -146,7 +147,7 @@ class CNLSZG2:
 
             def regression_rule2(model, i):
                 return log(self.y[i]) == log(model.frontier2[i] + 1) + sum(model.lamda2[k] * self.z[i][k] for k in model.K) + \
-                                          model.epsilon2[i]
+                    model.epsilon2[i]
 
             return regression_rule2
 
