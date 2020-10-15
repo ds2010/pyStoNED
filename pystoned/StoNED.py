@@ -8,8 +8,9 @@ import scipy.optimize as opt
 
 class StoNED(CNLS.CNLS):
     """Stochastic nonparametric envelopment of data (StoNED): Residuals decomposition"""
-    def __init__(self, y, x, cet='addi', fun='prod', rts='vrs'):
-        super().__init__(y, x, cet, fun, rts)
+
+    def __init__(self, y, x,  z=None, cet='addi', fun='prod', rts='vrs'):
+        super().__init__(y, x, z, cet, fun, rts)
 
     def get_unconditional_expected_inefficiency(self, method='MOM'):
         # method  = "MOM" : Method of moments
