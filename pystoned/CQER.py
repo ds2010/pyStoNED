@@ -14,6 +14,7 @@ class CQR:
         """
             y : Output variable
             x : Input variables
+            tau : quantile
             cet  = "addi" : Additive composite error term
                  = "mult" : Multiplicative composite error term
             fun  = "prod" : Production frontier
@@ -353,6 +354,7 @@ class CER(CQR):
         """
             y : Output variable
             x : Input variables
+            tau : expectile
             cet  = "addi" : Additive composite error term
                  = "mult" : Multiplicative composite error term
             fun  = "prod" : Production frontier

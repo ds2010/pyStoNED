@@ -8,9 +8,9 @@ import numpy as np
 class ICNLS(CNLS.CNLS):
     """Isotonic Convex Nonparametric Least Square (ICNLS)"""
 
-    def __init__(self, y, x, z=None,cet='addi', fun='prod', rts='vrs'):
+    def __init__(self, y, x, z=None, cet='addi', fun='prod', rts='vrs'):
         """
-            y : Output variable
+            y : Output variables
             x : Input variables
             cet  = "addi" : Additive composite error term
                  = "mult" : Multiplicative composite error term

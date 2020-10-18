@@ -14,7 +14,7 @@ class CNLS:
         """
             y : Output variable
             x : Input variables
-            z : Contexutal variable
+            z : Contextual variables
             cet  = "addi" : Additive composite error term
                  = "mult" : Multiplicative composite error term
             fun  = "prod" : Production frontier

@@ -6,14 +6,14 @@ from pyomo.core.expr.numvalue import NumericValue
 class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
     """Convex quantile regression with multiple Outputs (DDF formulation)"""
 
-    def __init__(self, y, x,  b=None, gy=[1], gx=[1], gb=None, fun='prod', tau=0.9):
+    def __init__(self, y, x, b=None, gy=[1], gx=[1], gb=None, fun='prod', tau=0.9):
         """
-            y : Output
-            x : Input
-            b : Undesirable output
-            gy : The direction of output
-            gx : The direction of input
-            gb : The direction of undesirable output
+            y : Output variables
+            x : Input variables
+            b : Undesirable output variables
+            gy : Output directional vector
+            gx : Input directional vector
+            gb : Undesirable output directional vector
             fun  = "prod" : Production frontier
                  = "cost" : Cost frontier
         """
@@ -165,12 +165,12 @@ class CERDDF(CQRDDF):
 
     def __init__(self, y, x,  b=None, gy=[1], gx=[1], gb=None, fun='prod', tau=0.9):
         """
-            y : Output
-            x : Input
-            b : Undesirable output
-            gy : The direction of output
-            gx : The direction of input
-            gb : The direction of undesirable output
+            y : Output variables
+            x : Input variables
+            b : Undesirable output variables
+            gy : Output directional vector
+            gx : Input directional vector
+            gb : Undesirable output directional vector
             fun  = "prod" : Production frontier
                  = "cost" : Cost frontier
         """
