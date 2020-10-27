@@ -19,6 +19,7 @@ __all__ = [
     'CNLSG2',
     'CQER',
     'CQERDDF',
+    'DEA',
     'FDH',
     'ICNLS',
     'ICQER',

@@ -1,114 +1,139 @@
-"""
-@Title   : Free Disposal Hull (FDH)
-@Author  : Sheng Dai, Timo Kuosmanen
-@Mail    : sheng.dai@aalto.fi (S. Dai); timo.kuosmanen@aalto.fi (T. Kuosmanen)
-@Date    : 2020-06-18
-"""
-
-# Import of the pyomo module
-from pyomo.environ import *
+# Import pyomo module
+from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, maximize, Constraint, Binary
+from pyomo.opt import SolverFactory, SolverManagerFactory
+from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
+class FDH:
+    """
+    Free Disposal Hull (FDH)
+    """
+    def __init__(self, y, x, orient):
+        """
+        orient  = "io" : input orientation
+                = "oo" : output orientation
+        """
+        # TODO(error/warning handling): Check the configuration of the model exist
+        self.x = x.tolist()
+        self.y = y.tolist()
+        self.orient = orient
 
-def fdh(y, x, orient):
-    # orient  = "io" : input orientation
-    #         = "oo" : output orientation
+        if type(self.x[0]) != list:
+            self.x = []
+            for x_value in x.tolist():
+                self.x.append([x_value])
 
-    # transform data
-    x = x.tolist()
-    y = y.tolist()
+        if type(self.y[0]) != list:
+            self.y = []
+            for y_value in y.tolist():
+                self.y.append([y_value])
 
-    # number of DMUs
-    n = len(y)
+        # Initialize DEA model
+        self.__model__ = ConcreteModel()
 
-    # number of inputs
-    if type(x[0]) == int or type(x[0]) == float:
-        m = 1
-        x = np.asmatrix(np.array(x)).tolist()
-    else:
-        m = len(x[0])
-        x = np.array(x).T.tolist()
+        # Initialize sets
+        self.__model__.I = Set(initialize=range(len(self.y)))
+        self.__model__.J = Set(initialize=range(len(self.x[0])))
+        self.__model__.K = Set(initialize=range(len(self.y[0])))
 
-        # number of outputs
-    if type(y[0]) == int or type(y[0]) == float:
-        p = 1
-        y = np.asmatrix(np.array(y)).tolist()
-    else:
-        p = len(y[0])
-        y = np.array(y).T.tolist()
+        # Initialize variable
+        self.__model__.theta = Var(self.__model__.I, doc='efficiency')
+        self.__model__.lamda = Var(self.__model__.I, self.__model__.I, within=Binary, doc='intensity variables')
 
-        # Creation of a Concrete Model
-    model = ConcreteModel()
+        # Setup the objective function and constraints
+        if self.orient == "io":
+            self.__model__.objective = Objective(rule=self.__objective_rule(), sense=minimize, doc='objective function')
+        else:
+            self.__model__.objective = Objective(rule=self.__objective_rule(), sense=maximize, doc='objective function')
+        self.__model__.input = Constraint(self.__model__.I, self.__model__.J, rule=self.__input_rule(), doc='input constraint')
+        self.__model__.output = Constraint(self.__model__.I, self.__model__.K, rule=self.__output_rule(), doc='output constraint')
+        self.__model__.vrs = Constraint(self.__model__.I, rule=self.__vrs_rule(), doc='various return to scale rule')
 
-    # Set
-    model.i = Set(initialize=range(n))
-    model.j = Set(initialize=range(m))
-    model.k = Set(initialize=range(p))
+        # Optimize model
+        self.optimization_status = 0
+        self.problem_status = 0
 
-    # Alias
-    model.io = SetOf(model.i)
+    def __objective_rule(self):
+        """Return the proper objective function"""
 
-    # Variables
-    model.theta = Var(model.io, doc='efficiency')
-    model.lamda = Var(model.io, model.i, within=Binary,
-                      doc='intensity variables')
-
-    if orient == "io":
-
-        # objective
         def objective_rule(model):
-            return sum(model.theta[io] for io in model.io)
+            return sum(model.theta[i] for i in model.I)
 
-        model.objective = Objective(
-            rule=objective_rule, sense=minimize, doc='objective function')
+        return objective_rule
+    
+    def __input_rule(self):
+        """Return the proper input constraint"""
+        if self.orient == "io":
+            def input_rule(model, o, j):
+                return model.theta[o]*self.x[o][j] >= sum(model.lamda[o,i]*self.x[i][j] for i in model.I)
+            return input_rule
+        elif self.orient == "oo":
+            def input_rule(model, o, j):
+                return sum(model.lamda[o,i] * self.x[i][j] for i in model.I) <= self.x[o][j]
+            return input_rule
+    
+    def __output_rule(self):
+        """Return the proper output constraint"""
+        if self.orient == "io":
+            def output_rule(model, o, k):
+                return sum(model.lamda[o,i] * self.y[i][k] for i in model.I) >= self.y[o][k]
+            return output_rule
+        elif self.orient == "oo":
+            def output_rule(model, o, k):
+                return model.theta[o]*self.y[o][k] <= sum(model.lamda[o,i]*self.y[i][k] for i in model.I)
+            return output_rule
+    
+    def __vrs_rule(self):
+        def vrs_rule(model, o):
+            return sum(model.lamda[o, i] for i in model.I) == 1
+        return vrs_rule
 
-        # Constraints
-        def input_rule(model, io, j):
-            arow = x[j]
-            return (model.theta[io] * arow[io]) >= sum(model.lamda[io, i] * arow[i] for i in model.i)
+    def optimize(self, remote=True):
+        """Optimize the function by requested method"""
+        if remote == False:
+            solver = SolverFactory("mosek")
+            self.problem_status = solver.solve(self.__model__, tee=True)
+            self.optimization_status = 1
+        else:
+            solver = SolverManagerFactory("neos")
+            self.problem_status = solver.solve(self.__model__, tee=True, opt="mosek")
+            self.optimization_status = 1
 
-        model.input = Constraint(
-            model.io, model.j, rule=input_rule, doc='input constraints')
+    def display_status(self):
+        """Display the status of problem"""
+        if self.optimization_status == 0:
+            self.optimize()
+        print(self.display_status)
+    
+    def display_theta(self):
+        """Display theta value"""
+        if self.optimization_status == 0:
+            self.optimize()
+        self.__model__.theta.display()
+    
+    def display_lamda(self):
+        """Display lamda value"""
+        if self.optimization_status == 0:
+            self.optimize()
+        self.__model__.lamda.display()
 
-        def output_rule(model, io, k):
-            brow = y[k]
-            return sum(model.lamda[io, i] * brow[i] for i in model.i) >= brow[io]
+    def get_status(self):
+        """Return status"""
+        return self.optimization_status
 
-        model.output = Constraint(
-            model.io, model.k, rule=output_rule, doc='output constraints')
+    def get_theta(self):
+        """Return theta value by array"""
+        if self.optimization_status == 0:
+            self.optimize()
+        theta = list(self.__model__.theta[:].value)
+        return np.asarray(theta)
 
-        def vrs_rule(model, io):
-            return sum(model.lamda[io, i] for i in model.i) == 1
+    def get_lamda(self):
+        """Return lamda value by array"""
+        if self.optimization_status == 0:
+            self.optimize()
+        lamda = list(self.__model__.lamda[:].value)
+        return np.asarray(lamda)
 
-        model.vrs = Constraint(model.io, rule=vrs_rule, doc='VRS constraints')
-
-    if orient == "oo":
-
-        # objective
-        def objective_rule(model):
-            return sum(model.theta[io] for io in model.io)
-
-        model.objective = Objective(
-            rule=objective_rule, sense=maximize, doc='objective function')
-
-        # Constraints
-        def input_rule(model, io, j):
-            arow = x[j]
-            return sum(model.lamda[io, i] * arow[i] for i in model.i) <= arow[io]
-
-        model.input = Constraint(
-            model.io, model.j, rule=input_rule, doc='input constraints')
-
-        def output_rule(model, io, k):
-            brow = y[k]
-            return model.theta[io] * brow[io] <= sum(model.lamda[io, i] * brow[i] for i in model.i)
-
-        model.output = Constraint(
-            model.io, model.k, rule=output_rule, doc='output constraints')
-
-        def vrs_rule(model, io):
-            return sum(model.lamda[io, i] for i in model.i) == 1
-
-        model.vrs = Constraint(model.io, rule=vrs_rule, doc='VRS constraints')
-
-    return model
