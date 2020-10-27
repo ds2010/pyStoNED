@@ -7,6 +7,7 @@
 
 # Import of the pyomo module
 from pyomo.environ import *
+from . import directV
 import numpy as np
 
 
