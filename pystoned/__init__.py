@@ -5,6 +5,7 @@ from . import CNLSG1
 from . import CNLSG2
 from . import CQER
 from . import CQERDDF
+from . import DEA
 from . import FDH
 from . import ICNLS
 from . import ICQER
