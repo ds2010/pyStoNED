@@ -294,12 +294,24 @@ class CNLS:
         residual = list(self.__model__.epsilon[:].value)
         return np.asarray(residual)
 
+    def get_lamda(self):
+        """Return beta value by array"""
+        if self.optimization_status == 0:
+            self.optimize()
+            
+        if type(self.z) == type(None):
+            # TODO: Replace print by warning
+            print("Without z variable")
+            return
+        lamda = list(self.__model__.lamda[:].value)
+        return np.asarray(lamda)
+        
     def get_frontier(self):
         """Return estimated frontier value by array"""
         if self.optimization_status == 0:
             self.optimize()
         frontier = list(self.__model__.frontier[:].value)
-        return np.asarray(frontier)
+        return np.asarray(frontier)+1
 
     def get_adjusted_residual(self):
         """Return the shifted residuals(epsilon) tern by CCNLS"""
