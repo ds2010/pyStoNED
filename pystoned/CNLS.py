@@ -311,7 +311,7 @@ class CNLS:
         if self.optimization_status == 0:
             self.optimize()
         frontier = list(self.__model__.frontier[:].value)
-        return np.asarray(frontier)
+        return np.asarray(frontier) + 1
 
     def get_adjusted_residual(self):
         """Return the shifted residuals(epsilon) tern by CCNLS"""
