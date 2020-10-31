@@ -27,4 +27,4 @@ A number of Jupyter Notebooks are provided in the repository [pyStoNED-Tutorials
 
 # Citation
 
-If you use pyStoNED for published work, we encourage you to cite our [papers and upcoming techinical report](https://github.com/ds2010/pyStoNED-Tutorials/blob/master/Intro/Citing.md). We appreciate it.
+If you use [pyStoNED](https://pypi.org/project/pystoned/) for published work, we encourage you to cite our [papers and upcoming techinical report](https://github.com/ds2010/pyStoNED-Tutorials/blob/master/Intro/Citing.md). We appreciate it.
