@@ -17,7 +17,7 @@ We have published a beta version [`pyStoNED`](https://pypi.org/project/pystoned/
 # [Tutorials](https://github.com/ds2010/pyStoNED-Tutorials)
 
 A number of Jupyter Notebooks are provided in the repository [pyStoNED-Tutorials](https://github.com/ds2010/pyStoNED-Tutorials), and more detailed technical reports are currently under development.
-  
+
 # Authors
 
  + [Timo Kuosmanen](https://www.researchgate.net/profile/Timo_Kuosmanen), Professor, Aalto University School of Business.
@@ -25,40 +25,6 @@ A number of Jupyter Notebooks are provided in the repository [pyStoNED-Tutorials
  + [Chia-Yen Lee](http://polab.im.ntu.edu.tw/), Professor, College of Management, National Taiwan University.
  + [Yu-Hsueh Fang](https://github.com/JulianATA), Computer Engineer, Institute of Manufacturing Information and Systems, National Cheng Kung University.
 
-# To do list
-- [x]  `CNLS`/`StoNED`
-   - [x] Production function estimation
-   - [x] Cost function estimation
-   - [x] variables returns to scale (`VRS`) model
-   - [x] constant returns to scale (`CRS`) model
-   - [x] Additive composite error term
-   - [x] Multiplicative composite error term
-   - [x] Residuals decomposition by method of moments(`MoM`) 
-   - [x] Residuals decomposition by quasi-likelihood estimation(`QLE`)
-   - [x] Residuals decomposition by nonparametric kernel deconvolution (`NKD`)
-- [x] A more efficient algorithm for CNLS (`CNLSG`)  
-- [x] `StoNEZD` (contextual variables)
-- [x] Convex quantile regression (`CQR`)
-- [x] Convex expectile regression (`CER`)
-- [x] Isotonic CNLS (`ICNLS`)
-- [x] Isotonic convex quantile regression (`ICQR`)
-- [x] Isotonic convex expectile regression (`ICER`)
-- [x] Corrected convex nonparametric least squares (C<sup>2</sup>NLS)
-- [x] Multiple outputs (CNLS-DDF formulation)
-   - [x] with undesirable outputs
-   - [x] without undesirable outputs
-- [x] Multiple outputs (CQR/CER-DDF formulation)
-   - [x] with undesirable outputs
-   - [x] without undesirable outputs   
-- [x] Data Envelopment Analysis (`DEA`)
-   - [x] Radial input oriented model: CRS and VRS
-   - [x] Radial output oriented model: CRS and VRS
-   - [x] Directional model: CRS and VRS
-   - [x] Directional model with undesirable outputs: CRS and VRS
-- [x] Free Disposal Hull (`FDH`) Analysis 
-   - [x] Radial input oriented FDH model
-   - [x] Radial output oriented FDH model            
-- [ ] Representation of `StoNED`-related frontier/quantile function
-   - [x] one input and one output
-   - [ ] two inputs and one output 
-   - [ ] three inputs and one output 
+# Citing
+
+If you use pyStoNED for academic work, we encourage you to cite our [papers and upcoming `pyStoNED` techinical report](https://github.com/ds2010/pyStoNED-Tutorials/blob/master/Intro/Citing.md). We appreciate it.
