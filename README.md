@@ -4,13 +4,13 @@
 
 # Installation
 
-The [`pyStoNED`](https://pypi.org/project/pystoned/) package is avaiable on PyPI. Please feel free to download and test it. We welcome any bug reports and feedback.
+The [`pyStoNED`](https://pypi.org/project/pystoned/) package is avaiable on PyPI. and the latest development version can be installed from the Github repository [`StoNED-Python`](https://github.com/ds2010/StoNED-Python). Please feel free to download and test it. We welcome any bug reports and feedback.
 
 #### PyPI [![PyPI version](https://img.shields.io/pypi/v/pystoned.svg?maxAge=3600)](https://pypi.org/project/pystoned/) [![Downloads](https://pepy.tech/badge/pystoned/month)](https://pepy.tech/project/pystoned/month) [![Downloads](https://pepy.tech/badge/pystoned)](https://pepy.tech/project/pystoned)
 
     pip install pystoned
 
-#### GitHub -- Latest development version
+#### GitHub
 
     pip install -U git+https://github.com/ds2010/StoNED-Python
 
@@ -25,6 +25,6 @@ A number of Jupyter Notebooks are provided in the repository [pyStoNED-Tutorials
  + [Chia-Yen Lee](http://polab.im.ntu.edu.tw/), Professor, College of Management, National Taiwan University.
  + [Yu-Hsueh Fang](https://github.com/JulianATA), Computer Engineer, Institute of Manufacturing Information and Systems, National Cheng Kung University.
 
-# Citing
+# Citation
 
-If you use pyStoNED for academic work, we encourage you to cite our [papers and upcoming `pyStoNED` techinical report](https://github.com/ds2010/pyStoNED-Tutorials/blob/master/Intro/Citing.md). We appreciate it.
+If you use `pyStoNED` for published work, we encourage you to cite our [papers and upcoming techinical report](https://github.com/ds2010/pyStoNED-Tutorials/blob/master/Intro/Citing.md). We appreciate it.
