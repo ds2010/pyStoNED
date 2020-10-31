@@ -4,7 +4,7 @@
 
 # Installation
 
-We have published a beta version [`pyStoNED`](https://pypi.org/project/pystoned/) package on PyPI. Please feel free to download and test it. We welcome any bug reports and feedback.
+The [`pyStoNED`](https://pypi.org/project/pystoned/) package is avaiable on PyPI. Please feel free to download and test it. We welcome any bug reports and feedback.
 
 #### PyPI [![PyPI version](https://img.shields.io/pypi/v/pystoned.svg?maxAge=3600)](https://pypi.org/project/pystoned/) [![Downloads](https://pepy.tech/badge/pystoned/month)](https://pepy.tech/project/pystoned/month) [![Downloads](https://pepy.tech/badge/pystoned)](https://pepy.tech/project/pystoned)
 
