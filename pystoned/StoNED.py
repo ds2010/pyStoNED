@@ -16,6 +16,9 @@ class StoNED(CNLS.CNLS):
         # method  = "MOM" : Method of moments
         #         = "QLE" : Quassi-likelihood estimation
         #         = "KDE" : kernel deconvolution estimation
+        if self.optimization_status == 0:
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         if method == "MOM":
             self.__method_of_moment(self.get_residual())
         elif method == "QLE":
@@ -32,6 +35,9 @@ class StoNED(CNLS.CNLS):
         #         = "QLE" : Quassi-likelihood estimation
 
         # calculate sigma_u, sigma_v, mu, and epsilon value
+        if self.optimization_status == 0:
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         self.get_unconditional_expected_inefficiency(method)
         sigma = self.sigma_u * self.sigma_v / math.sqrt(self.sigma_u**2 +
                                                         self.sigma_v**2)

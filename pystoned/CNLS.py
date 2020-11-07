@@ -87,12 +87,13 @@ class CNLS:
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self, remote=True):
+    def optimize(self, remote=False):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
         if remote == False:
             if self.cet == "addi":
                 solver = SolverFactory("mosek")
+                print("Estimating the additive model locally with mosek solver")
                 self.problem_status = solver.solve(self.__model__, tee=True)
                 self.optimization_status = 1
 
@@ -105,10 +106,10 @@ class CNLS:
         else:
             if self.cet == "addi":
                 opt = "mosek"
-
+                print("Estimating the additive model remotely with mosek solver")
             elif self.cet == "mult":
                 opt = "knitro"
-
+                print("Estimating the multiplicative model remotely with mosek solver")
             solver = SolverManagerFactory('neos')
             self.problem_status = solver.solve(self.__model__,
                                                tee=True,
@@ -234,26 +235,29 @@ class CNLS:
     def display_status(self):
         """Display the status of problem"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         print(self.display_status)
 
     def display_alpha(self):
         """Display alpha value"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         self.__model__.alpha.display()
 
     def display_beta(self):
         """Display beta value"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         self.__model__.beta.display()
 
     def display_lamda(self):
         """Display lamda value"""
         if self.optimization_status == 0:
-            self.optimize()
-
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         if type(self.z) == type(None):
             # TODO: Replace print by warning
             print("Without z variable")
@@ -263,7 +267,8 @@ class CNLS:
     def display_residual(self):
         """Dispaly residual value"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         self.__model__.epsilon.display()
 
     def get_status(self):
@@ -273,14 +278,16 @@ class CNLS:
     def get_alpha(self):
         """Return alpha value by array"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         alpha = list(self.__model__.alpha[:].value)
         return np.asarray(alpha)
 
     def get_beta(self):
         """Return beta value by array"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
                                                           list(self.__model__.beta[:, :].value))])
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
@@ -290,35 +297,43 @@ class CNLS:
     def get_residual(self):
         """Return residual value by array"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         residual = list(self.__model__.epsilon[:].value)
         return np.asarray(residual)
 
     def get_lamda(self):
         """Return beta value by array"""
         if self.optimization_status == 0:
-            self.optimize()
-            
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         if type(self.z) == type(None):
             # TODO: Replace print by warning
             print("Without z variable")
             return
         lamda = list(self.__model__.lamda[:].value)
         return np.asarray(lamda)
-        
+
     def get_frontier(self):
         """Return estimated frontier value by array"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         frontier = list(self.__model__.frontier[:].value)
         return np.asarray(frontier) + 1
 
     def get_adjusted_residual(self):
         """Return the shifted residuals(epsilon) tern by CCNLS"""
+        if self.optimization_status == 0:
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         return self.get_residual() - np.amax(self.get_residual())
 
     def get_adjusted_alpha(self):
         """Return the shifted constatnt(alpha) term by CCNLS"""
+        if self.optimization_status == 0:
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         return self.get_alpha() + np.amax(self.get_residual())
 
     def plot2d(self, xselect, fig_name=None):

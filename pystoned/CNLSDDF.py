@@ -89,10 +89,11 @@ class CNLSDDF(CNLS.CNLS):
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self, remote=True):
+    def optimize(self, remote=False):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
         if remote == False:
+            print("Estimating the model locally with mosek solver")
             solver = SolverFactory("mosek")
             self.problem_status = solver.solve(self.__model__,
                                                tee=True)
@@ -100,6 +101,7 @@ class CNLSDDF(CNLS.CNLS):
             self.optimization_status = 1
 
         else:
+            print("Estimating the model remotely with mosek solver")
             solver = SolverManagerFactory('neos')
             self.problem_status = solver.solve(self.__model__,
                                                tee=True,
@@ -187,15 +189,15 @@ class CNLSDDF(CNLS.CNLS):
     def display_gamma(self):
         """Display gamma value"""
         if self.optimization_status == 0:
-            self.optimize()
-
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         self.__model__.gamma.display()
 
     def display_delta(self):
         """Display delta value"""
         if self.optimization_status == 0:
-            self.optimize()
-
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         if type(self.b) == type(None):
             # TODO(warning handling): replace print to warning
             print("No undesirable output given.")
@@ -206,8 +208,8 @@ class CNLSDDF(CNLS.CNLS):
     def get_gamma(self):
         """Return gamma value by array"""
         if self.optimization_status == 0:
-            self.optimize()
-
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         gamma = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.gamma),
                                                            list(self.__model__.gamma[:, :].value))])
         gamma = pd.DataFrame(gamma, columns=['Name', 'Key', 'Value'])
@@ -217,8 +219,8 @@ class CNLSDDF(CNLS.CNLS):
     def get_delta(self):
         """Return delta value by array"""
         if self.optimization_status == 0:
-            self.optimize()
-
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         if type(self.b) == type(None):
             # TODO(warning handling): replace print to warning
             print("No undesirable output given.")

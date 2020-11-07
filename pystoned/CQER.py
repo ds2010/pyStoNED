@@ -90,6 +90,7 @@ class CQR:
         if remote == False:
             if self.cet == "addi":
                 solver = SolverFactory("mosek")
+                print("Estimating the additive model locally with mosek solver")
                 self.problem_status = solver.solve(self.__model__, tee=True)
                 self.optimization_status = 1
 
@@ -102,10 +103,10 @@ class CQR:
         else:
             if self.cet == "addi":
                 opt = "mosek"
-
+                print("Estimating the additive model remotely with mosek solver")
             elif self.cet == "mult":
                 opt = "knitro"
-
+                print("Estimating the multiplicative model remotely with mosek solver")
             solver = SolverManagerFactory('neos')
             self.problem_status = solver.solve(self.__model__,
                                                tee=True,
@@ -227,37 +228,43 @@ class CQR:
     def display_status(self):
         """Display the status of problem"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         print(self.display_status)
 
     def display_alpha(self):
         """Display alpha value"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         self.__model__.alpha.display()
 
     def display_beta(self):
         """Display beta value"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         self.__model__.beta.display()
 
     def display_residual(self):
         """Dispaly residual value"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         self.__model__.epsilon.display()
 
     def display_positive_residual(self):
         """Dispaly positive residual value"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         self.__model__.epsilon_plus.display()
 
     def display_negative_residual(self):
         """Dispaly negative residual value"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         self.__model__.epsilon_minus.display()
 
     def get_status(self):
@@ -267,14 +274,16 @@ class CQR:
     def get_alpha(self):
         """Return alpha value by array"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         alpha = list(self.__model__.alpha[:].value)
         return np.asarray(alpha)
 
     def get_beta(self):
         """Return beta value by array"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
                                                           list(self.__model__.beta[:, :].value))])
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
@@ -284,28 +293,32 @@ class CQR:
     def get_residual(self):
         """Return residual value by array"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         residual = list(self.__model__.epsilon[:].value)
         return np.asarray(residual)
 
     def get_positive_residual(self):
         """Return positive residual value by array"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         residual_plus = list(self.__model__.epsilon_plus[:].value)
         return np.asarray(residual_plus)
 
     def get_negative_residual(self):
         """Return negative residual value by array"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         residual_minus = list(self.__model__.epsilon_minus[:].value)
         return np.asarray(residual_minus)
 
     def get_frontier(self):
         """Return estimated frontier value by array"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         frontier = list(self.__model__.frontier[:].value)
         return np.asarray(frontier)
 
