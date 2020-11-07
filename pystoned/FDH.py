@@ -94,46 +94,56 @@ class FDH:
         """Optimize the function by requested method"""
         if remote == False:
             solver = SolverFactory("mosek")
+            print("Estimating the model locally with mosek solver")
             self.problem_status = solver.solve(self.__model__, tee=True)
             self.optimization_status = 1
         else:
             solver = SolverManagerFactory("neos")
+            print("Estimating the model remotely with mosek solver")
             self.problem_status = solver.solve(self.__model__, tee=True, opt="mosek")
             self.optimization_status = 1
 
     def display_status(self):
         """Display the status of problem"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         print(self.display_status)
     
     def display_theta(self):
         """Display theta value"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         self.__model__.theta.display()
     
     def display_lamda(self):
         """Display lamda value"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         self.__model__.lamda.display()
 
     def get_status(self):
         """Return status"""
+        if self.optimization_status == 0:
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         return self.optimization_status
 
     def get_theta(self):
         """Return theta value by array"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         theta = list(self.__model__.theta[:].value)
         return np.asarray(theta)
 
     def get_lamda(self):
         """Return lamda value by array"""
         if self.optimization_status == 0:
-            self.optimize()
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
         lamda = list(self.__model__.lamda[:].value)
         return np.asarray(lamda)
 
