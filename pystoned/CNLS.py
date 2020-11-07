@@ -109,7 +109,7 @@ class CNLS:
                 print("Estimating the additive model remotely with mosek solver")
             elif self.cet == "mult":
                 opt = "knitro"
-                print("Estimating the multiplicative model remotely with mosek solver")
+                print("Estimating the multiplicative model remotely with knitro solver")
             solver = SolverManagerFactory('neos')
             self.problem_status = solver.solve(self.__model__,
                                                tee=True,
