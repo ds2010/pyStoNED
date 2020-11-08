@@ -18,13 +18,20 @@ class DEA:
                 = "crs": constant returns to scale
         """
         # TODO(error/warning handling): Check the configuration of the model exist
+        # Initialize DEA model
+        self.__model__ = ConcreteModel()
+
         self.x = self.__to_2d_list(x.tolist())
         self.y = self.__to_2d_list(y.tolist())
         self.orient = orient
         self.rts = rts
+        self.__reference = False
 
-        # Initialize DEA model
-        self.__model__ = ConcreteModel()
+        if type(yref) != type(None):
+            self.__reference = True
+            self.yref = self._DEA__to_2d_list(yref)
+            self.xref = self._DEA__to_2d_list(xref)
+            self.__model__.R = Set(initialize=range(len(self.yref)))
 
         # Initialize sets
         self.__model__.I = Set(initialize=range(len(self.y)))
@@ -68,30 +75,55 @@ class DEA:
     
     def __input_rule(self):
         """Return the proper input constraint"""
-        if self.orient == "io":
-            def input_rule(model, o, j):
-                return model.theta[o]*self.x[o][j] >= sum(model.lamda[o,i]*self.x[i][j] for i in model.I)
-            return input_rule
-        elif self.orient == "oo":
-            def input_rule(model, o, j):
-                return sum(model.lamda[o,i] * self.x[i][j] for i in model.I) <= self.x[o][j]
-            return input_rule
-    
+        if self.__reference == False:
+            if self.orient == "io":
+                def input_rule(model, o, j):
+                    return model.theta[o]*self.x[o][j] >= sum(model.lamda[o,i]*self.x[i][j] for i in model.I)
+                return input_rule
+            elif self.orient == "oo":
+                def input_rule(model, o, j):
+                    return sum(model.lamda[o,i] * self.x[i][j] for i in model.I) <= self.x[o][j]
+                return input_rule
+        else:
+            if self.orient == "io":
+                def input_rule(model, o, j):
+                    return model.theta[o]*self.x[o][j] >= sum(model.lamda[o,r]*self.xref[r][j] for r in model.R)
+                return input_rule
+            elif self.orient == "oo":
+                def input_rule(model, o, j):
+                    return sum(model.lamda[o,r] * self.x[r][j] for r in model.I) <= self.x[o][j]
+                return input_rule
+
     def __output_rule(self):
         """Return the proper output constraint"""
-        if self.orient == "io":
-            def output_rule(model, o, k):
-                return sum(model.lamda[o,i] * self.y[i][k] for i in model.I) >= self.y[o][k]
-            return output_rule
-        elif self.orient == "oo":
-            def output_rule(model, o, k):
-                return model.theta[o]*self.y[o][k] <= sum(model.lamda[o,i]*self.y[i][k] for i in model.I)
-            return output_rule
-    
+        if self.__reference == False:
+            if self.orient == "io":
+                def output_rule(model, o, k):
+                    return sum(model.lamda[o,i] * self.y[i][k] for i in model.I) >= self.y[o][k]
+                return output_rule
+            elif self.orient == "oo":
+                def output_rule(model, o, k):
+                    return model.theta[o]*self.y[o][k] <= sum(model.lamda[o,i]*self.y[i][k] for i in model.I)
+                return output_rule
+        else:
+            if self.orient == "io":
+                def output_rule(model, o, k):
+                    return sum(model.lamda[o,r] * self.yref[r][k] for r in model.R) >= self.y[o][k]
+                return output_rule
+            elif self.orient == "oo":
+                def output_rule(model, o, k):
+                    return model.theta[o]*self.y[o][k] <= sum(model.lamda[o,r]*self.y[r][k] for r in model.R)
+                return output_rule
+
     def __vrs_rule(self):
-        def vrs_rule(model, o):
-            return sum(model.lamda[o, i] for i in model.I) == 1
-        return vrs_rule
+        if self.__reference == False:
+            def vrs_rule(model, o):
+                return sum(model.lamda[o, i] for i in model.I) == 1
+            return vrs_rule
+        else:
+            def vrs_rule(model, o):
+                return sum(model.lamda[o, r] for r in model.R) == 1
+            return vrs_rule      
 
     def optimize(self, remote=True):
         """Optimize the function by requested method"""
@@ -255,13 +287,4 @@ class DEADDF(DEA):
             def undesirable_output_rule(model, o, l):
                 return self.b[o][l] + model.theta[o]*self.gb[l] == sum(model.lamda[o, r] * self.bref[r][l] for r in model.R)
             return undesirable_output_rule
-
-    def __vrs_rule(self):
-        if self.__reference == False:
-            def vrs_rule(model, o):
-                return sum(model.lamda[o, i] for i in model.I) == 1
-            return vrs_rule
-        else:
-            def vrs_rule(model, o):
-                return sum(model.lamda[o, r] for r in model.R) == 1
-            return vrs_rule            
+      
