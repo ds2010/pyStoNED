@@ -287,4 +287,13 @@ class DEADDF(DEA):
             def undesirable_output_rule(model, o, l):
                 return self.b[o][l] + model.theta[o]*self.gb[l] == sum(model.lamda[o, r] * self.bref[r][l] for r in model.R)
             return undesirable_output_rule
-      
+
+    def __vrs_rule(self):
+        if self.__reference == False:
+            def vrs_rule(model, o):
+                return sum(model.lamda[o, i] for i in model.I) == 1
+            return vrs_rule
+        else:
+            def vrs_rule(model, o):
+                return sum(model.lamda[o, r] for r in model.R) == 1
+            return vrs_rule     
