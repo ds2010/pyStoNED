@@ -16,7 +16,7 @@ The [`pyStoNED`](https://pypi.org/project/pystoned/) package is now avaiable on 
 
 # [Tutorials](https://github.com/ds2010/pyStoNED-Tutorials)
 
-A number of Jupyter Notebooks are provided in the repository [pyStoNED-Tutorials](https://github.com/ds2010/pyStoNED-Tutorials), and more detailed technical reports are currently under development.
+A number of Jupyter Notebooks are provided in the repository [pyStoNED-tutorials](https://github.com/ds2010/pyStoNED-Tutorials), and more detailed technical reports are currently under development.
 
 # Authors
 
