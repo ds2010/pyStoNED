@@ -319,8 +319,14 @@ class CNLS:
         if self.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
-        frontier = list(self.__model__.frontier[:].value)
-        return np.asarray(frontier) + 1
+        if self.cet == "mult" and type(self.z) == type(None):
+            frontier = np.asarray(list(self.__model__.frontier[:].value))+1
+        elif self.cet == "mult" and type(self.z) != type(None):
+            frontier = list(np.divide(self.y, np.exp(
+                self.get_residual()+self.get_lamda()*np.asarray(self.z)[:, 0])) - 1)
+        elif self.cet == "addi":
+            frontier = np.asarray(self.y) - self.get_residual()
+        return np.asarray(frontier)
 
     def get_adjusted_residual(self):
         """Return the shifted residuals(epsilon) tern by CCNLS"""
