@@ -193,7 +193,6 @@ class CQR:
                                              for j in model.J),
                         model.alpha[h] + sum(model.beta[h, j] * self.x[i][j]
                                              for j in model.J))
-
                 return afriat_rule
             elif self.rts == "crs":
                 # TODO(warning handling): replace with model requested not exist
@@ -319,7 +318,10 @@ class CQR:
         if self.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
-        frontier = list(self.__model__.frontier[:].value)
+        if self.cet == "mult":
+            frontier = np.asarray(list(self.__model__.frontier[:].value))+1
+        elif self.cet == "addi":
+            frontier = np.asarray(self.y) - self.get_residual()
         return np.asarray(frontier)
 
     def plot2d(self, xselect, fig_name=None):
