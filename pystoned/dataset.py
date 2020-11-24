@@ -4,7 +4,7 @@ import os
 
 file_path = os.path.dirname(__file__)
 
-class production_frontier_data:
+class production_data:
     def __init__(self, dmu, x, y, b=None):
         self.decision_making_unit = dmu
         self.x = x
@@ -28,7 +28,7 @@ def load_GHG_abatement_cost(year=None, x_select=['HRSN', 'CPNK'], y_select=['VAL
     if b_select != None:
         b = np.concatenate(
             [np.asmatrix(dataframe[selected]).T for selected in b_select], axis=1)
-    return production_frontier_data(dmu, x, y, b)
+    return production_data(dmu, x, y, b)
 
 
 def load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'], y_select=['TOTEX']):
@@ -40,7 +40,7 @@ def load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'], y_
     y = np.concatenate(
         [np.asmatrix(dataframe[selected]).T for selected in y_select], axis=1)
 
-    return production_frontier_data(dmu, x, y)
+    return production_data(dmu, x, y)
 
 
 def load_Tim_Coelli_frontier(x_select=['capital', 'labour'], y_select=['output']):
@@ -52,7 +52,7 @@ def load_Tim_Coelli_frontier(x_select=['capital', 'labour'], y_select=['output']
         [np.asmatrix(dataframe[selected]).T for selected in x_select], axis=1)
     y = np.concatenate(
         [np.asmatrix(dataframe[selected]).T for selected in y_select], axis=1)
-    return production_frontier_data(dmu, x, y)
+    return production_data(dmu, x, y)
 
 
 def load_Philipines_rice_production(year=None, x_select=['AREA', 'LABOR', 'NPK', 'OTHER', 'AREAP', 'LABORP', 'NPKP', 'OTHERP'], y_select=['PROD', 'PRICE']):
@@ -70,4 +70,4 @@ def load_Philipines_rice_production(year=None, x_select=['AREA', 'LABOR', 'NPK',
     y = np.concatenate(
         [np.asmatrix(dataframe[selected]).T for selected in y_select], axis=1)
 
-    return production_frontier_data(dmu, x, y)
+    return production_data(dmu, x, y)
