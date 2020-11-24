@@ -28,6 +28,7 @@ setup_args = dict(
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Operating System :: OS Independent',
     ],
+    package_data={'pystoned': ['data/*.csv']},
 )
 
 install_requires = [

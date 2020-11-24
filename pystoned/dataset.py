@@ -4,7 +4,6 @@ import os
 
 file_path = os.path.dirname(__file__)
 
-
 class production_frontier_data:
     def __init__(self, dmu, x, y, b=None):
         self.decision_making_unit = dmu
