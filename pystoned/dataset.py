@@ -5,11 +5,12 @@ import os
 file_path = os.path.dirname(__file__)
 
 class production_data:
-    def __init__(self, dmu, x, y, b=None):
+    def __init__(self, dmu, x, y, b=None, z=None):
         self.decision_making_unit = dmu
         self.x = x
         self.y = y
         self.b = b
+        self.z = z
 
 
 def load_GHG_abatement_cost(year=None, x_select=['HRSN', 'CPNK'], y_select=['VALK'], b_select=['GHG']):
@@ -31,7 +32,7 @@ def load_GHG_abatement_cost(year=None, x_select=['HRSN', 'CPNK'], y_select=['VAL
     return production_data(dmu, x, y, b)
 
 
-def load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'], y_select=['TOTEX']):
+def load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'], y_select=['OPEX', 'CAPEX', 'TOTEX'], z_select=['PerUndGr']):
     dataframe = pd.read_csv(
         file_path+"/data/electricityFirms.csv", error_bad_lines=True)
     dmu = np.asmatrix(dataframe.index.tolist()).T
@@ -39,8 +40,11 @@ def load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'], y_
         [np.asmatrix(dataframe[selected]).T for selected in x_select], axis=1)
     y = np.concatenate(
         [np.asmatrix(dataframe[selected]).T for selected in y_select], axis=1)
+    if z_select != None:
+        z = np.concatenate(
+            [np.asmatrix(dataframe[selected]).T for selected in z_select], axis=1)
 
-    return production_data(dmu, x, y)
+    return production_data(dmu, x, y, z)
 
 
 def load_Tim_Coelli_frontier(x_select=['capital', 'labour'], y_select=['output']):
