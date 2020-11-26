@@ -45,7 +45,7 @@ def load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'], y_
 
 def load_Tim_Coelli_frontier(x_select=['capital', 'labour'], y_select=['output']):
     dataframe = pd.read_csv(
-        file_path+"/data/41Firms.csv", error_bad_lines=True)
+        file_path+"/data/41Firm.csv", error_bad_lines=True)
 
     dmu = np.asmatrix(dataframe['firm']).T
     x = np.concatenate(
