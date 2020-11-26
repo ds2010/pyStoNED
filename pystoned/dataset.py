@@ -43,14 +43,12 @@ def load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'], y_
     if z_select != None:
         z = np.concatenate(
             [np.asmatrix(dataframe[selected]).T for selected in z_select], axis=1)
-
     return production_data(dmu, x, y, z)
 
 
 def load_Tim_Coelli_frontier(x_select=['capital', 'labour'], y_select=['output']):
     dataframe = pd.read_csv(
         file_path+"/data/41Firm.csv", error_bad_lines=True)
-
     dmu = np.asmatrix(dataframe['firm']).T
     x = np.concatenate(
         [np.asmatrix(dataframe[selected]).T for selected in x_select], axis=1)
@@ -73,5 +71,4 @@ def load_Philipines_rice_production(year=None, x_select=['AREA', 'LABOR', 'NPK',
         [np.asmatrix(dataframe[selected]).T for selected in x_select], axis=1)
     y = np.concatenate(
         [np.asmatrix(dataframe[selected]).T for selected in y_select], axis=1)
-
     return production_data(dmu, x, y)
