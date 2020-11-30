@@ -7,6 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from .utils import CNLSG1, CNLSG2, CNLSZG1, CNLSZG2, sweet
 
+
 class CNLSG:
     """Convex Nonparametric Least Square (CNLS) with Genetic algorithm"""
 
@@ -36,7 +37,7 @@ class CNLSG:
         self.Active = np.zeros((len(x), len(x)))
         # violated concavity constraint
         self.Active2 = np.zeros((len(x), len(x)))
-        
+
         if type(self.y[0]) == list:
             self.y = self.__to_1d_list(self.y)
 
@@ -51,14 +52,16 @@ class CNLSG:
                 self.z = []
                 for z_value in z.tolist():
                     self.z.append([z_value])
-            model1 = CNLSZG1.CNLSZG1(self.y, self.x, self.z, self.cutactive, self.cet, self.fun, self.rts)
+            model1 = CNLSZG1.CNLSZG1(
+                self.y, self.x, self.z, self.cutactive, self.cet, self.fun, self.rts)
         else:
-            model1 = CNLSG1.CNLSG1(self.y, self.x, self.cutactive, self.cet, self.fun, self.rts)
+            model1 = CNLSG1.CNLSG1(
+                self.y, self.x, self.cutactive, self.cet, self.fun, self.rts)
         model1.optimize(remote=False)
         self.alpha = model1.get_alpha()
         self.beta = model1.get_beta()
         self.__modol__ = model1.__model__
-        
+
         # Optimize model
         self.optimization_status = 0
         self.problem_status = 0
@@ -68,17 +71,20 @@ class CNLSG:
         # TODO(error/warning handling): Check problem status after optimization
         while self.__convergence_test(self.alpha, self.beta) > 0.0001:
             if type(self.z) != type(None):
-                model2 = CNLSZG2.CNLSZG2(self.y, self.x, self.z,self.Active, self.cutactive, self.cet, self.fun, self.rts)
+                model2 = CNLSZG2.CNLSZG2(
+                    self.y, self.x, self.z, self.Active, self.cutactive, self.cet, self.fun, self.rts)
             else:
-                model2 = CNLSG2.CNLSG2(self.y, self.x, self.Active, self.cutactive, self.cet, self.fun, self.rts)
+                model2 = CNLSG2.CNLSG2(
+                    self.y, self.x, self.Active, self.cutactive, self.cet, self.fun, self.rts)
             model2.optimize(remote=True)
             self.alpha = model2.get_alpha()
             self.beta = model2.get_beta()
             # TODO: Replace print with log system
-            print("Genetic Algorithm Convergence : %8f"%(self.__convergence_test(self.alpha, self.beta)))
+            print("Genetic Algorithm Convergence : %8f" %
+                  (self.__convergence_test(self.alpha, self.beta)))
         self.__model__ = model2.__model__
         self.optimization_status = 1
-    
+
     def __to_1d_list(self, l):
         rl = []
         for i in range(len(l)):
@@ -88,7 +94,7 @@ class CNLSG:
     def __convergence_test(self, alpha, beta):
         x = np.asarray(self.x)
         Activetmp1 = 0.0
-    
+
         # go into the loop
         for i in range(len(x)):
             Activetmp = 0.0
@@ -126,7 +132,6 @@ class CNLSG:
             if Activetmp > Activetmp1:
                 Activetmp1 = Activetmp
         return Activetmp
-
 
     def display_status(self):
         """Display the status of problem"""
