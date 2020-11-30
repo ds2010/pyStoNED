@@ -43,7 +43,7 @@ def load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'], y_
     if z_select != None:
         z = np.concatenate(
             [np.asmatrix(dataframe[selected]).T for selected in z_select], axis=1)
-    return production_data(dmu, x, y, z)
+    return production_data(dmu, x, y, z=z)
 
 
 def load_Tim_Coelli_frontier(x_select=['capital', 'labour'], y_select=['output']):
