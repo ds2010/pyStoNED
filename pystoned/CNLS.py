@@ -36,6 +36,9 @@ class CNLS:
             for x_value in x.tolist():
                 self.x.append([x_value])
 
+        if type(self.y[0]) == list:
+            self.y = self.__to_1d_list(self.y)
+
         # Initialize the CNLS model
         self.__model__ = ConcreteModel()
 
@@ -86,6 +89,12 @@ class CNLS:
         # Optimize model
         self.optimization_status = 0
         self.problem_status = 0
+
+    def __to_1d_list(self, l):
+        rl = []
+        for i in range(len(l)):
+            rl.append(l[i][0])
+        return rl
 
     def optimize(self, remote=False):
         """Optimize the function by requested method"""

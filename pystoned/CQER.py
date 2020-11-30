@@ -36,6 +36,9 @@ class CQR:
             for x_value in x.tolist():
                 self.x.append([x_value])
 
+        if type(self.y[0]) == list:
+            self.y = self.__to_1d_list(self.y)
+
         # Initialize the CNLS model
         self.__model__ = ConcreteModel()
 
@@ -112,6 +115,12 @@ class CQR:
                                                tee=True,
                                                opt=opt)
             self.optimization_status = 1
+
+    def __to_1d_list(self, l):
+        rl = []
+        for i in range(len(l)):
+            rl.append(l[i][0])
+        return rl
 
     def __objective_rule(self):
         """Return the proper objective function"""
