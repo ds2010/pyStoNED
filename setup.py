@@ -3,15 +3,12 @@ from setuptools import setup, find_packages
 with open('README.md') as readme_file:
     README = readme_file.read()
 
-with open('HISTORY.md') as history_file:
-    HISTORY = history_file.read()
-
 setup_args = dict(
     name='pystoned',
-    version='0.3.9',
+    version='0.4.0',
     description='A Package for Stochastic Nonparametric Envelopment of Data (StoNED) in Python',
     long_description_content_type="text/markdown",
-    long_description=README + '\n\n' + HISTORY,
+    long_description=README,
     license='GPLv3',
     packages=find_packages(),
     author='Sheng Dai, Timo Kuosmanen, Chia-Yen Lee, Yu-Hsueh Fang',
@@ -22,7 +19,7 @@ setup_args = dict(
     include_package_data=True,
     zip_safe=False,
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
