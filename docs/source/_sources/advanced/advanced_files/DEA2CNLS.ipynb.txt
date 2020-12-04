@@ -1,0 +1,135 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# DEA as a sign-constrained variant of the CNLS problem"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# import the package pystoned\n",
+    "from pystoned import DEA2CNLS"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# import Finnish electricity distribution firms data\n",
+    "url = 'https://raw.githubusercontent.com/ds2010/pyStoNED-Tutorials/master/Data/firms.csv'\n",
+    "df = pd.read_csv(url, error_bad_lines=False)\n",
+    "df.head(10)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# output\n",
+    "y = df['Energy']\n",
+    "\n",
+    "# inputs\n",
+    "x1 = df['OPEX']\n",
+    "x1 = np.asmatrix(x1).T\n",
+    "x2 = df['CAPEX']\n",
+    "x2 = np.asmatrix(x2).T\n",
+    "x = np.concatenate((x1, x2), axis=1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# define and solve the CNLS model\n",
+    "\n",
+    "model = DEA2CNLS.dea2cnls(y, x)\n",
+    "\n",
+    "# using local solver (MOSEK API)\n",
+    "from pyomo.opt import SolverFactory\n",
+    "opt = SolverFactory(\"mosek\")\n",
+    "results = opt.solve(model, tee=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# retrive the residuals (additive DEA efficiency measure)\n",
+    "val = list(model.e[:].value)\n",
+    "eps = np.asarray(val)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# multiplicative DEA efficiency measure (c.f., DEA_oo_vrs)\n",
+    "theta = 1 - eps/y"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**Note**: In the single-output setting, the additive DEA efficiency measure (i.e., this case) is equivalent to the multiplicative DEA efficiency measure (i.e., [Radial output oriented VRS model](https://nbviewer.jupyter.org/github/ds2010/pyStoNED-Tutorials/blob/master/DEA/DEA_oo_vrs.ipynb)) in the sense that:\n",
+    "$\\theta_i^{DEA} = 1 - eps_i^{DEA}/y_i$"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "theta"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

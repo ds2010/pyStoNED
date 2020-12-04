@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Additive Production function &#8212; pyStoNED 0.4.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Multiplicative Production function" href="multiplicative_prod.html" />
+    <link rel="prev" title="Examples" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="additive-production-function">
+<h1>Additive Production function<a class="headerlink" href="#additive-production-function" title="Permalink to this headline">¶</a></h1>
+<p>Hildreth (1954) was the first to consider nonparametric regression subject to
+monotonicity and concavity constraints in the case of a single input variable <span class="math notranslate nohighlight">\(x\)</span>.
+Kuosmanen (2008) extended Hildreth’s approach to the multivariate setting with a
+vector-valued <span class="math notranslate nohighlight">\(\bf{x}\)</span>, and coined the term convex nonparametric least squares (<code class="docutils literal notranslate"><span class="pre">CNLS</span></code>) for this method.
+<code class="docutils literal notranslate"><span class="pre">CNLS</span></code> builds upon the assumption that the true but unknown production function
+<span class="math notranslate nohighlight">\(f\)</span> belongs to the set of continuous, monotonic increasing and globally concave functions,
+imposing exactly the same production axioms as standard DEA.</p>
+<p>The multivariate <code class="docutils literal notranslate"><span class="pre">CNLS</span></code> formulation is defined as:</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+  &amp; \underset{\alpha, \beta, \varepsilon} {min} \sum_{i=1}^n\varepsilon_i^2 \\
+  &amp; \text{s.t.} \\
+  &amp;  y_i = \alpha_i + \beta_i^{'}X_i + \varepsilon_i \quad \forall i \\
+  &amp;  \alpha_i + \beta_i^{'}X_i \le \alpha_j + \beta_j^{'}X_i  \quad  \forall i, j\\
+  &amp;  \beta_i \ge 0 \quad  \forall i \\
+\end{align*}</div><p>where <span class="math notranslate nohighlight">\(\alpha_i\)</span> and <span class="math notranslate nohighlight">\(\beta_i\)</span> define the intercept and slope parameters of
+tangent hyperplanes that characterize the estimated piece-wise linear frontier.
+<span class="math notranslate nohighlight">\(\varepsilon_i\)</span> denotes the CNLS residuals. The first constraint can be interpreted
+as a multivariate regression equation, the second constraint imposes convexity,
+and the third constraint imposes monotonicity.</p>
+<div class="section" id="example-ipynb">
+<h2>Example <a class="reference external" href="https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/CNLS_prod.ipynb">[.ipynb]</a><a class="headerlink" href="#example-ipynb" title="Permalink to this headline">¶</a></h2>
+<p>In the following code, we estimate an additive production function with pyStoNED.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import packages</span>
+<span class="kn">from</span> <span class="nn">pystoned</span> <span class="kn">import</span> <span class="n">CNLS</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># import Finnish electricity distribution firms data</span>
+<span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://raw.githubusercontent.com/ds2010/pyStoNED/master/sources/data/firms.csv&#39;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error_bad_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># output</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Energy&#39;</span><span class="p">]</span>
+
+<span class="c1"># inputs</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;OPEX&#39;</span><span class="p">]</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asmatrix</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CAPEX&#39;</span><span class="p">]</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asmatrix</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># define and solve the CNLS model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">CNLS</span><span class="o">.</span><span class="n">CNLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cet</span> <span class="o">=</span> <span class="s2">&quot;addi&quot;</span><span class="p">,</span> <span class="n">fun</span> <span class="o">=</span> <span class="s2">&quot;prod&quot;</span><span class="p">,</span> <span class="n">rts</span> <span class="o">=</span> <span class="s2">&quot;vrs&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">remote</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># display the estimates</span>
+<span class="n">model</span><span class="o">.</span><span class="n">display_alpha</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">display_beta</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">display_residual</span><span class="p">()</span>
+
+<span class="c1"># store the estimates</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_alpha</span><span class="p">()</span>
+<span class="n">beta</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_beta</span><span class="p">()</span>
+<span class="n">residuals</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_residual</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">pyStoNED</a></h1>
+
+
+
+<p class="blurb">A package for StoNED in Python</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ds2010&repo=StoNED-Python&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">Install</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../datasets/index.html">Datasets</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#convex-nonparametric-least-square">Convex Nonparametric Least Square</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Additive Production function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiplicative_prod.html">Multiplicative Production function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="additive_cost.html">Additive cost function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiplicative_cost.html">Multiplicative cost function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="corrected_cnls.html">Corrected CNLS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#stochastic-nonparametric-envelopment-of-data">Stochastic Nonparametric Envelopment of Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#contextual-variables">Contextual Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#multiple-outputs-ddf-formulation">Multiple Outputs (DDF Formulation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#convex-quantile-approaches">Convex Quantile Approaches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#monotonic-models">Monotonic Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#data-envelopment-analysis">Data Envelopment Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#free-disposal-hull">Free Disposal Hull</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/index.html">Advanced topics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../citing/index.html">Citing pyStoNED</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../free_course/index.html">Free online course</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../acronyms/index.html">List of Acronyms</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Examples</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">Examples</a></li>
+      <li>Next: <a href="multiplicative_prod.html" title="next chapter">Multiplicative Production function</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, The pyStoNED authors.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/examples/CNLS/additive_prod.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

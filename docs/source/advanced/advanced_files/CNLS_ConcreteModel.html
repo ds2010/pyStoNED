@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A ConcreteModel for CNLS estimation &#8212; pyStoNED 0.4.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="A ConcreteModel for DEA estimation" href="DEA_ConcreteModel.html" />
+    <link rel="prev" title="Rewrite GAMS codes in Python" href="gams2python.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="a-concretemodel-for-cnls-estimation">
+<h1>A ConcreteModel for CNLS estimation<a class="headerlink" href="#a-concretemodel-for-cnls-estimation" title="Permalink to this headline">¶</a></h1>
+<p>We also prepare a concrete model that does not need to call any of our developed functions in the pyStoNED package.
+In this concrete model, one can define the parameter specification by reading data from an Excel file.</p>
+<p>A concreteModel for CNLS estimation <a class="reference external" href="https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/docs/advanced/advanced_files/CNLS_ConcreteModel.ipynb">[.ipynb]</a> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import packages</span>
+<span class="kn">import</span> <span class="nn">pd</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">pyomo.environ</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Sets</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;i</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">90</span><span class="p">)])</span>
+<span class="n">model</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="n">Set</span><span class="p">(</span><span class="n">initialize</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;DMUs&#39;</span><span class="p">,</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">j</span> <span class="o">=</span> <span class="n">Set</span><span class="p">(</span><span class="n">initialize</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;j1&#39;</span><span class="p">,</span> <span class="s1">&#39;j2&#39;</span><span class="p">,</span> <span class="s1">&#39;j3&#39;</span><span class="p">],</span> <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;inputs and outputs&#39;</span><span class="p">)</span>
+
+<span class="c1"># alias</span>
+<span class="n">model</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">SetOf</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+
+<span class="c1"># Parameters</span>
+<span class="c1"># output (y1,y2,y3), avaiable at https://github.com/ds2010/pyStoNED/blob/master/sources/data/firms.csv.</span>
+<span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;y.xlsx&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">Dict1</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df1</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">df1</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">Dict1</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">df1</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+<span class="n">model</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">Param</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">j</span><span class="p">,</span> <span class="n">initialize</span> <span class="o">=</span> <span class="n">Dict1</span><span class="p">)</span>
+
+<span class="c1"># input (cost)</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;x.xlsx&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">Dict2</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df2</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+        <span class="n">Dict2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;TOTEX&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+<span class="n">model</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">Param</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="n">initialize</span> <span class="o">=</span> <span class="n">Dict2</span><span class="p">)</span>
+
+
+<span class="c1">#Variables</span>
+<span class="n">model</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">Var</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">j</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="kc">None</span><span class="p">),</span> <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;beta-coeff&#39;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="n">Var</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;res&#39;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">Var</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="kc">None</span><span class="p">),</span> <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;frontier&#39;</span><span class="p">)</span>
+
+<span class="c1"># Constraints and objective f.</span>
+<span class="k">def</span> <span class="nf">qreg_rule</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">log</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="n">log</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">model</span><span class="o">.</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="n">model</span><span class="o">.</span><span class="n">qreg</span> <span class="o">=</span> <span class="n">Constraint</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="n">rule</span><span class="o">=</span><span class="n">qreg_rule</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;log-transformed regression&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">qlog_rule</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="nb">sum</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">model</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">j</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">model</span><span class="o">.</span><span class="n">qlog</span> <span class="o">=</span> <span class="n">Constraint</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="n">rule</span><span class="o">=</span><span class="n">qlog_rule</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;cost function&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">qconcav_rule</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">model</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">j</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">h</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">model</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">j</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">qconcav</span> <span class="o">=</span> <span class="n">Constraint</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="n">rule</span><span class="o">=</span><span class="n">qconcav_rule</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;concavity constraint&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">objective_rule</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">model</span><span class="o">.</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">objective</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span><span class="n">rule</span><span class="o">=</span><span class="n">objective_rule</span><span class="p">,</span> <span class="n">sense</span><span class="o">=</span><span class="n">minimize</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Define objective function&#39;</span><span class="p">)</span>
+
+<span class="c1">#Solve the model</span>
+<span class="n">solver_manager</span> <span class="o">=</span> <span class="n">SolverManagerFactory</span><span class="p">(</span><span class="s1">&#39;neos&#39;</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">solver_manager</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="s1">&#39;knitro&#39;</span><span class="p">,</span> <span class="n">tee</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#retrive the beta</span>
+<span class="n">ind</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+<span class="n">val</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">b</span><span class="p">[:,:]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+<span class="n">df_b</span> <span class="o">=</span> <span class="p">[</span> <span class="n">i</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">val</span><span class="p">)]</span>
+<span class="n">df_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">df_b</span><span class="p">)</span>
+<span class="c1"># display beta coefficients</span>
+<span class="n">df_b</span>
+
+<span class="n">df_b</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_b</span><span class="p">,</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">,</span> <span class="s1">&#39;Key&#39;</span><span class="p">,</span> <span class="s1">&#39;Value&#39;</span><span class="p">])</span>
+<span class="n">df_b</span> <span class="o">=</span> <span class="n">df_b</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;Name&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;Key&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;Value&#39;</span><span class="p">)</span>
+<span class="c1"># retrive the residuals</span>
+<span class="n">ind</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
+<span class="n">val</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">e</span><span class="p">[:]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+<span class="n">df_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+<span class="c1">#display residuals</span>
+<span class="n">df_e</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">pyStoNED</a></h1>
+
+
+
+<p class="blurb">A package for StoNED in Python</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ds2010&repo=StoNED-Python&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">Install</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../datasets/index.html">Datasets</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Advanced topics</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gams2python.html">Rewrite GAMS codes in Python</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">A ConcreteModel for CNLS estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DEA_ConcreteModel.html">A ConcreteModel for DEA estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DEA2CNLS.html">DEA as a sign-constrained variant of the CNLS problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FDH2ICNLS.html">FDH as a sign-constrained variant of the ICNLS problem</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../citing/index.html">Citing pyStoNED</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../free_course/index.html">Free online course</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../acronyms/index.html">List of Acronyms</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Advanced topics</a><ul>
+      <li>Previous: <a href="gams2python.html" title="previous chapter">Rewrite GAMS codes in Python</a></li>
+      <li>Next: <a href="DEA_ConcreteModel.html" title="next chapter">A ConcreteModel for DEA estimation</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, The pyStoNED authors.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/advanced/advanced_files/CNLS_ConcreteModel.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

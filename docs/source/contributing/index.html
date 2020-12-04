@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contributing &#8212; pyStoNED 0.4.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Citing pyStoNED" href="../citing/index.html" />
+    <link rel="prev" title="FDH as a sign-constrained variant of the ICNLS problem" href="../advanced/advanced_files/FDH2ICNLS.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="contributing">
+<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
+<p>Thanks for your contribution to the <a class="reference external" href="https://github.com/ds2010/StoNED-Python">pyStoNED</a>.
+Please first discuss the change with the developers of this repository by
+creating an issue before making a change.</p>
+<div class="section" id="style">
+<h2>Style<a class="headerlink" href="#style" title="Permalink to this headline">¶</a></h2>
+<p>For the consistency of the source code, we follow <a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">PEP8 python style
+guide</a>.</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">yapf</span> <span class="pre">-i</span></code> to format the codes:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ yapf -i pystoned/example.py
+</pre></div>
+</div>
+<p>Using <code class="docutils literal notranslate"><span class="pre">pylint</span></code> to check the other requirements:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pylint pystoned/example.py
+</pre></div>
+</div>
+</div>
+<div class="section" id="commit-message">
+<h2>Commit message<a class="headerlink" href="#commit-message" title="Permalink to this headline">¶</a></h2>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">refactor</span><span class="p">(</span><span class="n">pyStoNED</span><span class="p">):</span> <span class="n">Rename</span> <span class="n">the</span> <span class="n">variables</span> <span class="ow">in</span> <span class="n">biMat</span><span class="o">.</span><span class="n">py</span>
+
+<span class="n">For</span> <span class="n">fitting</span> <span class="n">the</span> <span class="n">requirement</span> <span class="n">of</span> <span class="n">PEP8</span> <span class="n">style</span><span class="p">,</span>
+<span class="n">I</span> <span class="n">renamed</span> <span class="n">the</span> <span class="n">variables</span> <span class="ow">in</span> <span class="n">biMat</span><span class="o">.</span><span class="n">py</span><span class="p">:</span>
+<span class="o">*</span> <span class="o">...</span> <span class="n">to</span> <span class="o">...</span>
+<span class="o">*</span> <span class="o">...</span> <span class="n">to</span> <span class="o">...</span>
+<span class="o">*</span> <span class="o">...</span> <span class="n">to</span> <span class="o">...</span>
+
+<span class="n">Fixes</span> <span class="c1">#0000</span>
+</pre></div>
+</div>
+<p>Please write 1 commit message for one modification. Do not contain
+multiple changes in 1 commit. If the commit fixes any issue, please add
+<code class="docutils literal notranslate"><span class="pre">Fixes</span> <span class="pre">#xxxx</span></code> to the end of the commit message.</p>
+<p>The first line should not be longer than 70 characters, the second line
+is always blank and other lines should be wrapped at 80 characters. The
+type should always be lowercase as shown below:</p>
+<ul class="simple">
+<li><p>feat: (new feature for the user, not a new feature for build script)</p></li>
+<li><p>fix: (bug fix for the user, not a fix to a build script)</p></li>
+<li><p>docs: (changes to the documentation)</p></li>
+<li><p>style: (formatting, missing semi colons, etc; no production code
+change)</p></li>
+<li><p>refactor: (refactoring code, eg. renaming a variable)</p></li>
+<li><p>test: (adding tests, refactoring tests; no production code change)</p></li>
+</ul>
+<p>Reference:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://seesparkbox.com/foundry/semantic_commit_messages">https://seesparkbox.com/foundry/semantic_commit_messages</a></p></li>
+<li><p><a class="reference external" href="http://karma-runner.github.io/1.0/dev/git-commit-msg.html">http://karma-runner.github.io/1.0/dev/git-commit-msg.html</a></p></li>
+</ul>
+</div>
+<div class="section" id="pull-request-process">
+<h2>Pull Request Process<a class="headerlink" href="#pull-request-process" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Create a Fork of the project to your own repository.</p></li>
+<li><p>Create a Branch in your Fork.</p></li>
+<li><p>Make your contributions.</p></li>
+<li><p>Make a Test that checks the change you did.</p></li>
+<li><p>Format your code by <code class="docutils literal notranslate"><span class="pre">yapf</span></code> to <code class="docutils literal notranslate"><span class="pre">PEP8</span></code> style.</p></li>
+<li><p>Create a Pull Request (PR) and Provide your test in it.</p></li>
+<li><p>We will review your PR and discuss with you.</p></li>
+</ol>
+<p>Thanks for your contributions!</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">pyStoNED</a></h1>
+
+
+
+<p class="blurb">A package for StoNED in Python</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ds2010&repo=StoNED-Python&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">Install</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../datasets/index.html">Datasets</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/index.html">Advanced topics</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#style">Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#commit-message">Commit message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pull-request-process">Pull Request Process</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../citing/index.html">Citing pyStoNED</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../free_course/index.html">Free online course</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../acronyms/index.html">List of Acronyms</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../advanced/advanced_files/FDH2ICNLS.html" title="previous chapter">FDH as a sign-constrained variant of the ICNLS problem</a></li>
+      <li>Next: <a href="../citing/index.html" title="next chapter">Citing pyStoNED</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, The pyStoNED authors.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/contributing/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

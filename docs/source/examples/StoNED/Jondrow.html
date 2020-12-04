@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JLMS estimator &#8212; pyStoNED 0.4.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="StoNED with Z variables" href="../z/stoned_z.html" />
+    <link rel="prev" title="Kernel deconvolution estimation" href="kde.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="jlms-estimator">
+<h1>JLMS estimator<a class="headerlink" href="#jlms-estimator" title="Permalink to this headline">¶</a></h1>
+<p>After estimating the expected inefficiency using methods of moment (MOM) or quasi-likelihood estimation (QLE),
+We can use JLMS estimator proposed by Jondrow et al. (1982)
+to estimate the firm-specific inefficiencies (Johnson &amp; Kuosmanen, 2015).
+Under the assumption of a normally distributed error term and a half-normally
+distributed inefficiency term, they formulate the conditional distribution of
+inefficiency <span class="math notranslate nohighlight">\(u_i\)</span>, given <span class="math notranslate nohighlight">\(\varepsilon_i\)</span>, and propose the inefficiency estimator
+as the conditional mean <span class="math notranslate nohighlight">\(E(u_i|\varepsilon_i)\)</span>.</p>
+<ol class="arabic">
+<li><p><span class="math notranslate nohighlight">\(E(u_i \mid \varepsilon_i)\)</span>: Following Kumbhakar &amp; Lovell (2000), the conditional expected value of inefficiency are</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Production function</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+ \begin{align*}
+ E(u_i \mid \varepsilon_i)
+ &amp;= \mu_{*i} + \sigma_* \Bigg[ \frac{\phi(-\mu_{*i}/\sigma_*)}{1-\Phi(-\mu_{*i}/\sigma_*)} \Bigg] \\
+ &amp;= \sigma_* \Bigg[ \frac{\phi(\varepsilon_i \lambda/\sigma)}{1-\Phi(\varepsilon_i \lambda/\sigma)} - \frac{\varepsilon_i \lambda}{\sigma} \Bigg].
+ \end{align*}
+
+ where $\mu_*= -\varepsilon \sigma_u^2/\sigma^2$ and $\sigma_*^2 = \sigma_u^2\sigma_v^2/\sigma^2$.</div><ul class="simple">
+<li><p>Cost function</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+ \begin{align*}
+ E(u_i \mid \varepsilon_i)&amp;= \mu_{*i} + \sigma_* \Bigg[ \frac{\phi(-\mu_{*i}/\sigma_*)}{1-\Phi(-\mu_{*i}/\sigma_*)} \Bigg] \\
+ &amp;= \sigma_* \Bigg[ \frac{\phi(\varepsilon_i \lambda/\sigma)}{1-\Phi(-\varepsilon_i \lambda/\sigma)} + \frac{\varepsilon_i \lambda}{\sigma} \Bigg].
+ \end{align*}
+
+ where $\mu_*= \varepsilon \sigma_u^2/\sigma^2$ and $\sigma_*^2 = \sigma_u^2\sigma_v^2/\sigma^2$.</div></div></blockquote>
+</li>
+<li><p>Technical inefficiency (TE)</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>Production function</dt><dd><ul>
+<li><p>Logged Dependent Variable: <span class="math notranslate nohighlight">\(\text{TE} = \text{exp}(-E(u_i \mid \varepsilon_i))\)</span></p></li>
+<li><p>Otherwise,  <span class="math notranslate nohighlight">\(\text{TE} = \frac{\text{fitt}-E(u_i \mid \varepsilon_i)}{\text{fitt}}\)</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Cost function</dt><dd><ul>
+<li><p>Logged Dependent Variable: <span class="math notranslate nohighlight">\(\text{TE} = \text{exp}(E(u_i \mid \varepsilon_i))\)</span></p></li>
+<li><p>Otherwise,  <span class="math notranslate nohighlight">\(\text{TE} = \frac{\text{fitt}+ E(u_i \mid \varepsilon_i)}{\text{fitt}}\)</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+<p>References:</p>
+<p>[1] Johnson, A. L. &amp; Kuosmanen, T. (2015), An Introduction to CNLS and StoNED Methods for Efficiency Analysis: Economic Insights and Computational Aspects, in S. C. Ray, S. C. Kumbhakar &amp; P. Dua (eds), Benchmarking for Performance Evaluation: A Production Frontier Approach, Springer, chapter 3, pp. 117–186.</p>
+<p>[2] Jondrow, J., Lovell, C. A. K., Materov, I. S. &amp; Schmidt, P. (1982), On the estimation of technical inefficiency in the stochastic frontier production function model, Journal of Econometrics 19, 233–238.</p>
+<p>[3] Kumbhakar, S. C. &amp; Lovell, C. A. K. (2000), Stochastic Frontier Analysis, Cambridge University Press.</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">pyStoNED</a></h1>
+
+
+
+<p class="blurb">A package for StoNED in Python</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ds2010&repo=StoNED-Python&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">Install</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../datasets/index.html">Datasets</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#convex-nonparametric-least-square">Convex Nonparametric Least Square</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#stochastic-nonparametric-envelopment-of-data">Stochastic Nonparametric Envelopment of Data</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="mom.html">Method of Moments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qle.html">Quassi-likelihood estimation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="kde.html">Kernel deconvolution estimation</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">JLMS estimator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#contextual-variables">Contextual Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#multiple-outputs-ddf-formulation">Multiple Outputs (DDF Formulation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#convex-quantile-approaches">Convex Quantile Approaches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#monotonic-models">Monotonic Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#data-envelopment-analysis">Data Envelopment Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#free-disposal-hull">Free Disposal Hull</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/index.html">Advanced topics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../citing/index.html">Citing pyStoNED</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../free_course/index.html">Free online course</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../acronyms/index.html">List of Acronyms</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Examples</a><ul>
+      <li>Previous: <a href="kde.html" title="previous chapter">Kernel deconvolution estimation</a></li>
+      <li>Next: <a href="../z/stoned_z.html" title="next chapter">StoNED with Z variables</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, The pyStoNED authors.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/examples/StoNED/Jondrow.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
