@@ -4,7 +4,7 @@
 
 # Installation
 
-The [`pyStoNED`](https://pypi.org/project/pystoned/) package is now avaiable on PyPI and the latest development version can be installed from the Github repository [`StoNED-Python`](https://github.com/ds2010/StoNED-Python). Please feel free to download and test it. We welcome any bug reports and feedback.
+The [`pyStoNED`](https://pypi.org/project/pystoned/) package is now avaiable on PyPI and the latest development version can be installed from the Github repository [`pyStoNED`](https://github.com/ds2010/pyStoNED). Please feel free to download and test it. We welcome any bug reports and feedback.
 
 #### PyPI [![PyPI version](https://img.shields.io/pypi/v/pystoned.svg?maxAge=3600)](https://pypi.org/project/pystoned/) [![Downloads](https://pepy.tech/badge/pystoned/month)](https://pepy.tech/project/pystoned/month) [![Downloads](https://pepy.tech/badge/pystoned)](https://pepy.tech/project/pystoned)
 
