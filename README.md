@@ -16,7 +16,7 @@ The [`pyStoNED`](https://pypi.org/project/pystoned/) package is now avaiable on 
 
 # Documentation
 
-A number of Jupyter Notebooks are provided in the [Documentation](https://stoned-python.readthedocs.io/en/latest/) website, and more detailed technical reports are currently under development.
+A number of Jupyter Notebooks are provided in the [Documentation](https://pystoned.readthedocs.io/en/latest/) website, and more detailed technical reports are currently under development.
 
 # Authors
 
@@ -27,4 +27,4 @@ A number of Jupyter Notebooks are provided in the [Documentation](https://stoned
 
 # Citation
 
-If you use [pyStoNED](https://pypi.org/project/pystoned/) for published work, we encourage you to cite our [papers and upcoming techinical report](https://github.com/ds2010/pyStoNED-Tutorials/blob/master/doc/Citing.md). We appreciate it.
+If you use [pyStoNED](https://pypi.org/project/pystoned/) for published work, we encourage you to cite our [papers and upcoming techinical report](https://pystoned.readthedocs.io/en/latest/citing/index.html). We appreciate it.
