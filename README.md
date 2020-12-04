@@ -16,7 +16,7 @@ The [`pyStoNED`](https://pypi.org/project/pystoned/) package is now avaiable on 
 
 # Documentation
 
-A number of Jupyter Notebooks are provided in the [Documentation](https://pystoned.readthedocs.io/en/latest/) website, and more detailed technical reports are currently under development.
+A number of Jupyter Notebooks are provided in the [Documentation](https://stoned-python.readthedocs.io/en/latest/) website, and more detailed technical reports are currently under development.
 
 # Authors
 
