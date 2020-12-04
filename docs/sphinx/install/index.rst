@@ -15,7 +15,7 @@ GitHub [1]_
 -----------
   ::
 
-   pip install -U git+https://github.com/ds2010/StoNED-Python
+   pip install -U git+https://github.com/ds2010/pyStoNED
 
 Solver
 ------
