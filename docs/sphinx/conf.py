@@ -106,7 +106,7 @@ html_theme = 'alabaster'
 html_theme_options = {
     'description': 'A package for StoNED in Python',
     'github_user': 'ds2010',
-    'github_repo': 'StoNED-Python',
+    'github_repo': 'pyStoNED',
     'github_type': 'star',
     'travis_button': False,
 }
