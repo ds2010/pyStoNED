@@ -14,9 +14,9 @@ The [`pyStoNED`](https://pypi.org/project/pystoned/) package is now avaiable on 
 
     pip install -U git+https://github.com/ds2010/StoNED-Python
 
-# [Documentation](https://pystoned.readthedocs.io/en/latest/)
+# Documentation
 
-A number of Jupyter Notebooks are provided in the Web [pyStoNED](https://pystoned.readthedocs.io/en/latest/), and more detailed technical reports are currently under development.
+A number of Jupyter Notebooks are provided in the [Documentation](https://pystoned.readthedocs.io/en/latest/) website, and more detailed technical reports are currently under development.
 
 # Authors
 
