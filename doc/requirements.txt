@@ -1,8 +1,0 @@
-sphinx
-cloud_sptheme
-numpydoc
-scipy
-numpy
-recommonmark
-nbsphinx
-sphinx_markdown_tables
