@@ -1,4 +1,4 @@
-# StoNED-Python
+# pyStoNED
 
 `StoNED-Python` project provides the python codes for estimating Convex Nonparametric Least Square (`CNLS`), Stochastic Nonparametric Envelopment of Data (`StoNED`), and other different `StoNED`-related variants. It allows the user to estimate the CNLS/StoNED models in an open-access environment rather than in commercial software, e.g., GAMS, MATLAB. The `StoNED-Python` project is built based on the [PYOMO](http://www.pyomo.org/). 
 
@@ -12,7 +12,7 @@ The [`pyStoNED`](https://pypi.org/project/pystoned/) package is now avaiable on 
 
 #### GitHub
 
-    pip install -U git+https://github.com/ds2010/StoNED-Python
+    pip install -U git+https://github.com/ds2010/pyStoNED
 
 # Documentation
 
