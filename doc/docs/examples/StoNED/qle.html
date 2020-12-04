@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quassi-likelihood estimation &#8212; pyStoNED 0.4.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Kernel deconvolution estimation" href="kde.html" />
+    <link rel="prev" title="Method of Moments" href="mom.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="quassi-likelihood-estimation">
+<h1>Quassi-likelihood estimation<a class="headerlink" href="#quassi-likelihood-estimation" title="Permalink to this headline">¶</a></h1>
+<p>Quassi-likelihood approach is alternative to decomposing the <span class="math notranslate nohighlight">\(\sigma_u\)</span> and <span class="math notranslate nohighlight">\(\sigma_v\)</span> suggested
+by Fan et al. (1996). In this method we apply the standard maximum likelihood method to
+estimate the parameters <span class="math notranslate nohighlight">\(\sigma_u\)</span> and <span class="math notranslate nohighlight">\(\sigma_v\)</span>, taking the shape of <code class="docutils literal notranslate"><span class="pre">CNLS</span></code> curve
+as given. The quasi-likelihood function is formulated as</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+    \text{ln} L(\lambda) &amp; = -n\text{ln}(\hat{\sigma}) + \sum \text{ln} \Phi\bigg[\frac{-\hat{\varepsilon}_i \lambda}{\hat{\sigma}}\bigg] - \frac{1}{2\hat{\sigma}^2}\sum\hat{\varepsilon}_i^2
+\end{align*}</div><p>where</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+    \hat{\varepsilon}_i &amp;= \hat{\varepsilon}_i^{CNLS}-(\sqrt{2}\lambda\hat{\sigma})/[\pi(1+\lambda^2)]^{1/2}    \\
+    \hat{\sigma} &amp;= \Bigg\{\frac{1}{n}\sum(\hat{\varepsilon}_i^{CNLS})^2 / \bigg[1 - \frac{2\lambda^2}{\pi(1+\lambda^2)}\bigg]  \Bigg\}
+\end{align*}</div><div class="section" id="example-ipynb">
+<h2>Example <a class="reference external" href="https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/StoNED_QLE.ipynb">[.ipynb]</a><a class="headerlink" href="#example-ipynb" title="Permalink to this headline">¶</a></h2>
+<p>In the following code, we use the quassi-likelihood approach to decompose the CNLS residuals with the pyStoNED.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import packages</span>
+<span class="kn">from</span> <span class="nn">pystoned</span> <span class="kn">import</span> <span class="n">StoNED</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># import Finnish electricity distribution firms data</span>
+<span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://raw.githubusercontent.com/ds2010/pyStoNED/master/sources/data/firms.csv&#39;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error_bad_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># output</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Energy&#39;</span><span class="p">]</span>
+
+<span class="c1"># inputs</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;OPEX&#39;</span><span class="p">]</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asmatrix</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CAPEX&#39;</span><span class="p">]</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asmatrix</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># define and solve the StoNED model using QLE approach</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">StoNED</span><span class="o">.</span><span class="n">StoNED</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cet</span> <span class="o">=</span> <span class="s2">&quot;mult&quot;</span><span class="p">,</span> <span class="n">fun</span> <span class="o">=</span> <span class="s2">&quot;cost&quot;</span><span class="p">,</span> <span class="n">rts</span> <span class="o">=</span> <span class="s2">&quot;vrs&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">remote</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># retrive the unconditional expected inefficiency \mu</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">get_unconditional_expected_inefficiency</span><span class="p">(</span><span class="s1">&#39;QLE&#39;</span><span class="p">))</span>
+
+<span class="c1"># retrive the technical inefficiency</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">get_technical_inefficiency</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;QLE&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">pyStoNED</a></h1>
+
+
+
+<p class="blurb">A package for StoNED in Python</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ds2010&repo=StoNED-Python&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">Install</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../datasets/index.html">Datasets</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#convex-nonparametric-least-square">Convex Nonparametric Least Square</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#stochastic-nonparametric-envelopment-of-data">Stochastic Nonparametric Envelopment of Data</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="mom.html">Method of Moments</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Quassi-likelihood estimation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="kde.html">Kernel deconvolution estimation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Jondrow.html">JLMS estimator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#contextual-variables">Contextual Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#multiple-outputs-ddf-formulation">Multiple Outputs (DDF Formulation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#convex-quantile-approaches">Convex Quantile Approaches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#monotonic-models">Monotonic Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#data-envelopment-analysis">Data Envelopment Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#free-disposal-hull">Free Disposal Hull</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/index.html">Advanced topics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Contributing</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../citing/index.html">Citing pyStoNED</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../free_course/index.html">Free online course</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../acronyms/index.html">List of Acronyms</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Examples</a><ul>
+      <li>Previous: <a href="mom.html" title="previous chapter">Method of Moments</a></li>
+      <li>Next: <a href="kde.html" title="next chapter">Kernel deconvolution estimation</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, The pyStoNED authors.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/examples/StoNED/qle.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

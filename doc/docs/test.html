@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Multiple Outputs (DDF Formulation) &mdash; pyStoNED 0.4.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> pyStoNED
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="install/index.html">Install</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="datasets/index.html">Datasets</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="free_course/index.html">Free online course</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced/index.html">Advanced topics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="citing/index.html">Citing pyStoNED</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="acronyms/index.html">List of Acronyms</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyStoNED</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Multiple Outputs (DDF Formulation)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/test.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="multiple-outputs-ddf-formulation">
+<span id="ddf-examples"></span><h1>Multiple Outputs (DDF Formulation)<a class="headerlink" href="#multiple-outputs-ddf-formulation" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><span class="xref std std-doc">Concave fractional function</span> <a class="reference external" href="https://colab.research.google.com/github/cvxgrp/cvxpy/blob/master/examples/notebooks/dqcp/concave_fractional_function.ipynb">[.ipynb]</a></p></li>
+<li><p><span class="xref std std-doc">Minimum-length least squares</span> <a class="reference external" href="https://colab.research.google.com/github/cvxgrp/cvxpy/blob/master/examples/notebooks/dqcp/minimum_length_least_squares.ipynb">[.ipynb]</a></p></li>
+<li><p><span class="xref std std-doc">Hypersonic shape design</span> <a class="reference external" href="https://colab.research.google.com/github/cvxgrp/cvxpy/blob/master/examples/notebooks/dqcp/hypersonic_shape_design.ipynb">[.ipynb]</a></p></li>
+</ul>
+</div>
+<div class="section" id="convex-quantile-approaches">
+<span id="quantile-examples"></span><h1>Convex quantile approaches<a class="headerlink" href="#convex-quantile-approaches" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><span class="xref std std-doc">Fundamentals</span> <a class="reference external" href="https://colab.research.google.com/github/cvxgrp/cvxpy/blob/master/examples/notebooks/derivatives/fundamentals.ipynb">[.ipynb]</a></p></li>
+<li><p><span class="xref std std-doc">Queuing design</span> <a class="reference external" href="https://colab.research.google.com/github/cvxgrp/cvxpy/blob/master/examples/notebooks/derivatives/queuing_design.ipynb">[.ipynb]</a></p></li>
+<li><p><span class="xref std std-doc">Structured prediction</span> <a class="reference external" href="https://colab.research.google.com/github/cvxgrp/cvxpy/blob/master/examples/notebooks/derivatives/structured_prediction.ipynb">[.ipynb]</a></p></li>
+</ul>
+</div>
+<div class="section" id="monotonic-models">
+<span id="monotonic-examples"></span><h1>Monotonic models<a class="headerlink" href="#monotonic-models" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><span class="xref std std-doc">Ridge regression</span> <a class="reference external" href="https://colab.research.google.com/github/cvxgrp/cvxpy/blob/master/examples/machine_learning/ridge_regression.ipynb">[.ipynb]</a></p></li>
+<li><p><span class="xref std std-doc">Lasso regression</span> <a class="reference external" href="https://colab.research.google.com/github/cvxgrp/cvxpy/blob/master/examples/machine_learning/lasso_regression.ipynb">[.ipynb]</a></p></li>
+<li><p><span class="xref std std-doc">Logistic regression</span> <a class="reference external" href="https://colab.research.google.com/github/cvxgrp/cvxpy/blob/master/examples/machine_learning/logistic_regression.ipynb">[.ipynb]</a></p></li>
+<li><p><span class="xref std std-doc">SVM classifier</span> <a class="reference external" href="https://colab.research.google.com/github/cvxgrp/cvxpy/blob/master/examples/machine_learning/svm.ipynb">[.ipynb]</a></p></li>
+<li><p><a class="reference external" href="https://colab.research.google.com/github/cvxgrp/cvx_short_course/blob/master/applications/huber_regression.ipynb">Huber regression</a></p></li>
+<li><p><a class="reference external" href="https://colab.research.google.com/github/cvxgrp/cvx_short_course/blob/master/applications/quantile_regression.ipynb">Quantile regression</a></p></li>
+</ul>
+</div>
+<div class="section" id="data-envelopment-analysis">
+<span id="dea-examples"></span><h1>Data Envelopment Analysis<a class="headerlink" href="#data-envelopment-analysis" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Input orientation</dt><dd><ul>
+<li><p><span class="xref std std-doc">DEA_vrs_io</span> <a class="reference external" href="https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/DEA_io_vrs.ipynb">[.ipynb]</a></p></li>
+<li><p><span class="xref std std-doc">DEA_crs_io</span> <a class="reference external" href="https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/DEA_io_vrs.ipynb">[.ipynb]</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Output orientation</dt><dd><ul>
+<li><p><span class="xref std std-doc">DEA_vrs_oo</span> <a class="reference external" href="https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/DEA_io_vrs.ipynb">[.ipynb]</a></p></li>
+<li><p><span class="xref std std-doc">DEA_vrs_oo</span> <a class="reference external" href="https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/DEA_io_vrs.ipynb">[.ipynb]</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>DDF</dt><dd><ul>
+<li><p><span class="xref std std-doc">DEA_DDF</span> <a class="reference external" href="https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/DEA_ddf_vrs.ipynb">[.ipynb]</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Bad Outputs</dt><dd><ul>
+<li><p><span class="xref std std-doc">DEA_DDF</span> <a class="reference external" href="https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/DEA_ddf_vrs.ipynb">[.ipynb]</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="free-disposal-hull">
+<span id="fdh-examples"></span><h1>Free Disposal Hull<a class="headerlink" href="#free-disposal-hull" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Input orientation</dt><dd><ul>
+<li><p><span class="xref std std-doc">Object-oriented convex optimization</span> <a class="reference external" href="https://colab.research.google.com/github/cvxgrp/cvxpy/blob/master/examples/notebooks/WWW/OOCO.ipynb">[.ipynb]</a></p></li>
+<li><p><span class="xref std std-doc">Consensus optimization</span> <a class="reference external" href="https://colab.research.google.com/github/cvxgrp/cvxpy/blob/master/examples/notebooks/WWW/consensus_opt.ipynb">[.ipynb]</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Output orientation</dt><dd><ul>
+<li><p><span class="xref std std-doc">Method of multipliers</span> <a class="reference external" href="https://colab.research.google.com/github/cvxgrp/cvxpy/blob/master/examples/notebooks/WWW/MM.ipynb">[.ipynb]</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="contextual-variables">
+<span id="zvariable-examples"></span><h1>Contextual variables<a class="headerlink" href="#contextual-variables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><span class="xref std std-doc">Z vriables</span> <a class="reference external" href="https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/StoNEZD.ipynb">[.ipynb]</a></p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, The pyStoNED authors
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
