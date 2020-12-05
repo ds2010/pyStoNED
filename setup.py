@@ -30,9 +30,9 @@ setup_args = dict(
 
 install_requires = [
     'pyomo>=5.6.9',
-    'pandas',
-    'numpy',
-    'scipy',
+    'pandas>=1.1.3',
+    'numpy>=1.19.2',
+    'scipy>=1.5.2',
     'matplotlib'
 ]
 
