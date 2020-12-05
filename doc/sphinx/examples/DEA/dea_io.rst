@@ -42,7 +42,7 @@ Thus, the only difference with the CRS model is the adjunction of the condition
     \end{align*}
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/DEA_io_vrs.ipynb>`_
+Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DEA_io_vrs.ipynb>`_
 -----------------------------------------------------------------------------------------------------------------------------
 
 In the following code, we calculate the VRS radial model with pyStoNED.

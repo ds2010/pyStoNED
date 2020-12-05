@@ -59,7 +59,7 @@ obtained as theoptimal solution to above nonlinear problem. Johnson and Kuosmane
 detail, showing its unbiasedness, consistency, and asymptotic efficiency.
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/StoNEZD.ipynb>`_
+Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNEZD.ipynb>`_
 ------------------------------------------------------------------------------------------------------------------------------
 
 In the following code, we estimatie a log-transformed cost function model with z-variable and 

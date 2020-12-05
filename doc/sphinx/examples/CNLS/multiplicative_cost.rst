@@ -43,7 +43,7 @@ input while assuring convexity of the production possibility set in original
 input-output space.
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/CNLS_mult_cost.ipynb>`_
+Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_mult_cost.ipynb>`_
 -----------------------------------------------------------------------------------------------------------------------------------
 
 In the following code, we estimate two multiplicative cost functions with pyStoNED.

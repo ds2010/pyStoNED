@@ -38,7 +38,7 @@ frontier), we can estimate :math:`\sigma_u` parameter by
     \end{align*}
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/StoNED_MoM.ipynb>`_
+Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_MoM.ipynb>`_
 -------------------------------------------------------------------------------------------------------------------------------
 
 In the following code, we use the method of moments to decompose the CNLS residuals with the pyStoNED.

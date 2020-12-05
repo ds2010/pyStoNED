@@ -30,7 +30,7 @@ as a multivariate regression equation, the second constraint imposes convexity,
 and the third constraint imposes monotonicity.
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/CNLS_prod.ipynb>`_
+Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_prod.ipynb>`_
 ------------------------------------------------------------------------------------------------------------------------------
 
 In the following code, we estimate an additive production function with pyStoNED.

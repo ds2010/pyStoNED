@@ -16,7 +16,7 @@ as proposed by Hall and Simar (2002). A robust nonparametric estimator of expect
 where :math:`C` is a closed interval in he right tail of :math:`f_{\varepsilon^+}`.
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/StoNED_KDE.ipynb>`_
+Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_KDE.ipynb>`_
 -------------------------------------------------------------------------------------------------------------------------------
 
 In the following code, we use the kernel density approach to decompose the CNLS residuals with the pyStoNED.

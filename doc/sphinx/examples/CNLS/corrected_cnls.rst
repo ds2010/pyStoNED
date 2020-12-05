@@ -53,7 +53,7 @@ and :math:`\alpha_i^{C2NLS}` is the ``C2NLS`` estimator. Slope coefficients :mat
 for ``C2NLS`` are obtained directly as the optimal solution to the CNLS problem.
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/CCNLS.ipynb>`_
+Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CCNLS.ipynb>`_
 ------------------------------------------------------------------------------------------------------------------------------
 
 In the following code, we estimate an Corrected CNLS model by using the pyStoNED.
