@@ -50,7 +50,8 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
+    'sphinx.ext.autosummary'
 ]
 source_suffix = ['.rst', '.md', '.ipynb']
 nbsphinx_execute = 'never'
