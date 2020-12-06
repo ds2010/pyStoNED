@@ -37,7 +37,6 @@ release = '0.4.0'
 # ones.
 extensions = [
     'recommonmark',
-    'sphinx.ext.mathjax',
     'nbsphinx',  # This lets us use notebooks
     'sphinx_markdown_tables',
     'sphinx.ext.githubpages',
