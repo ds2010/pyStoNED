@@ -6,4 +6,4 @@ numpy
 recommonmark
 nbsphinx
 sphinx_markdown_tables
-sphinx_apidoc
+sphinx-apidoc
