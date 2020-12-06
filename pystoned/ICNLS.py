@@ -10,14 +10,17 @@ class ICNLS(CNLS.CNLS):
 
     def __init__(self, y, x, z=None, cet='addi', fun='prod', rts='vrs'):
         """
-            y : Output variables
-            x : Input variables
-            cet  = "addi" : Additive composite error term
-                 = "mult" : Multiplicative composite error term
-            fun  = "prod" : Production frontier
-                 = "cost" : Cost frontier
-            rts  = "vrs"  : Variable returns to scale
-                 = "crs"  : Constant returns to scale
+        Initialize the ICNLS model
+
+        * y: Output variable 
+        * x: Input variables
+        * z: Contextual variables              
+        * cet = "addi" : Additive composite error term
+              = "mult" : Multiplicative composite error term
+        * fun = "prod" : Production frontier
+              = "cost" : Cost frontier
+        * rts = "vrs"  : Variable returns to scale
+              = "crs"  : Constant returns to scale
         """
         super().__init__(y, x, z, cet, fun, rts)
 
