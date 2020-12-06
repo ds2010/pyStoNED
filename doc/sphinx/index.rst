@@ -21,7 +21,7 @@ It allows the user to estimate the StoNED-related models in an open-access envir
 .. toctree::
    :hidden:
 
-   api/index.md
+   api/index
 
 .. toctree::
    :maxdepth: 3
