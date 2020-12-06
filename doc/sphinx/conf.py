@@ -15,11 +15,8 @@ import sys
 
 sys.path.insert(0, os.path.abspath('../../'))
 
-import mock
-
-MOCK_MODULES = ['numpy', 'scipy', 'pyomo', 'pandas', 'matplotlib']
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = mock.Mock()
+if 'READTHEDOCS' not in os.environ:
+    import cython_generated_ext
 
 # -- Project information -----------------------------------------------------
 
