@@ -12,15 +12,17 @@ class CNLS:
 
     def __init__(self, y, x, z=None, cet='addi', fun='prod', rts='vrs'):
         """
-            y : Output variable
-            x : Input variables
-            z : Contextual variables
-            cet  = "addi" : Additive composite error term
-                 = "mult" : Multiplicative composite error term
-            fun  = "prod" : Production frontier
-                 = "cost" : Cost frontier
-            rts  = "vrs"  : Variable returns to scale
-                 = "crs"  : Constant returns to scale
+        Initialize the CNLS model
+
+        * y: Output variable 
+        * x: Input variables
+        * z: Contextual variables              
+        * cet = "addi" : Additive composite error term
+              = "mult" : Multiplicative composite error term
+        * fun = "prod" : Production frontier
+              = "cost" : Cost frontier
+        * rts = "vrs"  : Variable returns to scale
+              = "crs"  : Constant returns to scale
         """
 
         # TODO(error/warning handling): Check the configuration of the model exist
@@ -352,7 +354,13 @@ class CNLS:
         return self.get_alpha() + np.amax(self.get_residual())
 
     def plot2d(self, xselect, fig_name=None):
-        """Plot with selected x"""
+        """
+        Plot with Selected x
+
+        * xselect: The index of selected x
+        * fig_name: The name of figure to save
+                    If `fig_name` is not given, the figure will be showed.
+        """
         x = np.array(self.x).T[xselect]
         y = np.array(self.y).T
         f = y - self.get_residual()
