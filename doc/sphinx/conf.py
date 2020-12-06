@@ -15,19 +15,11 @@ import sys
 
 sys.path.insert(0, os.path.abspath('../../'))
 
-class Mocked(object):
-    def __setattr__(self, name, value):
-        self.__dict__[name] = value
+import mock
 
-    def __getattr__(self, name):
-        if name in self.__dict__:
-            return self.__dict__[name]
-        else:
-            return None
-
-MOCK_MODULES = ['pystoned.CNLS', 'pystoned.ICNLS']
-sys.modules.update((mod_name, Mocked()) for mod_name in MOCK_MODULES)
-
+MOCK_MODULES = ['numpy', 'scipy', 'pyomo', 'pandas', 'matplotlib']
+for mod_name in MOCK_MODULES:
+    sys.modules[mod_name] = mock.Mock()
 
 # -- Project information -----------------------------------------------------
 
