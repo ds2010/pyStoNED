@@ -8,7 +8,7 @@ Formulations Classes:
 ---------------------
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
 
    formulations/CNLS
    formulations/ICNLS
@@ -18,6 +18,6 @@ Peripheral Classes:
 -------------------
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
 
    peripherals/dataset
