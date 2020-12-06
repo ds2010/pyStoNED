@@ -6,3 +6,5 @@ numpy
 recommonmark
 nbsphinx
 sphinx_markdown_tables
+alabaster
+pystoned
