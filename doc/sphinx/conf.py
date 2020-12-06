@@ -12,6 +12,7 @@
 #
 import os
 import sys
+import shlex
 
 sys.path.insert(0, os.path.abspath('../'))
 
@@ -52,6 +53,8 @@ extensions = [
 source_suffix = ['.rst', '.md', '.ipynb']
 nbsphinx_execute = 'never'
 nbsphinx_allow_errors = True
+
+autosummary_generate = True
 
 # To suppress autodoc/numpydoc warning.
 numpydoc_show_class_members = False
