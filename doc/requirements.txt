@@ -2,6 +2,7 @@ cloud_sptheme
 nbsphinx
 numpy
 numpydoc
+matplotlib
 pandas
 pyomo
 recommonmark
