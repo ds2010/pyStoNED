@@ -11,7 +11,8 @@ Formulations Classes:
    :maxdepth: 1
 
    formulations/CNLS
-   ormulations/CNLSDDF
+   formulations/CNLSDDF
+   formulations/CNLSG
    formulations/ICNLS
 
 
