@@ -1,8 +1,9 @@
-sphinx
 cloud_sptheme
-numpydoc
-scipy
-numpy
-recommonmark
 nbsphinx
+numpy
+numpydoc
+pyomo
+recommonmark
+scipy
+sphinx
 sphinx_markdown_tables
