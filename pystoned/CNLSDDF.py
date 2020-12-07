@@ -14,14 +14,14 @@ class CNLSDDF(CNLS.CNLS):
         """
         Initialize the CNLSDDF model
 
-        * y : Output variables
-        * x : Input variables
-        * b : Undesirable output variables
-        * gy : Output directional vector
-        * gx : Input directional vector
-        * gb : Undesirable output directional vector
-        * fun  = "prod" : Production frontier
-               = "cost" : Cost frontier
+        * y: Output variables
+        * x: Input variables
+        * b: Undesirable output variables
+        * gy: Output directional vector
+        * gx: Input directional vector
+        * gb: Undesirable output directional vector
+        * fun = "prod": Production frontier
+              = "cost": Cost frontier
         """
 
         # TODO(error/warning handling): Check the configuration of the model exist
