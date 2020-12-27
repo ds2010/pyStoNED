@@ -13,7 +13,13 @@ Formulations Classes:
    formulations/CNLS
    formulations/CNLSDDF
    formulations/CNLSG
+   formulations/CQER
+   formulations/CQERDDF
+   formulations/DEA
+   formulations/FDH
    formulations/ICNLS
+   formulations/ICQER
+   formulations/StoNED
 
 
 Peripheral Classes:
