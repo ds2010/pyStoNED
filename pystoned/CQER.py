@@ -10,22 +10,24 @@ import matplotlib.pyplot as plt
 class CQR:
     """Convex quantile regression (CQR)"""
 
-    def __init__(self, y, x, tau, cet='addi', fun='prod', rts='vrs'):
+    def __init__(self, y, x, z=None, tau, cet='addi', fun='prod', rts='vrs'):
         """
-            y : Output variable
-            x : Input variables
-            tau : quantile
-            cet  = "addi" : Additive composite error term
+          * y : Output variable
+          * x : Input variables
+          * z: Contextual variables  
+          * tau : quantile
+          * cet  = "addi" : Additive composite error term
                  = "mult" : Multiplicative composite error term
-            fun  = "prod" : Production frontier
+          * fun  = "prod" : Production frontier
                  = "cost" : Cost frontier
-            rts  = "vrs"  : Variable returns to scale
+          * rts  = "vrs"  : Variable returns to scale
                  = "crs"  : Constant returns to scale
         """
 
         # TODO(error/warning handling): Check the configuration of the model exist
         self.x = x.tolist()
         self.y = y.tolist()
+        self.z = z
         self.tau = tau
         self.cet = cet
         self.fun = fun
@@ -39,8 +41,21 @@ class CQR:
         if type(self.y[0]) == list:
             self.y = self.__to_1d_list(self.y)
 
-        # Initialize the CNLS model
+        # Initialize the CQR model
         self.__model__ = ConcreteModel()
+
+        if type(self.z) != type(None):
+            self.z = z.tolist()
+            if type(self.z[0]) != list:
+                self.z = []
+                for z_value in z.tolist():
+                    self.z.append([z_value])
+
+            # Initialize the set of z
+            self.__model__.K = Set(initialize=range(len(self.z[0])))
+
+            # Initialize the variables for z variable
+            self.__model__.lamda = Var(self.__model__.K, doc='z coefficient')
 
         # Initialize the sets
         self.__model__.I = Set(initialize=range(len(self.y)))
@@ -49,22 +64,22 @@ class CQR:
         # Initialize the variables
         self.__model__.alpha = Var(self.__model__.I, doc='alpha')
         self.__model__.beta = Var(self.__model__.I,
-                                  self.__model__.J,
-                                  bounds=(0.0, None),
-                                  doc='beta')
-        self.__model__.epsilon = Var(self.__model__.I, doc='residual')
+                                self.__model__.J,
+                                bounds=(0.0, None),
+                                doc='beta')
+        self.__model__.epsilon = Var(self.__model__.I, doc='error term')
         self.__model__.epsilon_plus = Var(
             self.__model__.I, bounds=(0.0, None), doc='positive error term')
         self.__model__.epsilon_minus = Var(
             self.__model__.I, bounds=(0.0, None), doc='negative error term')
         self.__model__.frontier = Var(self.__model__.I,
-                                      bounds=(0.0, None),
-                                      doc='estimated frontier')
+                                    bounds=(0.0, None),
+                                    doc='estimated frontier')
 
         # Setup the objective function and constraints
         self.__model__.objective = Objective(rule=self.__objective_rule(),
-                                             sense=minimize,
-                                             doc='objective function')
+                                            sense=minimize,
+                                            doc='objective function')
 
         self.__model__.error_decomposition = Constraint(self.__model__.I,
                                                         rule=self.__error_decomposition(),
@@ -75,8 +90,8 @@ class CQR:
                                                     doc='regression equation')
         if self.cet == "mult":
             self.__model__.log_rule = Constraint(self.__model__.I,
-                                                 rule=self.__log_rule(),
-                                                 doc='log-transformed regression equation')
+                                                    rule=self.__log_rule(),
+                                                    doc='log-transformed regression equation')
 
         self.__model__.afriat_rule = Constraint(self.__model__.I,
                                                 self.__model__.I,
@@ -112,8 +127,8 @@ class CQR:
                 print("Estimating the multiplicative model remotely with knitro solver")
             solver = SolverManagerFactory('neos')
             self.problem_status = solver.solve(self.__model__,
-                                               tee=True,
-                                               opt=opt)
+                                                tee=True,
+                                                opt=opt)
             self.optimization_status = 1
 
     def __to_1d_list(self, l):
@@ -126,7 +141,8 @@ class CQR:
         """Return the proper objective function"""
 
         def objective_rule(model):
-            return self.tau * sum(model.epsilon_plus[i] for i in model.I) + (1 - self.tau) * sum(model.epsilon_minus[i] for i in model.I)
+            return self.tau * sum(model.epsilon_plus[i] for i in model.I) \
+                    + (1 - self.tau) * sum(model.epsilon_minus[i] for i in model.I)
 
         return objective_rule
 
@@ -142,6 +158,13 @@ class CQR:
         """Return the proper regression constraint"""
         if self.cet == "addi":
             if self.rts == "vrs":
+                if type(self.z) != type(None):
+                    def regression_rule(model, i):
+                        return self.y[i] == model.alpha[i] \
+                            + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                            + sum(model.lamda[k] * self.z[i][k]
+                                    for k in model.K) + model.epsilon[i]
+                    return regression_rule
 
                 def regression_rule(model, i):
                     return self.y[i] == model.alpha[i] \
@@ -154,10 +177,15 @@ class CQR:
                 return False
 
         elif self.cet == "mult":
+            if type(self.z) != type(None):
+                def regression_rule(model, i):
+                    return log(self.y[i]) == log(model.frontier[i] + 1) \
+                                + sum(model.lamda[k] * self.z[i][k]
+                                        for k in model.K) + model.epsilon[i]
+                return regression_rule
 
             def regression_rule(model, i):
                 return log(self.y[i]) == log(model.frontier[i] + 1) + model.epsilon[i]
-
             return regression_rule
 
         # TODO(error handling): replace with undefined model attribute
@@ -199,9 +227,9 @@ class CQR:
                         return Constraint.Skip
                     return __operator(
                         model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
-                                             for j in model.J),
+                                                for j in model.J),
                         model.alpha[h] + sum(model.beta[h, j] * self.x[i][j]
-                                             for j in model.J))
+                                                for j in model.J))
                 return afriat_rule
             elif self.rts == "crs":
                 # TODO(warning handling): replace with model requested not exist
@@ -214,9 +242,9 @@ class CQR:
                         return Constraint.Skip
                     return __operator(
                         model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
-                                             for j in model.J),
+                                                for j in model.J),
                         model.alpha[h] + sum(model.beta[h, j] * self.x[i][j]
-                                             for j in model.J))
+                                                for j in model.J))
 
                 return afriat_rule
             elif self.rts == "crs":
@@ -293,7 +321,7 @@ class CQR:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
         beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
-                                                          list(self.__model__.beta[:, :].value))])
+                                                            list(self.__model__.beta[:, :].value))])
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
         beta = beta.pivot(index='Name', columns='Key', values='Value')
         return beta.to_numpy()
@@ -374,19 +402,20 @@ class CQR:
 class CER(CQR):
     """Convex expectile regression (CER)"""
 
-    def __init__(self, y, x, tau, cet='addi', fun='prod', rts='vrs'):
+    def __init__(self, y, x, z=None, tau, cet='addi', fun='prod', rts='vrs'):
         """
-            y : Output variable
-            x : Input variables
-            tau : expectile
-            cet  = "addi" : Additive composite error term
-                 = "mult" : Multiplicative composite error term
-            fun  = "prod" : Production frontier
-                 = "cost" : Cost frontier
-            rts  = "vrs"  : Variable returns to scale
-                 = "crs"  : Constant returns to scale
+           * y : Output variable
+           * x : Input variables
+           * z: Contextual variables  
+           * tau : expectile
+           * cet  = "addi" : Additive composite error term
+                  = "mult" : Multiplicative composite error term
+           * fun  = "prod" : Production frontier
+                  = "cost" : Cost frontier
+           * rts  = "vrs"  : Variable returns to scale
+                  = "crs"  : Constant returns to scale
         """
-        super().__init__(y, x, tau, cet, fun, rts)
+        super().__init__(y, x, z, tau, cet, fun, rts)
         self.__model__.objective.deactivate()
         self.__model__.squared_objective = Objective(
             rule=self.__squared_objective_rule(), sense=minimize, doc='squared objective rule')
