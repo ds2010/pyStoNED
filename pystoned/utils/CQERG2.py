@@ -354,7 +354,7 @@ class CQRG2:
 class CERG2(CQRG2):
     """Convex expectile regression (CER)"""
 
-    def __init__(self, y, x, tau, Cutactive, cet='addi', fun='prod', rts='vrs'):
+    def __init__(self, y, x, tau, Cutactive, Active, cet='addi', fun='prod', rts='vrs'):
         """
             y : Output variable
             x : Input variables
@@ -366,7 +366,7 @@ class CERG2(CQRG2):
             rts  = "vrs"  : Variable returns to scale
                  = "crs"  : Constant returns to scale
         """
-        super().__init__(y, x, tau, Cutactive, cet, fun, rts)
+        super().__init__(y, x, tau, Cutactive, Active, cet, fun, rts)
         self.__model__.objective.deactivate()
         self.__model__.squared_objective = Objective(
             rule=self.__squared_objective_rule(), sense=minimize, doc='squared objective rule')

@@ -159,7 +159,8 @@ class CQRZG1:
         elif self.cet == "mult":
 
             def regression_rule(model, i):
-                return log(self.y[i]) == log(model.frontier[i] + 1) + sum(model.lamda[k] * self.z[i][k] for k in model.K) + model.epsilon[i]
+                return log(self.y[i]) == log(model.frontier[i] + 1) + sum(model.lamda[k] * self.z[i][k] for k in model.K) \
+                        + model.epsilon[i]
 
             return regression_rule
 
@@ -320,7 +321,7 @@ class CERZG1(CQRZG1):
             rts  = "vrs"  : Variable returns to scale
                  = "crs"  : Constant returns to scale
         """
-        super().__init__(y, x, tau, Cutactive, cet, fun, rts)
+        super().__init__(y, x, z, tau, Cutactive, cet, fun, rts)
         self.__model__.objective.deactivate()
         self.__model__.squared_objective = Objective(
             rule=self.__squared_objective_rule(), sense=minimize, doc='squared objective rule')
@@ -331,4 +332,3 @@ class CERZG1(CQRZG1):
                     + (1 - self.tau) * sum(model.epsilon_minus[i] ** 2 for i in model.I)
 
         return squared_objective_rule
-        
