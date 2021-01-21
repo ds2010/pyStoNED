@@ -78,7 +78,7 @@ class CNLSG:
             else:
                 model2 = CNLSG2.CNLSG2(
                     self.y, self.x, self.Active, self.cutactive, self.cet, self.fun, self.rts)
-            model2.optimize(remote=True)
+            model2.optimize(remote=False)
             self.alpha = model2.get_alpha()
             self.beta = model2.get_beta()
             # TODO: Replace print with log system
@@ -230,20 +230,6 @@ class CNLSG:
         elif self.cet == "addi":
             frontier = np.asarray(self.y) - self.get_residual()
         return np.asarray(frontier)
-
-    def get_adjusted_residual(self):
-        """Return the shifted residuals(epsilon) tern by CCNLS"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
-        return self.get_residual() - np.amax(self.get_residual())
-
-    def get_adjusted_alpha(self):
-        """Return the shifted constatnt(alpha) term by CCNLS"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
-        return self.get_alpha() + np.amax(self.get_residual())
 
     def plot2d(self, xselect, fig_name=None):
         """
