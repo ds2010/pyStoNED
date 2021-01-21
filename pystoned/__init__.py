@@ -3,6 +3,7 @@ from . import CNLSDDF
 from . import CNLSG
 from . import CQER
 from . import CQERDDF
+from . import CQERG
 from . import dataset
 from . import DEA
 from . import FDH
@@ -16,6 +17,7 @@ __all__ = [
     'CNLSG',
     'CQER',
     'CQERDDF',
+    'CQERG',
     'dataset',
     'DEA',
     'FDH',
