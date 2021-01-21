@@ -14,11 +14,14 @@ def sweet(x):
             if i != j:
                 distance[i, j] = np.sqrt(
                     np.sum(np.square(df[i, :] - df[j, :])))
+            else:
+                distance[i, j] = np.nan
 
     # calculate distance cut
-    distcut = np.asmatrix(np.percentile(distance, 3, axis=0))
+    distcut = np.asmatrix(np.nanpercentile(distance, 3, axis=0))
 
     # find concavity constraint in sweet spot
+    distance = np.where(np.isnan(distance), 0, distance)
     Cutactive = np.zeros((len(distance), len(distance)))
     for i in range(len(distance)):
         for j in range(len(distance)):
