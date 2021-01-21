@@ -52,7 +52,7 @@ class CQR:
                                   self.__model__.J,
                                   bounds=(0.0, None),
                                   doc='beta')
-        self.__model__.epsilon = Var(self.__model__.I, doc='error term')
+        self.__model__.epsilon = Var(self.__model__.I, doc='residual')
         self.__model__.epsilon_plus = Var(
             self.__model__.I, bounds=(0.0, None), doc='positive error term')
         self.__model__.epsilon_minus = Var(
