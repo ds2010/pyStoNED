@@ -1,12 +1,12 @@
 from . import CNLSDDF, CQER
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint
 from pyomo.core.expr.numvalue import NumericValue
-
+from .constant import FUN_PROD, FUN_COST
 
 class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
     """Convex quantile regression with multiple Outputs (DDF formulation)"""
 
-    def __init__(self, y, x, b=None, gy=[1], gx=[1], gb=None, fun='prod', tau=0.9):
+    def __init__(self, y, x, b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD, tau=0.9):
         """
             y : Output variables
             x : Input variables
@@ -14,8 +14,8 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
             gy : Output directional vector
             gx : Input directional vector
             gb : Undesirable output directional vector
-            fun  = "prod" : Production frontier
-                 = "cost" : Cost frontier
+            fun  = FUN_PROD : Production frontier
+                 = FUN_COST : Cost frontier
         """
 
         # TODO(error/warning handling): Check the configuration of the model exist
@@ -119,9 +119,9 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
 
     def __afriat_rule(self):
         """Return the proper afriat inequality constraint"""
-        if self.fun == "prod":
+        if self.fun == FUN_PROD:
             __operator = NumericValue.__le__
-        elif self.fun == "cost":
+        elif self.fun == FUN_COST:
             __operator = NumericValue.__ge__
 
         if type(self.b) == type(None):
@@ -163,7 +163,7 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
 class CERDDF(CQRDDF):
     """Convex expectile regression with multiple Outputs (DDF formulation)"""
 
-    def __init__(self, y, x,  b=None, gy=[1], gx=[1], gb=None, fun='prod', tau=0.9):
+    def __init__(self, y, x,  b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD, tau=0.9):
         """
             y : Output variables
             x : Input variables
@@ -171,8 +171,8 @@ class CERDDF(CQRDDF):
             gy : Output directional vector
             gx : Input directional vector
             gb : Undesirable output directional vector
-            fun  = "prod" : Production frontier
-                 = "cost" : Cost frontier
+            fun  = FUN_PROD : Production frontier
+                 = FUN_COST : Cost frontier
         """
         super().__init__(y, x,  b, gy, gx, gb, fun, tau)
         self.__model__.objective.deactivate()

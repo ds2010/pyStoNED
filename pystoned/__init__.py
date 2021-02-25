@@ -1,6 +1,7 @@
 from . import CNLS
 from . import CNLSDDF
 from . import CNLSG
+from . import constant
 from . import CQER
 from . import CQERDDF
 from . import CQERG
@@ -15,6 +16,7 @@ __all__ = [
     'CNLS',
     'CNLSDDF',
     'CNLSG',
+    'constant',
     'CQER',
     'CQERDDF',
     'CQERG',

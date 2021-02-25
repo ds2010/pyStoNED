@@ -4,23 +4,23 @@ from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
-
+from ..constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
 
 class CQRZG1:
     """initial Group-VC-added CQR (CQR+G) model"""
 
-    def __init__(self, y, x, z, tau, Cutactive, cet='addi', fun='prod', rts='vrs'):
+    def __init__(self, y, x, z, tau, Cutactive, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """
             y : Output
             x : Input
             z : Contexutal variable
             tau : quantile
-            cet  = "addi" : Additive composite error term
-                 = "mult" : Multiplicative composite error term
-            fun  = "prod" : Production frontier
-                 = "cost" : Cost frontier
-            rts  = "vrs"  : Variable returns to scale
-                 = "crs"  : Constant returns to scale
+            cet  = CET_ADDI : Additive composite error term
+                 = CET_MULT : Multiplicative composite error term
+            fun  = FUN_PROD : Production frontier
+                 = FUN_COST : Cost frontier
+            rts  = RTS_VRS  : Variable returns to scale
+                 = RTS_CRS  : Constant returns to scale
         """
 
         # TODO(error/warning handling): Check the configuration of the model exist
@@ -78,7 +78,7 @@ class CQRZG1:
         self.__model__.regression_rule = Constraint(self.__model__.I,
                                                     rule=self.__regression_rule(),
                                                     doc='regression equation')
-        if self.cet == "mult":
+        if self.cet == CET_MULT:
             self.__model__.log_rule = Constraint(self.__model__.I,
                                                 rule=self.__log_rule(),
                                                 doc='log-transformed regression equation')
@@ -98,12 +98,12 @@ class CQRZG1:
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
         if remote == False:
-            if self.cet == "addi":
+            if self.cet == CET_ADDI:
                 solver = SolverFactory("mosek")
                 self.problem_status = solver.solve(self.__model__, tee=True)
                 self.optimization_status = 1
 
-            elif self.cet == "mult":
+            elif self.cet == CET_MULT:
                 # TODO(warning handling): Use log system instead of print()
                 print(
                     "Estimating the multiplicative model will be available in near future."
@@ -111,10 +111,10 @@ class CQRZG1:
                 return False
 
         else:
-            if self.cet == "addi":
+            if self.cet == CET_ADDI:
                 opt = "mosek"
 
-            elif self.cet == "mult":
+            elif self.cet == CET_MULT:
                 opt = "knitro"
 
             solver = SolverManagerFactory('neos')
@@ -142,8 +142,8 @@ class CQRZG1:
 
     def __regression_rule(self):
         """Return the proper regression constraint"""
-        if self.cet == "addi":
-            if self.rts == "vrs":
+        if self.cet == CET_ADDI:
+            if self.rts == RTS_VRS:
 
                 def regression_rule(model, i):
                     return self.y[i] == model.alpha[i] \
@@ -152,11 +152,11 @@ class CQRZG1:
                             for k in model.K) + model.epsilon[i]
 
                 return regression_rule
-            elif self.rts == "crs":
+            elif self.rts == RTS_CRS:
                 # TODO(warning handling): replace with model requested not exist
                 return False
 
-        elif self.cet == "mult":
+        elif self.cet == CET_MULT:
 
             def regression_rule(model, i):
                 return log(self.y[i]) == log(model.frontier[i] + 1) + sum(model.lamda[k] * self.z[i][k] for k in model.K) \
@@ -169,15 +169,15 @@ class CQRZG1:
 
     def __log_rule(self):
         """Return the proper log constraint"""
-        if self.cet == "mult":
-            if self.rts == "vrs":
+        if self.cet == CET_MULT:
+            if self.rts == RTS_VRS:
 
                 def log_rule(model, i):
                     return model.frontier[i] == model.alpha[i] + sum(
                         model.beta[i, j] * self.x[i][j] for j in model.J) - 1
 
                 return log_rule
-            elif self.rts == "crs":
+            elif self.rts == RTS_CRS:
 
                 def log_rule(model, i):
                     return model.frontier[i] == sum(
@@ -190,13 +190,13 @@ class CQRZG1:
 
     def __afriat_rule(self):
         """Return the proper elementary Afriat approach constraint"""
-        if self.fun == "prod":
+        if self.fun == FUN_PROD:
             __operator = NumericValue.__le__
-        elif self.fun == "cost":
+        elif self.fun == FUN_COST:
             __operator = NumericValue.__ge__
 
-        if self.cet == "addi":
-            if self.rts == "vrs":
+        if self.cet == CET_ADDI:
+            if self.rts == RTS_VRS:
 
                 def afriat_rule(model, i):
                     return __operator(
@@ -207,11 +207,11 @@ class CQRZG1:
                             for j in model.J))
 
                 return afriat_rule
-            elif self.rts == "crs":
+            elif self.rts == RTS_CRS:
                 # TODO(warning handling): replace with model requested not exist
                 return False
-        elif self.cet == "mult":
-            if self.rts == "vrs":
+        elif self.cet == CET_MULT:
+            if self.rts == RTS_VRS:
 
                 def afriat_rule(model, i):
                     return __operator(
@@ -222,7 +222,7 @@ class CQRZG1:
                             for j in model.J))
 
                 return afriat_rule
-            elif self.rts == "crs":
+            elif self.rts == RTS_CRS:
 
                 def afriat_rule(model, i):
                     return __operator(
@@ -236,13 +236,13 @@ class CQRZG1:
 
     def __sweet_rule(self, ):
         """Return the proper sweet spot approach constraint"""
-        if self.fun == "prod":
+        if self.fun == FUN_PROD:
             __operator = NumericValue.__le__
-        elif self.fun == "cost":
+        elif self.fun == FUN_COST:
             __operator = NumericValue.__ge__
 
-        if self.cet == "addi":
-            if self.rts == "vrs":
+        if self.cet == CET_ADDI:
+            if self.rts == RTS_VRS:
 
                 def sweet_rule(model, i, h):
                     if self.Cutactive[i, h]:
@@ -255,11 +255,11 @@ class CQRZG1:
                     return Constraint.Skip
 
                 return sweet_rule
-            elif self.rts == "crs":
+            elif self.rts == RTS_CRS:
                 # TODO(warning handling): replace with model requested not exist
                 return False
-        elif self.cet == "mult":
-            if self.rts == "vrs":
+        elif self.cet == CET_MULT:
+            if self.rts == RTS_VRS:
 
                 def sweet_rule(model, i, h):
                     if self.Cutactive[i, h]:
@@ -272,7 +272,7 @@ class CQRZG1:
                     return Constraint.Skip
 
                 return sweet_rule
-            elif self.rts == "crs":
+            elif self.rts == RTS_CRS:
 
                 def sweet_rule(model, i, h):
                     if self.Cutactive[i, h]:
@@ -308,18 +308,18 @@ class CQRZG1:
 class CERZG1(CQRZG1):
     """Convex expectile regression (CER)"""
 
-    def __init__(self, y, x, z, tau, Cutactive, cet='addi', fun='prod', rts='vrs'):
+    def __init__(self, y, x, z, tau, Cutactive, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """
             y : Output variable
             x : Input variables
             z : Contexutal variable
             tau : expectile
-            cet  = "addi" : Additive composite error term
-                 = "mult" : Multiplicative composite error term
-            fun  = "prod" : Production frontier
-                 = "cost" : Cost frontier
-            rts  = "vrs"  : Variable returns to scale
-                 = "crs"  : Constant returns to scale
+            cet  = CET_ADDI : Additive composite error term
+                 = CET_MULT : Multiplicative composite error term
+            fun  = FUN_PROD : Production frontier
+                 = FUN_COST : Cost frontier
+            rts  = RTS_VRS  : Variable returns to scale
+                 = RTS_CRS  : Constant returns to scale
         """
         super().__init__(y, x, z, tau, Cutactive, cet, fun, rts)
         self.__model__.objective.deactivate()

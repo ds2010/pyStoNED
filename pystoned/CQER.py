@@ -5,23 +5,23 @@ from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
 
 class CQR:
     """Convex quantile regression (CQR)"""
 
-    def __init__(self, y, x, tau, z=None, cet='addi', fun='prod', rts='vrs'):
+    def __init__(self, y, x, tau, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """
           * y : Output variable
           * x : Input variables
           * z: Contextual variables  
           * tau : quantile
-          * cet  = "addi" : Additive composite error term
-                 = "mult" : Multiplicative composite error term
-          * fun  = "prod" : Production frontier
-                 = "cost" : Cost frontier
-          * rts  = "vrs"  : Variable returns to scale
-                 = "crs"  : Constant returns to scale
+          * cet  = CET_ADDI : Additive composite error term
+                 = CET_MULT : Multiplicative composite error term
+          * fun  = FUN_PROD : Production frontier
+                 = FUN_COST : Cost frontier
+          * rts  = RTS_VRS  : Variable returns to scale
+                 = RTS_CRS  : Constant returns to scale
         """
 
         # TODO(error/warning handling): Check the configuration of the model exist
@@ -88,7 +88,7 @@ class CQR:
         self.__model__.regression_rule = Constraint(self.__model__.I,
                                                     rule=self.__regression_rule(),
                                                     doc='regression equation')
-        if self.cet == "mult":
+        if self.cet == CET_MULT:
             self.__model__.log_rule = Constraint(self.__model__.I,
                                                     rule=self.__log_rule(),
                                                     doc='log-transformed regression equation')
@@ -106,23 +106,23 @@ class CQR:
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
         if remote == False:
-            if self.cet == "addi":
+            if self.cet == CET_ADDI:
                 solver = SolverFactory("mosek")
                 print("Estimating the additive model locally with mosek solver")
                 self.problem_status = solver.solve(self.__model__, tee=True)
                 self.optimization_status = 1
 
-            elif self.cet == "mult":
+            elif self.cet == CET_MULT:
                 # TODO(warning handling): Use log system instead of print()
                 print(
                     "Estimating the multiplicative model will be available in near future."
                 )
                 return False
         else:
-            if self.cet == "addi":
+            if self.cet == CET_ADDI:
                 opt = "mosek"
                 print("Estimating the additive model remotely with mosek solver")
-            elif self.cet == "mult":
+            elif self.cet == CET_MULT:
                 opt = "knitro"
                 print("Estimating the multiplicative model remotely with knitro solver")
             solver = SolverManagerFactory('neos')
@@ -156,8 +156,8 @@ class CQR:
 
     def __regression_rule(self):
         """Return the proper regression constraint"""
-        if self.cet == "addi":
-            if self.rts == "vrs":
+        if self.cet == CET_ADDI:
+            if self.rts == RTS_VRS:
                 if type(self.z) != type(None):
                     def regression_rule(model, i):
                         return self.y[i] == model.alpha[i] \
@@ -172,11 +172,11 @@ class CQR:
                         + model.epsilon[i]
 
                 return regression_rule
-            elif self.rts == "crs":
+            elif self.rts == RTS_CRS:
                 # TODO(warning handling): replace with model requested not exist
                 return False
 
-        elif self.cet == "mult":
+        elif self.cet == CET_MULT:
             if type(self.z) != type(None):
                 def regression_rule(model, i):
                     return log(self.y[i]) == log(model.frontier[i] + 1) \
@@ -193,15 +193,15 @@ class CQR:
 
     def __log_rule(self):
         """Return the proper log constraint"""
-        if self.cet == "mult":
-            if self.rts == "vrs":
+        if self.cet == CET_MULT:
+            if self.rts == RTS_VRS:
 
                 def log_rule(model, i):
                     return model.frontier[i] == model.alpha[i] + sum(
                         model.beta[i, j] * self.x[i][j] for j in model.J) - 1
 
                 return log_rule
-            elif self.rts == "crs":
+            elif self.rts == RTS_CRS:
 
                 def log_rule(model, i):
                     return model.frontier[i] == sum(
@@ -214,13 +214,13 @@ class CQR:
 
     def __afriat_rule(self):
         """Return the proper afriat inequality constraint"""
-        if self.fun == "prod":
+        if self.fun == FUN_PROD:
             __operator = NumericValue.__le__
-        elif self.fun == "cost":
+        elif self.fun == FUN_COST:
             __operator = NumericValue.__ge__
 
-        if self.cet == "addi":
-            if self.rts == "vrs":
+        if self.cet == CET_ADDI:
+            if self.rts == RTS_VRS:
 
                 def afriat_rule(model, i, h):
                     if i == h:
@@ -231,11 +231,11 @@ class CQR:
                         model.alpha[h] + sum(model.beta[h, j] * self.x[i][j]
                                                 for j in model.J))
                 return afriat_rule
-            elif self.rts == "crs":
+            elif self.rts == RTS_CRS:
                 # TODO(warning handling): replace with model requested not exist
                 return False
-        elif self.cet == "mult":
-            if self.rts == "vrs":
+        elif self.cet == CET_MULT:
+            if self.rts == RTS_VRS:
 
                 def afriat_rule(model, i, h):
                     if i == h:
@@ -247,7 +247,7 @@ class CQR:
                                                 for j in model.J))
 
                 return afriat_rule
-            elif self.rts == "crs":
+            elif self.rts == RTS_CRS:
 
                 def afriat_rule(model, i, h):
                     if i == h:
@@ -355,9 +355,9 @@ class CQR:
         if self.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
-        if self.cet == "mult":
+        if self.cet == CET_MULT:
             frontier = np.asarray(list(self.__model__.frontier[:].value))+1
-        elif self.cet == "addi":
+        elif self.cet == CET_ADDI:
             frontier = np.asarray(self.y) - self.get_residual()
         return np.asarray(frontier)
 
@@ -402,18 +402,18 @@ class CQR:
 class CER(CQR):
     """Convex expectile regression (CER)"""
 
-    def __init__(self, y, x, tau, z=None, cet='addi', fun='prod', rts='vrs'):
+    def __init__(self, y, x, tau, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """
            * y : Output variable
            * x : Input variables
            * z: Contextual variables  
            * tau : expectile
-           * cet  = "addi" : Additive composite error term
-                  = "mult" : Multiplicative composite error term
-           * fun  = "prod" : Production frontier
-                  = "cost" : Cost frontier
-           * rts  = "vrs"  : Variable returns to scale
-                  = "crs"  : Constant returns to scale
+           * cet  = CET_ADDI : Additive composite error term
+                  = CET_MULT : Multiplicative composite error term
+           * fun  = FUN_PROD : Production frontier
+                  = FUN_COST : Cost frontier
+           * rts  = RTS_VRS  : Variable returns to scale
+                  = RTS_CRS  : Constant returns to scale
         """
         super().__init__(y, x, tau, z, cet, fun, rts)
         self.__model__.objective.deactivate()

@@ -3,24 +3,24 @@ from . import CNLS
 from pyomo.environ import Constraint
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
-
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
 
 class ICNLS(CNLS.CNLS):
     """Isotonic Convex Nonparametric Least Square (ICNLS)"""
 
-    def __init__(self, y, x, z=None, cet='addi', fun='prod', rts='vrs'):
+    def __init__(self, y, x, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """
         Initialize the ICNLS model
 
         * y: Output variable 
         * x: Input variables
         * z: Contextual variables              
-        * cet = "addi" : Additive composite error term
-              = "mult" : Multiplicative composite error term
-        * fun = "prod" : Production frontier
-              = "cost" : Cost frontier
-        * rts = "vrs"  : Variable returns to scale
-              = "crs"  : Constant returns to scale
+        * cet = CET_ADDI : Additive composite error term
+              = CET_MULT : Multiplicative composite error term
+        * fun = FUN_PROD : Production frontier
+              = FUN_COST : Cost frontier
+        * rts = RTS_VRS  : Variable returns to scale
+              = RTS_CRS  : Constant returns to scale
         """
         super().__init__(y, x, z, cet, fun, rts)
 
@@ -33,13 +33,13 @@ class ICNLS(CNLS.CNLS):
 
     def __isotonic_afriat_rule(self):
         """Return the proper afriat inequality constraint"""
-        if self.fun == "prod":
+        if self.fun == FUN_PROD:
             __operator = NumericValue.__le__
-        elif self.fun == "cost":
+        elif self.fun == FUN_COST:
             __operator = NumericValue.__ge__
 
-        if self.cet == "addi":
-            if self.rts == "vrs":
+        if self.cet == CET_ADDI:
+            if self.rts == RTS_VRS:
 
                 def afriat_rule(model, i, h):
                     if i == h or self.__pmatrix[i][h] == 0:
@@ -52,11 +52,11 @@ class ICNLS(CNLS.CNLS):
                     )
                 return afriat_rule
 
-            elif self.rts == "crs":
+            elif self.rts == RTS_CRS:
                 # TODO(warning handling): replace with model requested not exist
                 return False
-        elif self.cet == "mult":
-            if self.rts == "vrs":
+        elif self.cet == CET_MULT:
+            if self.rts == RTS_VRS:
 
                 def afriat_rule(model, i, h):
                     if (i == h) or (self.__pmatrix[i][h] == 0):
@@ -69,7 +69,7 @@ class ICNLS(CNLS.CNLS):
                     )
                 return afriat_rule
 
-            elif self.rts == "crs":
+            elif self.rts == RTS_CRS:
 
                 def afriat_rule(model, i, h):
                     if (i == h) or (self.__pmatrix[i][h] == 0):
