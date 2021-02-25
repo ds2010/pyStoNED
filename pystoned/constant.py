@@ -21,3 +21,11 @@ RTS_Categories = {
     RTS_VRS: "Variable returns to scale",
     RTS_CRS: "Constant returns to scale"
 }
+
+# Orientation
+ORIENT_IN = "io"
+ORIENT_OU = "oo"
+ORIENT_Categories = {
+    ORIENT_IN: "Input orientation",
+    ORIENT_OU: "Output orientation"
+}
