@@ -4,12 +4,12 @@ import numpy as np
 import math
 import scipy.stats as stats
 import scipy.optimize as opt
-
+from .constants import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
 
 class StoNED(CNLS.CNLS):
     """Stochastic nonparametric envelopment of data (StoNED): Residuals decomposition"""
 
-    def __init__(self, y, x,  z=None, cet='addi', fun='prod', rts='vrs'):
+    def __init__(self, y, x,  z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         super().__init__(y, x, z, cet, fun, rts)
 
     def get_unconditional_expected_inefficiency(self, method='MOM'):
@@ -44,21 +44,21 @@ class StoNED(CNLS.CNLS):
         mu = self.epsilon * self.sigma_u / (
             self.sigma_v * math.sqrt(self.sigma_u**2 + self.sigma_v**2))
 
-        if self.fun == "prod":
+        if self.fun == FUN_PROD:
             Eu = sigma * ((stats.norm.pdf(mu) /
                            (1 - stats.norm.cdf(mu) + 0.000001)) - mu)
-            if self.cet == "addi":
+            if self.cet == CET_ADDI:
                 return (self.y - self.get_residual() + self.mu -
                         Eu) / (self.y - self.get_residual() + self.mu)
-            elif self.cet == "mult":
+            elif self.cet == CET_MULT:
                 return np.exp(-Eu)
-        elif self.fun == "cost":
+        elif self.fun == FUN_COST:
             Eu = sigma * ((stats.norm.pdf(mu) /
                            (1 - stats.norm.cdf(-mu) + 0.000001)) + mu)
-            if self.cet == "addi":
+            if self.cet == CET_ADDI:
                 return (self.y - self.get_residual() - self.mu +
                         Eu) / (self.y - self.get_residual() - self.mu)
-            elif self.cet == "mult":
+            elif self.cet == CET_MULT:
                 return np.exp(Eu)
         # TODO(error/warning handling): Raise error while undefined fun/cet
         return False
@@ -72,13 +72,14 @@ class StoNED(CNLS.CNLS):
         M2_mean = np.mean(M2, axis=0)
         M3_mean = np.mean(M3, axis=0)
 
-        if self.fun == "prod":
+        if self.fun == FUN_PROD
+:
             if M3_mean > 0:
                 M3_mean = 0.0
             self.sigma_u = (M3_mean / ((2 / math.pi)**(1 / 2) *
                                        (1 - 4 / math.pi)))**(1 / 3)
 
-        elif self.fun == "cost":
+        elif self.fun == FUN_COST:
             if M3_mean < 0:
                 M3_mean = 0.00001
             self.sigma_u = (-M3_mean / ((2 / math.pi)**(1 / 2) *
@@ -91,7 +92,8 @@ class StoNED(CNLS.CNLS):
         self.sigma_v = (M2_mean -
                         ((math.pi - 2) / math.pi) * self.sigma_u**2)**(1 / 2)
         self.mu = (self.sigma_u**2 * 2 / math.pi)**(1 / 2)
-        if self.fun == "prod":
+        if self.fun == FUN_PROD
+:
             self.epsilon = residual - self.mu
         else:
             self.epsilon = residual + self.mu
@@ -127,12 +129,13 @@ class StoNED(CNLS.CNLS):
             return -(-len(epsilon) * math.log(sigma) + np.sum(np.log(pn)) -
                      0.5 * np.sum(epsilon**2) / sigma**2)
 
-        if self.fun == "prod":
+        if self.fun == FUN_PROD
+:
             lamda = opt.minimize(__quassi_likelihood_estimation,
                                  1.0,
                                  residual,
                                  method='BFGS').x[0]
-        elif self.fun == "cost":
+        elif self.fun == FUN_COST:
             lamda = opt.minimize(__quassi_likelihood_estimation,
                                  1.0,
                                  -residual,
@@ -154,9 +157,10 @@ class StoNED(CNLS.CNLS):
         self.sigma_v = (sigma**2 / (1 + lamda**2))**(1 / 2)
         self.sigma_u = self.sigma_v * lamda
 
-        if self.fun == "prod":
+        if self.fun == FUN_PROD
+:
             self.epsilon = residual - self.mu
-        elif self.fun == "cost":
+        elif self.fun == FUN_COST:
             self.epsilon = residual + self.mu
 
     def __gaussian_kernel_estimation(self, residual):
@@ -193,5 +197,5 @@ class StoNED(CNLS.CNLS):
 
         # expected inefficiency mu
         self.mu = -np.max(derivative)
-        if self.fun == "cost":
+        if self.fun == FUN_COST:
             self.mu *= -1

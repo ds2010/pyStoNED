@@ -5,12 +5,13 @@ from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
 import pandas as pd
 import numpy as np
+from constant import FUN_COST, FUN_PROD
 
 
 class CNLSDDF(CNLS.CNLS):
     """Convex Nonparametric Least Square with multiple Outputs (DDF formulation)"""
 
-    def __init__(self, y, x, b=None, gy=[1], gx=[1], gb=None, fun='prod'):
+    def __init__(self, y, x, b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD:
         """
         Initialize the CNLSDDF model
 
@@ -20,8 +21,8 @@ class CNLSDDF(CNLS.CNLS):
         * gy: Output directional vector
         * gx: Input directional vector
         * gb: Undesirable output directional vector
-        * fun = "prod": Production frontier
-              = "cost": Cost frontier
+        * fun = FUN_PROD: Production frontier
+              = FUN_COST: Cost frontier
         """
 
         # TODO(error/warning handling): Check the configuration of the model exist
@@ -154,9 +155,9 @@ class CNLSDDF(CNLS.CNLS):
 
     def __afriat_rule(self):
         """Return the proper afriat inequality constraint"""
-        if self.fun == "prod":
+        if self.fun == FUN_PROD:
             __operator = NumericValue.__le__
-        elif self.fun == "cost":
+        elif self.fun == FUN_COST:
             __operator = NumericValue.__ge__
 
         if type(self.b) == type(None):

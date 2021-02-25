@@ -3,22 +3,22 @@ from . import CQER, ICNLS
 from pyomo.environ import Constraint
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
-
+from .constants import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
 
 class ICQR(ICNLS.ICNLS, CQER.CQR):
     """Isotonic convex quantile regression (ICQR)"""
 
-    def __init__(self, y, x, tau, cet='addi', fun='prod', rts='vrs'):
+    def __init__(self, y, x, tau, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """
             y : Output variable
             x : Input variables
             tau : quantile
-            cet  = "addi" : Additive composite error term
-                 = "mult" : Multiplicative composite error term
-            fun  = "prod" : Production frontier
-                 = "cost" : Cost frontier
-            rts  = "vrs"  : Variable returns to scale
-                 = "crs"  : Constant returns to scale
+            cet  = CET_ADDI : Additive composite error term
+                 = CET_MULT : Multiplicative composite error term
+            fun  = FUN_PROD : Production frontier
+                 = FUN_COST : Cost frontier
+            rts  = RTS_VRS  : Variable returns to scale
+                 = RTS_CRS  : Constant returns to scale
         """
         CQER.CQR.__init__(self, y, x, tau, cet, fun, rts)
 
@@ -33,17 +33,17 @@ class ICQR(ICNLS.ICNLS, CQER.CQR):
 class ICER(ICNLS.ICNLS, CQER.CER):
     """Isotonic convex expectile regression (ICER)"""
 
-    def __init__(self, y, x, tau, cet='addi', fun='prod', rts='vrs'):
+    def __init__(self, y, x, tau, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """
             y : Output variable
             x : Input variables
             tau : expectile
-            cet  = "addi" : Additive composite error term
-                 = "mult" : Multiplicative composite error term
-            fun  = "prod" : Production frontier
-                 = "cost" : Cost frontier
-            rts  = "vrs"  : Variable returns to scale
-                 = "crs"  : Constant returns to scale
+            cet  = CET_ADDI : Additive composite error term
+                 = CET_MULT : Multiplicative composite error term
+            fun  = FUN_PROD : Production frontier
+                 = FUN_COST : Cost frontier
+            rts  = RTS_VRS  : Variable returns to scale
+                 = RTS_CRS  : Constant returns to scale
         """
         CQER.CER.__init__(self, y, x, tau, cet, fun, rts)
 

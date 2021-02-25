@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from .constant import ORIENT_IN, ORIENT_OU
 
 class FDH:
     """
@@ -14,8 +15,8 @@ class FDH:
 
     def __init__(self, y, x, orient):
         """
-        orient  = "io" : input orientation
-                = "oo" : output orientation
+        orient  = ORIENT_IN : input orientation
+                = ORIENT_OU : output orientation
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.x = x.tolist()
@@ -46,7 +47,7 @@ class FDH:
             self.__model__.I, self.__model__.I, within=Binary, doc='intensity variables')
 
         # Setup the objective function and constraints
-        if self.orient == "io":
+        if self.orient == ORIENT_IN:
             self.__model__.objective = Objective(
                 rule=self.__objective_rule(), sense=minimize, doc='objective function')
         else:
@@ -73,22 +74,22 @@ class FDH:
 
     def __input_rule(self):
         """Return the proper input constraint"""
-        if self.orient == "io":
+        if self.orient == ORIENT_IN:
             def input_rule(model, o, j):
                 return model.theta[o]*self.x[o][j] >= sum(model.lamda[o, i]*self.x[i][j] for i in model.I)
             return input_rule
-        elif self.orient == "oo":
+        elif self.orient == ORIENT_OU:
             def input_rule(model, o, j):
                 return sum(model.lamda[o, i] * self.x[i][j] for i in model.I) <= self.x[o][j]
             return input_rule
 
     def __output_rule(self):
         """Return the proper output constraint"""
-        if self.orient == "io":
+        if self.orient == ORIENT_IN:
             def output_rule(model, o, k):
                 return sum(model.lamda[o, i] * self.y[i][k] for i in model.I) >= self.y[o][k]
             return output_rule
-        elif self.orient == "oo":
+        elif self.orient == ORIENT_OU:
             def output_rule(model, o, k):
                 return model.theta[o]*self.y[o][k] <= sum(model.lamda[o, i]*self.y[i][k] for i in model.I)
             return output_rule

@@ -6,12 +6,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from .utils import CQERG1, CQERG2, CQERZG1, CQERZG2, sweet
-
+from .constants import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
 
 class CQRG:
     """Convex quantile regression (CQR) with Genetic algorithm"""
 
-    def __init__(self, y, x, tau, z=None, cet='addi', fun='prod', rts='vrs'):
+    def __init__(self, y, x, tau, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """
         Initialize the CNLSG model
 
@@ -19,12 +19,12 @@ class CQRG:
         * x : Input variables
         * z : Contextual variables
         * tau : quantile
-        * cet  = "addi" : Additive composite error term
-               = "mult" : Multiplicative composite error term
-        * fun  = "prod" : Production frontier
-               = "cost" : Cost frontier
-        * rts  = "vrs"  : Variable returns to scale
-               = "crs"  : Constant returns to scale
+        * cet  = CET_ADDI : Additive composite error term
+               = CET_MULT : Multiplicative composite error term
+        * fun  = FUN_PROD : Production frontier
+               = FUN_COST : Cost frontier
+        * rts  = RTS_VRS  : Variable returns to scale
+               = RTS_CRS  : Constant returns to scale
         """
 
         # TODO(error/warning handling): Check the configuration of the model exist
@@ -104,27 +104,27 @@ class CQRG:
             Activetmp = 0.0
             # go into the sub-loop and find the violated concavity constraints
             for j in range(len(x)):
-                if self.cet == "addi":
-                    if self.rts == "vrs":
-                        if self.fun == "prod":
+                if self.cet == CET_ADDI:
+                    if self.rts == RTS_VRS:
+                        if self.fun == FUN_PROD:
                             self.Active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
                                 alpha[j] - np.sum(beta[j, :] * x[i, :])
-                        elif self.fun == "cost":
+                        elif self.fun == FUN_COST:
                             self.Active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
-                if self.cet == "mult":
-                    if self.rts == "vrs":
-                        if self.fun == "prod":
+                if self.cet == CET_MULT:
+                    if self.rts == RTS_VRS:
+                        if self.fun == FUN_PROD:
                             self.Active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
                                 alpha[j] - np.sum(beta[j, :] * x[i, :])
-                        elif self.fun == "cost":
+                        elif self.fun == FUN_COST:
                             self.Active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
-                    if self.rts == "crs":
-                        if self.fun == "prod":
+                    if self.rts == RTS_CRS:
+                        if self.fun == FUN_PROD:
                             self.Active2[i, j] = np.sum(beta[i, :] * x[i, :]) - \
                                 np.sum(beta[j, :] * x[i, :])
-                        elif self.fun == "cost":
+                        elif self.fun == FUN_COST:
                             self.Active2[i, j] = - np.sum(beta[i, :] * x[i, :]) + \
                                 np.sum(beta[j, :] * x[i, :])
                 if self.Active2[i, j] > Activetmp:
@@ -254,12 +254,12 @@ class CQRG:
         if self.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
-        if self.cet == "mult" and type(self.z) == type(None):
+        if self.cet == CET_MULT and type(self.z) == type(None):
             frontier = np.asarray(list(self.__model__.frontier[:].value))+1
-        elif self.cet == "mult" and type(self.z) != type(None):
+        elif self.cet == CET_MULT and type(self.z) != type(None):
             frontier = list(np.divide(self.y, np.exp(
                 self.get_residual()+self.get_lamda()*np.asarray(self.z)[:, 0])) - 1)
-        elif self.cet == "addi":
+        elif self.cet == CET_ADDI:
             frontier = np.asarray(self.y) - self.get_residual()
         return np.asarray(frontier)
 
@@ -267,7 +267,7 @@ class CQRG:
 class CERG:
     """Convex expectile regression (CER) with Genetic algorithm"""
 
-    def __init__(self, y, x, tau, z=None, cet='addi', fun='prod', rts='vrs'):
+    def __init__(self, y, x, tau, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """
         Initialize the CNLSG model
 
@@ -275,12 +275,12 @@ class CERG:
         * x : Input variables
         * z : Contextual variables
         * tau : expectile
-        * cet  = "addi" : Additive composite error term
-               = "mult" : Multiplicative composite error term
-        * fun  = "prod" : Production frontier
-               = "cost" : Cost frontier
-        * rts  = "vrs"  : Variable returns to scale
-               = "crs"  : Constant returns to scale
+        * cet  = CET_ADDI : Additive composite error term
+               = CET_MULT : Multiplicative composite error term
+        * fun  = FUN_PROD : Production frontier
+               = FUN_COST : Cost frontier
+        * rts  = RTS_VRS  : Variable returns to scale
+               = RTS_CRS  : Constant returns to scale
         """
 
         # TODO(error/warning handling): Check the configuration of the model exist
@@ -360,27 +360,27 @@ class CERG:
             Activetmp = 0.0
             # go into the sub-loop and find the violated concavity constraints
             for j in range(len(x)):
-                if self.cet == "addi":
-                    if self.rts == "vrs":
-                        if self.fun == "prod":
+                if self.cet == CET_ADDI:
+                    if self.rts == RTS_VRS:
+                        if self.fun == FUN_PROD:
                             self.Active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
                                 alpha[j] - np.sum(beta[j, :] * x[i, :])
-                        elif self.fun == "cost":
+                        elif self.fun == FUN_COST:
                             self.Active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
-                if self.cet == "mult":
-                    if self.rts == "vrs":
-                        if self.fun == "prod":
+                if self.cet == CET_MULT:
+                    if self.rts == RTS_VRS:
+                        if self.fun == FUN_PROD:
                             self.Active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
                                 alpha[j] - np.sum(beta[j, :] * x[i, :])
-                        elif self.fun == "cost":
+                        elif self.fun == FUN_COST:
                             self.Active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
-                    if self.rts == "crs":
-                        if self.fun == "prod":
+                    if self.rts == RTS_CRS:
+                        if self.fun == FUN_PROD:
                             self.Active2[i, j] = np.sum(beta[i, :] * x[i, :]) - \
                                 np.sum(beta[j, :] * x[i, :])
-                        elif self.fun == "cost":
+                        elif self.fun == FUN_COST:
                             self.Active2[i, j] = - np.sum(beta[i, :] * x[i, :]) + \
                                 np.sum(beta[j, :] * x[i, :])
                 if self.Active2[i, j] > Activetmp:
@@ -510,11 +510,11 @@ class CERG:
         if self.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
-        if self.cet == "mult" and type(self.z) == type(None):
+        if self.cet == CET_MULT and type(self.z) == type(None):
             frontier = np.asarray(list(self.__model__.frontier[:].value))+1
-        elif self.cet == "mult" and type(self.z) != type(None):
+        elif self.cet == CET_MULT and type(self.z) != type(None):
             frontier = list(np.divide(self.y, np.exp(
                 self.get_residual()+self.get_lamda()*np.asarray(self.z)[:, 0])) - 1)
-        elif self.cet == "addi":
+        elif self.cet == CET_ADDI:
             frontier = np.asarray(self.y) - self.get_residual()
         return np.asarray(frontier)

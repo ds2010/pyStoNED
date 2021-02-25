@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from .constant import ORIENT_IN, ORIENT_OU, RTS_VRS
 
 class DEA:
     """
@@ -14,10 +15,10 @@ class DEA:
 
     def __init__(self, y, x, orient, rts, yref=None, xref=None):
         """
-        orient  = "io" : input orientation
-                = "oo" : output orientation
-        rts     = "vrs": variable returns to scale
-                = "crs": constant returns to scale
+        orient  = ORIENT_IN : input orientation
+                = ORIENT_OU : output orientation
+        rts     = RTS_VRS: variable returns to scale
+                = RTS_CRS: constant returns to scale
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         # Initialize DEA model
@@ -46,7 +47,7 @@ class DEA:
             0.0, None), doc='intensity variables')
 
         # Setup the objective function and constraints
-        if self.orient == "io":
+        if self.orient == ORIENT_IN:
             self.__model__.objective = Objective(
                 rule=self.__objective_rule(), sense=minimize, doc='objective function')
         else:
@@ -56,7 +57,7 @@ class DEA:
             self.__model__.I, self.__model__.J, rule=self.__input_rule(), doc='input constraint')
         self.__model__.output = Constraint(
             self.__model__.I, self.__model__.K, rule=self.__output_rule(), doc='output constraint')
-        if self.rts == "vrs":
+        if self.rts == RTS_VRS:
             self.__model__.vrs = Constraint(
                 self.__model__.I, rule=self.__vrs_rule(), doc='various return to scale rule')
 
@@ -84,20 +85,20 @@ class DEA:
     def __input_rule(self):
         """Return the proper input constraint"""
         if self.__reference == False:
-            if self.orient == "io":
+            if self.orient == ORIENT_IN:
                 def input_rule(model, o, j):
                     return model.theta[o]*self.x[o][j] >= sum(model.lamda[o, i]*self.x[i][j] for i in model.I)
                 return input_rule
-            elif self.orient == "oo":
+            elif self.orient == ORIENT_OU:
                 def input_rule(model, o, j):
                     return sum(model.lamda[o, i] * self.x[i][j] for i in model.I) <= self.x[o][j]
                 return input_rule
         else:
-            if self.orient == "io":
+            if self.orient == ORIENT_IN:
                 def input_rule(model, o, j):
                     return model.theta[o]*self.x[o][j] >= sum(model.lamda[o, r]*self.xref[r][j] for r in model.R)
                 return input_rule
-            elif self.orient == "oo":
+            elif self.orient == ORIENT_OU:
                 def input_rule(model, o, j):
                     return sum(model.lamda[o, r] * self.x[r][j] for r in model.I) <= self.x[o][j]
                 return input_rule
@@ -105,20 +106,20 @@ class DEA:
     def __output_rule(self):
         """Return the proper output constraint"""
         if self.__reference == False:
-            if self.orient == "io":
+            if self.orient == ORIENT_IN:
                 def output_rule(model, o, k):
                     return sum(model.lamda[o, i] * self.y[i][k] for i in model.I) >= self.y[o][k]
                 return output_rule
-            elif self.orient == "oo":
+            elif self.orient == ORIENT_OU:
                 def output_rule(model, o, k):
                     return model.theta[o]*self.y[o][k] <= sum(model.lamda[o, i]*self.y[i][k] for i in model.I)
                 return output_rule
         else:
-            if self.orient == "io":
+            if self.orient == ORIENT_IN:
                 def output_rule(model, o, k):
                     return sum(model.lamda[o, r] * self.yref[r][k] for r in model.R) >= self.y[o][k]
                 return output_rule
-            elif self.orient == "oo":
+            elif self.orient == ORIENT_OU:
                 def output_rule(model, o, k):
                     return model.theta[o]*self.y[o][k] <= sum(model.lamda[o, r]*self.y[r][k] for r in model.R)
                 return output_rule
@@ -193,7 +194,7 @@ class DEA:
 
 
 class DEADDF(DEA):
-    def __init__(self,  y, x, b=None, gy=[1], gx=[1], gb=None, rts="vrs", yref=None, xref=None, bref=None):
+    def __init__(self,  y, x, b=None, gy=[1], gx=[1], gb=None, rts=RTS_VRS, yref=None, xref=None, bref=None):
         """
             y : Output variables
             x : Input variables
@@ -201,8 +202,8 @@ class DEADDF(DEA):
             gy : Output directional vector
             gx : Input directional vector
             gb : Undesirable output directional vector
-            rts     = "vrs": variable returns to scale
-                    = "crs": constant returns to scale
+            rts     = RTS_VRS: variable returns to scale
+                    = RTS_CRS: constant returns to scale
             yref : the reference point of y
             xref : the reference point of x
             bref : the reference point of b
@@ -260,7 +261,7 @@ class DEADDF(DEA):
             self.__model__.undesirable_output = Constraint(
                 self.__model__.I, self.__model__.L, rule=self.__undesirable_output_rule(), doc='undesirable output constraint')
 
-        if self.rts == "vrs":
+        if self.rts == RTS_VRS:
             self.__model__.vrs = Constraint(
                 self.__model__.I, rule=self.__vrs_rule(), doc='various return to scale rule')
 
