@@ -3,7 +3,7 @@ from . import CNLS
 from pyomo.environ import Constraint
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
-from .constants import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
 
 class ICNLS(CNLS.CNLS):
     """Isotonic Convex Nonparametric Least Square (ICNLS)"""

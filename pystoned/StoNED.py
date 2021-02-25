@@ -4,7 +4,7 @@ import numpy as np
 import math
 import scipy.stats as stats
 import scipy.optimize as opt
-from .constants import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
 
 class StoNED(CNLS.CNLS):
     """Stochastic nonparametric envelopment of data (StoNED): Residuals decomposition"""
@@ -72,8 +72,7 @@ class StoNED(CNLS.CNLS):
         M2_mean = np.mean(M2, axis=0)
         M3_mean = np.mean(M3, axis=0)
 
-        if self.fun == FUN_PROD
-:
+        if self.fun == FUN_PROD:
             if M3_mean > 0:
                 M3_mean = 0.0
             self.sigma_u = (M3_mean / ((2 / math.pi)**(1 / 2) *
@@ -92,8 +91,7 @@ class StoNED(CNLS.CNLS):
         self.sigma_v = (M2_mean -
                         ((math.pi - 2) / math.pi) * self.sigma_u**2)**(1 / 2)
         self.mu = (self.sigma_u**2 * 2 / math.pi)**(1 / 2)
-        if self.fun == FUN_PROD
-:
+        if self.fun == FUN_PROD:
             self.epsilon = residual - self.mu
         else:
             self.epsilon = residual + self.mu
@@ -129,8 +127,7 @@ class StoNED(CNLS.CNLS):
             return -(-len(epsilon) * math.log(sigma) + np.sum(np.log(pn)) -
                      0.5 * np.sum(epsilon**2) / sigma**2)
 
-        if self.fun == FUN_PROD
-:
+        if self.fun == FUN_PROD:
             lamda = opt.minimize(__quassi_likelihood_estimation,
                                  1.0,
                                  residual,
@@ -157,8 +154,7 @@ class StoNED(CNLS.CNLS):
         self.sigma_v = (sigma**2 / (1 + lamda**2))**(1 / 2)
         self.sigma_u = self.sigma_v * lamda
 
-        if self.fun == FUN_PROD
-:
+        if self.fun == FUN_PROD:
             self.epsilon = residual - self.mu
         elif self.fun == FUN_COST:
             self.epsilon = residual + self.mu

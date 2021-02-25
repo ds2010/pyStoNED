@@ -5,13 +5,13 @@ from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
 import pandas as pd
 import numpy as np
-from constant import FUN_COST, FUN_PROD
+from .constant import FUN_COST, FUN_PROD
 
 
 class CNLSDDF(CNLS.CNLS):
     """Convex Nonparametric Least Square with multiple Outputs (DDF formulation)"""
 
-    def __init__(self, y, x, b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD:
+    def __init__(self, y, x, b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD):
         """
         Initialize the CNLSDDF model
 

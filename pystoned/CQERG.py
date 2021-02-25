@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from .utils import CQERG1, CQERG2, CQERZG1, CQERZG2, sweet
-from .constants import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
 
 class CQRG:
     """Convex quantile regression (CQR) with Genetic algorithm"""

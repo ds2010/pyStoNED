@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from .utils import CNLSG1, CNLSG2, CNLSZG1, CNLSZG2, sweet
-from .constants import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
 
 class CNLSG:
     """Convex Nonparametric Least Square (CNLS) with Genetic algorithm"""

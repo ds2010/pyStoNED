@@ -5,7 +5,7 @@ from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from .constants import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
 
 class CNLS:
     """Convex Nonparametric Least Square (CNLS)"""
