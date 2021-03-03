@@ -5,7 +5,10 @@ from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
+
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL
+from .utils import tools
+
 
 class CQR:
     """Convex quantile regression (CQR)"""
@@ -64,22 +67,22 @@ class CQR:
         # Initialize the variables
         self.__model__.alpha = Var(self.__model__.I, doc='alpha')
         self.__model__.beta = Var(self.__model__.I,
-                                self.__model__.J,
-                                bounds=(0.0, None),
-                                doc='beta')
+                                  self.__model__.J,
+                                  bounds=(0.0, None),
+                                  doc='beta')
         self.__model__.epsilon = Var(self.__model__.I, doc='error term')
         self.__model__.epsilon_plus = Var(
             self.__model__.I, bounds=(0.0, None), doc='positive error term')
         self.__model__.epsilon_minus = Var(
             self.__model__.I, bounds=(0.0, None), doc='negative error term')
         self.__model__.frontier = Var(self.__model__.I,
-                                    bounds=(0.0, None),
-                                    doc='estimated frontier')
+                                      bounds=(0.0, None),
+                                      doc='estimated frontier')
 
         # Setup the objective function and constraints
         self.__model__.objective = Objective(rule=self.__objective_rule(),
-                                            sense=minimize,
-                                            doc='objective function')
+                                             sense=minimize,
+                                             doc='objective function')
 
         self.__model__.error_decomposition = Constraint(self.__model__.I,
                                                         rule=self.__error_decomposition(),
@@ -90,8 +93,8 @@ class CQR:
                                                     doc='regression equation')
         if self.cet == CET_MULT:
             self.__model__.log_rule = Constraint(self.__model__.I,
-                                                    rule=self.__log_rule(),
-                                                    doc='log-transformed regression equation')
+                                                 rule=self.__log_rule(),
+                                                 doc='log-transformed regression equation')
 
         self.__model__.afriat_rule = Constraint(self.__model__.I,
                                                 self.__model__.I,
@@ -102,10 +105,10 @@ class CQR:
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self, remote=True):
+    def optimize(self, email=OPT_LOCAL):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
-        if remote == False:
+        if not tools.set_neos_email(email):
             if self.cet == CET_ADDI:
                 solver = SolverFactory("mosek")
                 print("Estimating the additive model locally with mosek solver")
@@ -127,8 +130,8 @@ class CQR:
                 print("Estimating the multiplicative model remotely with knitro solver")
             solver = SolverManagerFactory('neos')
             self.problem_status = solver.solve(self.__model__,
-                                                tee=True,
-                                                opt=opt)
+                                               tee=True,
+                                               opt=opt)
             self.optimization_status = 1
 
     def __to_1d_list(self, l):
@@ -142,7 +145,7 @@ class CQR:
 
         def objective_rule(model):
             return self.tau * sum(model.epsilon_plus[i] for i in model.I) \
-                    + (1 - self.tau) * sum(model.epsilon_minus[i] for i in model.I)
+                + (1 - self.tau) * sum(model.epsilon_minus[i] for i in model.I)
 
         return objective_rule
 
@@ -163,7 +166,7 @@ class CQR:
                         return self.y[i] == model.alpha[i] \
                             + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
                             + sum(model.lamda[k] * self.z[i][k]
-                                    for k in model.K) + model.epsilon[i]
+                                  for k in model.K) + model.epsilon[i]
                     return regression_rule
 
                 def regression_rule(model, i):
@@ -180,8 +183,8 @@ class CQR:
             if type(self.z) != type(None):
                 def regression_rule(model, i):
                     return log(self.y[i]) == log(model.frontier[i] + 1) \
-                                + sum(model.lamda[k] * self.z[i][k]
-                                        for k in model.K) + model.epsilon[i]
+                        + sum(model.lamda[k] * self.z[i][k]
+                              for k in model.K) + model.epsilon[i]
                 return regression_rule
 
             def regression_rule(model, i):
@@ -227,9 +230,9 @@ class CQR:
                         return Constraint.Skip
                     return __operator(
                         model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
-                                                for j in model.J),
+                                             for j in model.J),
                         model.alpha[h] + sum(model.beta[h, j] * self.x[i][j]
-                                                for j in model.J))
+                                             for j in model.J))
                 return afriat_rule
             elif self.rts == RTS_CRS:
                 # TODO(warning handling): replace with model requested not exist
@@ -242,9 +245,9 @@ class CQR:
                         return Constraint.Skip
                     return __operator(
                         model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
-                                                for j in model.J),
+                                             for j in model.J),
                         model.alpha[h] + sum(model.beta[h, j] * self.x[i][j]
-                                                for j in model.J))
+                                             for j in model.J))
 
                 return afriat_rule
             elif self.rts == RTS_CRS:
@@ -321,7 +324,7 @@ class CQR:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
         beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
-                                                            list(self.__model__.beta[:, :].value))])
+                                                          list(self.__model__.beta[:, :].value))])
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
         beta = beta.pivot(index='Name', columns='Key', values='Value')
         return beta.to_numpy()
