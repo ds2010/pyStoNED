@@ -5,7 +5,7 @@ with open('README.md') as readme_file:
 
 setup_args = dict(
     name='pystoned',
-    version='0.4.2',
+    version='0.4.3',
     description='A Package for Stochastic Nonparametric Envelopment of Data (StoNED) in Python',
     long_description_content_type="text/markdown",
     long_description=README,
@@ -29,7 +29,7 @@ setup_args = dict(
 )
 
 install_requires = [
-    'pyomo>=5.6.9',
+    'pyomo>=5.7.3',
     'pandas>=1.1.3',
     'numpy>=1.19.2',
     'scipy>=1.5.2',
