@@ -1,7 +1,8 @@
 import re
-import os 
+import os
 from ..constant import OPT_LOCAL
 __email_re = re.compile(r'([^@]+@[^@]+\.[a-zA-Z0-9]+)$')
+
 
 def set_neos_email(address):
     if not __email_re.match(address):
