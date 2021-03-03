@@ -6,6 +6,7 @@ import scipy.stats as stats
 import scipy.optimize as opt
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
 
+
 class StoNED(CNLS.CNLS):
     """Stochastic nonparametric envelopment of data (StoNED): Residuals decomposition"""
 
