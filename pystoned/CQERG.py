@@ -6,7 +6,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from .utils import CQERG1, CQERG2, CQERZG1, CQERZG2, sweet
-from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL
+
 
 class CQRG:
     """Convex quantile regression (CQR) with Genetic algorithm"""
@@ -56,23 +57,25 @@ class CQRG:
                 self.z = []
                 for z_value in z.tolist():
                     self.z.append([z_value])
-            model1 = CQERZG1.CQRZG1(
-                self.y, self.x, self.z, self.tau, self.cutactive, self.cet, self.fun, self.rts)
-        else:
-            model1 = CQERG1.CQRG1(
-                self.y, self.x, self.tau, self.cutactive, self.cet, self.fun, self.rts)
-        model1.optimize(remote=False)
-        self.alpha = model1.get_alpha()
-        self.beta = model1.get_beta()
-        self.__modol__ = model1.__model__
 
         # Optimize model
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self):
+    def optimize(self, email=OPT_LOCAL):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
+        if type(self.z) != type(None):
+            model1 = CQERZG1.CQRZG1(
+                self.y, self.x, self.z, self.tau, self.cutactive, self.cet, self.fun, self.rts)
+        else:
+            model1 = CQERG1.CQRG1(
+                self.y, self.x, self.tau, self.cutactive, self.cet, self.fun, self.rts)
+        model1.optimize(email)
+        self.alpha = model1.get_alpha()
+        self.beta = model1.get_beta()
+        self.__model__ = model1.__model__
+
         while self.__convergence_test(self.alpha, self.beta) > 0.0001:
             if type(self.z) != type(None):
                 model2 = CQERZG2.CQRZG2(
@@ -80,7 +83,7 @@ class CQRG:
             else:
                 model2 = CQERG2.CQRG2(
                     self.y, self.x, self.tau, self.Active, self.cutactive, self.cet, self.fun, self.rts)
-            model2.optimize(remote=False)
+            model2.optimize(email)
             self.alpha = model2.get_alpha()
             self.beta = model2.get_beta()
             # TODO: Replace print with log system
@@ -208,7 +211,7 @@ class CQRG:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
         beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
-                                                        list(self.__model__.beta[:, :].value))])
+                                                          list(self.__model__.beta[:, :].value))])
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
         beta = beta.pivot(index='Name', columns='Key', values='Value')
         return beta.to_numpy()
@@ -312,23 +315,25 @@ class CERG:
                 self.z = []
                 for z_value in z.tolist():
                     self.z.append([z_value])
-            model1 = CQERZG1.CERZG1(
-                self.y, self.x, self.z, self.tau, self.cutactive, self.cet, self.fun, self.rts)
-        else:
-            model1 = CQERG1.CERG1(
-                self.y, self.x, self.tau, self.cutactive, self.cet, self.fun, self.rts)
-        model1.optimize(remote=False)
-        self.alpha = model1.get_alpha()
-        self.beta = model1.get_beta()
-        self.__modol__ = model1.__model__
 
         # Optimize model
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self):
+    def optimize(self, email=OPT_LOCAL):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
+        if type(self.z) != type(None):
+            model1 = CQERZG1.CERZG1(
+                self.y, self.x, self.z, self.tau, self.cutactive, self.cet, self.fun, self.rts)
+        else:
+            model1 = CQERG1.CERG1(
+                self.y, self.x, self.tau, self.cutactive, self.cet, self.fun, self.rts)
+        model1.optimize(email)
+        self.alpha = model1.get_alpha()
+        self.beta = model1.get_beta()
+        self.__model__ = model1.__model__
+
         while self.__convergence_test(self.alpha, self.beta) > 0.0001:
             if type(self.z) != type(None):
                 model2 = CQERZG2.CERZG2(
@@ -336,7 +341,7 @@ class CERG:
             else:
                 model2 = CQERG2.CERG2(
                     self.y, self.x, self.tau, self.Active, self.cutactive, self.cet, self.fun, self.rts)
-            model2.optimize(remote=False)
+            model2.optimize(email)
             self.alpha = model2.get_alpha()
             self.beta = model2.get_beta()
             # TODO: Replace print with log system
@@ -464,7 +469,7 @@ class CERG:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
         beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
-                                                        list(self.__model__.beta[:, :].value))])
+                                                          list(self.__model__.beta[:, :].value))])
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
         beta = beta.pivot(index='Name', columns='Key', values='Value')
         return beta.to_numpy()
