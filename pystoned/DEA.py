@@ -6,7 +6,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from .constant import ORIENT_IN, ORIENT_OU, RTS_VRS
+from .constant import ORIENT_IN, ORIENT_OU, RTS_VRS, OPT_LOCAL
+from .utils import tools
+
 
 class DEA:
     """
@@ -134,9 +136,9 @@ class DEA:
                 return sum(model.lamda[o, r] for r in model.R) == 1
             return vrs_rule
 
-    def optimize(self, remote=True):
+    def optimize(self, email=OPT_LOCAL):
         """Optimize the function by requested method"""
-        if remote == False:
+        if tools.set_neos_email(email):
             solver = SolverFactory("mosek")
             print("Estimating the model locally with mosek solver")
             self.problem_status = solver.solve(self.__model__, tee=True)

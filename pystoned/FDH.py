@@ -6,7 +6,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from .constant import ORIENT_IN, ORIENT_OU
+from .constant import ORIENT_IN, ORIENT_OU, OPT_LOCAL
+from .utils import tools
+
 
 class FDH:
     """
@@ -99,9 +101,9 @@ class FDH:
             return sum(model.lamda[o, i] for i in model.I) == 1
         return vrs_rule
 
-    def optimize(self, remote=True):
+    def optimize(self, email=OPT_LOCAL):
         """Optimize the function by requested method"""
-        if remote == False:
+        if tools.set_neos_email(email):
             solver = SolverFactory("mosek")
             print("Estimating the model locally with mosek solver")
             self.problem_status = solver.solve(self.__model__, tee=True)

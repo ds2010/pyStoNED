@@ -6,7 +6,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from .utils import CNLSG1, CNLSG2, CNLSZG1, CNLSZG2, sweet
-from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL
+
 
 class CNLSG:
     """Convex Nonparametric Least Square (CNLS) with Genetic algorithm"""
@@ -54,23 +55,25 @@ class CNLSG:
                 self.z = []
                 for z_value in z.tolist():
                     self.z.append([z_value])
-            model1 = CNLSZG1.CNLSZG1(
-                self.y, self.x, self.z, self.cutactive, self.cet, self.fun, self.rts)
-        else:
-            model1 = CNLSG1.CNLSG1(
-                self.y, self.x, self.cutactive, self.cet, self.fun, self.rts)
-        model1.optimize(remote=False)
-        self.alpha = model1.get_alpha()
-        self.beta = model1.get_beta()
-        self.__modol__ = model1.__model__
 
         # Optimize model
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self):
+    def optimize(self, email=OPT_LOCAL):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
+        if type(self.z) != type(None):
+            model1 = CNLSZG1.CNLSZG1(
+                self.y, self.x, self.z, self.cutactive, self.cet, self.fun, self.rts)
+        else:
+            model1 = CNLSG1.CNLSG1(
+                self.y, self.x, self.cutactive, self.cet, self.fun, self.rts)
+        model1.optimize(email)
+        self.alpha = model1.get_alpha()
+        self.beta = model1.get_beta()
+        self.__model__ = model1.__model__
+
         while self.__convergence_test(self.alpha, self.beta) > 0.0001:
             if type(self.z) != type(None):
                 model2 = CNLSZG2.CNLSZG2(
@@ -78,7 +81,7 @@ class CNLSG:
             else:
                 model2 = CNLSG2.CNLSG2(
                     self.y, self.x, self.Active, self.cutactive, self.cet, self.fun, self.rts)
-            model2.optimize(remote=False)
+            model2.optimize(email)
             self.alpha = model2.get_alpha()
             self.beta = model2.get_beta()
             # TODO: Replace print with log system

@@ -5,7 +5,9 @@ from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
 import pandas as pd
 import numpy as np
-from .constant import FUN_COST, FUN_PROD
+
+from .constant import FUN_COST, FUN_PROD, OPT_LOCAL
+from .utils import tools
 
 
 class CNLSDDF(CNLS.CNLS):
@@ -92,17 +94,16 @@ class CNLSDDF(CNLS.CNLS):
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self, remote=False):
+    def optimize(self, email=OPT_LOCAL):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
-        if remote == False:
+        if not tools.set_neos_email(email):
             print("Estimating the model locally with mosek solver")
             solver = SolverFactory("mosek")
             self.problem_status = solver.solve(self.__model__,
                                                tee=True)
             print(self.problem_status)
             self.optimization_status = 1
-
         else:
             print("Estimating the model remotely with mosek solver")
             solver = SolverManagerFactory('neos')

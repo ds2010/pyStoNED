@@ -5,7 +5,10 @@ from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
+
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL
+from .utils import tools
+
 
 class CNLS:
     """Convex Nonparametric Least Square (CNLS)"""
@@ -98,10 +101,10 @@ class CNLS:
             rl.append(l[i][0])
         return rl
 
-    def optimize(self, remote=False):
+    def optimize(self, email=OPT_LOCAL):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
-        if remote == False:
+        if not tools.set_neos_email(email):
             if self.cet == CET_ADDI:
                 solver = SolverFactory("mosek")
                 print("Estimating the additive model locally with mosek solver")

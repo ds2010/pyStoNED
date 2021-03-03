@@ -29,3 +29,6 @@ ORIENT_Categories = {
     ORIENT_IN: "Input orientation",
     ORIENT_OU: "Output orientation"
 }
+
+# Optimization
+OPT_LOCAL = "N"

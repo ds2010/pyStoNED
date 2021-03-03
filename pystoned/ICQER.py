@@ -5,6 +5,7 @@ from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
 
+
 class ICQR(ICNLS.ICNLS, CQER.CQR):
     """Isotonic convex quantile regression (ICQR)"""
 
