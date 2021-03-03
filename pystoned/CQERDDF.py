@@ -3,6 +3,7 @@ from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constrai
 from pyomo.core.expr.numvalue import NumericValue
 from .constant import FUN_PROD, FUN_COST
 
+
 class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
     """Convex quantile regression with multiple Outputs (DDF formulation)"""
 
