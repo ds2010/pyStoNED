@@ -14,7 +14,7 @@ class CQRG:
 
     def __init__(self, y, x, tau, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """
-        Initialize the CNLSG model
+        Initialize the CQRG model
 
         * y : Output variable
         * x : Input variables
@@ -272,7 +272,7 @@ class CERG:
 
     def __init__(self, y, x, tau, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """
-        Initialize the CNLSG model
+        Initialize the CERG model
 
         * y : Output variable
         * x : Input variables
