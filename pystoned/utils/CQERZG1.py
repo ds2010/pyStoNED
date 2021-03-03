@@ -4,7 +4,9 @@ from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
-from ..constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
+from ..constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL
+from .tools import set_neos_email
+
 
 class CQRZG1:
     """initial Group-VC-added CQR (CQR+G) model"""
@@ -27,7 +29,7 @@ class CQRZG1:
         self.x = x
         self.y = y
         self.z = z
-        self.tau = tau        
+        self.tau = tau
         self.cet = cet
         self.fun = fun
         self.rts = rts
@@ -55,9 +57,9 @@ class CQRZG1:
         # Initialize the variables
         self.__model__.alpha = Var(self.__model__.I, doc='alpha')
         self.__model__.beta = Var(self.__model__.I,
-                                self.__model__.J,
-                                bounds=(0.0, None),
-                                doc='beta')
+                                  self.__model__.J,
+                                  bounds=(0.0, None),
+                                  doc='beta')
         self.__model__.lamda = Var(self.__model__.K, doc='Zvalue')
         self.__model__.epsilon = Var(self.__model__.I, doc='residual')
         self.__model__.epsilon_plus = Var(
@@ -65,39 +67,39 @@ class CQRZG1:
         self.__model__.epsilon_minus = Var(
             self.__model__.I, bounds=(0.0, None), doc='negative error term')
         self.__model__.frontier = Var(self.__model__.I,
-                                    bounds=(0.0, None),
-                                    doc='estimated frontier')
+                                      bounds=(0.0, None),
+                                      doc='estimated frontier')
 
         # Setup the objective function and constraints
         self.__model__.objective = Objective(rule=self.__objective_rule(),
-                                            sense=minimize,
-                                            doc='objective function')
+                                             sense=minimize,
+                                             doc='objective function')
         self.__model__.error_decomposition = Constraint(self.__model__.I,
                                                         rule=self.__error_decomposition(),
-                                                        doc='decompose error term')                                              
+                                                        doc='decompose error term')
         self.__model__.regression_rule = Constraint(self.__model__.I,
                                                     rule=self.__regression_rule(),
                                                     doc='regression equation')
         if self.cet == CET_MULT:
             self.__model__.log_rule = Constraint(self.__model__.I,
-                                                rule=self.__log_rule(),
-                                                doc='log-transformed regression equation')
+                                                 rule=self.__log_rule(),
+                                                 doc='log-transformed regression equation')
         self.__model__.afriat_rule = Constraint(self.__model__.I,
                                                 rule=self.__afriat_rule(),
                                                 doc='elementary Afriat approach')
         self.__model__.sweet_rule = Constraint(self.__model__.I,
-                                                self.__model__.I,
-                                                rule=self.__sweet_rule(),
-                                                doc='sweet spot approach')
+                                               self.__model__.I,
+                                               rule=self.__sweet_rule(),
+                                               doc='sweet spot approach')
 
         # Optimize model
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self, remote=True):
+    def optimize(self, email=OPT_LOCAL):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
-        if remote == False:
+        if not set_neos_email(email):
             if self.cet == CET_ADDI:
                 solver = SolverFactory("mosek")
                 self.problem_status = solver.solve(self.__model__, tee=True)
@@ -119,8 +121,8 @@ class CQRZG1:
 
             solver = SolverManagerFactory('neos')
             self.problem_status = solver.solve(self.__model__,
-                                            tee=True,
-                                            opt=opt)
+                                               tee=True,
+                                               opt=opt)
             self.optimization_status = 1
 
     def __objective_rule(self):
@@ -128,7 +130,7 @@ class CQRZG1:
 
         def objective_rule(model):
             return self.tau * sum(model.epsilon_plus[i] for i in model.I) \
-                    + (1 - self.tau) * sum(model.epsilon_minus[i] for i in model.I)
+                + (1 - self.tau) * sum(model.epsilon_minus[i] for i in model.I)
 
         return objective_rule
 
@@ -149,7 +151,7 @@ class CQRZG1:
                     return self.y[i] == model.alpha[i] \
                         + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
                         + sum(model.lamda[k] * self.z[i][k]
-                            for k in model.K) + model.epsilon[i]
+                              for k in model.K) + model.epsilon[i]
 
                 return regression_rule
             elif self.rts == RTS_CRS:
@@ -160,7 +162,7 @@ class CQRZG1:
 
             def regression_rule(model, i):
                 return log(self.y[i]) == log(model.frontier[i] + 1) + sum(model.lamda[k] * self.z[i][k] for k in model.K) \
-                        + model.epsilon[i]
+                    + model.epsilon[i]
 
             return regression_rule
 
@@ -201,7 +203,7 @@ class CQRZG1:
                 def afriat_rule(model, i):
                     return __operator(
                         model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
-                                            for j in model.J),
+                                             for j in model.J),
                         model.alpha[self.__model__.I.nextw(i)] +
                         sum(model.beta[self.__model__.I.nextw(i), j] * self.x[i][j]
                             for j in model.J))
@@ -216,7 +218,7 @@ class CQRZG1:
                 def afriat_rule(model, i):
                     return __operator(
                         model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
-                                            for j in model.J),
+                                             for j in model.J),
                         model.alpha[self.__model__.I.nextw(i)] +
                         sum(model.beta[self.__model__.I.nextw(i), j] * self.x[i][j]
                             for j in model.J))
@@ -249,9 +251,9 @@ class CQRZG1:
                         if i == h:
                             return Constraint.Skip
                         return __operator(model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
-                                                                for j in model.J),
+                                                               for j in model.J),
                                           model.alpha[h] + sum(model.beta[h, j] * self.x[i][j]
-                                                                for j in model.J))
+                                                               for j in model.J))
                     return Constraint.Skip
 
                 return sweet_rule
@@ -266,9 +268,9 @@ class CQRZG1:
                         if i == h:
                             return Constraint.Skip
                         return __operator(model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
-                                                                for j in model.J),
+                                                               for j in model.J),
                                           model.alpha[h] + sum(model.beta[h, j] * self.x[i][j]
-                                                                for j in model.J))
+                                                               for j in model.J))
                     return Constraint.Skip
 
                 return sweet_rule
@@ -299,7 +301,7 @@ class CQRZG1:
         if self.optimization_status == 0:
             self.optimize()
         beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
-                                                        list(self.__model__.beta[:, :].value))])
+                                                          list(self.__model__.beta[:, :].value))])
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
         beta = beta.pivot(index='Name', columns='Key', values='Value')
         return beta.to_numpy()
@@ -329,6 +331,7 @@ class CERZG1(CQRZG1):
     def __squared_objective_rule(self):
         def squared_objective_rule(model):
             return self.tau * sum(model.epsilon_plus[i] ** 2 for i in model.I) \
-                    + (1 - self.tau) * sum(model.epsilon_minus[i] ** 2 for i in model.I)
+                + (1 - self.tau) * \
+                sum(model.epsilon_minus[i] ** 2 for i in model.I)
 
         return squared_objective_rule
