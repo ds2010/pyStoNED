@@ -4,7 +4,7 @@ from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 
-from .constant import ORIENT_IN, ORIENT_OO, RTS_VRS, OPT_LOCAL
+from .constant import ORIENT_IO, ORIENT_OO, RTS_VRS, OPT_LOCAL
 from .utils import tools
 
 
@@ -15,7 +15,7 @@ class DEA:
 
     def __init__(self, y, x, orient, rts, yref=None, xref=None):
         """
-        orient  = ORIENT_IN : input orientation
+        orient  = ORIENT_IO : input orientation
                 = ORIENT_OO : output orientation
         rts     = RTS_VRS: variable returns to scale
                 = RTS_CRS: constant returns to scale
@@ -47,7 +47,7 @@ class DEA:
             0.0, None), doc='intensity variables')
 
         # Setup the objective function and constraints
-        if self.orient == ORIENT_IN:
+        if self.orient == ORIENT_IO:
             self.__model__.objective = Objective(
                 rule=self.__objective_rule(), sense=minimize, doc='objective function')
         else:
@@ -85,7 +85,7 @@ class DEA:
     def __input_rule(self):
         """Return the proper input constraint"""
         if self.__reference == False:
-            if self.orient == ORIENT_IN:
+            if self.orient == ORIENT_IO:
                 def input_rule(model, o, j):
                     return model.theta[o]*self.x[o][j] >= sum(model.lamda[o, i]*self.x[i][j] for i in model.I)
                 return input_rule
@@ -94,7 +94,7 @@ class DEA:
                     return sum(model.lamda[o, i] * self.x[i][j] for i in model.I) <= self.x[o][j]
                 return input_rule
         else:
-            if self.orient == ORIENT_IN:
+            if self.orient == ORIENT_IO:
                 def input_rule(model, o, j):
                     return model.theta[o]*self.x[o][j] >= sum(model.lamda[o, r]*self.xref[r][j] for r in model.R)
                 return input_rule
@@ -106,7 +106,7 @@ class DEA:
     def __output_rule(self):
         """Return the proper output constraint"""
         if self.__reference == False:
-            if self.orient == ORIENT_IN:
+            if self.orient == ORIENT_IO:
                 def output_rule(model, o, k):
                     return sum(model.lamda[o, i] * self.y[i][k] for i in model.I) >= self.y[o][k]
                 return output_rule
@@ -115,7 +115,7 @@ class DEA:
                     return model.theta[o]*self.y[o][k] <= sum(model.lamda[o, i]*self.y[i][k] for i in model.I)
                 return output_rule
         else:
-            if self.orient == ORIENT_IN:
+            if self.orient == ORIENT_IO:
                 def output_rule(model, o, k):
                     return sum(model.lamda[o, r] * self.yref[r][k] for r in model.R) >= self.y[o][k]
                 return output_rule

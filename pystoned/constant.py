@@ -23,10 +23,10 @@ RTS_Categories = {
 }
 
 # Orientation
-ORIENT_IN = "io"
+ORIENT_IO = "io"
 ORIENT_OO = "oo"
 ORIENT_Categories = {
-    ORIENT_IN: "Input orientation",
+    ORIENT_IO: "Input orientation",
     ORIENT_OO: "Output orientation"
 }
 

@@ -4,7 +4,7 @@ from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 
-from .constant import ORIENT_IN, ORIENT_OO, OPT_LOCAL
+from .constant import ORIENT_IO, ORIENT_OO, OPT_LOCAL
 from .utils import tools
 
 
@@ -15,7 +15,7 @@ class FDH:
 
     def __init__(self, y, x, orient):
         """
-        orient  = ORIENT_IN : input orientation
+        orient  = ORIENT_IO : input orientation
                 = ORIENT_OO : output orientation
         """
         # TODO(error/warning handling): Check the configuration of the model exist
@@ -47,7 +47,7 @@ class FDH:
             self.__model__.I, self.__model__.I, within=Binary, doc='intensity variables')
 
         # Setup the objective function and constraints
-        if self.orient == ORIENT_IN:
+        if self.orient == ORIENT_IO:
             self.__model__.objective = Objective(
                 rule=self.__objective_rule(), sense=minimize, doc='objective function')
         else:
@@ -74,7 +74,7 @@ class FDH:
 
     def __input_rule(self):
         """Return the proper input constraint"""
-        if self.orient == ORIENT_IN:
+        if self.orient == ORIENT_IO:
             def input_rule(model, o, j):
                 return model.theta[o]*self.x[o][j] >= sum(model.lamda[o, i]*self.x[i][j] for i in model.I)
             return input_rule
@@ -85,7 +85,7 @@ class FDH:
 
     def __output_rule(self):
         """Return the proper output constraint"""
-        if self.orient == ORIENT_IN:
+        if self.orient == ORIENT_IO:
             def output_rule(model, o, k):
                 return sum(model.lamda[o, i] * self.y[i][k] for i in model.I) >= self.y[o][k]
             return output_rule
