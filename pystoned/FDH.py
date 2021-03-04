@@ -1,7 +1,6 @@
 # Import pyomo module
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, maximize, Constraint, Binary
 from pyomo.opt import SolverFactory, SolverManagerFactory
-from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 
 from .constant import ORIENT_IO, ORIENT_OO, OPT_LOCAL
@@ -101,7 +100,7 @@ class FDH:
 
     def optimize(self, email=OPT_LOCAL):
         """Optimize the function by requested method"""
-        if tools.set_neos_email(email):
+        if not tools.set_neos_email(email):
             solver = SolverFactory("mosek")
             print("Estimating the model locally with mosek solver")
             self.problem_status = solver.solve(self.__model__, tee=True)
