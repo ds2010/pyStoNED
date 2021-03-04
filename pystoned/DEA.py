@@ -3,10 +3,8 @@ from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, maximize
 from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 
-from .constant import ORIENT_IN, ORIENT_OU, RTS_VRS, OPT_LOCAL
+from .constant import ORIENT_IN, ORIENT_OO, RTS_VRS, OPT_LOCAL
 from .utils import tools
 
 
@@ -18,7 +16,7 @@ class DEA:
     def __init__(self, y, x, orient, rts, yref=None, xref=None):
         """
         orient  = ORIENT_IN : input orientation
-                = ORIENT_OU : output orientation
+                = ORIENT_OO : output orientation
         rts     = RTS_VRS: variable returns to scale
                 = RTS_CRS: constant returns to scale
         """
@@ -91,7 +89,7 @@ class DEA:
                 def input_rule(model, o, j):
                     return model.theta[o]*self.x[o][j] >= sum(model.lamda[o, i]*self.x[i][j] for i in model.I)
                 return input_rule
-            elif self.orient == ORIENT_OU:
+            elif self.orient == ORIENT_OO:
                 def input_rule(model, o, j):
                     return sum(model.lamda[o, i] * self.x[i][j] for i in model.I) <= self.x[o][j]
                 return input_rule
@@ -100,7 +98,7 @@ class DEA:
                 def input_rule(model, o, j):
                     return model.theta[o]*self.x[o][j] >= sum(model.lamda[o, r]*self.xref[r][j] for r in model.R)
                 return input_rule
-            elif self.orient == ORIENT_OU:
+            elif self.orient == ORIENT_OO:
                 def input_rule(model, o, j):
                     return sum(model.lamda[o, r] * self.x[r][j] for r in model.I) <= self.x[o][j]
                 return input_rule
@@ -112,7 +110,7 @@ class DEA:
                 def output_rule(model, o, k):
                     return sum(model.lamda[o, i] * self.y[i][k] for i in model.I) >= self.y[o][k]
                 return output_rule
-            elif self.orient == ORIENT_OU:
+            elif self.orient == ORIENT_OO:
                 def output_rule(model, o, k):
                     return model.theta[o]*self.y[o][k] <= sum(model.lamda[o, i]*self.y[i][k] for i in model.I)
                 return output_rule
@@ -121,7 +119,7 @@ class DEA:
                 def output_rule(model, o, k):
                     return sum(model.lamda[o, r] * self.yref[r][k] for r in model.R) >= self.y[o][k]
                 return output_rule
-            elif self.orient == ORIENT_OU:
+            elif self.orient == ORIENT_OO:
                 def output_rule(model, o, k):
                     return model.theta[o]*self.y[o][k] <= sum(model.lamda[o, r]*self.y[r][k] for r in model.R)
                 return output_rule
