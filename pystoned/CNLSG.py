@@ -4,7 +4,6 @@ from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from .utils import CNLSG1, CNLSG2, CNLSZG1, CNLSZG2, sweet
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL
 
@@ -233,47 +232,3 @@ class CNLSG:
         elif self.cet == CET_ADDI:
             frontier = np.asarray(self.y) - self.get_residual()
         return np.asarray(frontier)
-
-    def plot2d(self, xselect, fig_name=None):
-        """
-        Plot with Selected x
-
-        * xselect: The index of selected x
-        * fig_name: The name of figure to save
-                    If `fig_name` is not given, the figure will be showed.
-        """
-
-        x = np.array(self.x).T[xselect]
-        y = np.array(self.y).T
-        f = y - self.get_residual()
-        data = (np.stack([x, y, f], axis=0)).T
-
-        # sort
-        data = data[np.argsort(data[:, 0])].T
-
-        x, y, f = data[0], data[1], data[2]
-
-        # create figure and axes objects
-        fig, ax = plt.subplots()
-        dp = ax.scatter(x, y, color="k", marker='x')
-        fl = ax.plot(x, f, color="r", label="CNLS")
-
-        # add legend
-        legend = plt.legend([dp, fl[0]],
-                            ['Data points', 'CNLS'],
-                            loc='upper left',
-                            ncol=1,
-                            fontsize=10,
-                            frameon=False)
-
-        # add x, y label
-        ax.set_xlabel("Input $x$%d" % (xselect))
-        ax.set_ylabel("Output $y$")
-
-        # Remove top and right axes
-        ax.spines["right"].set_visible(False)
-        ax.spines["top"].set_visible(False)
-        if fig_name == None:
-            plt.show()
-        else:
-            plt.savefig(fig_name)
