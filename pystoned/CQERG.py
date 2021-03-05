@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from .utils import CQERG1, CQERG2, CQERZG1, CQERZG2, sweet
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL
+import time
 
 
 class CQRG:
@@ -60,6 +61,7 @@ class CQRG:
     def optimize(self, email=OPT_LOCAL):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
+        self.t0 = time.time()
         if type(self.z) != type(None):
             model1 = CQERZG1.CQRZG1(
                 self.y, self.x, self.z, self.tau, self.cutactive, self.cet, self.fun, self.rts)
@@ -86,6 +88,7 @@ class CQRG:
                   (self.__convergence_test(self.alpha, self.beta)))
             self.__model__ = model2.__model__
         self.optimization_status = 1
+        self.tt = time.time() - self.t0
 
     def __to_1d_list(self, l):
         rl = []
@@ -276,7 +279,14 @@ class CQRG:
         totalconstr = Activeconstr + Cutactiveconstr + 2 * len(np.matrix(self.Active)) + 1
         return totalconstr
 
+    def get_runningtime(self):
+        """Return the running time"""
+        if self.optimization_status == 0:
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
+        return self.tt
 
+        
 class CERG:
     """Convex expectile regression (CER) with Genetic algorithm"""
 
@@ -333,6 +343,7 @@ class CERG:
     def optimize(self, email=OPT_LOCAL):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
+        self.t0 = time.time()
         if type(self.z) != type(None):
             model1 = CQERZG1.CERZG1(
                 self.y, self.x, self.z, self.tau, self.cutactive, self.cet, self.fun, self.rts)
@@ -359,6 +370,7 @@ class CERG:
                   (self.__convergence_test(self.alpha, self.beta)))
             self.__model__ = model2.__model__
         self.optimization_status = 1
+        self.tt = time.time() - self.t0
 
     def __to_1d_list(self, l):
         rl = []
@@ -548,3 +560,10 @@ class CERG:
                     Cutactiveconstr += self.cutactive[i, j] 
         totalconstr = Activeconstr + Cutactiveconstr + 2 * len(np.matrix(self.Active)) + 1
         return totalconstr
+
+    def get_runningtime(self):
+        """Return the running time"""
+        if self.optimization_status == 0:
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
+        return self.tt   
