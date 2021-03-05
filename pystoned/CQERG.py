@@ -84,7 +84,7 @@ class CQRG:
             # TODO: Replace print with log system
             print("Genetic Algorithm Convergence : %8f" %
                   (self.__convergence_test(self.alpha, self.beta)))
-        self.__model__ = model2.__model__
+            self.__model__ = model2.__model__
         self.optimization_status = 1
 
     def __to_1d_list(self, l):
@@ -357,7 +357,7 @@ class CERG:
             # TODO: Replace print with log system
             print("Genetic Algorithm Convergence : %8f" %
                   (self.__convergence_test(self.alpha, self.beta)))
-        self.__model__ = model2.__model__
+            self.__model__ = model2.__model__
         self.optimization_status = 1
 
     def __to_1d_list(self, l):
