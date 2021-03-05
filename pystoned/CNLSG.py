@@ -1,7 +1,3 @@
-# Import pyomo module
-from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint, log
-from pyomo.opt import SolverFactory, SolverManagerFactory
-from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
 from .utils import CNLSG1, CNLSG2, CNLSZG1, CNLSZG2, sweet
