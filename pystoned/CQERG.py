@@ -261,6 +261,21 @@ class CQRG:
             frontier = np.asarray(self.y) - self.get_residual()
         return np.asarray(frontier)
 
+    def get_totalconstr(self):
+        """Return the number of total constraints"""
+        if self.optimization_status == 0:
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
+        Activeconstr = 0
+        Cutactiveconstr = 0
+        for i in range(len(np.matrix(self.Active))):
+            for j in range(len(np.matrix(self.Active))):
+                if i != j:
+                    Activeconstr += self.Active[i, j]
+                    Cutactiveconstr += self.cutactive[i, j] 
+        totalconstr = Activeconstr + Cutactiveconstr + 2 * len(np.matrix(self.Active)) + 1
+        return totalconstr
+
 
 class CERG:
     """Convex expectile regression (CER) with Genetic algorithm"""
@@ -518,3 +533,18 @@ class CERG:
         elif self.cet == CET_ADDI:
             frontier = np.asarray(self.y) - self.get_residual()
         return np.asarray(frontier)
+
+    def get_totalconstr(self):
+        """Return the number of total constraints"""
+        if self.optimization_status == 0:
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
+        Activeconstr = 0
+        Cutactiveconstr = 0
+        for i in range(len(np.matrix(self.Active))):
+            for j in range(len(np.matrix(self.Active))):
+                if i != j:
+                    Activeconstr += self.Active[i, j]
+                    Cutactiveconstr += self.cutactive[i, j] 
+        totalconstr = Activeconstr + Cutactiveconstr + 2 * len(np.matrix(self.Active)) + 1
+        return totalconstr
