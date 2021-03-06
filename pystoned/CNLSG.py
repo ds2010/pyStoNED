@@ -71,6 +71,7 @@ class CNLSG:
         self.beta = model1.get_beta()
         self.__model__ = model1.__model__
 
+        self.count = 0
         while self.__convergence_test(self.alpha, self.beta) > 0.0001:
             if type(self.z) != type(None):
                 model2 = CNLSZG2.CNLSZG2(
@@ -85,6 +86,7 @@ class CNLSG:
             print("Genetic Algorithm Convergence : %8f" %
                   (self.__convergence_test(self.alpha, self.beta)))
             self.__model__ = model2.__model__
+            self.count += 1
         self.optimization_status = 1
         self.tt = time.time() - self.t0
 
@@ -253,3 +255,10 @@ class CNLSG:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
         return self.tt
+
+    def get_blocks(self):
+        """Return the number of blocks"""
+        if self.optimization_status == 0:
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
+        return self.count   
