@@ -1,5 +1,5 @@
 ## GHG abatement cost of OECD countries
-*data from: Timo Kuosmanen (timo.kuosmanen@aalto.fi)*
+*data from Kuosmanen T. et al. (2020)*
 
 This dataset contains the following variables:
 

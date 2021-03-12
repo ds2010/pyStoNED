@@ -1,5 +1,5 @@
 ## Regulation of Finnish electricity distribution firms
-*data from: Timo Kuosmanen (timo.kuosmanen@aalto.fi)*
+*data from Kuosmanen T. (2012)*
 
 This dataset contains the following variables:
 
