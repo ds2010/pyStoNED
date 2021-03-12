@@ -15,7 +15,7 @@ will resort to these example data.
     front41Data/index.md
     riceProdPhil/index.md
 
-Import the example data from pyStoNED
+Import example data from pyStoNED
 -----------------------------------------
 
 - Finnish electricity firm data
