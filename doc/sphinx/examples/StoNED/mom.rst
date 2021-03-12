@@ -51,7 +51,7 @@ In the following code, we use the method of moments to decompose the CNLS residu
     import numpy as np
     
     # import Finnish electricity distribution firms data
-    url='https://raw.githubusercontent.com/ds2010/pyStoNED/master/sources/data/firms.csv'
+    url='https://raw.githubusercontent.com/ds2010/pyStoNED/master/pystoned/data/electricityFirms.csv'
     df = pd.read_csv(url, error_bad_lines=False)
     df.head(5)
     

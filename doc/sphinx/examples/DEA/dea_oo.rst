@@ -55,7 +55,7 @@ In the following code, we calculate the VRS radial model with pyStoNED.
     import numpy as np
     
     # import the data provided with Tim Coelli’s Frontier 4.1
-    url = 'https://raw.githubusercontent.com/ds2010/pyStoNED/master/sources/data/front41Data.csv'
+    url = 'https://raw.githubusercontent.com/ds2010/pyStoNED/master/pystoned/data/41Firm.csv'
     df = pd.read_csv(url, error_bad_lines=False)
     df.head(10)
     

@@ -39,7 +39,7 @@ In the following code, we estimate an additive cost function with pyStoNED.
     import numpy as np
     
     # import Finnish electricity distribution firms data
-    url='https://raw.githubusercontent.com/ds2010/pyStoNED/master/sources/data/firms.csv'
+    url='https://raw.githubusercontent.com/ds2010/pyStoNED/master/pystoned/data/electricityFirms.csv'
     df = pd.read_csv(url, error_bad_lines=False)
     df.head(5)
     
