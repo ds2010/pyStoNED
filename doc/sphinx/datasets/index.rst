@@ -1,7 +1,7 @@
 .. _datasets:
 
 Datasets
-=========
+===========
 
 In this section, the package provides 4 datasets: First two are used in large number of CNLS/StoNED
 liturature; the others are commonly used in the SFA liturature. In the following section (:ref:`Examples`), our tutorials
@@ -15,8 +15,8 @@ will resort to these example data.
     front41Data/index.md
     riceProdPhil/index.md
 
-Import the data from pyStoNED
----------------------------------
+Import the example data from pyStoNED
+-----------------------------------------
 
 - Finnish electricity firm data
 
