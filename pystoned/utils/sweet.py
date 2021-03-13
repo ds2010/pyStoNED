@@ -5,10 +5,10 @@ def sweet(x):
     """Sweet spot approach
 
     Args:
-        x: input variables
+        x (matrix): input variables
 
     Returns:
-        Cutactive: active concavity constraint
+        matrix: active concavity constraint
     """
 
     # transform data

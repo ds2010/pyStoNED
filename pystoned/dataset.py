@@ -7,15 +7,6 @@ file_path = os.path.dirname(__file__)
 
 class production_data:
     def __init__(self, dmu, x, y, b=None, z=None):
-        """General data structure
-
-        Args:
-            dmu: decision marking unit
-            x: input variables
-            y: output variable
-            b: bad output variable. Defaults to None.
-            z: contextual variable. Defaults to None.
-        """
         self.decision_making_unit = dmu
         self.x = x
         self.y = y
@@ -24,16 +15,16 @@ class production_data:
 
 
 def load_GHG_abatement_cost(year=None, x_select=['HRSN', 'CPNK'], y_select=['VALK'], b_select=['GHG']):
-    """load OECD GHG emissions data
+    """loading OECD GHG emissions data
 
     Args:
-        year: years. Defaults to None.
-        x_select: input variables. Defaults to ['HRSN', 'CPNK'].
-        y_select: output variable. Defaults to ['VALK'].
-        b_select: bad output variable. Defaults to ['GHG'].
+        year (array, optional): years. Defaults to None.
+        x_select (list, optional): input variables. Defaults to ['HRSN', 'CPNK'].
+        y_select (list, optional): output variable. Defaults to ['VALK'].
+        b_select (list, optional): bad output variable. Defaults to ['GHG'].
 
     Returns:
-        [type]: selected input-output
+        array: selected input-output
     """
     dataframe = pd.read_csv(
         file_path+"/data/abatementCost.csv", error_bad_lines=True)
@@ -54,6 +45,16 @@ def load_GHG_abatement_cost(year=None, x_select=['HRSN', 'CPNK'], y_select=['VAL
 
 
 def load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'], y_select=['OPEX', 'CAPEX', 'TOTEX'], z_select=['PerUndGr']):
+    """loading Finnish electricity firm data
+
+    Args:
+        x_select (list, optional): input variables. Defaults to ['Energy', 'Length', 'Customers'].
+        y_select (list, optional): output variable. Defaults to ['OPEX', 'CAPEX', 'TOTEX'].
+        z_select (list, optional): contextual variable. Defaults to ['PerUndGr'].
+
+    Returns:
+        array: selected input-output
+    """
     dataframe = pd.read_csv(
         file_path+"/data/electricityFirms.csv", error_bad_lines=True)
     dmu = np.asmatrix(dataframe.index.tolist()).T
@@ -68,6 +69,15 @@ def load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'], y_
 
 
 def load_Tim_Coelli_frontier(x_select=['capital', 'labour'], y_select=['output']):
+    """loading Tim Coelli 4.1 data
+
+    Args:
+        x_select (list, optional): input variables. Defaults to ['capital', 'labour'].
+        y_select (list, optional): output variable. Defaults to ['output'].
+
+    Returns:
+        array: selected input-output
+    """
     dataframe = pd.read_csv(
         file_path+"/data/41Firm.csv", error_bad_lines=True)
     dmu = np.asmatrix(dataframe['firm']).T
@@ -79,6 +89,16 @@ def load_Tim_Coelli_frontier(x_select=['capital', 'labour'], y_select=['output']
 
 
 def load_Philipines_rice_production(year=None, x_select=['AREA', 'LABOR', 'NPK', 'OTHER', 'AREAP', 'LABORP', 'NPKP', 'OTHERP'], y_select=['PROD', 'PRICE']):
+    """loading Philipines rice data
+
+    Args:
+        year (array, optional): [description]. Defaults to None.
+        x_select (list, optional): input variables. Defaults to ['AREA', 'LABOR', 'NPK', 'OTHER', 'AREAP', 'LABORP', 'NPKP', 'OTHERP'].
+        y_select (list, optional): output variable. Defaults to ['PROD', 'PRICE'].
+
+    Returns:
+        array: selected input-output
+    """
     dataframe = pd.read_csv(
         file_path+"/data/riceProduction.csv", error_bad_lines=True)
     if year != None:
