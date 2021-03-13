@@ -30,6 +30,6 @@ Peripheral Classes:
    :maxdepth: 1
 
    peripherals/dataset
-   peripherals/constant
+   peripherals/sweet
 
 
