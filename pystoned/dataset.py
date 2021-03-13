@@ -7,14 +7,14 @@ file_path = os.path.dirname(__file__)
 
 class production_data:
     def __init__(self, dmu, x, y, b=None, z=None):
-        """[summary]
+        """General data structure
 
         Args:
-            dmu ([type]): [description]
-            x ([type]): [description]
-            y ([type]): [description]
-            b ([type], optional): [description]. Defaults to None.
-            z ([type], optional): [description]. Defaults to None.
+            dmu: decision marking unit
+            x: input variables
+            y: output variable
+            b: bad output variable. Defaults to None.
+            z: contextual variable. Defaults to None.
         """
         self.decision_making_unit = dmu
         self.x = x
@@ -24,6 +24,17 @@ class production_data:
 
 
 def load_GHG_abatement_cost(year=None, x_select=['HRSN', 'CPNK'], y_select=['VALK'], b_select=['GHG']):
+    """load OECD GHG emissions data
+
+    Args:
+        year: years. Defaults to None.
+        x_select: input variables. Defaults to ['HRSN', 'CPNK'].
+        y_select: output variable. Defaults to ['VALK'].
+        b_select: bad output variable. Defaults to ['GHG'].
+
+    Returns:
+        [type]: selected input-output
+    """
     dataframe = pd.read_csv(
         file_path+"/data/abatementCost.csv", error_bad_lines=True)
     if year != None:

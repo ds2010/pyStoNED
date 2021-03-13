@@ -2,7 +2,14 @@ import numpy as np
 
 
 def sweet(x):
-    """Sweet spot approach, return active concavity constraint"""
+    """Sweet spot approach
+
+    Args:
+        x: input variables
+
+    Returns:
+        Cutactive: active concavity constraint
+    """
 
     # transform data
     df = np.asmatrix(x)
