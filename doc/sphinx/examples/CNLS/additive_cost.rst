@@ -40,8 +40,7 @@ In the following code, we estimate an additive cost function with pyStoNED.
     
     # import Finnish electricity distribution firms data
     data = load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'],
-                                            y_select=['TOTEX'],
-                                            z_select=['PerUndGr'])
+                                            y_select=['TOTEX'])
     
     # define and solve the CNLS model
     model = CNLS.CNLS(y=data.y, x=data.x, z=None, cet = CET_ADDI, fun = FUN_COST, rts = RTS_VRS)
