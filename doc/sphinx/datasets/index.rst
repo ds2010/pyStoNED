@@ -3,7 +3,7 @@
 Datasets
 ===========
 
-In this section, the package provides 4 datasets: First two are used in large number of CNLS/StoNED
+In this section, the package provides four example datasets: First two are used in large number of CNLS/StoNED
 liturature; the others are commonly used in the SFA liturature. In the following section (:ref:`Examples`), our tutorials
 will resort to these example data.
 
@@ -22,17 +22,88 @@ Import example data from pyStoNED
 
 .. code:: python
 
+    # import dataset module
     from pystoned.dataset import load_Finnish_electricity_firm
 
+    # import all data (including the contextual varibale)
     data = load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'], 
-                                        y_select=['TOTEX'], 
-                                        z_select=['PerUndGr'])
-                                        
+                                            y_select=['TOTEX'], 
+                                            z_select=['PerUndGr'])
+    x, y, z = data.x, data.y, data.z
+    
+    # print data
+    print(x)
+    print(y)
+    print(z)
+
+    # (OR) import data (only inputs and output)
+    data = load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'], 
+                                            y_select=['TOTEX'])
+    x, y = data.x, data.y
+    
+    # print data
+    print(x)
+    print(y)
+
+
 - import OECD GHG emissions data
+
+.. code:: python
+
+    # import dataset module
+    from pystoned.dataset import load_GHG_abatement_cost
+
+    # import all data 
+    data = load_GHG_abatement_cost(x_select=['HRSN', 'CPNK'], 
+                                    y_select=['VALK'], 
+                                    b_select=['GHG'])
+    x, y, b = data.x, data.y, data.b
+
+    # print data
+    print(x)
+    print(y)
+    print(b)
 
 - import Tim Coelli’s Frontier 4.1 data
 
+.. code:: python
+
+    # import dataset module
+    from pystoned.dataset import load_Tim_Coelli_frontier
+
+    # import all data 
+    data = load_Tim_Coelli_frontier(x_select=['capital', 'labour'], 
+                                        y_select=['output'])
+    x, y = data.x, data.y
+
+    # print data
+    print(x)
+    print(y)
+
 - import rice production data
+
+.. code:: python
+
+    # import dataset module
+    from pystoned.dataset import load_Philipines_rice_production
+
+    # import all data 
+    data = load_Philipines_rice_production(x_select=['AREA', 'LABOR', 'NPK', 'OTHER', 'AREAP', 'LABORP', 'NPKP', 'OTHERP'], 
+                                                y_select=['PROD', 'PRICE'])
+    x, y = data.x, data.y
+
+    # print data
+    print(x)
+    print(y)
+
+    # (OR) import partial data (two input-one output) 
+    data = load_Philipines_rice_production(x_select=['LABOR', 'NPK'], 
+                                                y_select=['PROD'])
+    x, y = data.x, data.y
+
+    # print data
+    print(x)
+    print(y)
 
 
 Import personal data
@@ -78,4 +149,3 @@ use the Panda to read the Excel file and organize the data using the Numpy.
 
     # contextual Variable: z
     z = df['z_var']
-
