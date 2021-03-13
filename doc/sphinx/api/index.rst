@@ -29,6 +29,7 @@ Peripheral Classes:
 .. toctree::
    :maxdepth: 1
 
+   peripherals/CNLSG1
    peripherals/dataset
    peripherals/sweet
 

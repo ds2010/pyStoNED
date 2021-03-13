@@ -5,10 +5,10 @@ def sweet(x):
     """Sweet spot approach
 
     Args:
-        x (list): input variables
+        x (list): input variables.
 
     Returns:
-        array: active concavity constraint
+        Numbers: active concavity constraint.
     """
 
     # transform data

@@ -12,17 +12,16 @@ class CNLSG1:
     """initial Group-VC-added CNLS (CNLS+G) model"""
 
     def __init__(self, y, x, Cutactive, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
-        """
-            y : Output variable
-            x : Input variables
-            cet  = CET_ADDI : Additive composite error term
-                 = CET_MULT : Multiplicative composite error term
-            fun  = FUN_PROD : Production frontier
-                 = FUN_COST : Cost frontier
-            rts  = RTS_VRS  : Variable returns to scale
-                 = RTS_CRS  : Constant returns to scale
-        """
+        """CNLS+G model 1
 
+        Args:
+            y (Numbers): output variable.
+            x (Numbers): input variables.
+            Cutactive (Numbers): active concavity constraint.
+            cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
+            fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
+            rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
+        """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.x = x
         self.y = y
@@ -79,7 +78,14 @@ class CNLSG1:
         self.problem_status = 0
 
     def optimize(self, email=OPT_LOCAL):
-        """Optimize the function by requested method"""
+        """Optimize the function by requested method
+
+        Args:
+            email (String, optional): [description]. Defaults to OPT_LOCAL.
+
+        Returns:
+            Numbers: [description]
+        """
         # TODO(error/warning handling): Check problem status after optimization
         if not set_neos_email(email):
             if self.cet == CET_ADDI:
