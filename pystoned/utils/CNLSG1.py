@@ -1,4 +1,4 @@
-# Import pyomo module
+# import dependencies
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint, log
 from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
@@ -15,9 +15,9 @@ class CNLSG1:
         """CNLS+G model 1
 
         Args:
-            y (Numbers): output variable.
-            x (Numbers): input variables.
-            Cutactive (Numbers): active concavity constraint.
+            y (float): output variable.
+            x (float): input variables.
+            Cutactive (float): active concavity constraint.
             cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
             fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
             rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.

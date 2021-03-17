@@ -1,3 +1,4 @@
+# import dependencies
 import numpy as np
 import pandas as pd
 from .utils import CNLSG1, CNLSG2, CNLSZG1, CNLSZG2, sweet
@@ -6,23 +7,19 @@ import time
 
 
 class CNLSG:
-    """Convex Nonparametric Least Square (CNLS) with Genetic algorithm"""
-
+    """Convex Nonparametric Least Square (CNLS) with Genetic algorithm
+    """
     def __init__(self, y, x, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
-        """
-        Initialize the CNLSG model
+        """CNLSG model
 
-        * y : Output variable
-        * x : Input variables
-        * z : Contextual variables
-        * cet  = CET_ADDI : Additive composite error term
-               = CET_MULT : Multiplicative composite error term
-        * fun  = FUN_PROD : Production frontier
-               = FUN_COST : Cost frontier
-        * rts  = RTS_VRS  : Variable returns to scale
-               = RTS_CRS  : Constant returns to scale
+        Args:
+            y (float): output variable. 
+            x (float): input variables.
+            z (float, optional): Contextual variable(s). Defaults to None.
+            cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
+            fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
+            rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
         """
-
         # TODO(error/warning handling): Check the configuration of the model exist
         self.cutactive = sweet.sweet(x)
         self.x = x.tolist()
@@ -84,7 +81,7 @@ class CNLSG:
             self.beta = model2.get_beta()
             # TODO: Replace print with log system
             print("Genetic Algorithm Convergence : %8f" %
-                  (self.__convergence_test(self.alpha, self.beta)))
+                    (self.__convergence_test(self.alpha, self.beta)))
             self.__model__ = model2.__model__
             self.count += 1
         self.optimization_status = 1
@@ -195,7 +192,7 @@ class CNLSG:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
         beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
-                                                          list(self.__model__.beta[:, :].value))])
+                                                            list(self.__model__.beta[:, :].value))])
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
         beta = beta.pivot(index='Name', columns='Key', values='Value')
         return beta.to_numpy()
