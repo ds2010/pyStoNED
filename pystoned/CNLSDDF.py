@@ -11,7 +11,7 @@ from .utils import tools
 
 
 class CNLSDDF(CNLS.CNLS):
-    """Convex Nonparametric Least Square DDF formulation
+    """Convex Nonparametric Least Square with DDF formulation
     """
     def __init__(self, y, x, b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD):
         """CNLS DDF model

@@ -352,12 +352,11 @@ class CNLS:
         return self.get_alpha() + np.amax(self.get_residual())
 
     def plot2d(self, xselect, fig_name=None):
-        """
-        Plot with Selected x
+        """Plot with Selected x
 
-        * xselect: The index of selected x
-        * fig_name: The name of figure to save
-                    If `fig_name` is not given, the figure will be showed.
+        Args:
+            xselect (list): The index of selected x.
+            fig_name (String, optional): The name of figure to save. Defaults to None.
         """
         x = np.array(self.x).T[xselect]
         y = np.array(self.y).T
