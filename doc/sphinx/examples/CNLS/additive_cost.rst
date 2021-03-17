@@ -45,7 +45,7 @@ In the following code, we estimate an additive cost function with pyStoNED.
     # define and solve the CNLS model
     model = CNLS.CNLS(y=data.y, x=data.x, z=None, cet = CET_ADDI, fun = FUN_COST, rts = RTS_VRS)
                                             
-    # Please replace with your own email address reqired by NEOS server (see https://twitter.com/NeosOpt/status/1336360894884966401)
+    # Please replace with your own email address reqired by NEOS server (see https://neos-guide.org/content/FAQ#email)
     model.optimize('email@address')
 
     # print the residuals
