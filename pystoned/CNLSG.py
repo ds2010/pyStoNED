@@ -9,6 +9,7 @@ import time
 class CNLSG:
     """Convex Nonparametric Least Square (CNLS) with Genetic algorithm
     """
+
     def __init__(self, y, x, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CNLSG model
 
@@ -81,7 +82,7 @@ class CNLSG:
             self.beta = model2.get_beta()
             # TODO: Replace print with log system
             print("Genetic Algorithm Convergence : %8f" %
-                    (self.__convergence_test(self.alpha, self.beta)))
+                  (self.__convergence_test(self.alpha, self.beta)))
             self.__model__ = model2.__model__
             self.count += 1
         self.optimization_status = 1
@@ -106,25 +107,25 @@ class CNLSG:
                     if self.rts == RTS_VRS:
                         if self.fun == FUN_PROD:
                             self.Active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
-                                alpha[j] - np.sum(beta[j, :] * x[i, :])
+                                                 alpha[j] - np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
                             self.Active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
-                                alpha[j] + np.sum(beta[j, :] * x[i, :])
+                                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
                 if self.cet == CET_MULT:
                     if self.rts == RTS_VRS:
                         if self.fun == FUN_PROD:
                             self.Active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
-                                alpha[j] - np.sum(beta[j, :] * x[i, :])
+                                                 alpha[j] - np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
                             self.Active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
-                                alpha[j] + np.sum(beta[j, :] * x[i, :])
+                                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
                     if self.rts == RTS_CRS:
                         if self.fun == FUN_PROD:
                             self.Active2[i, j] = np.sum(beta[i, :] * x[i, :]) - \
-                                np.sum(beta[j, :] * x[i, :])
+                                                 np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
                             self.Active2[i, j] = - np.sum(beta[i, :] * x[i, :]) + \
-                                np.sum(beta[j, :] * x[i, :])
+                                                 np.sum(beta[j, :] * x[i, :])
                 if self.Active2[i, j] > Activetmp:
                     Activetmp = self.Active2[i, j]
             # find the maximal violated constraint in sub-loop and added into the active matrix
@@ -192,7 +193,7 @@ class CNLSG:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
         beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
-                                                            list(self.__model__.beta[:, :].value))])
+                                                          list(self.__model__.beta[:, :].value))])
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
         beta = beta.pivot(index='Name', columns='Key', values='Value')
         return beta.to_numpy()
@@ -223,10 +224,10 @@ class CNLSG:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
         if self.cet == CET_MULT and type(self.z) == type(None):
-            frontier = np.asarray(list(self.__model__.frontier[:].value))+1
+            frontier = np.asarray(list(self.__model__.frontier[:].value)) + 1
         elif self.cet == CET_MULT and type(self.z) != type(None):
             frontier = list(np.divide(self.y, np.exp(
-                self.get_residual()+self.get_lamda()*np.asarray(self.z)[:, 0])) - 1)
+                self.get_residual() + self.get_lamda() * np.asarray(self.z)[:, 0])) - 1)
         elif self.cet == CET_ADDI:
             frontier = np.asarray(self.y) - self.get_residual()
         return np.asarray(frontier)
@@ -242,7 +243,7 @@ class CNLSG:
             for j in range(len(np.matrix(self.Active))):
                 if i != j:
                     Activeconstr += self.Active[i, j]
-                    Cutactiveconstr += self.cutactive[i, j] 
+                    Cutactiveconstr += self.cutactive[i, j]
         totalconstr = Activeconstr + Cutactiveconstr + 2 * len(np.matrix(self.Active)) + 1
         return totalconstr
 
@@ -258,4 +259,4 @@ class CNLSG:
         if self.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
-        return self.count   
+        return self.count

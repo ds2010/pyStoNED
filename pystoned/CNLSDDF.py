@@ -13,6 +13,7 @@ from .utils import tools
 class CNLSDDF(CNLS.CNLS):
     """Convex Nonparametric Least Square with DDF formulation
     """
+
     def __init__(self, y, x, b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD):
         """CNLS DDF model
 
@@ -75,14 +76,14 @@ class CNLSDDF(CNLS.CNLS):
 
         # Setup the objective function and constraints
         self.__model__.objective = Objective(rule=self._CNLS__objective_rule(),
-                                                sense=minimize,
-                                                doc='objective function')
+                                             sense=minimize,
+                                             doc='objective function')
         self.__model__.regression_rule = Constraint(self.__model__.I,
                                                     rule=self.__regression_rule(),
                                                     doc='regression equation')
         self.__model__.translation_rule = Constraint(self.__model__.I,
-                                                        rule=self.__translation_property(),
-                                                        doc='translation property')
+                                                     rule=self.__translation_property(),
+                                                     doc='translation property')
         self.__model__.afriat_rule = Constraint(self.__model__.I,
                                                 self.__model__.I,
                                                 rule=self.__afriat_rule(),
@@ -99,15 +100,15 @@ class CNLSDDF(CNLS.CNLS):
             print("Estimating the model locally with mosek solver")
             solver = SolverFactory("mosek")
             self.problem_status = solver.solve(self.__model__,
-                                                tee=True)
+                                               tee=True)
             print(self.problem_status)
             self.optimization_status = 1
         else:
             print("Estimating the model remotely with mosek solver")
             solver = SolverManagerFactory('neos')
             self.problem_status = solver.solve(self.__model__,
-                                                tee=True,
-                                                opt="mosek")
+                                               tee=True,
+                                               opt="mosek")
             print(self.problem_status)
             self.optimization_status = 1
 
@@ -121,19 +122,19 @@ class CNLSDDF(CNLS.CNLS):
         """Return the proper regression constraint"""
         if type(self.b) == type(None):
             def regression_rule(model, i):
-                return sum(model.gamma[i, k] * self.y[i][k] for k in model.K)\
-                    == model.alpha[i]\
-                    + sum(model.beta[i, j] * self.x[i][j] for j in model.J)\
-                    - model.epsilon[i]
+                return sum(model.gamma[i, k] * self.y[i][k] for k in model.K) \
+                       == model.alpha[i] \
+                       + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                       - model.epsilon[i]
 
             return regression_rule
 
         def regression_rule(model, i):
-            return sum(model.gamma[i, k] * self.y[i][k] for k in model.K)\
-                == model.alpha[i]\
-                + sum(model.beta[i, j] * self.x[i][j] for j in model.J)\
-                + sum(model.delta[i, l] * self.b[i][l] for l in model.L)\
-                - model.epsilon[i]
+            return sum(model.gamma[i, k] * self.y[i][k] for k in model.K) \
+                   == model.alpha[i] \
+                   + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                   + sum(model.delta[i, l] * self.b[i][l] for l in model.L) \
+                   - model.epsilon[i]
 
         return regression_rule
 
@@ -142,13 +143,14 @@ class CNLSDDF(CNLS.CNLS):
         if type(self.b) == type(None):
             def translation_rule(model, i):
                 return sum(model.beta[i, j] * self.gx[j] for j in model.J) \
-                    + sum(model.gamma[i, k] * self.gy[k] for k in model.K) == 1
+                       + sum(model.gamma[i, k] * self.gy[k] for k in model.K) == 1
+
             return translation_rule
 
         def translation_rule(model, i):
             return sum(model.beta[i, j] * self.gx[j] for j in model.J) \
-                + sum(model.gamma[i, k] * self.gy[k] for k in model.K) \
-                + sum(model.delta[i, l] * self.gb[l] for l in model.L) == 1
+                   + sum(model.gamma[i, k] * self.gy[k] for k in model.K) \
+                   + sum(model.delta[i, l] * self.gb[l] for l in model.L) == 1
 
         return translation_rule
 
@@ -168,7 +170,7 @@ class CNLSDDF(CNLS.CNLS):
                                         for j in model.J)
                                   - sum(model.gamma[i, k] * self.y[i][k]
                                         for k in model.K),
-                                model.alpha[h]
+                                  model.alpha[h]
                                   + sum(model.beta[h, j] * self.x[i][j]
                                         for j in model.J)
                                   - sum(model.gamma[h, k] * self.y[i][k] for k in model.K))
@@ -179,7 +181,7 @@ class CNLSDDF(CNLS.CNLS):
             if i == h:
                 return Constraint.Skip
             return __operator(model.epsilon[i],
-                            model.alpha[h]
+                              model.alpha[h]
                               + sum(model.beta[h, j] * self.x[i][j]
                                     for j in model.J)
                               + sum(model.delta[h, l] * self.b[i][l]
@@ -213,7 +215,7 @@ class CNLSDDF(CNLS.CNLS):
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
         gamma = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.gamma),
-                                                            list(self.__model__.gamma[:, :].value))])
+                                                           list(self.__model__.gamma[:, :].value))])
         gamma = pd.DataFrame(gamma, columns=['Name', 'Key', 'Value'])
         gamma = gamma.pivot(index='Name', columns='Key', values='Value')
         return gamma.to_numpy()
@@ -229,7 +231,7 @@ class CNLSDDF(CNLS.CNLS):
             return False
 
         delta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.delta),
-                                                            list(self.__model__.delta[:, :].value))])
+                                                           list(self.__model__.delta[:, :].value))])
         delta = pd.DataFrame(delta, columns=['Name', 'Key', 'Value'])
         delta = delta.pivot(index='Name', columns='Key', values='Value')
         return delta.to_numpy()

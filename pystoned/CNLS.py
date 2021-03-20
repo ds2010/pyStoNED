@@ -13,6 +13,7 @@ from .utils import tools
 class CNLS:
     """Convex Nonparametric Least Square (CNLS)
     """
+
     def __init__(self, y, x, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CNLS model
 
@@ -63,25 +64,25 @@ class CNLS:
         # Initialize the variables
         self.__model__.alpha = Var(self.__model__.I, doc='alpha')
         self.__model__.beta = Var(self.__model__.I,
-                                    self.__model__.J,
-                                    bounds=(0.0, None),
-                                    doc='beta')
+                                  self.__model__.J,
+                                  bounds=(0.0, None),
+                                  doc='beta')
         self.__model__.epsilon = Var(self.__model__.I, doc='residual')
         self.__model__.frontier = Var(self.__model__.I,
-                                        bounds=(0.0, None),
-                                        doc='estimated frontier')
+                                      bounds=(0.0, None),
+                                      doc='estimated frontier')
 
         # Setup the objective function and constraints
         self.__model__.objective = Objective(rule=self.__objective_rule(),
-                                                sense=minimize,
-                                                doc='objective function')
+                                             sense=minimize,
+                                             doc='objective function')
         self.__model__.regression_rule = Constraint(self.__model__.I,
                                                     rule=self.__regression_rule(),
                                                     doc='regression equation')
         if self.cet == CET_MULT:
             self.__model__.log_rule = Constraint(self.__model__.I,
-                                                    rule=self.__log_rule(),
-                                                    doc='log-transformed regression equation')
+                                                 rule=self.__log_rule(),
+                                                 doc='log-transformed regression equation')
         self.__model__.afriat_rule = Constraint(self.__model__.I,
                                                 self.__model__.I,
                                                 rule=self.__afriat_rule(),
@@ -122,12 +123,13 @@ class CNLS:
                 print("Estimating the multiplicative model remotely with knitro solver")
             solver = SolverManagerFactory('neos')
             self.problem_status = solver.solve(self.__model__,
-                                                tee=True,
-                                                opt=opt)
+                                               tee=True,
+                                               opt=opt)
             self.optimization_status = 1
 
     def __objective_rule(self):
         """Return the proper objective function"""
+
         def objective_rule(model):
             return sum(model.epsilon[i] ** 2 for i in model.I)
 
@@ -140,15 +142,16 @@ class CNLS:
                 if type(self.z) != type(None):
                     def regression_rule(model, i):
                         return self.y[i] == model.alpha[i] \
-                            + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
-                            + sum(model.lamda[k] * self.z[i][k]
-                                    for k in model.K) + model.epsilon[i]
+                               + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                               + sum(model.lamda[k] * self.z[i][k]
+                                     for k in model.K) + model.epsilon[i]
+
                     return regression_rule
 
                 def regression_rule(model, i):
                     return self.y[i] == model.alpha[i] \
-                        + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
-                        + model.epsilon[i]
+                           + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                           + model.epsilon[i]
 
                 return regression_rule
             elif self.rts == RTS_CRS:
@@ -159,12 +162,14 @@ class CNLS:
             if type(self.z) != type(None):
                 def regression_rule(model, i):
                     return log(self.y[i]) == log(model.frontier[i] + 1) \
-                        + sum(model.lamda[k] * self.z[i][k]
-                                for k in model.K) + model.epsilon[i]
+                           + sum(model.lamda[k] * self.z[i][k]
+                                 for k in model.K) + model.epsilon[i]
+
                 return regression_rule
 
             def regression_rule(model, i):
                 return log(self.y[i]) == log(model.frontier[i] + 1) + model.epsilon[i]
+
             return regression_rule
 
         # TODO(error handling): replace with undefined model attribute
@@ -206,9 +211,9 @@ class CNLS:
                         return Constraint.Skip
                     return __operator(
                         model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
-                                                for j in model.J),
+                                             for j in model.J),
                         model.alpha[h] + sum(model.beta[h, j] * self.x[i][j]
-                                                for j in model.J))
+                                             for j in model.J))
 
                 return afriat_rule
             elif self.rts == RTS_CRS:
@@ -222,9 +227,9 @@ class CNLS:
                         return Constraint.Skip
                     return __operator(
                         model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
-                                                for j in model.J),
+                                             for j in model.J),
                         model.alpha[h] + sum(model.beta[h, j] * self.x[i][j]
-                                                for j in model.J))
+                                             for j in model.J))
 
                 return afriat_rule
             elif self.rts == RTS_CRS:
@@ -329,10 +334,10 @@ class CNLS:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
         if self.cet == CET_MULT and type(self.z) == type(None):
-            frontier = np.asarray(list(self.__model__.frontier[:].value))+1
+            frontier = np.asarray(list(self.__model__.frontier[:].value)) + 1
         elif self.cet == CET_MULT and type(self.z) != type(None):
             frontier = list(np.divide(self.y, np.exp(
-                self.get_residual()+self.get_lamda()*np.asarray(self.z)[:, 0])) - 1)
+                self.get_residual() + self.get_lamda() * np.asarray(self.z)[:, 0])) - 1)
         elif self.cet == CET_ADDI:
             frontier = np.asarray(self.y) - self.get_residual()
         return np.asarray(frontier)

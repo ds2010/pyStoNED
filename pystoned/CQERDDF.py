@@ -8,6 +8,7 @@ from . import CNLSDDF, CQER
 class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
     """Convex quantile regression with DDF formulation
     """
+
     def __init__(self, y, x, b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD, tau=0.5):
         """CQR DDF 
 
@@ -76,8 +77,8 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
                 self.__model__.I, self.__model__.L, bounds=(0.0, None), doc='delta')
 
         self.__model__.objective = Objective(rule=self._CQR__objective_rule(),
-                                                sense=minimize,
-                                                doc='objective function')
+                                             sense=minimize,
+                                             doc='objective function')
 
         self.__model__.error_decomposition = Constraint(self.__model__.I,
                                                         rule=self._CQR__error_decomposition(),
@@ -88,8 +89,8 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
                                                     doc='regression equation')
 
         self.__model__.translation_rule = Constraint(self.__model__.I,
-                                                        rule=self._CNLSDDF__translation_property(),
-                                                        doc='translation property')
+                                                     rule=self._CNLSDDF__translation_property(),
+                                                     doc='translation property')
 
         self.__model__.afriat_rule = Constraint(self.__model__.I,
                                                 self.__model__.I,
@@ -104,19 +105,19 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
         """Return the proper regression constraint"""
         if type(self.b) == type(None):
             def regression_rule(model, i):
-                return sum(model.gamma[i, k] * self.y[i][k] for k in model.K)\
-                    == model.alpha[i]\
-                    + sum(model.beta[i, j] * self.x[i][j] for j in model.J)\
-                    + model.epsilon[i]
+                return sum(model.gamma[i, k] * self.y[i][k] for k in model.K) \
+                       == model.alpha[i] \
+                       + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                       + model.epsilon[i]
 
             return regression_rule
 
         def regression_rule(model, i):
-            return sum(model.gamma[i, k] * self.y[i][k] for k in model.K)\
-                == model.alpha[i]\
-                + sum(model.beta[i, j] * self.x[i][j] for j in model.J)\
-                + sum(model.delta[i, l] * self.b[i][l] for l in model.L)\
-                + model.epsilon[i]
+            return sum(model.gamma[i, k] * self.y[i][k] for k in model.K) \
+                   == model.alpha[i] \
+                   + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                   + sum(model.delta[i, l] * self.b[i][l] for l in model.L) \
+                   + model.epsilon[i]
 
         return regression_rule
 
@@ -136,7 +137,7 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
                                         for j in model.J)
                                   - sum(model.gamma[i, k] * self.y[i][k]
                                         for k in model.K),
-                                model.alpha[h]
+                                  model.alpha[h]
                                   + sum(model.beta[h, j] * self.x[i][j]
                                         for j in model.J)
                                   - sum(model.gamma[h, k] * self.y[i][k] for k in model.K))
@@ -153,7 +154,7 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
                                     for l in model.L)
                               - sum(model.gamma[i, k] * self.y[i][k]
                                     for k in model.K),
-                            model.alpha[h]
+                              model.alpha[h]
                               + sum(model.beta[h, j] * self.x[i][j]
                                     for j in model.J)
                               + sum(model.delta[h, l] * self.b[i][l]
@@ -166,7 +167,8 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
 class CERDDF(CQRDDF):
     """Convex expectile regression with DDF formulation
     """
-    def __init__(self, y, x,  b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD, tau=0.5):
+
+    def __init__(self, y, x, b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD, tau=0.5):
         """CER DDF 
 
         Args:
@@ -179,14 +181,15 @@ class CERDDF(CQRDDF):
             fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
             tau (float, optional): expectile. Defaults to 0.5.
         """
-        super().__init__(y, x,  b, gy, gx, gb, fun, tau)
+        super().__init__(y, x, b, gy, gx, gb, fun, tau)
         self.__model__.objective.deactivate()
         self.__model__.squared_objective = Objective(
             rule=self.__squared_objective_rule(), sense=minimize, doc='squared objective rule')
 
     def __squared_objective_rule(self):
         def squared_objective_rule(model):
-            return self.tau * sum(model.epsilon_plus[i] ** 2 for i in model.I)\
-                + (1 - self.tau) * \
-                sum(model.epsilon_minus[i] ** 2 for i in model.I)
+            return self.tau * sum(model.epsilon_plus[i] ** 2 for i in model.I) \
+                   + (1 - self.tau) * \
+                   sum(model.epsilon_minus[i] ** 2 for i in model.I)
+
         return squared_objective_rule
