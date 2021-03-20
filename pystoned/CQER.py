@@ -21,7 +21,7 @@ class CQR:
             y (float): output variable. 
             x (float): input variables.
             z (float, optional): Contextual variable(s). Defaults to None.
-            tau (float): quantile
+            tau (float): quantile.
             cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
             fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
             rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
@@ -421,7 +421,7 @@ class CER(CQR):
             y (float): output variable. 
             x (float): input variables.
             z (float, optional): Contextual variable(s). Defaults to None.
-            tau (float): expectile
+            tau (float): expectile.
             cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
             fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
             rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.

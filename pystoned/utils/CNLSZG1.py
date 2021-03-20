@@ -1,4 +1,4 @@
-# Import pyomo module
+# import dependencies
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint, log
 from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
@@ -9,21 +9,20 @@ from .tools import set_neos_email
 
 
 class CNLSZG1:
-    """initial Group-VC-added CNLS (CNLS+G) model"""
-
+    """initial Group-VC-added CNLSZ (CNLSZ+G) model
+    """
     def __init__(self, y, x, z, Cutactive, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
-        """
-            y : Output
-            x : Input
-            z : Contexutal variable
-            cet  = CET_ADDI : Additive composite error term
-                 = CET_MULT : Multiplicative composite error term
-            fun  = FUN_PROD : Production frontier
-                 = FUN_COST : Cost frontier
-            rts  = RTS_VRS  : Variable returns to scale
-                 = RTS_CRS  : Constant returns to scale
-        """
+        """CNLSZ+G model
 
+        Args:
+            y (float): output variable.
+            x (float): input variables.
+            z (float, optional): Contextual variable(s). Defaults to None.
+            Cutactive (float): active concavity constraint.
+            cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
+            fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
+            rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
+        """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.x = x
         self.y = y

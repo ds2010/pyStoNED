@@ -1,3 +1,4 @@
+# import dependencies
 import numpy as np
 
 
@@ -8,7 +9,7 @@ def sweet(x):
         x (list): input variables.
 
     Returns:
-        Numbers: active concavity constraint.
+        list: active concavity constraint.
     """
 
     # transform data

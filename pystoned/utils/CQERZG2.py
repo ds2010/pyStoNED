@@ -1,4 +1,4 @@
-# Import pyomo module
+# import dependencies
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint, log
 from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
@@ -9,22 +9,22 @@ from .tools import set_neos_email
 
 
 class CQRZG2:
-    """CNLS+G in iterative loop"""
-
+    """CQRZ+G in iterative loop
+    """
     def __init__(self, y, x, z, tau, Cutactive, Active, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
-        """
-            y : Output
-            x : Input
-            z : Contexutal variable
-            tau : quantile
-            cet  = CET_ADDI : Additive composite error term
-                 = CET_MULT : Multiplicative composite error term
-            fun  = FUN_PROD : Production frontier
-                 = FUN_COST : Cost frontier
-            rts  = RTS_VRS  : Variable returns to scale
-                 = RTS_CRS  : Constant returns to scale
-        """
+        """CQRZ+G model
 
+        Args:
+            y (float): output variable. 
+            x (float): input variables.
+            z (float, optional): Contextual variable(s). Defaults to None.
+            tau (float): quantile.
+            Cutactive (float): active concavity constraint.
+            Active (float): violated concavity constraint.
+            cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
+            fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
+            rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
+        """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.x = x
         self.y = y
@@ -366,20 +366,21 @@ class CQRZG2:
 
 
 class CERZG2(CQRZG2):
-    """Convex expectile regression (CER)"""
-
+    """CERZ+G in iterative loop
+    """
     def __init__(self, y, x, z, tau, Cutactive, Active, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
-        """
-            y : Output variable
-            x : Input variables
-            z : Contexutal variable
-            tau : expectile
-            cet  = CET_ADDI : Additive composite error term
-                 = CET_MULT : Multiplicative composite error term
-            fun  = FUN_PROD : Production frontier
-                 = FUN_COST : Cost frontier
-            rts  = RTS_VRS  : Variable returns to scale
-                 = RTS_CRS  : Constant returns to scale
+        """CERZ+G model
+
+        Args:
+            y (float): output variable. 
+            x (float): input variables.
+            z (float, optional): Contextual variable(s). Defaults to None.
+            tau (float): expectile.
+            Cutactive (float): active concavity constraint.
+            Active (float): violated concavity constraint.
+            cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
+            fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
+            rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
         """
         super().__init__(y, x, z, tau, Cutactive, Active, cet, fun, rts)
         self.__model__.objective.deactivate()

@@ -9,7 +9,8 @@ from .tools import set_neos_email
 
 
 class CNLSG1:
-    """initial Group-VC-added CNLS (CNLS+G) model"""
+    """initial Group-VC-added CNLS (CNLS+G) model
+    """
 
     def __init__(self, y, x, Cutactive, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CNLS+G model 1
@@ -46,32 +47,32 @@ class CNLSG1:
         # Initialize the variables
         self.__model__.alpha = Var(self.__model__.I, doc='alpha')
         self.__model__.beta = Var(self.__model__.I,
-                                    self.__model__.J,
-                                    bounds=(0.0, None),
-                                    doc='beta')
+                                  self.__model__.J,
+                                  bounds=(0.0, None),
+                                  doc='beta')
         self.__model__.epsilon = Var(self.__model__.I, doc='residual')
         self.__model__.frontier = Var(self.__model__.I,
-                                        bounds=(0.0, None),
-                                        doc='estimated frontier')
+                                      bounds=(0.0, None),
+                                      doc='estimated frontier')
 
         # Setup the objective function and constraints
         self.__model__.objective = Objective(rule=self.__objective_rule(),
-                                                sense=minimize,
-                                                doc='objective function')
+                                             sense=minimize,
+                                             doc='objective function')
         self.__model__.regression_rule = Constraint(self.__model__.I,
                                                     rule=self.__regression_rule(),
                                                     doc='regression equation')
         if self.cet == CET_MULT:
             self.__model__.log_rule = Constraint(self.__model__.I,
-                                                    rule=self.__log_rule(),
-                                                    doc='log-transformed regression equation')
+                                                 rule=self.__log_rule(),
+                                                 doc='log-transformed regression equation')
         self.__model__.afriat_rule = Constraint(self.__model__.I,
                                                 rule=self.__afriat_rule(),
                                                 doc='elementary Afriat approach')
         self.__model__.sweet_rule = Constraint(self.__model__.I,
-                                                self.__model__.I,
-                                                rule=self.__sweet_rule(),
-                                                doc='sweet spot approach')
+                                               self.__model__.I,
+                                               rule=self.__sweet_rule(),
+                                               doc='sweet spot approach')
 
         # Optimize model
         self.optimization_status = 0
@@ -126,8 +127,8 @@ class CNLSG1:
             if self.rts == RTS_VRS:
                 def regression_rule(model, i):
                     return self.y[i] == model.alpha[i] \
-                        + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
-                        + model.epsilon[i]
+                           + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                           + model.epsilon[i]
 
                 return regression_rule
             elif self.rts == RTS_CRS:
