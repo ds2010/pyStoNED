@@ -12,13 +12,13 @@ class CNLSG1:
     """initial Group-VC-added CNLS (CNLS+G) model
     """
 
-    def __init__(self, y, x, Cutactive, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
+    def __init__(self, y, x, cutactive, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CNLS+G model 1
 
         Args:
             y (float): output variable.
             x (float): input variables.
-            Cutactive (float): active concavity constraint.
+            cutactive (float): active concavity constraint.
             cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
             fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
             rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
@@ -35,7 +35,7 @@ class CNLSG1:
             for x_value in x.tolist():
                 self.x.append([x_value])
 
-        self.Cutactive = Cutactive
+        self.cutactive = cutactive
 
         # Initialize the CNLS model
         self.__model__ = ConcreteModel()
@@ -224,7 +224,7 @@ class CNLSG1:
             if self.rts == RTS_VRS:
 
                 def sweet_rule(model, i, h):
-                    if self.Cutactive[i, h]:
+                    if self.cutactive[i, h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
@@ -241,7 +241,7 @@ class CNLSG1:
             if self.rts == RTS_VRS:
 
                 def sweet_rule(model, i, h):
-                    if self.Cutactive[i, h]:
+                    if self.cutactive[i, h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
@@ -254,7 +254,7 @@ class CNLSG1:
             elif self.rts == RTS_CRS:
 
                 def sweet_rule(model, i, h):
-                    if self.Cutactive[i, h]:
+                    if self.cutactive[i, h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(sum(model.beta[i, j] * self.x[i][j] for j in model.J),

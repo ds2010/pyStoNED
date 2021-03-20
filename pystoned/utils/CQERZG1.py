@@ -11,7 +11,7 @@ from .tools import set_neos_email
 class CQRZG1:
     """initial Group-VC-added CQRZ (CQRZ+G) model
     """
-    def __init__(self, y, x, z, tau, Cutactive, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
+    def __init__(self, y, x, z, tau, cutactive, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CQRZ+G model
 
         Args:
@@ -19,7 +19,7 @@ class CQRZG1:
             x (float): input variables.
             z (float, optional): Contextual variable(s). Defaults to None.
             tau (float): quantile.
-            Cutactive (float): active concavity constraint.
+            cutactive (float): active concavity constraint.
             cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
             fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
             rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
@@ -43,7 +43,7 @@ class CQRZG1:
             for z_value in z.tolist():
                 self.z.append([z_value])
 
-        self.Cutactive = Cutactive
+        self.cutactive = cutactive
 
         # Initialize the CNLS model
         self.__model__ = ConcreteModel()
@@ -246,7 +246,7 @@ class CQRZG1:
             if self.rts == RTS_VRS:
 
                 def sweet_rule(model, i, h):
-                    if self.Cutactive[i, h]:
+                    if self.cutactive[i, h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
@@ -263,7 +263,7 @@ class CQRZG1:
             if self.rts == RTS_VRS:
 
                 def sweet_rule(model, i, h):
-                    if self.Cutactive[i, h]:
+                    if self.cutactive[i, h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
@@ -276,7 +276,7 @@ class CQRZG1:
             elif self.rts == RTS_CRS:
 
                 def sweet_rule(model, i, h):
-                    if self.Cutactive[i, h]:
+                    if self.cutactive[i, h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(sum(model.beta[i, j] * self.x[i][j] for j in model.J),
@@ -309,7 +309,7 @@ class CQRZG1:
 class CERZG1(CQRZG1):
     """initial Group-VC-added CERZ (CERZ+G) model
     """
-    def __init__(self, y, x, z, tau, Cutactive, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
+    def __init__(self, y, x, z, tau, cutactive, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CERZ+G model
 
         Args:
@@ -317,12 +317,12 @@ class CERZG1(CQRZG1):
             x (float): input variables.
             z (float, optional): Contextual variable(s). Defaults to None.
             tau (float): expectile.
-            Cutactive (float): active concavity constraint.
+            cutactive (float): active concavity constraint.
             cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
             fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
             rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
         """
-        super().__init__(y, x, z, tau, Cutactive, cet, fun, rts)
+        super().__init__(y, x, z, tau, cutactive, cet, fun, rts)
         self.__model__.objective.deactivate()
         self.__model__.squared_objective = Objective(
             rule=self.__squared_objective_rule(), sense=minimize, doc='squared objective rule')

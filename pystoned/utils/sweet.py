@@ -30,10 +30,10 @@ def sweet(x):
 
     # find concavity constraint in sweet spot
     distance = np.where(np.isnan(distance), 0, distance)
-    Cutactive = np.zeros((len(distance), len(distance)))
+    cutactive = np.zeros((len(distance), len(distance)))
     for i in range(len(distance)):
         for j in range(len(distance)):
             if distance[i, j] <= distcut[:, i]:
-                Cutactive[i, j] = 1
+                cutactive[i, j] = 1
 
-    return Cutactive
+    return cutactive

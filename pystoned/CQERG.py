@@ -32,9 +32,9 @@ class CQRG:
         self.rts = rts
 
         # active (added) violated concavity constraint by iterative procedure
-        self.Active = np.zeros((len(x), len(x)))
+        self.active = np.zeros((len(x), len(x)))
         # violated concavity constraint
-        self.Active2 = np.zeros((len(x), len(x)))
+        self.active2 = np.zeros((len(x), len(x)))
 
         if type(self.y[0]) == list:
             self.y = self.__to_1d_list(self.y)
@@ -74,10 +74,10 @@ class CQRG:
         while self.__convergence_test(self.alpha, self.beta) > 0.0001:
             if type(self.z) != type(None):
                 model2 = CQERZG2.CQRZG2(
-                    self.y, self.x, self.z, self.tau, self.Active, self.cutactive, self.cet, self.fun, self.rts)
+                    self.y, self.x, self.z, self.tau, self.active, self.cutactive, self.cet, self.fun, self.rts)
             else:
                 model2 = CQERG2.CQRG2(
-                    self.y, self.x, self.tau, self.Active, self.cutactive, self.cet, self.fun, self.rts)
+                    self.y, self.x, self.tau, self.active, self.cutactive, self.cet, self.fun, self.rts)
             model2.optimize(email)
             self.alpha = model2.get_alpha()
             self.beta = model2.get_beta()
@@ -97,45 +97,45 @@ class CQRG:
 
     def __convergence_test(self, alpha, beta):
         x = np.asarray(self.x)
-        Activetmp1 = 0.0
+        activetmp1 = 0.0
 
         # go into the loop
         for i in range(len(x)):
-            Activetmp = 0.0
+            activetmp = 0.0
             # go into the sub-loop and find the violated concavity constraints
             for j in range(len(x)):
                 if self.cet == CET_ADDI:
                     if self.rts == RTS_VRS:
                         if self.fun == FUN_PROD:
-                            self.Active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
+                            self.active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
                                 alpha[j] - np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
-                            self.Active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
+                            self.active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
                 if self.cet == CET_MULT:
                     if self.rts == RTS_VRS:
                         if self.fun == FUN_PROD:
-                            self.Active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
+                            self.active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
                                 alpha[j] - np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
-                            self.Active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
+                            self.active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
                     if self.rts == RTS_CRS:
                         if self.fun == FUN_PROD:
-                            self.Active2[i, j] = np.sum(beta[i, :] * x[i, :]) - \
+                            self.active2[i, j] = np.sum(beta[i, :] * x[i, :]) - \
                                 np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
-                            self.Active2[i, j] = - np.sum(beta[i, :] * x[i, :]) + \
+                            self.active2[i, j] = - np.sum(beta[i, :] * x[i, :]) + \
                                 np.sum(beta[j, :] * x[i, :])
-                if self.Active2[i, j] > Activetmp:
-                    Activetmp = self.Active2[i, j]
+                if self.active2[i, j] > activetmp:
+                    activetmp = self.active2[i, j]
             # find the maximal violated constraint in sub-loop and added into the active matrix
             for j in range(len(x)):
-                if self.Active2[i, j] >= Activetmp and Activetmp > 0:
-                    self.Active[i, j] = 1
-            if Activetmp > Activetmp1:
-                Activetmp1 = Activetmp
-        return Activetmp
+                if self.active2[i, j] >= activetmp and activetmp > 0:
+                    self.active[i, j] = 1
+            if activetmp > activetmp1:
+                activetmp1 = activetmp
+        return activetmp
 
     def display_status(self):
         """Display the status of problem"""
@@ -268,14 +268,14 @@ class CQRG:
         if self.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
-        Activeconstr = 0
-        Cutactiveconstr = 0
-        for i in range(len(np.matrix(self.Active))):
-            for j in range(len(np.matrix(self.Active))):
+        activeconstr = 0
+        cutactiveconstr = 0
+        for i in range(len(np.matrix(self.active))):
+            for j in range(len(np.matrix(self.active))):
                 if i != j:
-                    Activeconstr += self.Active[i, j]
-                    Cutactiveconstr += self.cutactive[i, j] 
-        totalconstr = Activeconstr + Cutactiveconstr + 2 * len(np.matrix(self.Active)) + 1
+                    activeconstr += self.active[i, j]
+                    cutactiveconstr += self.cutactive[i, j] 
+        totalconstr = activeconstr + cutactiveconstr + 2 * len(np.matrix(self.active)) + 1
         return totalconstr
 
     def get_runningtime(self):
@@ -556,13 +556,13 @@ class CERG:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
         Activeconstr = 0
-        Cutactiveconstr = 0
+        cutactiveconstr = 0
         for i in range(len(np.matrix(self.Active))):
             for j in range(len(np.matrix(self.Active))):
                 if i != j:
                     Activeconstr += self.Active[i, j]
-                    Cutactiveconstr += self.cutactive[i, j] 
-        totalconstr = Activeconstr + Cutactiveconstr + 2 * len(np.matrix(self.Active)) + 1
+                    cutactiveconstr += self.cutactive[i, j] 
+        totalconstr = Activeconstr + cutactiveconstr + 2 * len(np.matrix(self.Active)) + 1
         return totalconstr
 
     def get_runningtime(self):
