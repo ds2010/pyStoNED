@@ -1,4 +1,4 @@
-# Import pyomo module
+# import dependencies
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, maximize, Constraint, Binary
 from pyomo.opt import SolverFactory, SolverManagerFactory
 import numpy as np
@@ -8,14 +8,16 @@ from .utils import tools
 
 
 class FDH:
-    """
-    Free Disposal Hull (FDH)
+    """Free Disposal Hull (FDH)
     """
 
     def __init__(self, y, x, orient):
-        """
-        orient  = ORIENT_IO : input orientation
-                = ORIENT_OO : output orientation
+        """DEA model
+
+        Args:
+            y (float): output variable. 
+            x (float): input variables.
+            orient (String): ORIENT_IO (input orientation) or ORIENT_OO (output orientation)
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.x = x.tolist()

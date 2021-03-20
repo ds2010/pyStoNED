@@ -1,8 +1,8 @@
-# Import CNLS as parent class
-from . import CNLS
+# import dependencies
 from pyomo.environ import Constraint
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
+from . import CNLS
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
 
 
@@ -10,27 +10,24 @@ class ICNLS(CNLS.CNLS):
     """Isotonic Convex Nonparametric Least Square (ICNLS)"""
 
     def __init__(self, y, x, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
-        """
-        Initialize the ICNLS model
+        """ICNLS
 
-        * y: Output variable 
-        * x: Input variables
-        * z: Contextual variables              
-        * cet = CET_ADDI : Additive composite error term
-              = CET_MULT : Multiplicative composite error term
-        * fun = FUN_PROD : Production frontier
-              = FUN_COST : Cost frontier
-        * rts = RTS_VRS  : Variable returns to scale
-              = RTS_CRS  : Constant returns to scale
-        """
+        Args:
+            y (float): output variable. 
+            x (float): input variables.
+            z (float, optional): Contextual variable(s). Defaults to None.
+            cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
+            fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
+            rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
+        """        
         super().__init__(y, x, z, cet, fun, rts)
 
         self.__pmatrix = self.__binaryMatrix()
         self.__model__.afriat_rule.deactivate()
         self.__model__.isotonic_afriat_rule = Constraint(self.__model__.I,
-                                                         self.__model__.I,
-                                                         rule=self.__isotonic_afriat_rule(),
-                                                         doc='isotonic afriat inequality')
+                                                            self.__model__.I,
+                                                            rule=self.__isotonic_afriat_rule(),
+                                                            doc='isotonic afriat inequality')
 
     def __isotonic_afriat_rule(self):
         """Return the proper afriat inequality constraint"""

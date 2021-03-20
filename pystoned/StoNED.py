@@ -1,4 +1,4 @@
-# Import CNLS as parent class
+# import dependencies
 from . import CNLS
 import numpy as np
 import math
@@ -8,9 +8,19 @@ from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
 
 
 class StoNED(CNLS.CNLS):
-    """Stochastic nonparametric envelopment of data (StoNED): Residuals decomposition"""
-
+    """Stochastic nonparametric envelopment of data (StoNED)
+    """
     def __init__(self, y, x,  z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
+        """StoNED model
+
+        Args:
+            y (float): output variable. 
+            x (float): input variables.
+            z (float, optional): Contextual variable(s). Defaults to None.
+            cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
+            fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
+            rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
+        """
         super().__init__(y, x, z, cet, fun, rts)
 
     def get_unconditional_expected_inefficiency(self, method='MOM'):
@@ -47,7 +57,7 @@ class StoNED(CNLS.CNLS):
 
         if self.fun == FUN_PROD:
             Eu = sigma * ((stats.norm.pdf(mu) /
-                           (1 - stats.norm.cdf(mu) + 0.000001)) - mu)
+                            (1 - stats.norm.cdf(mu) + 0.000001)) - mu)
             if self.cet == CET_ADDI:
                 return (self.y - self.get_residual() + self.mu -
                         Eu) / (self.y - self.get_residual() + self.mu)
@@ -55,7 +65,7 @@ class StoNED(CNLS.CNLS):
                 return np.exp(-Eu)
         elif self.fun == FUN_COST:
             Eu = sigma * ((stats.norm.pdf(mu) /
-                           (1 - stats.norm.cdf(-mu) + 0.000001)) + mu)
+                            (1 - stats.norm.cdf(-mu) + 0.000001)) + mu)
             if self.cet == CET_ADDI:
                 return (self.y - self.get_residual() - self.mu +
                         Eu) / (self.y - self.get_residual() - self.mu)
@@ -77,7 +87,7 @@ class StoNED(CNLS.CNLS):
             if M3_mean > 0:
                 M3_mean = 0.0
             self.sigma_u = (M3_mean / ((2 / math.pi)**(1 / 2) *
-                                       (1 - 4 / math.pi)))**(1 / 3)
+                                        (1 - 4 / math.pi)))**(1 / 3)
 
         elif self.fun == FUN_COST:
             if M3_mean < 0:
@@ -99,21 +109,20 @@ class StoNED(CNLS.CNLS):
 
     def __quassi_likelihood(self, residual):
         def __quassi_likelihood_estimation(lamda, eps):
-            """
-            This function computes the negative of the log likelihood function
+            """ This function computes the negative of the log likelihood function
             given parameter (lambda) and residual (eps).
 
-            INPUTS:
-            lamda  = scalar, signal-to-noise ratio
-            eps    = (N,) vector, values of the residual
+            Args:
+                lamda (float): signal-to-noise ratio
+                eps (list): values of the residual
 
-            RETURNS: -logl scalar, negative value of log likelihood
+            Returns:
+                float: -logl, negative value of log likelihood
             """
-
             # sigma Eq. (3.26) in Johnson and Kuosmanen (2015)
             sigma = np.sqrt(
                 np.mean(eps**2) / (1 - 2 * lamda**2 / (math.pi *
-                                                       (1 + lamda**2))))
+                                                        (1 + lamda**2))))
 
             # bias adjusted residuals Eq. (3.25)
             # mean
@@ -130,26 +139,26 @@ class StoNED(CNLS.CNLS):
 
         if self.fun == FUN_PROD:
             lamda = opt.minimize(__quassi_likelihood_estimation,
-                                 1.0,
-                                 residual,
-                                 method='BFGS').x[0]
+                                    1.0,
+                                    residual,
+                                    method='BFGS').x[0]
         elif self.fun == FUN_COST:
             lamda = opt.minimize(__quassi_likelihood_estimation,
-                                 1.0,
-                                 -residual,
-                                 method='BFGS').x[0]
+                                    1.0,
+                                    -residual,
+                                    method='BFGS').x[0]
         else:
             # TODO(error/warning handling): Raise error while undefined fun
             return False
         # use estimate of lambda to calculate sigma Eq. (3.26) in Johnson and Kuosmanen (2015)
         sigma = math.sqrt(
             np.mean(residual**2) / (1 - (2 * lamda**2) / (math.pi *
-                                                          (1 + lamda**2))))
+                                                            (1 + lamda**2))))
 
         # calculate bias correction
         # (unconditional) mean
         self.mu = math.sqrt(2) * sigma * lamda / math.sqrt(math.pi *
-                                                           (1 + lamda**2))
+                                                            (1 + lamda**2))
 
         # calculate sigma.u and sigma.v
         self.sigma_v = (sigma**2 / (1 + lamda**2))**(1 / 2)
@@ -190,7 +199,7 @@ class StoNED(CNLS.CNLS):
         for i in range(len(self.y) - 1):
             derivative[i +
                        1] = 0.2 * (kernel_density_value[i + 1] -
-                                   kernel_density_value[i]) / (x[i + 1] - x[i])
+                                    kernel_density_value[i]) / (x[i + 1] - x[i])
 
         # expected inefficiency mu
         self.mu = -np.max(derivative)

@@ -1,24 +1,26 @@
-from . import CNLSDDF, CQER
+# import dependencies
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint
 from pyomo.core.expr.numvalue import NumericValue
 from .constant import FUN_PROD, FUN_COST
+from . import CNLSDDF, CQER
 
 
 class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
-    """Convex quantile regression with multiple Outputs (DDF formulation)"""
+    """Convex quantile regression with DDF formulation
+    """
+    def __init__(self, y, x, b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD, tau=0.5):
+        """CQR DDF 
 
-    def __init__(self, y, x, b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD, tau=0.9):
+        Args:
+            y (float): output variable.
+            x (float): input variables.
+            b (float), optional): undesirable output variables. Defaults to None.
+            gy (list, optional): output directional vector. Defaults to [1].
+            gx (list, optional): input directional vector. Defaults to [1].
+            gb (list, optional): undesirable output directional vector. Defaults to None.
+            fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
+            tau (float, optional): quantile. Defaults to 0.5.
         """
-            y : Output variables
-            x : Input variables
-            b : Undesirable output variables
-            gy : Output directional vector
-            gx : Input directional vector
-            gb : Undesirable output directional vector
-            fun  = FUN_PROD : Production frontier
-                 = FUN_COST : Cost frontier
-        """
-
         # TODO(error/warning handling): Check the configuration of the model exist
         self.x = x.tolist()
         self.y = y.tolist()
@@ -74,8 +76,8 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
                 self.__model__.I, self.__model__.L, bounds=(0.0, None), doc='delta')
 
         self.__model__.objective = Objective(rule=self._CQR__objective_rule(),
-                                             sense=minimize,
-                                             doc='objective function')
+                                                sense=minimize,
+                                                doc='objective function')
 
         self.__model__.error_decomposition = Constraint(self.__model__.I,
                                                         rule=self._CQR__error_decomposition(),
@@ -86,8 +88,8 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
                                                     doc='regression equation')
 
         self.__model__.translation_rule = Constraint(self.__model__.I,
-                                                     rule=self._CNLSDDF__translation_property(),
-                                                     doc='translation property')
+                                                        rule=self._CNLSDDF__translation_property(),
+                                                        doc='translation property')
 
         self.__model__.afriat_rule = Constraint(self.__model__.I,
                                                 self.__model__.I,
@@ -134,7 +136,7 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
                                         for j in model.J)
                                   - sum(model.gamma[i, k] * self.y[i][k]
                                         for k in model.K),
-                                  model.alpha[h]
+                                model.alpha[h]
                                   + sum(model.beta[h, j] * self.x[i][j]
                                         for j in model.J)
                                   - sum(model.gamma[h, k] * self.y[i][k] for k in model.K))
@@ -151,7 +153,7 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
                                     for l in model.L)
                               - sum(model.gamma[i, k] * self.y[i][k]
                                     for k in model.K),
-                              model.alpha[h]
+                            model.alpha[h]
                               + sum(model.beta[h, j] * self.x[i][j]
                                     for j in model.J)
                               + sum(model.delta[h, l] * self.b[i][l]
@@ -162,18 +164,20 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
 
 
 class CERDDF(CQRDDF):
-    """Convex expectile regression with multiple Outputs (DDF formulation)"""
+    """Convex expectile regression with DDF formulation
+    """
+    def __init__(self, y, x,  b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD, tau=0.5):
+        """CER DDF 
 
-    def __init__(self, y, x,  b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD, tau=0.9):
-        """
-            y : Output variables
-            x : Input variables
-            b : Undesirable output variables
-            gy : Output directional vector
-            gx : Input directional vector
-            gb : Undesirable output directional vector
-            fun  = FUN_PROD : Production frontier
-                 = FUN_COST : Cost frontier
+        Args:
+            y (float): output variable.
+            x (float): input variables.
+            b (float), optional): undesirable output variables. Defaults to None.
+            gy (list, optional): output directional vector. Defaults to [1].
+            gx (list, optional): input directional vector. Defaults to [1].
+            gb (list, optional): undesirable output directional vector. Defaults to None.
+            fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
+            tau (float, optional): expectile. Defaults to 0.5.
         """
         super().__init__(y, x,  b, gy, gx, gb, fun, tau)
         self.__model__.objective.deactivate()

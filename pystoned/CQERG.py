@@ -1,3 +1,4 @@
+# import dependencies
 import numpy as np
 import pandas as pd
 from .utils import CQERG1, CQERG2, CQERZG1, CQERZG2, sweet
@@ -6,24 +7,20 @@ import time
 
 
 class CQRG:
-    """Convex quantile regression (CQR) with Genetic algorithm"""
-
+    """Convex quantile regression (CQR) with Genetic algorithm
+    """
     def __init__(self, y, x, tau, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
-        """
-        Initialize the CQRG model
+        """CQRG model
 
-        * y : Output variable
-        * x : Input variables
-        * z : Contextual variables
-        * tau : quantile
-        * cet  = CET_ADDI : Additive composite error term
-               = CET_MULT : Multiplicative composite error term
-        * fun  = FUN_PROD : Production frontier
-               = FUN_COST : Cost frontier
-        * rts  = RTS_VRS  : Variable returns to scale
-               = RTS_CRS  : Constant returns to scale
+        Args:
+            y (float): output variable. 
+            x (float): input variables.
+            tau (float): quantile.
+            z (float, optional): Contextual variable(s). Defaults to None.
+            cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
+            fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
+            rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
         """
-
         # TODO(error/warning handling): Check the configuration of the model exist
         self.cutactive = sweet.sweet(x)
         self.x = x.tolist()
@@ -300,21 +297,17 @@ class CERG:
     """Convex expectile regression (CER) with Genetic algorithm"""
 
     def __init__(self, y, x, tau, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
-        """
-        Initialize the CERG model
+        """CERG model
 
-        * y : Output variable
-        * x : Input variables
-        * z : Contextual variables
-        * tau : expectile
-        * cet  = CET_ADDI : Additive composite error term
-               = CET_MULT : Multiplicative composite error term
-        * fun  = FUN_PROD : Production frontier
-               = FUN_COST : Cost frontier
-        * rts  = RTS_VRS  : Variable returns to scale
-               = RTS_CRS  : Constant returns to scale
+        Args:
+            y (float): output variable. 
+            x (float): input variables.
+            tau (float): expectile.
+            z (float, optional): Contextual variable(s). Defaults to None.
+            cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
+            fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
+            rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
         """
-
         # TODO(error/warning handling): Check the configuration of the model exist
         self.cutactive = sweet.sweet(x)
         self.x = x.tolist()
@@ -502,7 +495,7 @@ class CERG:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
         beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
-                                                          list(self.__model__.beta[:, :].value))])
+                                                            list(self.__model__.beta[:, :].value))])
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
         beta = beta.pivot(index='Name', columns='Key', values='Value')
         return beta.to_numpy()

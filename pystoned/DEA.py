@@ -1,4 +1,4 @@
-# Import pyomo module
+# import dependencies
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, maximize, Constraint
 from pyomo.opt import SolverFactory, SolverManagerFactory
 import numpy as np
@@ -8,16 +8,18 @@ from .utils import tools
 
 
 class DEA:
+    """Data Envelopment Analysis (DEA)
     """
-    Data Envelopment Analysis (DEA)
-    """
-
     def __init__(self, y, x, orient, rts, yref=None, xref=None):
-        """
-        orient  = ORIENT_IO : input orientation
-                = ORIENT_OO : output orientation
-        rts     = RTS_VRS: variable returns to scale
-                = RTS_CRS: constant returns to scale
+        """DEA model
+
+        Args:
+            y (float): output variable. 
+            x (float): input variables.
+            orient (String): ORIENT_IO (input orientation) or ORIENT_OO (output orientation)
+            rts (String): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale)
+            yref (String, optional): reference output. Defaults to None.
+            xref (String, optional): reference inputs. Defaults to None.
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         # Initialize DEA model
@@ -194,18 +196,19 @@ class DEA:
 
 class DEADDF(DEA):
     def __init__(self,  y, x, b=None, gy=[1], gx=[1], gb=None, rts=RTS_VRS, yref=None, xref=None, bref=None):
-        """
-            y : Output variables
-            x : Input variables
-            b : Undesirable output variables
-            gy : Output directional vector
-            gx : Input directional vector
-            gb : Undesirable output directional vector
-            rts     = RTS_VRS: variable returns to scale
-                    = RTS_CRS: constant returns to scale
-            yref : the reference point of y
-            xref : the reference point of x
-            bref : the reference point of b
+        """DEA DDF model 
+
+        Args:
+            y (float): output variable. 
+            x (float): input variables.
+            b (float), optional): undesirable output variables. Defaults to None.
+            gy (list, optional): output directional vector. Defaults to [1].
+            gx (list, optional): input directional vector. Defaults to [1].
+            gb (list, optional): undesirable output directional vector. Defaults to None.
+            rts (String): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale)
+            yref (String, optional): reference output. Defaults to None.
+            xref (String, optional): reference inputs. Defaults to None.
+            bref (String, optional): reference undesirable output. Defaults to None.
         """
         # Initialize DEA model
         self.__model__ = ConcreteModel()
