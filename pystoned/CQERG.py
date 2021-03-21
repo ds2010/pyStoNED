@@ -294,8 +294,8 @@ class CQRG:
 
             
 class CERG:
-    """Convex expectile regression (CER) with Genetic algorithm"""
-
+    """Convex expectile regression (CER) with Genetic algorithm
+    """
     def __init__(self, y, x, tau, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CERG model
 

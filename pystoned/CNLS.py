@@ -13,7 +13,6 @@ from .utils import tools
 class CNLS:
     """Convex Nonparametric Least Square (CNLS)
     """
-
     def __init__(self, y, x, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CNLS model
 
