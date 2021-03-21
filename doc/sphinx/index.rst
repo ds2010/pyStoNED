@@ -12,7 +12,7 @@ and other various `StoNED`-related variants (e.g., `CQR <https://www.sciencedire
 `ICNLS <https://www.sciencedirect.com/science/article/abs/pii/S0377221713004748>`_). 
 It allows the user to estimate the StoNED-related models in an open-access environment rather than in commercial software (e.g., ``GAMS`` and ``MATLAB``).
 
-For example, the following code estimates the basic CNLS model and plot the production frontier.
+For example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/Ex1.ipynb>`_, the following code estimates the basic CNLS model and plot the production frontier.
 
 .. code:: python
 
@@ -41,6 +41,9 @@ For example, the following code estimates the basic CNLS model and plot the prod
    # plot CNLS frontier
    model.plot2d(0, fig_name="CNLS frontier")
 
+.. image:: ../notebooks/CNLS estimation.png
+   :width: 400
+   :alt: Alternative text
    
 .. toctree::
    :hidden:
