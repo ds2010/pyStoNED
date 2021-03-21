@@ -24,7 +24,7 @@ For example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/
    # set seed
    np.random.seed(0)  
    
-   # generat DMUs: DGP
+   # generate DMUs: DGP
    x = np.sort(np.random.uniform(low=1, high=10, size=50))
    u = np.abs(np.random.normal(loc=0, scale=0.7, size=50))
    y_true = 3 + np.log(x)
@@ -39,11 +39,11 @@ For example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/
    model.display_residual()
 
    # plot CNLS frontier
-   model.plot2d(0, fig_name="CNLS frontier")
+   model.plot2d(0, fig_name="CNLS_frontier")
 
 The CNLS production frontier is shown as follows:
 
-.. image:: ../../notebooks/CNLS_estimation.png
+.. image:: ../../notebooks/CNLS_frontier.png
    :width: 600
    :alt: CNLS production frontier
 
