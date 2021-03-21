@@ -41,10 +41,13 @@ For example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/
    # plot CNLS frontier
    model.plot2d(0, fig_name="CNLS frontier")
 
-.. image:: ../notebooks/CNLS estimation.png
-   :width: 400
-   :alt: Alternative text
-   
+The CNLS production frontier is shown as follows:
+
+.. image:: ../../notebooks/CNLS_estimation.png
+   :width: 600
+   :alt: CNLS production frontier
+
+
 .. toctree::
    :hidden:
 
