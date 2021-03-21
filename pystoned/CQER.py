@@ -398,7 +398,7 @@ class CQR:
         """
         x = np.array(self.x).T[xselect]
         y = np.array(self.y).T
-        f = y - self.get_residual()
+        f = self.get_frontier()
         data = (np.stack([x, y, f], axis=0)).T
 
         # sort
