@@ -13,7 +13,6 @@ from .utils import tools
 class CQR:
     """Convex quantile regression (CQR)
     """
-
     def __init__(self, y, x, tau, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CQR model
 
@@ -288,6 +287,17 @@ class CQR:
             return False
         self.__model__.beta.display()
 
+    def display_lamda(self):
+        """Display lamda value"""
+        if self.optimization_status == 0:
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
+        if type(self.z) == type(None):
+            # TODO: Replace print by warning
+            print("Without z variable")
+            return
+        self.__model__.lamda.display()
+
     def display_residual(self):
         """Dispaly residual value"""
         if self.optimization_status == 0:
@@ -331,6 +341,18 @@ class CQR:
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
         beta = beta.pivot(index='Name', columns='Key', values='Value')
         return beta.to_numpy()
+
+    def get_lamda(self):
+        """Return beta value by array"""
+        if self.optimization_status == 0:
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
+        if type(self.z) == type(None):
+            # TODO: Replace print by warning
+            print("Without z variable")
+            return
+        lamda = list(self.__model__.lamda[:].value)
+        return np.asarray(lamda)
 
     def get_residual(self):
         """Return residual value by array"""
@@ -413,7 +435,6 @@ class CQR:
 class CER(CQR):
     """Convex expectile regression (CER)
     """
-
     def __init__(self, y, x, tau, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CER model
 
