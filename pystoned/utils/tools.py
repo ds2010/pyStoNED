@@ -1,7 +1,8 @@
 # import dependencies
 import re
 import os
-from ..constant import OPT_LOCAL
+from pyomo.opt import SolverFactory, SolverManagerFactory
+from ..constant import CET_ADDI, CET_MULT, OPT_LOCAL
 __email_re = re.compile(r'([^@]+@[^@]+\.[a-zA-Z0-9]+)$')
 
 
@@ -20,3 +21,26 @@ def set_neos_email(address):
         return False
     os.environ['NEOS_EMAIL'] = address
     return True
+
+
+def optimize_model(model, email, cet):
+    if not set_neos_email(email):
+        if cet == CET_ADDI:
+            solver = SolverFactory("mosek")
+            print("Estimating the additive model locally with mosek solver")
+            return solver.solve(model, tee=True), 1
+        elif cet == CET_MULT:
+            # TODO(warning handling): Use log system instead of print()
+            print(
+                "Estimating the multiplicative model will be available in near future."
+            )
+            return False
+    else:
+        if cet == CET_ADDI:
+            opt = "mosek"
+            print("Estimating the additive model remotely with mosek solver")
+        elif cet == CET_MULT:
+            opt = "knitro"
+            print("Estimating the multiplicative model remotely with knitro solver")
+        solver = SolverManagerFactory('neos')
+        return solver.solve(model, tee=True, opt=opt), 1

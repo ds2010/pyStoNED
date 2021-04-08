@@ -5,7 +5,7 @@ from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
 from ..constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL
-from .tools import set_neos_email
+from .tools import set_neos_email, optimize_model
 
 
 class CNLSG1:
@@ -88,30 +88,8 @@ class CNLSG1:
             Numbers: [description]
         """
         # TODO(error/warning handling): Check problem status after optimization
-        if not set_neos_email(email):
-            if self.cet == CET_ADDI:
-                solver = SolverFactory("mosek")
-                self.problem_status = solver.solve(self.__model__, tee=True)
-                self.optimization_status = 1
-
-            elif self.cet == CET_MULT:
-                # TODO(warning handling): Use log system instead of print()
-                print(
-                    "Estimating the multiplicative model will be available in near future."
-                )
-                return False
-        else:
-            if self.cet == CET_ADDI:
-                opt = "mosek"
-
-            elif self.cet == CET_MULT:
-                opt = "knitro"
-
-            solver = SolverManagerFactory('neos')
-            self.problem_status = solver.solve(self.__model__,
-                                               tee=True,
-                                               opt=opt)
-            self.optimization_status = 1
+        self.problem_status, self.optimization_status = optimize_model(
+            self.__model__, email, self.cet)
 
     def __objective_rule(self):
         """Return the proper objective function"""
@@ -127,8 +105,8 @@ class CNLSG1:
             if self.rts == RTS_VRS:
                 def regression_rule(model, i):
                     return self.y[i] == model.alpha[i] \
-                           + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
-                           + model.epsilon[i]
+                        + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                        + model.epsilon[i]
 
                 return regression_rule
             elif self.rts == RTS_CRS:

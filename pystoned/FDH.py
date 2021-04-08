@@ -3,7 +3,7 @@ from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, maximize
 from pyomo.opt import SolverFactory, SolverManagerFactory
 import numpy as np
 
-from .constant import ORIENT_IO, ORIENT_OO, OPT_LOCAL
+from .constant import CET_ADDI, ORIENT_IO, ORIENT_OO, OPT_LOCAL
 from .utils import tools
 
 
@@ -15,7 +15,7 @@ class FDH:
         """DEA model
 
         Args:
-            y (float): output variable. 
+            y (float): output variable.
             x (float): input variables.
             orient (String): ORIENT_IO (input orientation) or ORIENT_OO (output orientation)
         """
@@ -102,19 +102,12 @@ class FDH:
 
     def optimize(self, email=OPT_LOCAL):
         """Optimize the function by requested method"""
-        if not tools.set_neos_email(email):
-            solver = SolverFactory("mosek")
-            print("Estimating the model locally with mosek solver")
-            self.problem_status = solver.solve(self.__model__, tee=True)
-            self.optimization_status = 1
-        else:
-            solver = SolverManagerFactory("neos")
-            print("Estimating the model remotely with mosek solver")
-            self.problem_status = solver.solve(
-                self.__model__, tee=True, opt="mosek")
-            self.optimization_status = 1
 
-    def display_status(self):
+
+self.problem_status, self.optimization_status = tools.optimize_model(
+    self.__model__, email, CET_ADDI)
+
+   def display_status(self):
         """Display the status of problem"""
         if self.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")

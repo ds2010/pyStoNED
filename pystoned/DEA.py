@@ -3,13 +3,14 @@ from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, maximize
 from pyomo.opt import SolverFactory, SolverManagerFactory
 import numpy as np
 
-from .constant import ORIENT_IO, ORIENT_OO, RTS_VRS, OPT_LOCAL
+from .constant import CET_ADDI, ORIENT_IO, ORIENT_OO, RTS_VRS, OPT_LOCAL
 from .utils import tools
 
 
 class DEA:
     """Data Envelopment Analysis (DEA)
     """
+
     def __init__(self, y, x, orient, rts, yref=None, xref=None):
         """DEA model
 
@@ -137,17 +138,8 @@ class DEA:
 
     def optimize(self, email=OPT_LOCAL):
         """Optimize the function by requested method"""
-        if not tools.set_neos_email(email):
-            solver = SolverFactory("mosek")
-            print("Estimating the model locally with mosek solver")
-            self.problem_status = solver.solve(self.__model__, tee=True)
-            self.optimization_status = 1
-        else:
-            solver = SolverManagerFactory("neos")
-            print("Estimating the model remotely with mosek solver")
-            self.problem_status = solver.solve(
-                self.__model__, tee=True, opt="mosek")
-            self.optimization_status = 1
+        self.problem_status, self.optimization_status = tools.optimize_model(
+            self.__model__, email, CET_ADDI)
 
     def display_status(self):
         """Display the status of problem"""

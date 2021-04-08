@@ -107,25 +107,25 @@ class CNLSG:
                     if self.rts == RTS_VRS:
                         if self.fun == FUN_PROD:
                             self.active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
-                                                 alpha[j] - np.sum(beta[j, :] * x[i, :])
+                                alpha[j] - np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
                             self.active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
-                                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
+                                alpha[j] + np.sum(beta[j, :] * x[i, :])
                 if self.cet == CET_MULT:
                     if self.rts == RTS_VRS:
                         if self.fun == FUN_PROD:
                             self.active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
-                                                 alpha[j] - np.sum(beta[j, :] * x[i, :])
+                                alpha[j] - np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
                             self.active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
-                                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
+                                alpha[j] + np.sum(beta[j, :] * x[i, :])
                     if self.rts == RTS_CRS:
                         if self.fun == FUN_PROD:
                             self.active2[i, j] = np.sum(beta[i, :] * x[i, :]) - \
-                                                 np.sum(beta[j, :] * x[i, :])
+                                np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
                             self.active2[i, j] = - np.sum(beta[i, :] * x[i, :]) + \
-                                                 np.sum(beta[j, :] * x[i, :])
+                                np.sum(beta[j, :] * x[i, :])
                 if self.active2[i, j] > activetmp:
                     activetmp = self.active2[i, j]
             # find the maximal violated constraint in sub-loop and added into the active matrix
@@ -244,7 +244,8 @@ class CNLSG:
                 if i != j:
                     activeconstr += self.active[i, j]
                     cutactiveconstr += self.cutactive[i, j]
-        totalconstr = activeconstr + cutactiveconstr + 2 * len(np.matrix(self.active)) + 1
+        totalconstr = activeconstr + cutactiveconstr + \
+            2 * len(np.matrix(self.active)) + 1
         return totalconstr
 
     def get_runningtime(self):

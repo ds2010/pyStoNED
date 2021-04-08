@@ -54,7 +54,7 @@ class StoNED(CNLS.CNLS):
         sigma = self.sigma_u * self.sigma_v / math.sqrt(self.sigma_u ** 2 +
                                                         self.sigma_v ** 2)
         mu = self.epsilon * self.sigma_u / (
-                self.sigma_v * math.sqrt(self.sigma_u ** 2 + self.sigma_v ** 2))
+            self.sigma_v * math.sqrt(self.sigma_u ** 2 + self.sigma_v ** 2))
 
         if self.fun == FUN_PROD:
             Eu = sigma * ((stats.norm.pdf(mu) /

@@ -13,6 +13,7 @@ from .utils import tools
 class CQR:
     """Convex quantile regression (CQR)
     """
+
     def __init__(self, y, x, tau, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CQR model
 
@@ -106,31 +107,8 @@ class CQR:
     def optimize(self, email=OPT_LOCAL):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
-        if not tools.set_neos_email(email):
-            if self.cet == CET_ADDI:
-                solver = SolverFactory("mosek")
-                print("Estimating the additive model locally with mosek solver")
-                self.problem_status = solver.solve(self.__model__, tee=True)
-                self.optimization_status = 1
-
-            elif self.cet == CET_MULT:
-                # TODO(warning handling): Use log system instead of print()
-                print(
-                    "Estimating the multiplicative model will be available in near future."
-                )
-                return False
-        else:
-            if self.cet == CET_ADDI:
-                opt = "mosek"
-                print("Estimating the additive model remotely with mosek solver")
-            elif self.cet == CET_MULT:
-                opt = "knitro"
-                print("Estimating the multiplicative model remotely with knitro solver")
-            solver = SolverManagerFactory('neos')
-            self.problem_status = solver.solve(self.__model__,
-                                               tee=True,
-                                               opt=opt)
-            self.optimization_status = 1
+        self.problem_status, self.optimization_status = tools.optimize_model(
+            self.__model__, email, self.cet)
 
     def __to_1d_list(self, l):
         rl = []
@@ -143,7 +121,7 @@ class CQR:
 
         def objective_rule(model):
             return self.tau * sum(model.epsilon_plus[i] for i in model.I) \
-                   + (1 - self.tau) * sum(model.epsilon_minus[i] for i in model.I)
+                + (1 - self.tau) * sum(model.epsilon_minus[i] for i in model.I)
 
         return objective_rule
 
@@ -162,16 +140,16 @@ class CQR:
                 if type(self.z) != type(None):
                     def regression_rule(model, i):
                         return self.y[i] == model.alpha[i] \
-                               + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
-                               + sum(model.lamda[k] * self.z[i][k]
-                                     for k in model.K) + model.epsilon[i]
+                            + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                            + sum(model.lamda[k] * self.z[i][k]
+                                  for k in model.K) + model.epsilon[i]
 
                     return regression_rule
 
                 def regression_rule(model, i):
                     return self.y[i] == model.alpha[i] \
-                           + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
-                           + model.epsilon[i]
+                        + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                        + model.epsilon[i]
 
                 return regression_rule
             elif self.rts == RTS_CRS:
@@ -182,8 +160,8 @@ class CQR:
             if type(self.z) != type(None):
                 def regression_rule(model, i):
                     return log(self.y[i]) == log(model.frontier[i] + 1) \
-                           + sum(model.lamda[k] * self.z[i][k]
-                                 for k in model.K) + model.epsilon[i]
+                        + sum(model.lamda[k] * self.z[i][k]
+                              for k in model.K) + model.epsilon[i]
 
                 return regression_rule
 
@@ -435,6 +413,7 @@ class CQR:
 class CER(CQR):
     """Convex expectile regression (CER)
     """
+
     def __init__(self, y, x, tau, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CER model
 
@@ -455,7 +434,7 @@ class CER(CQR):
     def __squared_objective_rule(self):
         def squared_objective_rule(model):
             return self.tau * sum(model.epsilon_plus[i] ** 2 for i in model.I) \
-                   + (1 - self.tau) * \
-                   sum(model.epsilon_minus[i] ** 2 for i in model.I)
+                + (1 - self.tau) * \
+                sum(model.epsilon_minus[i] ** 2 for i in model.I)
 
         return squared_objective_rule
