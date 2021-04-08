@@ -17,10 +17,10 @@ class plot2d:
             label_name (String): the estimator name.
             fig_name (String, optional): The name of figure to save. Defaults to None.
         """
-        x = np.array(self.x).T
-        y = np.array(self.y).T
-        f = np.array(f).T
-        data = (np.stack([x, y, f], axis=0)).T
+        self.x = np.array(x).T
+        self.y = np.array(y).T
+        self.f = np.array(f).T
+        data = (np.stack([self.x, self.y, self.f], axis=0)).T
 
         # sort
         data = data[np.argsort(data[:, 0])].T
