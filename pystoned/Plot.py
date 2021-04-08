@@ -11,8 +11,8 @@ class plot2d:
         """Plot 2D estimated function/frontier
 
         Args:
-            x (float): output variable. 
-            y (float): input variables.
+            x (float): input variable. 
+            y (float): output variables.
             f (float): estimated function?frontier
             label_name (String): the estimator name.
             fig_name (String, optional): The name of figure to save. Defaults to None.
