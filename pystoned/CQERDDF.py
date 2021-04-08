@@ -1,7 +1,7 @@
 # import dependencies
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint
 from pyomo.core.expr.numvalue import NumericValue
-from .constant import CET_ADDI, FUN_PROD, FUN_COST
+from .constant import FUN_PROD, FUN_COST
 from . import CNLSDDF, CQER
 
 

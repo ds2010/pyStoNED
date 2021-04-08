@@ -1,11 +1,10 @@
 # import dependencies
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint, log
-from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
-from ..constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL
-from .tools import set_neos_email, optimize_model
+from ..constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_DEFAULT, OPT_LOCAL
+from .tools import optimize_model
 
 
 class CQRZG2:
@@ -102,11 +101,16 @@ class CQRZG2:
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self, email=OPT_LOCAL):
-        """Optimize the function by requested method"""
+    def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
+        """Optimize the function by requested method
+
+        Args:
+            email (string): The email address for remote optimization. It will optimize locally if OPT_LOCAL is given.
+            solver (string): The solver chosen for optimization. It will optimize with default solver if OPT_DEFAULT is given.
+        """
         # TODO(error/warning handling): Check problem status after optimization
         self.problem_status, self.optimization_status = optimize_model(
-            self.__model__, email, self.cet)
+            self.__model__, email, self.cet, solver)
 
     def __objective_rule(self):
         """Return the proper objective function"""

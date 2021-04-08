@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 
 from . import CNLS
-from .constant import CET_ADDI, FUN_COST, FUN_PROD, OPT_LOCAL
+from .constant import CET_ADDI, FUN_COST, FUN_PROD, OPT_DEFAULT, OPT_LOCAL
 from .utils import tools
 
 
@@ -93,11 +93,16 @@ class CNLSDDF(CNLS.CNLS):
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self, email=OPT_LOCAL):
-        """Optimize the function by requested method"""
+    def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
+        """Optimize the function by requested method
+
+        Args:
+            email (string): The email address for remote optimization. It will optimize locally if OPT_LOCAL is given.
+            solver (string): The solver chosen for optimization. It will optimize with default solver if OPT_DEFAULT is given.
+        """
         # TODO(error/warning handling): Check problem status after optimization
         self.problem_status, self.optimization_status = tools.optimize_model(
-            self.__model__, email, CET_ADDI)
+            self.__model__, email, CET_ADDI, solver)
 
     def __to_1d_list(self, l):
         if type(l) == int or type(l) == float:

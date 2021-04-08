@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 from .utils import CQERG1, CQERG2, CQERZG1, CQERZG2, sweet
-from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL, OPT_DEFAULT
 import time
 
 
@@ -56,7 +56,7 @@ class CQRG:
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self, email=OPT_LOCAL):
+    def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
         self.t0 = time.time()
@@ -66,7 +66,7 @@ class CQRG:
         else:
             model1 = CQERG1.CQRG1(
                 self.y, self.x, self.tau, self.cutactive, self.cet, self.fun, self.rts)
-        model1.optimize(email)
+        model1.optimize(email, solver)
         self.alpha = model1.get_alpha()
         self.beta = model1.get_beta()
         self.__model__ = model1.__model__
@@ -79,7 +79,7 @@ class CQRG:
             else:
                 model2 = CQERG2.CQRG2(
                     self.y, self.x, self.tau, self.active, self.cutactive, self.cet, self.fun, self.rts)
-            model2.optimize(email)
+            model2.optimize(email, solver)
             self.alpha = model2.get_alpha()
             self.beta = model2.get_beta()
             # TODO: Replace print with log system
@@ -345,7 +345,7 @@ class CERG:
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self, email=OPT_LOCAL):
+    def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
         self.t0 = time.time()
@@ -355,7 +355,7 @@ class CERG:
         else:
             model1 = CQERG1.CERG1(
                 self.y, self.x, self.tau, self.cutactive, self.cet, self.fun, self.rts)
-        model1.optimize(email)
+        model1.optimize(email, solver)
         self.alpha = model1.get_alpha()
         self.beta = model1.get_beta()
         self.__model__ = model1.__model__
@@ -368,7 +368,7 @@ class CERG:
             else:
                 model2 = CQERG2.CERG2(
                     self.y, self.x, self.tau, self.Active, self.cutactive, self.cet, self.fun, self.rts)
-            model2.optimize(email)
+            model2.optimize(email, solver)
             self.alpha = model2.get_alpha()
             self.beta = model2.get_beta()
             # TODO: Replace print with log system

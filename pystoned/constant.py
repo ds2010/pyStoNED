@@ -31,4 +31,5 @@ ORIENT_Categories = {
 }
 
 # Optimization
-OPT_LOCAL = "N"
+OPT_LOCAL = "local"
+OPT_DEFAULT = None

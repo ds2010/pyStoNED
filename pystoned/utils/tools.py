@@ -2,7 +2,7 @@
 import re
 import os
 from pyomo.opt import SolverFactory, SolverManagerFactory
-from ..constant import CET_ADDI, CET_MULT, OPT_LOCAL
+from ..constant import CET_ADDI, CET_MULT, OPT_LOCAL, OPT_DEFAULT
 __email_re = re.compile(r'([^@]+@[^@]+\.[a-zA-Z0-9]+)$')
 
 
@@ -23,7 +23,11 @@ def set_neos_email(address):
     return True
 
 
-def optimize_model(model, email, cet):
+def optimize_model(model, email, cet, solver=OPT_DEFAULT):
+    if solver is not OPT_DEFAULT and SolverFactory(solver).available():
+        solver = SolverFactory(solver)
+        return solver.solve(model, tee=True), 1
+
     if not set_neos_email(email):
         if cet == CET_ADDI:
             solver = SolverFactory("mosek")
@@ -34,7 +38,7 @@ def optimize_model(model, email, cet):
             print(
                 "Estimating the multiplicative model will be available in near future."
             )
-            return False
+            return False, 0
     else:
         if cet == CET_ADDI:
             opt = "mosek"
