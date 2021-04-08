@@ -8,6 +8,7 @@ file_path = os.path.dirname(__file__)
 class production_data:
     """Example datasets provided by the pyStoNED
     """
+
     def __init__(self, dmu, x, y, b=None, z=None):
         """General data structure
 

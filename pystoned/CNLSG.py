@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 from .utils import CNLSG1, CNLSG2, CNLSZG1, CNLSZG2, sweet
-from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, OPT_DEFAULT, RTS_CRS, RTS_VRS, OPT_DEFAULT, OPT_LOCAL
 import time
 
 
@@ -54,7 +54,7 @@ class CNLSG:
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self, email=OPT_LOCAL):
+    def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
         self.t0 = time.time()
@@ -64,7 +64,7 @@ class CNLSG:
         else:
             model1 = CNLSG1.CNLSG1(
                 self.y, self.x, self.cutactive, self.cet, self.fun, self.rts)
-        model1.optimize(email)
+        model1.optimize(email, solver)
         self.alpha = model1.get_alpha()
         self.beta = model1.get_beta()
         self.__model__ = model1.__model__
@@ -77,7 +77,7 @@ class CNLSG:
             else:
                 model2 = CNLSG2.CNLSG2(
                     self.y, self.x, self.active, self.cutactive, self.cet, self.fun, self.rts)
-            model2.optimize(email)
+            model2.optimize(email, solver)
             self.alpha = model2.get_alpha()
             self.beta = model2.get_beta()
             # TODO: Replace print with log system
@@ -107,25 +107,25 @@ class CNLSG:
                     if self.rts == RTS_VRS:
                         if self.fun == FUN_PROD:
                             self.active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
-                                                 alpha[j] - np.sum(beta[j, :] * x[i, :])
+                                alpha[j] - np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
                             self.active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
-                                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
+                                alpha[j] + np.sum(beta[j, :] * x[i, :])
                 if self.cet == CET_MULT:
                     if self.rts == RTS_VRS:
                         if self.fun == FUN_PROD:
                             self.active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
-                                                 alpha[j] - np.sum(beta[j, :] * x[i, :])
+                                alpha[j] - np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
                             self.active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
-                                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
+                                alpha[j] + np.sum(beta[j, :] * x[i, :])
                     if self.rts == RTS_CRS:
                         if self.fun == FUN_PROD:
                             self.active2[i, j] = np.sum(beta[i, :] * x[i, :]) - \
-                                                 np.sum(beta[j, :] * x[i, :])
+                                np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
                             self.active2[i, j] = - np.sum(beta[i, :] * x[i, :]) + \
-                                                 np.sum(beta[j, :] * x[i, :])
+                                np.sum(beta[j, :] * x[i, :])
                 if self.active2[i, j] > activetmp:
                     activetmp = self.active2[i, j]
             # find the maximal violated constraint in sub-loop and added into the active matrix
@@ -244,7 +244,8 @@ class CNLSG:
                 if i != j:
                     activeconstr += self.active[i, j]
                     cutactiveconstr += self.cutactive[i, j]
-        totalconstr = activeconstr + cutactiveconstr + 2 * len(np.matrix(self.active)) + 1
+        totalconstr = activeconstr + cutactiveconstr + \
+            2 * len(np.matrix(self.active)) + 1
         return totalconstr
 
     def get_runningtime(self):

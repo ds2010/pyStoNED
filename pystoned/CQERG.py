@@ -2,13 +2,14 @@
 import numpy as np
 import pandas as pd
 from .utils import CQERG1, CQERG2, CQERZG1, CQERZG2, sweet
-from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL, OPT_DEFAULT
 import time
 
 
 class CQRG:
     """Convex quantile regression (CQR) with Genetic algorithm
     """
+
     def __init__(self, y, x, tau, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CQRG model
 
@@ -55,7 +56,7 @@ class CQRG:
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self, email=OPT_LOCAL):
+    def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
         self.t0 = time.time()
@@ -65,7 +66,7 @@ class CQRG:
         else:
             model1 = CQERG1.CQRG1(
                 self.y, self.x, self.tau, self.cutactive, self.cet, self.fun, self.rts)
-        model1.optimize(email)
+        model1.optimize(email, solver)
         self.alpha = model1.get_alpha()
         self.beta = model1.get_beta()
         self.__model__ = model1.__model__
@@ -78,7 +79,7 @@ class CQRG:
             else:
                 model2 = CQERG2.CQRG2(
                     self.y, self.x, self.tau, self.active, self.cutactive, self.cet, self.fun, self.rts)
-            model2.optimize(email)
+            model2.optimize(email, solver)
             self.alpha = model2.get_alpha()
             self.beta = model2.get_beta()
             # TODO: Replace print with log system
@@ -274,8 +275,9 @@ class CQRG:
             for j in range(len(np.matrix(self.active))):
                 if i != j:
                     activeconstr += self.active[i, j]
-                    cutactiveconstr += self.cutactive[i, j] 
-        totalconstr = activeconstr + cutactiveconstr + 2 * len(np.matrix(self.active)) + 1
+                    cutactiveconstr += self.cutactive[i, j]
+        totalconstr = activeconstr + cutactiveconstr + \
+            2 * len(np.matrix(self.active)) + 1
         return totalconstr
 
     def get_runningtime(self):
@@ -290,12 +292,13 @@ class CQRG:
         if self.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
-        return self.count   
+        return self.count
 
-            
+
 class CERG:
     """Convex expectile regression (CER) with Genetic algorithm
     """
+
     def __init__(self, y, x, tau, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CERG model
 
@@ -342,7 +345,7 @@ class CERG:
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self, email=OPT_LOCAL):
+    def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
         """Optimize the function by requested method"""
         # TODO(error/warning handling): Check problem status after optimization
         self.t0 = time.time()
@@ -352,7 +355,7 @@ class CERG:
         else:
             model1 = CQERG1.CERG1(
                 self.y, self.x, self.tau, self.cutactive, self.cet, self.fun, self.rts)
-        model1.optimize(email)
+        model1.optimize(email, solver)
         self.alpha = model1.get_alpha()
         self.beta = model1.get_beta()
         self.__model__ = model1.__model__
@@ -365,7 +368,7 @@ class CERG:
             else:
                 model2 = CQERG2.CERG2(
                     self.y, self.x, self.tau, self.Active, self.cutactive, self.cet, self.fun, self.rts)
-            model2.optimize(email)
+            model2.optimize(email, solver)
             self.alpha = model2.get_alpha()
             self.beta = model2.get_beta()
             # TODO: Replace print with log system
@@ -495,7 +498,7 @@ class CERG:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
         beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
-                                                            list(self.__model__.beta[:, :].value))])
+                                                          list(self.__model__.beta[:, :].value))])
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
         beta = beta.pivot(index='Name', columns='Key', values='Value')
         return beta.to_numpy()
@@ -561,8 +564,9 @@ class CERG:
             for j in range(len(np.matrix(self.Active))):
                 if i != j:
                     Activeconstr += self.Active[i, j]
-                    cutactiveconstr += self.cutactive[i, j] 
-        totalconstr = Activeconstr + cutactiveconstr + 2 * len(np.matrix(self.Active)) + 1
+                    cutactiveconstr += self.cutactive[i, j]
+        totalconstr = Activeconstr + cutactiveconstr + \
+            2 * len(np.matrix(self.Active)) + 1
         return totalconstr
 
     def get_runningtime(self):
@@ -570,11 +574,11 @@ class CERG:
         if self.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
-        return self.tt   
+        return self.tt
 
     def get_blocks(self):
         """Return the number of blocks"""
         if self.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
-        return self.count   
+        return self.count

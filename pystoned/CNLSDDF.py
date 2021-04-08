@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 
 from . import CNLS
-from .constant import FUN_COST, FUN_PROD, OPT_LOCAL
+from .constant import CET_ADDI, FUN_COST, FUN_PROD, OPT_DEFAULT, OPT_LOCAL
 from .utils import tools
 
 
@@ -93,24 +93,16 @@ class CNLSDDF(CNLS.CNLS):
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self, email=OPT_LOCAL):
-        """Optimize the function by requested method"""
+    def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
+        """Optimize the function by requested method
+
+        Args:
+            email (string): The email address for remote optimization. It will optimize locally if OPT_LOCAL is given.
+            solver (string): The solver chosen for optimization. It will optimize with default solver if OPT_DEFAULT is given.
+        """
         # TODO(error/warning handling): Check problem status after optimization
-        if not tools.set_neos_email(email):
-            print("Estimating the model locally with mosek solver")
-            solver = SolverFactory("mosek")
-            self.problem_status = solver.solve(self.__model__,
-                                               tee=True)
-            print(self.problem_status)
-            self.optimization_status = 1
-        else:
-            print("Estimating the model remotely with mosek solver")
-            solver = SolverManagerFactory('neos')
-            self.problem_status = solver.solve(self.__model__,
-                                               tee=True,
-                                               opt="mosek")
-            print(self.problem_status)
-            self.optimization_status = 1
+        self.problem_status, self.optimization_status = tools.optimize_model(
+            self.__model__, email, CET_ADDI, solver)
 
     def __to_1d_list(self, l):
         if type(l) == int or type(l) == float:
@@ -123,18 +115,18 @@ class CNLSDDF(CNLS.CNLS):
         if type(self.b) == type(None):
             def regression_rule(model, i):
                 return sum(model.gamma[i, k] * self.y[i][k] for k in model.K) \
-                       == model.alpha[i] \
-                       + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
-                       - model.epsilon[i]
+                    == model.alpha[i] \
+                    + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                    - model.epsilon[i]
 
             return regression_rule
 
         def regression_rule(model, i):
             return sum(model.gamma[i, k] * self.y[i][k] for k in model.K) \
-                   == model.alpha[i] \
-                   + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
-                   + sum(model.delta[i, l] * self.b[i][l] for l in model.L) \
-                   - model.epsilon[i]
+                == model.alpha[i] \
+                + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                + sum(model.delta[i, l] * self.b[i][l] for l in model.L) \
+                - model.epsilon[i]
 
         return regression_rule
 
@@ -143,14 +135,14 @@ class CNLSDDF(CNLS.CNLS):
         if type(self.b) == type(None):
             def translation_rule(model, i):
                 return sum(model.beta[i, j] * self.gx[j] for j in model.J) \
-                       + sum(model.gamma[i, k] * self.gy[k] for k in model.K) == 1
+                    + sum(model.gamma[i, k] * self.gy[k] for k in model.K) == 1
 
             return translation_rule
 
         def translation_rule(model, i):
             return sum(model.beta[i, j] * self.gx[j] for j in model.J) \
-                   + sum(model.gamma[i, k] * self.gy[k] for k in model.K) \
-                   + sum(model.delta[i, l] * self.gb[l] for l in model.L) == 1
+                + sum(model.gamma[i, k] * self.gy[k] for k in model.K) \
+                + sum(model.delta[i, l] * self.gb[l] for l in model.L) == 1
 
         return translation_rule
 

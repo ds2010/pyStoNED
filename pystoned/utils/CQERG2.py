@@ -1,16 +1,16 @@
 # Import pyomo module
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint, log
-from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
-from ..constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL
-from .tools import set_neos_email
+from ..constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_DEFAULT, OPT_LOCAL
+from .tools import optimize_model
 
 
 class CQRG2:
     """CQR+G in iterative loop
     """
+
     def __init__(self, y, x, tau, cutactive, active, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CQR+G model
 
@@ -92,33 +92,16 @@ class CQRG2:
         self.optimization_status = 0
         self.problem_status = 0
 
-    def optimize(self, email=OPT_LOCAL):
-        """Optimize the function by requested method"""
+    def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
+        """Optimize the function by requested method
+
+        Args:
+            email (string): The email address for remote optimization. It will optimize locally if OPT_LOCAL is given.
+            solver (string): The solver chosen for optimization. It will optimize with default solver if OPT_DEFAULT is given.
+        """
         # TODO(error/warning handling): Check problem status after optimization
-        if not set_neos_email(email):
-            if self.cet == CET_ADDI:
-                solver = SolverFactory("mosek")
-                self.problem_status = solver.solve(self.__model__, tee=True)
-                self.optimization_status = 1
-
-            elif self.cet == CET_MULT:
-                # TODO(warning handling): Use log system instead of print()
-                print(
-                    "Estimating the multiplicative model will be available in near future."
-                )
-                return False
-        else:
-            if self.cet == CET_ADDI:
-                opt = "mosek"
-
-            elif self.cet == CET_MULT:
-                opt = "knitro"
-
-            solver = SolverManagerFactory('neos')
-            self.problem_status = solver.solve(self.__model__,
-                                               tee=True,
-                                               opt=opt)
-            self.optimization_status = 1
+        self.problem_status, self.optimization_status = optimize_model(
+            self.__model__, email, self.cet, solver)
 
     def __objective_rule(self):
         """Return the proper objective function"""
@@ -356,6 +339,7 @@ class CQRG2:
 class CERG2(CQRG2):
     """CER+G in iterative loop
     """
+
     def __init__(self, y, x, tau, cutactive, active, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CER+G model
 

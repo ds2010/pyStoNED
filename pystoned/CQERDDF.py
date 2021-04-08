@@ -106,18 +106,18 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
         if type(self.b) == type(None):
             def regression_rule(model, i):
                 return sum(model.gamma[i, k] * self.y[i][k] for k in model.K) \
-                       == model.alpha[i] \
-                       + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
-                       + model.epsilon[i]
+                    == model.alpha[i] \
+                    + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                    + model.epsilon[i]
 
             return regression_rule
 
         def regression_rule(model, i):
             return sum(model.gamma[i, k] * self.y[i][k] for k in model.K) \
-                   == model.alpha[i] \
-                   + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
-                   + sum(model.delta[i, l] * self.b[i][l] for l in model.L) \
-                   + model.epsilon[i]
+                == model.alpha[i] \
+                + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                + sum(model.delta[i, l] * self.b[i][l] for l in model.L) \
+                + model.epsilon[i]
 
         return regression_rule
 
@@ -189,7 +189,7 @@ class CERDDF(CQRDDF):
     def __squared_objective_rule(self):
         def squared_objective_rule(model):
             return self.tau * sum(model.epsilon_plus[i] ** 2 for i in model.I) \
-                   + (1 - self.tau) * \
-                   sum(model.epsilon_minus[i] ** 2 for i in model.I)
+                + (1 - self.tau) * \
+                sum(model.epsilon_minus[i] ** 2 for i in model.I)
 
         return squared_objective_rule

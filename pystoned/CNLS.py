@@ -1,18 +1,18 @@
 # import dependencies
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint, log
-from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, OPT_DEFAULT, RTS_CRS, RTS_VRS, OPT_LOCAL
 from .utils import tools
 
 
 class CNLS:
     """Convex Nonparametric Least Square (CNLS)
     """
+
     def __init__(self, y, x, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """CNLS model
 
@@ -97,34 +97,16 @@ class CNLS:
             rl.append(l[i][0])
         return rl
 
-    def optimize(self, email=OPT_LOCAL):
-        """Optimize the function by requested method"""
-        # TODO(error/warning handling): Check problem status after optimization
-        if not tools.set_neos_email(email):
-            if self.cet == CET_ADDI:
-                solver = SolverFactory("mosek")
-                print("Estimating the additive model locally with mosek solver")
-                self.problem_status = solver.solve(self.__model__, tee=True)
-                self.optimization_status = 1
+    def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
+        """Optimize the function by requested method
 
-            elif self.cet == CET_MULT:
-                # TODO(warning handling): Use log system instead of print()
-                print(
-                    "Estimating the multiplicative model will be available in near future."
-                )
-                return False
-        else:
-            if self.cet == CET_ADDI:
-                opt = "mosek"
-                print("Estimating the additive model remotely with mosek solver")
-            elif self.cet == CET_MULT:
-                opt = "knitro"
-                print("Estimating the multiplicative model remotely with knitro solver")
-            solver = SolverManagerFactory('neos')
-            self.problem_status = solver.solve(self.__model__,
-                                               tee=True,
-                                               opt=opt)
-            self.optimization_status = 1
+        Args:
+            email (string): The email address for remote optimization. It will optimize locally if OPT_LOCAL is given.
+            solver (string): The solver chosen for optimization. It will optimize with default solver if OPT_DEFAULT is given.
+        """
+        # TODO(error/warning handling): Check problem status after optimization
+        self.problem_status, self.optimization_status = tools.optimize_model(
+            self.__model__, email, self.cet, solver)
 
     def __objective_rule(self):
         """Return the proper objective function"""
@@ -141,16 +123,16 @@ class CNLS:
                 if type(self.z) != type(None):
                     def regression_rule(model, i):
                         return self.y[i] == model.alpha[i] \
-                               + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
-                               + sum(model.lamda[k] * self.z[i][k]
-                                     for k in model.K) + model.epsilon[i]
+                            + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                            + sum(model.lamda[k] * self.z[i][k]
+                                  for k in model.K) + model.epsilon[i]
 
                     return regression_rule
 
                 def regression_rule(model, i):
                     return self.y[i] == model.alpha[i] \
-                           + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
-                           + model.epsilon[i]
+                        + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                        + model.epsilon[i]
 
                 return regression_rule
             elif self.rts == RTS_CRS:
@@ -161,8 +143,8 @@ class CNLS:
             if type(self.z) != type(None):
                 def regression_rule(model, i):
                     return log(self.y[i]) == log(model.frontier[i] + 1) \
-                           + sum(model.lamda[k] * self.z[i][k]
-                                 for k in model.K) + model.epsilon[i]
+                        + sum(model.lamda[k] * self.z[i][k]
+                              for k in model.K) + model.epsilon[i]
 
                 return regression_rule
 

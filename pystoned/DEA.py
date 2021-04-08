@@ -1,15 +1,15 @@
 # import dependencies
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, maximize, Constraint
-from pyomo.opt import SolverFactory, SolverManagerFactory
 import numpy as np
 
-from .constant import ORIENT_IO, ORIENT_OO, RTS_VRS, OPT_LOCAL
+from .constant import CET_ADDI, ORIENT_IO, ORIENT_OO, RTS_VRS, OPT_DEFAULT, OPT_LOCAL
 from .utils import tools
 
 
 class DEA:
     """Data Envelopment Analysis (DEA)
     """
+
     def __init__(self, y, x, orient, rts, yref=None, xref=None):
         """DEA model
 
@@ -135,19 +135,16 @@ class DEA:
                 return sum(model.lamda[o, r] for r in model.R) == 1
             return vrs_rule
 
-    def optimize(self, email=OPT_LOCAL):
-        """Optimize the function by requested method"""
-        if not tools.set_neos_email(email):
-            solver = SolverFactory("mosek")
-            print("Estimating the model locally with mosek solver")
-            self.problem_status = solver.solve(self.__model__, tee=True)
-            self.optimization_status = 1
-        else:
-            solver = SolverManagerFactory("neos")
-            print("Estimating the model remotely with mosek solver")
-            self.problem_status = solver.solve(
-                self.__model__, tee=True, opt="mosek")
-            self.optimization_status = 1
+    def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
+        """Optimize the function by requested method
+
+        Args:
+            email (string): The email address for remote optimization. It will optimize locally if OPT_LOCAL is given.
+            solver (string): The solver chosen for optimization. It will optimize with default solver if OPT_DEFAULT is given.
+        """
+        # TODO(error/warning handling): Check problem status after optimization
+        self.problem_status, self.optimization_status = tools.optimize_model(
+            self.__model__, email, CET_ADDI, solver)
 
     def display_status(self):
         """Display the status of problem"""
