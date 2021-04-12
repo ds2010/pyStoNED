@@ -53,6 +53,10 @@ Multiple Outputs (DDF Formulation)
 
 Convex Quantile Approaches
 --------------------------
+.. toctree::
+   :maxdepth: 1
+
+   quantile/cqer
 
 
 Monotonic Models
