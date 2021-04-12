@@ -6,7 +6,7 @@ def sweet(x):
     """Sweet spot approach
 
     Args:
-        x (list): input variables.
+        x (float): input variables.
 
     Returns:
         list: active concavity constraint.
