@@ -38,6 +38,7 @@ Peripheral Classes:
    peripherals/CQERZG1
    peripherals/CQERZG2     
    peripherals/dataset
+   peripherals/interpolation
    peripherals/sweet
    peripherals/tools
 
