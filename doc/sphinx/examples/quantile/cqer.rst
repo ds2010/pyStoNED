@@ -53,7 +53,7 @@ In the following code, we first estimate an convex quantile regression model wit
     from pystoned import dataset as dataset
 
     # import the GHG example data
-    data = dataset.load_GHG_abatement_cost(x_select=['HRSN', 'CPNK', 'GHG'], 
+    data = dataset.load_GHG_abatement_cost(x_select=['HRSN', 'CPNK', 'GHG'],
                                             y_select=['VALK'])
 
     # calculate the quantile model
@@ -62,7 +62,6 @@ In the following code, we first estimate an convex quantile regression model wit
                                                   fun=FUN_PROD, 
                                                   rts=RTS_VRS)
     model.optimize(OPT_LOCAL)
-
 
     # display estiamted alpha and beta
     model.display_alpha()
@@ -76,7 +75,7 @@ In the following code, we first estimate an convex quantile regression model wit
 Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CER.ipynb>`_
 --------------------------------------------------------------------------------------------------------------------
     
-We estimate an convex expectile regression model with pyStoNED.
+We estimate an convex expectile regression model.
     
 .. code:: python
     
@@ -86,7 +85,7 @@ We estimate an convex expectile regression model with pyStoNED.
     from pystoned import dataset as dataset
 
     # import the GHG example data
-    data = dataset.load_GHG_abatement_cost(x_select=['HRSN', 'CPNK', 'GHG'], 
+    data = dataset.load_GHG_abatement_cost(x_select=['HRSN', 'CPNK', 'GHG'],
                                             y_select=['VALK'])
 
     # calculate the expectile model
@@ -95,7 +94,6 @@ We estimate an convex expectile regression model with pyStoNED.
                                                   fun=FUN_PROD, 
                                                   rts=RTS_VRS)
     model.optimize(OPT_LOCAL)
-
 
     # display estiamted alpha and beta
     model.display_alpha()
