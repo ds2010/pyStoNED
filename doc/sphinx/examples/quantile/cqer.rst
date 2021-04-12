@@ -68,8 +68,8 @@ In the following code, we first estimate an convex quantile regression model wit
     model.display_beta() 
 
     # display estimated residuals
-    model.display_positive()
-    model.display_negative() 
+    model.display_positive_residual()
+    model.display_negative_residual()
 
 
 Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CER.ipynb>`_
@@ -100,6 +100,6 @@ We estimate an convex expectile regression model.
     model.display_beta() 
 
     # display estimated residuals
-    model.display_positive()
-    model.display_negative()     
+    model.display_positive_residual()
+    model.display_negative_residual() 
     
