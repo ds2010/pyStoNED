@@ -18,6 +18,7 @@ Formulations Classes:
    formulations/CQERG
    formulations/DEA
    formulations/FDH
+   formulations/Plot
    formulations/ICNLS
    formulations/ICQER
    formulations/StoNED
