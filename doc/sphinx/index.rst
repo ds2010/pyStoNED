@@ -19,6 +19,7 @@ For example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/
    # import packages
    import numpy as np
    from pystoned import CNLS
+   from pystoned import Plot
    from pystoned.constant import CET_ADDI, FUN_PROD, OPT_LOCAL, RTS_VRS
    
    # set seed
@@ -39,7 +40,8 @@ For example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/
    model.display_residual()
 
    # plot CNLS frontier
-   model.plot2d(0, fig_name="CNLS_frontier")
+   yhat=model.get_frontier()
+   Plot.plot2d(x, y, yhat, label_name='CNLS', fig_name='CNLS_frontier')
 
 The CNLS production frontier is shown as follows:
 
