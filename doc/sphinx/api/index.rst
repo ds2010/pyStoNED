@@ -30,17 +30,7 @@ Peripheral Classes:
 .. toctree::
    :maxdepth: 2
 
-   peripherals/CNLSG1
-   peripherals/CNLSG2
-   peripherals/CNLSZG1
-   peripherals/CNLSZG2
-   peripherals/CQERG1
-   peripherals/CQERG2
-   peripherals/CQERZG1
-   peripherals/CQERZG2     
-   peripherals/dataset
-   peripherals/interpolation
-   peripherals/sweet
-   peripherals/tools
+   peripherals/Built-in
+   peripherals/Dataset
 
 
