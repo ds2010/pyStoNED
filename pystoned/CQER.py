@@ -1,10 +1,8 @@
 # import dependencies
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint, log
-from pyomo.opt import SolverFactory, SolverManagerFactory
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL, OPT_DEFAULT
 from .utils import tools
