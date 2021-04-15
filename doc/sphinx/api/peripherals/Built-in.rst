@@ -1,7 +1,10 @@
-
+==================================
 Built-in constant
-------------------
+==================================
 
+++++++++++++++++++++++++++++++++++++
+Genetic algorithms related models
+++++++++++++++++++++++++++++++++++++
 .. toctree::
    :maxdepth: 1
 
@@ -12,7 +15,21 @@ Built-in constant
    CQERG1
    CQERG2
    CQERZG1
-   CQERZG2     
+   CQERZG2 
+
+++++++++++++++++++++++++++++++++++++
+Sweet spot function/Interpolation
+++++++++++++++++++++++++++++++++++++
+.. toctree::
+   :maxdepth: 1
+   
    interpolation
    sweet
+
+++++++++++++
+Tools
+++++++++++++
+.. toctree::
+   :maxdepth: 1
+
    tools
