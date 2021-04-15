@@ -28,7 +28,7 @@ Peripheral Classes:
 -------------------
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    peripherals/CNLSG1
    peripherals/CNLSG2

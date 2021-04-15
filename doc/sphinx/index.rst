@@ -59,19 +59,19 @@ The CNLS production frontier is shown as follows:
    :maxdepth: 3
    :hidden:
 
-   api/index
+   examples/index
 
 .. toctree::
    :maxdepth: 3
    :hidden:
 
    datasets/index  
-      
+
 .. toctree::
    :maxdepth: 3
    :hidden:
 
-   examples/index
+   api/index
 
 .. toctree::
    :hidden:
