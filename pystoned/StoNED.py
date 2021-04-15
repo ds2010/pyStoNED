@@ -1,5 +1,5 @@
 # import dependencies
-from . import CNLS
+from . import CNLS, CNLSG
 import numpy as np
 import math
 import scipy.stats as stats
@@ -206,3 +206,21 @@ class StoNED(CNLS.CNLS):
         self.mu = -np.max(derivative)
         if self.fun == FUN_COST:
             self.mu *= -1
+
+
+class StoNEDG(CNLSG.CNLSG, StoNED):
+    """Stochastic nonparametric envelopment of data (StoNED) with Genetic algorithm
+    """
+
+    def __init__(self, y, x, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
+        """StoNEDG model
+
+        Args:
+            y (float): output variable. 
+            x (float): input variables.
+            z (float, optional): Contextual variable(s). Defaults to None.
+            cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
+            fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
+            rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
+        """
+        CNLSG.CNLSG.__init__(self, y, x, z, cet, fun, rts)
