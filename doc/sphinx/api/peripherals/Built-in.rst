@@ -1,10 +1,9 @@
 
 Built-in constant
----------------------------
+------------------
 
 .. toctree::
    :maxdepth: 1
-   :hidden:
 
    CNLSG1
    CNLSG2

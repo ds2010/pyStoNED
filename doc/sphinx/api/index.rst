@@ -28,8 +28,8 @@ Peripheral Classes:
 -------------------
 
 .. toctree::
-   :maxdepth: 2
-
+   :maxdepth: 1
+   
    peripherals/Built-in
    peripherals/Dataset
 
