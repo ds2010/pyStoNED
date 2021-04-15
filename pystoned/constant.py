@@ -30,6 +30,16 @@ ORIENT_Categories = {
     ORIENT_OO: "Output orientation"
 }
 
+# Residual decomposition
+RED_MOM = "MOM"
+RED_QLE = "QLE"
+RED_KDE = "KDE"
+RED_Categories = {
+    RED_MOM: "Method of moments",
+    RED_QLE: "Quassi-likelihood estimation",
+    RED_KDE: "Kernel deconvolution estimation"
+}
+
 # Optimization
 OPT_LOCAL = "local"
 OPT_DEFAULT = None

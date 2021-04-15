@@ -4,7 +4,7 @@ import numpy as np
 import math
 import scipy.stats as stats
 import scipy.optimize as opt
-from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_VRS, RED_MOM, RED_QLE, RED_KDE
 
 
 class StoNED(CNLS.CNLS):
@@ -24,27 +24,27 @@ class StoNED(CNLS.CNLS):
         """
         super().__init__(y, x, z, cet, fun, rts)
 
-    def get_unconditional_expected_inefficiency(self, method='MOM'):
-        # method  = "MOM" : Method of moments
-        #         = "QLE" : Quassi-likelihood estimation
-        #         = "KDE" : kernel deconvolution estimation
+    def get_unconditional_expected_inefficiency(self, method=RED_MOM):
+        # method  = RED_MOM : Method of moments
+        #         = RED_QLE : Quassi-likelihood estimation
+        #         = RED_KDE : Kernel deconvolution estimation
         if self.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
-        if method == "MOM":
+        if method == RED_MOM:
             self.__method_of_moment(self.get_residual())
-        elif method == "QLE":
+        elif method == RED_QLE:
             self.__quassi_likelihood(self.get_residual())
-        elif method == "KDE":
+        elif method == RED_KDE:
             self.__gaussian_kernel_estimation(self.get_residual())
         else:
             # TODO(error/warning handling): Raise error while undefined method
             return False
         return self.mu
 
-    def get_technical_inefficiency(self, method='MOM'):
-        # method  = "MOM" : Method of moments
-        #         = "QLE" : Quassi-likelihood estimation
+    def get_technical_inefficiency(self, method=RED_MOM):
+        # method  = RED_MOM : Method of moments
+        #         = RED_QLE : Quassi-likelihood estimation
 
         # calculate sigma_u, sigma_v, mu, and epsilon value
         if self.optimization_status == 0:
