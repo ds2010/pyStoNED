@@ -1,6 +1,6 @@
-========================
-Additive cost function
-========================
+===============================
+Cost function: Additive model
+===============================
 
 We now consider the ``CNLS`` that builds upon the assumption that the true but unknown production function 
 :math:`f` belongs to the set of continuous, monotonic increasing and globally convex functions, 
@@ -44,9 +44,19 @@ In the following code, we estimate an additive cost function with pyStoNED.
     
     # define and solve the CNLS model
     model = CNLS.CNLS(y=data.y, x=data.x, z=None, cet = CET_ADDI, fun = FUN_COST, rts = RTS_VRS)
-                                            
-    # Please replace with your own email address reqired by NEOS server (see https://neos-guide.org/content/FAQ#email)
-    model.optimize('email@address')
+    
+    # estimate the model: 1) local estimation; 2) remote estimation
+    model.optimize(OPT_LOCAL)
 
-    # print the residuals
-    print(model.get_residual())
+    # Please replace with your own email address reqired by NEOS server (see https://neos-guide.org/content/FAQ#email)
+    # model.optimize('email@address') 
+
+    # display the estimates
+    model.display_alpha()
+    model.display_beta()
+    model.display_residual()
+
+    # store the estimates
+    alpha = model.get_alpha()
+    beta = model.get_beta()
+    residuals = model.get_residual()
