@@ -14,7 +14,6 @@ Like ``COLS``, the ``C2NLS`` method is implemented in two stages, which can be s
 
 * First stage: Estimate :math:`E(y_i|x_i)` by solving the following CNLS problem. Denote the CNLS residuals by :math:`\varepsilon^{CNLS}_i`.
 
-
 .. math::
     :nowrap:
 
@@ -62,28 +61,17 @@ In the following code, we estimate an Corrected CNLS model by using the pyStoNED
 
     # import packages
     from pystoned import CNLS
-    import pandas as pd
-    import numpy as np
+    from pystoned.constant import CET_ADDI, FUN_PROD, OPT_LOCAL, RTS_VRS
+    from pystoned.dataset import load_Finnish_electricity_firm
     
     # import Finnish electricity distribution firms data
-    url='https://raw.githubusercontent.com/ds2010/pyStoNED/master/pystoned/data/electricityFirms.csv'
-    df = pd.read_csv(url, error_bad_lines=False)
-    df.head(5)
+    data = load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'],
+                                        y_select=['TOTEX'])
     
-    # output
-    y = df['Energy']
-
-    # inputs
-    x1 = df['OPEX']
-    x1 = np.asmatrix(x1).T
-    x2 = df['CAPEX']
-    x2 = np.asmatrix(x2).T
-    x = np.concatenate((x1, x2), axis=1)
-
     # First stage
     # define and solve the CNLS model
-    model = CNLS.CNLS(y, x, z= None, cet = "addi", fun = "prod", rts = "vrs")
-    model.optimize(remote=True)
+    model = CNLS.CNLS(y=data.y, x=data.x, z=None, cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)
+    model.optimize(OPT_LOCAL)
 
     # Second stage
     # print the shifted residuals
