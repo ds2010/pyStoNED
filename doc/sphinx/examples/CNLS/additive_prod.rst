@@ -1,6 +1,6 @@
-============================
-Additive Production function
-============================
+=====================================
+Production function: Additive model 
+=====================================
 
 Hildreth (1954) was the first to consider nonparametric regression subject to 
 monotonicity and concavity constraints in the case of a single input variable :math:`x`. 
@@ -39,27 +39,21 @@ In the following code, we estimate an additive production function with pyStoNED
 
     # import packages
     from pystoned import CNLS
-    import pandas as pd
-    import numpy as np
+    from pystoned.constant import CET_ADDI, FUN_PROD, OPT_LOCAL, RTS_VRS
+    from pystoned.dataset import load_Finnish_electricity_firm
     
     # import Finnish electricity distribution firms data
-    url='https://raw.githubusercontent.com/ds2010/pyStoNED/master/pystoned/data/electricityFirms.csv'
-    df = pd.read_csv(url, error_bad_lines=False)
-    df.head(5)
-    
-    # output
-    y = df['Energy']
-
-    # inputs
-    x1 = df['OPEX']
-    x1 = np.asmatrix(x1).T
-    x2 = df['CAPEX']
-    x2 = np.asmatrix(x2).T
-    x = np.concatenate((x1, x2), axis=1)
+    data = load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'],
+                                          y_select=['TOTEX'])
 
     # define and solve the CNLS model
-    model = CNLS.CNLS(y, x, z=None, cet = "addi", fun = "prod", rts = "vrs")
-    model.optimize(remote=True)
+    model = CNLS.CNLS(y=data.y, x=data.x, z=None, cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)
+    
+    # estimate the model: 1) local estimation; 2) remote estimation
+    model.optimize(OPT_LOCAL)
+
+    # Please replace with your own email address reqired by NEOS server (see https://neos-guide.org/content/FAQ#email)
+    # model.optimize('email@address') 
 
     # display the estimates
     model.display_alpha()
@@ -70,5 +64,3 @@ In the following code, we estimate an additive production function with pyStoNED
     alpha = model.get_alpha()
     beta = model.get_beta()
     residuals = model.get_residual()
-
-
