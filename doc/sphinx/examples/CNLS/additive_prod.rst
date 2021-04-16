@@ -1,5 +1,5 @@
 =====================================
-Production function: Additive model 
+Production function: additive model 
 =====================================
 
 Hildreth (1954) was the first to consider nonparametric regression subject to 

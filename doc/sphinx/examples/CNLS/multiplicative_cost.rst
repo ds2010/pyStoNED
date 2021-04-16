@@ -1,5 +1,5 @@
 =====================================
-Cost function: Multiplicative model
+Cost function: multiplicative model
 =====================================
 
 Similarly, we consider the follwing muliplicatiive cost models:

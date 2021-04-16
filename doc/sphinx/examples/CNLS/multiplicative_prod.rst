@@ -1,5 +1,5 @@
 =============================================
-Production function: Multiplicative model
+Production function: multiplicative model
 =============================================
 
 Most SFA studies use Cobb-Douglas or translog functional forms where inefficiency and 

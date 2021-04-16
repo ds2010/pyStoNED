@@ -1,5 +1,5 @@
 ===============================
-Cost function: Additive model
+Cost function: additive model
 ===============================
 
 We now consider the ``CNLS`` that builds upon the assumption that the true but unknown production function 
