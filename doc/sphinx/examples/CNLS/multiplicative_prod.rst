@@ -1,6 +1,6 @@
-===================================
-Multiplicative Production function
-===================================
+=============================================
+Production function: Multiplicative model
+=============================================
 
 Most SFA studies use Cobb-Douglas or translog functional forms where inefficiency and 
 noise affect production in a multiplicative fashion. Note that the assumption of 
@@ -52,31 +52,20 @@ In the following code, we estimate two multiplicative production functions with 
 
     # import packages
     from pystoned import CNLS
-    import pandas as pd
-    import numpy as np
+    from pystoned.constant import CET_MULT, FUN_PROD, FUN_COST, OPT_LOCAL, RTS_VRS, RTS_CRS
+    from pystoned.dataset import load_Finnish_electricity_firm
     
     # import Finnish electricity distribution firms data
-    url='https://raw.githubusercontent.com/ds2010/pyStoNED/master/pystoned/data/electricityFirms.csv'
-    df = pd.read_csv(url, error_bad_lines=False)
-    df.head(5)
-    
-    # output
-    y = df['Energy']
-
-    # inputs
-    x1 = df['OPEX']
-    x1 = np.asmatrix(x1).T
-    x2 = df['CAPEX']
-    x2 = np.asmatrix(x2).T
-    x = np.concatenate((x1, x2), axis=1)
+    data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'],
+                                        y_select=['Energy'])
 
     # define and solve the Multiplicative CNLS_vrs model
-    model1 = CNLS.CNLS(y, x, z=None, cet = "mult", fun = "prod", rts = "vrs")
-    model1.optimize(remote=True)
+    model1 = CNLS.CNLS(y=data.y, x=data.x, z=None, cet = CET_MULT, fun = FUN_PROD, rts = RTS_VRS)
+    model1.optimize('email@address')
 
     # define and solve the Multiplicative CNLS_crs model
-    model2 = CNLS.CNLS(y, x, z=None, cet = "mult", fun = "prod", rts = "crs")
-    model2.optimize(remote=True)
+    model2 = CNLS.CNLS(y=data.y, x=data.x, z=None, cet = CET_MULT, fun = FUN_PROD, rts = RTS_CRS)
+    model2.optimize('email@address')
 
     # print residuals in the VRS model
     print(model1.display_residual())
