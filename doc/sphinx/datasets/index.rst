@@ -4,7 +4,7 @@ Datasets
 ===========
 
 In this section, the package provides four example datasets: First two are used in large number of CNLS/StoNED
-liturature; the others are commonly used in the SFA liturature. In the following section (:ref:`Examples`), our tutorials
+liturature; the others are commonly used in the SFA liturature. In the Examples, our tutorials
 will resort to these example data.
 
 .. toctree::
@@ -15,7 +15,7 @@ will resort to these example data.
     front41Data/index.md
     riceProdPhil/index.md
 
-Import example data from pyStoNED
+Import internal data
 -----------------------------------------
 
 - Finnish electricity firm data
@@ -106,7 +106,7 @@ Import example data from pyStoNED
     print(y)
 
 
-Import personal data
+Import external data
 --------------------------------
 
 Assuming that we have a dataset like the following example in `Book1.xlsx`, we then 
