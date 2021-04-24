@@ -4,39 +4,38 @@ import numpy as np
 import math
 import scipy.stats as stats
 import scipy.optimize as opt
-from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_VRS, RED_MOM, RED_QLE, RED_KDE
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RED_MOM, RED_QLE, RED_KDE
 
-
-class StoNED(CNLS.CNLS):
+class StoNED:
     """Stochastic nonparametric envelopment of data (StoNED)
     """
 
-    def __init__(self, y, x, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
-        """StoNED model
-
-        Args:
-            y (float): output variable. 
-            x (float): input variables.
-            z (float, optional): Contextual variable(s). Defaults to None.
-            cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
-            fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
-            rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
+    def __init__(self, model):
+        """Stochastic nonparametric envelopment of data (StoNED)
+        model: The input model for residual decomposition
         """
-        super().__init__(y, x, z, cet, fun, rts)
+        self.model = model
+
+        # If the model is a directional distance based, set cet to CET_ADDI
+        if hasattr(self.model, 'gx'):
+            self.model.cet = CET_ADDI
+            self.y = np.diag(np.tensordot(self.model.y, self.model.get_gamma(),axes=([1],[1])))
+        else:
+            self.y = self.model.y
 
     def get_unconditional_expected_inefficiency(self, method=RED_MOM):
         # method  = RED_MOM : Method of moments
         #         = RED_QLE : Quassi-likelihood estimation
         #         = RED_KDE : Kernel deconvolution estimation
-        if self.optimization_status == 0:
+        if self.model.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
         if method == RED_MOM:
-            self.__method_of_moment(self.get_residual())
+            self.__method_of_moment(self.model.get_residual())
         elif method == RED_QLE:
-            self.__quassi_likelihood(self.get_residual())
+            self.__quassi_likelihood(self.model.get_residual())
         elif method == RED_KDE:
-            self.__gaussian_kernel_estimation(self.get_residual())
+            self.__gaussian_kernel_estimation(self.model.get_residual())
         else:
             # TODO(error/warning handling): Raise error while undefined method
             return False
@@ -47,7 +46,7 @@ class StoNED(CNLS.CNLS):
         #         = RED_QLE : Quassi-likelihood estimation
 
         # calculate sigma_u, sigma_v, mu, and epsilon value
-        if self.optimization_status == 0:
+        if self.model.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
         self.get_unconditional_expected_inefficiency(method)
@@ -56,21 +55,21 @@ class StoNED(CNLS.CNLS):
         mu = self.epsilon * self.sigma_u / (
             self.sigma_v * math.sqrt(self.sigma_u ** 2 + self.sigma_v ** 2))
 
-        if self.fun == FUN_PROD:
+        if self.model.fun == FUN_PROD:
             Eu = sigma * ((stats.norm.pdf(mu) /
                            (1 - stats.norm.cdf(mu) + 0.000001)) - mu)
-            if self.cet == CET_ADDI:
-                return (self.y - self.get_residual() + self.mu -
-                        Eu) / (self.y - self.get_residual() + self.mu)
-            elif self.cet == CET_MULT:
+            if self.model.cet == CET_ADDI:
+                return (self.y - self.model.get_residual() + self.mu -
+                        Eu) / (self.y - self.model.get_residual() + self.mu)
+            elif self.model.cet == CET_MULT:
                 return np.exp(-Eu)
-        elif self.fun == FUN_COST:
+        elif self.model.fun == FUN_COST:
             Eu = sigma * ((stats.norm.pdf(mu) /
                            (1 - stats.norm.cdf(-mu) + 0.000001)) + mu)
-            if self.cet == CET_ADDI:
-                return (self.y - self.get_residual() - self.mu +
-                        Eu) / (self.y - self.get_residual() - self.mu)
-            elif self.cet == CET_MULT:
+            if self.model.cet == CET_ADDI:
+                return (self.y - self.model.get_residual() - self.mu +
+                        Eu) / (self.y - self.model.get_residual() - self.mu)
+            elif self.model.cet == CET_MULT:
                 return np.exp(Eu)
         # TODO(error/warning handling): Raise error while undefined fun/cet
         return False
@@ -84,13 +83,13 @@ class StoNED(CNLS.CNLS):
         M2_mean = np.mean(M2, axis=0)
         M3_mean = np.mean(M3, axis=0)
 
-        if self.fun == FUN_PROD:
+        if self.model.fun == FUN_PROD:
             if M3_mean > 0:
                 M3_mean = 0.0
             self.sigma_u = (M3_mean / ((2 / math.pi) ** (1 / 2) *
                                        (1 - 4 / math.pi))) ** (1 / 3)
 
-        elif self.fun == FUN_COST:
+        elif self.model.fun == FUN_COST:
             if M3_mean < 0:
                 M3_mean = 0.00001
             self.sigma_u = (-M3_mean / ((2 / math.pi) ** (1 / 2) *
@@ -103,7 +102,7 @@ class StoNED(CNLS.CNLS):
         self.sigma_v = (M2_mean -
                         ((math.pi - 2) / math.pi) * self.sigma_u ** 2) ** (1 / 2)
         self.mu = (self.sigma_u ** 2 * 2 / math.pi) ** (1 / 2)
-        if self.fun == FUN_PROD:
+        if self.model.fun == FUN_PROD:
             self.epsilon = residual - self.mu
         else:
             self.epsilon = residual + self.mu
@@ -138,12 +137,12 @@ class StoNED(CNLS.CNLS):
             return -(-len(epsilon) * math.log(sigma) + np.sum(np.log(pn)) -
                      0.5 * np.sum(epsilon ** 2) / sigma ** 2)
 
-        if self.fun == FUN_PROD:
+        if self.model.fun == FUN_PROD:
             lamda = opt.minimize(__quassi_likelihood_estimation,
                                  1.0,
                                  residual,
                                  method='BFGS').x[0]
-        elif self.fun == FUN_COST:
+        elif self.model.fun == FUN_COST:
             lamda = opt.minimize(__quassi_likelihood_estimation,
                                  1.0,
                                  -residual,
@@ -165,9 +164,9 @@ class StoNED(CNLS.CNLS):
         self.sigma_v = (sigma ** 2 / (1 + lamda ** 2)) ** (1 / 2)
         self.sigma_u = self.sigma_v * lamda
 
-        if self.fun == FUN_PROD:
+        if self.model.fun == FUN_PROD:
             self.epsilon = residual - self.mu
-        elif self.fun == FUN_COST:
+        elif self.model.fun == FUN_COST:
             self.epsilon = residual + self.mu
 
     def __gaussian_kernel_estimation(self, residual):
@@ -204,23 +203,5 @@ class StoNED(CNLS.CNLS):
 
         # expected inefficiency mu
         self.mu = -np.max(derivative)
-        if self.fun == FUN_COST:
+        if self.model.fun == FUN_COST:
             self.mu *= -1
-
-
-class StoNEDG(CNLSG.CNLSG, StoNED):
-    """Stochastic nonparametric envelopment of data (StoNED) with Genetic algorithm
-    """
-
-    def __init__(self, y, x, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
-        """StoNEDG model
-
-        Args:
-            y (float): output variable. 
-            x (float): input variables.
-            z (float, optional): Contextual variable(s). Defaults to None.
-            cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
-            fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
-            rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
-        """
-        CNLSG.CNLSG.__init__(self, y, x, z, cet, fun, rts)
