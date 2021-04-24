@@ -4,7 +4,7 @@ API Documentation
 
 The API Documentation including 2 parts: Formulations classes and Peripheral methods.
 
-Formulations Classes:
+Formulations Classes
 ---------------------
 
 .. toctree::
@@ -24,7 +24,7 @@ Formulations Classes:
    formulations/StoNED
 
 
-Peripheral Classes:
+Peripheral Classes
 -------------------
 
 .. toctree::
