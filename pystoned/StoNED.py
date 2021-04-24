@@ -1,5 +1,4 @@
 # import dependencies
-from . import CNLS, CNLSG
 import numpy as np
 import math
 import scipy.stats as stats
@@ -11,7 +10,7 @@ class StoNED:
     """
 
     def __init__(self, model):
-        """Stochastic nonparametric envelopment of data (StoNED)
+        """StoNED
         model: The input model for residual decomposition
         """
         self.model = model
