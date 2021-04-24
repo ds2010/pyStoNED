@@ -2,10 +2,9 @@
 StoNED with Z variables
 ========================
 
-A firm’s ability to operate efficiently often depends on operational conditions 
-and practices, such as the production environment and the firm specific 
-characteristics for  example  technology  selection  or  managerial  
-practices.  Banker  and  Natarajan (2008) refer to both variables that 
+A firm’s ability to operate efficiently often depends on operational conditions and practices, 
+such as the production environment and the firm specific characteristics for  example  
+technology  selection  or  managerial  practices.  Banker  and  Natarajan (2008) refer to both variables that 
 characterize operational conditions and practices as `contextual variables`.
 
 * Contextual variables are often (but not always) **external factors** that are beyond the control of firms
@@ -68,31 +67,19 @@ show how to obtain the firm-specific inefficiency.
 .. code:: python
 
     # import packages
-    from pystoned import StoNED
-    import pandas as pd
-    import numpy as np
+    from pystoned import CNLS, StoNED
+    from pystoned.constant import CET_MULT, FUN_COST, RTS_CRS, RED_MOM
+    from pystoned.dataset import load_Finnish_electricity_firm
     
-    # import Finnish electricity distribution firms data
-    url='https://raw.githubusercontent.com/ds2010/pyStoNED/master/pystoned/data/electricityFirms.csv'
-    df = pd.read_csv(url, error_bad_lines=False)
-    df.head(5)
-    
-    # output
-    y = df['Energy']
+    # import all data (including the contextual varibale)
+    data = load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'],   
+                                         y_select=['TOTEX'],
+                                         z_select=['PerUndGr'])
 
-    # inputs
-    x1 = df['OPEX']
-    x1 = np.asmatrix(x1).T
-    x2 = df['CAPEX']
-    x2 = np.asmatrix(x2).T
-    x = np.concatenate((x1, x2), axis=1)
+    # define and solve the StoNED model using MoM approach
+    model = CNLS.CNLS(y=data.y, x=data.x, z=data.x, cet = CET_MULT, fun = FUN_COST, rts = RTS_CRS) 
+    model.optimize('email@address')
 
-    # Z variables
-    z = df['PerUndGr']
-
-    # define and solve the StoNED model using KDE approach
-    model = StoNED.StoNED(y, x, z, cet = "mult", fun = "cost", rts = "crs")
-    model.optimize(remote=True)
-
-    # retrive the technical inefficiency
-    print(model.get_technical_inefficiency(method='MOM'))
+    # Residual decomposition
+    rd = StoNED.StoNED(model)
+    print(rd.get_technical_inefficiency(RED_MOM))

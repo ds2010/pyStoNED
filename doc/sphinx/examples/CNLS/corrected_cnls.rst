@@ -32,7 +32,7 @@ Like ``COLS``, the ``C2NLS`` method is implemented in two stages, which can be s
     :nowrap:
 
     \begin{align*}
-        \hat{\varepsilon_i}^{C2NLS}= \varepsilon_i^{CNLS}− \max_h \varepsilon_h^{CNLS},
+        \hat{\varepsilon_i}^{C2NLS}= \varepsilon_i^{CNLS} − \max_h \varepsilon_h^{CNLS},
     \end{align*}
 
 where values of :math:`\hat{\varepsilon_i}^{C2NLS}` range from :math:`[0, +\infty]` with 0 
