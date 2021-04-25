@@ -32,6 +32,14 @@ Stochastic Nonparametric Envelopment of Data
    StoNED/Jondrow
 
 
+Convex Quantile Approaches
+--------------------------
+.. toctree::
+   :maxdepth: 1
+   
+   quantile/cqer
+
+
 Contextual Variables
 ---------------------
 
@@ -49,14 +57,6 @@ Multiple Outputs (DDF Formulation)
 
    DDF/cnls_ddf
    DDF/cqer_ddf
-
-
-Convex Quantile Approaches
---------------------------
-.. toctree::
-   :maxdepth: 1
-
-   quantile/cqer
 
 
 Monotonic Models

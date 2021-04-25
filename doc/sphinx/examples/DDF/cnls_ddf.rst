@@ -58,33 +58,16 @@ In the following code, we first estimate the DDF without considering the undesir
 
     # import packages
     from pystoned import CNLSDDF
-    import pandas as pd
-    import numpy as np
+    from pystoned.constant import FUN_PROD, OPT_LOCAL
+    from pystoned.dataset import load_Finnish_electricity_firm
     
     # import Finnish electricity distribution firms data
-    url='https://raw.githubusercontent.com/ds2010/pyStoNED/master/pystoned/data/electricityFirms.csv'
-    df = pd.read_csv(url, error_bad_lines=False)
-    df.head(5)
+    data = load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'],
+                                        y_select=['TOTEX', 'CAPEX'])
     
-    # outputs
-    y1 = df['Energy']
-    y1 = np.asmatrix(y1).T
-    y2 = df['Length']
-    y2 = np.asmatrix(y2).T
-    y3 = df['Customers']
-    y3 = np.asmatrix(y3).T
-    y = np.concatenate((y1, y2, y3), axis=1)
-
-    # inputs
-    x1 = df['OPEX']
-    x1 = np.asmatrix(x1).T
-    x2 = df['CAPEX']
-    x2 = np.asmatrix(x2).T
-    x = np.concatenate((x1, x2), axis=1)
-
     # define and solve the CNLS-DDF model
-    model = CNLSDDF.CNLSDDF(y, x, b=None, fun = "prod", gx= [0.0, 0.0], gb=None, gy= [0.0, 0.5, 0.5])
-    model.optimize(remote=False)
+    model = CNLSDDF.CNLSDDF(y=data.x, x=data.y, b=None, fun = FUN_PROD, gx= [0.0, 0.0], gb=None, gy= [0.0, 0.5, 0.5])
+    model.optimize(OPT_LOCAL)
 
     # display the estimates (alpha, beta, gamma, and residual)
     model.display_alpha()
@@ -102,30 +85,15 @@ Now we take the undesirable outputs into considertion, the python code is presen
 
     # import packages
     from pystoned import CNLSDDF
-    import pandas as pd
-    import numpy as np
+    from pystoned.constant import FUN_PROD, OPT_LOCAL
+    from pystoned import dataset as dataset
     
-    # import OECD countries data
-    url = 'https://raw.githubusercontent.com/ds2010/pyStoNED/master/sources/data/countries.csv'
-    df = pd.read_csv(url, error_bad_lines=False)
-    df.head(5)
+    # import the GHG example data
+    data = dataset.load_GHG_abatement_cost()
     
-    # inputs
-    x1 = df['HRSN']
-    x1 = np.asmatrix(x1).T
-    x2 = df['CPNK']
-    x2 = np.asmatrix(x2).T
-    x = np.concatenate((x1, x2), axis=1)
-
-    # good output
-    y = df['VALK']
-
-    # bad output
-    b = df['GHG']
-
     # define and solve the CNLS-DDF model
-    model = CNLSDDF.CNLSDDF(y, x, b, fun="prod", gx=[0.0, 0.0], gb=-1.0, gy=1.0)
-    model.optimize(remote=False)
+    model = CNLSDDF.CNLSDDF(y=data.y, x=data.x, b=data.b, fun=FUN_PROD, gx=[0.0, 0.0], gb=-1.0, gy=1.0)
+    model.optimize(OPT_LOCAL)
 
     # display the estimates (alpha, beta, gamma, delta, and residual)
     model.display_alpha()
