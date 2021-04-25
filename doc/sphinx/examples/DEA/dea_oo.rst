@@ -51,27 +51,15 @@ In the following code, we calculate the VRS radial model with pyStoNED.
 
     # import packages
     from pystoned import DEA
-    import pandas as pd
-    import numpy as np
+    from pystoned import dataset as dataset
+    from pystoned.constant import RTS_VRS, ORIENT_OO, OPT_LOCAL
     
     # import the data provided with Tim Coelli’s Frontier 4.1
-    url = 'https://raw.githubusercontent.com/ds2010/pyStoNED/master/pystoned/data/41Firm.csv'
-    df = pd.read_csv(url, error_bad_lines=False)
-    df.head(10)
+    data = dataset.load_Tim_Coelli_frontier()
     
-    # output
-    y = df['output']
-
-    # inputs
-    x1 = df['capital']
-    x1 = np.asmatrix(x1).T
-    x2 = df['labour']
-    x2 = np.asmatrix(x2).T
-    x = np.concatenate((x1, x2), axis=1)
-
     # define and solve the DEA radial model
-    model = DEA.DEA(y,x,rts ="vrs", orient="oo", yref=None, xref=None)
-    model.optimize(remote=False)
+    model = DEA.DEA(data.y, data.x, rts=RTS_VRS, orient=ORIENT_OO, yref=None, xref=None)
+    model.optimize(OPT_LOCAL)
 
     # display the technical efficiency
     model.display_theta()
