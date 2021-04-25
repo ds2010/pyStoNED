@@ -62,6 +62,17 @@ Multiple Outputs (DDF Formulation)
 Monotonic Models
 ----------------
 
+
+CNLS-G Algorithm (for large sample)
+------------------------------------
+.. toctree::
+   :maxdepth: 1
+
+   CNLSG/cnls_g
+   CNLSG/cqer_g
+
+
+
 Data Envelopment Analysis
 --------------------------
 .. toctree::
@@ -73,4 +84,8 @@ Data Envelopment Analysis
 
 Free Disposal Hull
 -------------------
+.. toctree::
+   :maxdepth: 1
 
+   FDH/fdh_io
+   FDH/fdh_oo
