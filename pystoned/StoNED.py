@@ -58,16 +58,14 @@ class StoNED:
             Eu = sigma * ((stats.norm.pdf(mu) /
                            (1 - stats.norm.cdf(mu) + 0.000001)) - mu)
             if self.model.cet == CET_ADDI:
-                return (self.y - self.model.get_residual() + self.mu -
-                        Eu) / (self.y - self.model.get_residual() + self.mu)
+                return (self.y - Eu) / self.y
             elif self.model.cet == CET_MULT:
                 return np.exp(-Eu)
         elif self.model.fun == FUN_COST:
             Eu = sigma * ((stats.norm.pdf(mu) /
                            (1 - stats.norm.cdf(-mu) + 0.000001)) + mu)
             if self.model.cet == CET_ADDI:
-                return (self.y - self.model.get_residual() - self.mu +
-                        Eu) / (self.y - self.model.get_residual() - self.mu)
+                return (self.y + Eu) / self.y
             elif self.model.cet == CET_MULT:
                 return np.exp(Eu)
         # TODO(error/warning handling): Raise error while undefined fun/cet
@@ -75,9 +73,8 @@ class StoNED:
 
     def __method_of_moment(self, residual):
         """Method of moment"""
-        residual_mean = np.mean(residual)
-        M2 = (residual - residual_mean) ** 2
-        M3 = (residual - residual_mean) ** 3
+        M2 = (residual - np.mean(residual)) ** 2
+        M3 = (residual - np.mean(residual)) ** 3
 
         M2_mean = np.mean(M2, axis=0)
         M3_mean = np.mean(M3, axis=0)
@@ -204,3 +201,26 @@ class StoNED:
         self.mu = -np.max(derivative)
         if self.model.fun == FUN_COST:
             self.mu *= -1
+
+    def get_frontier(self, method=RED_MOM):
+        # method  = RED_MOM : Method of moments
+        #         = RED_QLE : Quassi-likelihood estimation
+
+        # calculate sigma_u, sigma_v, mu, and epsilon value
+        if self.model.optimization_status == 0:
+            print("Model isn't optimized. Use optimize() method to estimate the model.")
+            return False
+        self.get_unconditional_expected_inefficiency(method)
+
+        if self.model.fun == FUN_PROD:
+            if self.model.cet == CET_ADDI:
+                return (self.y - self.model.get_residual()) - self.sigma_u * math.sqrt(2 / math.pi)
+            elif self.model.cet == CET_MULT:
+                return  (self.y / np.exp(self.model.get_residual())) * np.exp(self.sigma_u * math.sqrt(2 / math.pi))
+        elif self.model.fun == FUN_COST:
+            if self.model.cet == CET_ADDI:
+                return (self.y - self.model.get_residual()) + self.sigma_u * math.sqrt(2 / math.pi)
+            elif self.model.cet == CET_MULT:
+                return (self.y / np.exp(self.model.get_residual())) * np.exp(-self.sigma_u * math.sqrt(2 / math.pi))
+        # TODO(error/warning handling): Raise error while undefined fun/cet
+        return False
