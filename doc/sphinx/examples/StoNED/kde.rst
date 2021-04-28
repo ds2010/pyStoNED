@@ -36,5 +36,5 @@ In the following code, we use the kernel density approach to decompose the CNLS 
     model.optimize('email@address')
     
     # retrive the unconditional expected inefficiency \mu
-    model = StoNED.StoNED(model)
-    print(model.get_unconditional_expected_inefficiency('KDE'))
+    rd = StoNED.StoNED(model)
+    print(rd.get_unconditional_expected_inefficiency('KDE'))
