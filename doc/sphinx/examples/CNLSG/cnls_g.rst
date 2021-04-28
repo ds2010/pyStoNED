@@ -1,6 +1,6 @@
-========================================
-CNLS-G Alogrithm: CNLS and CQR models
-========================================
+===========================================
+CNLS-G Alogrithm: CNLS and CQR/CER models
+===========================================
 
 
 Since both CNLS and CQR/CER models have the Afrait inequality constraint, the estimation becomes
