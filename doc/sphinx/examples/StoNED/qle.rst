@@ -27,36 +27,25 @@ where
 Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_QLE.ipynb>`_
 -------------------------------------------------------------------------------------------------------------------------------
 
-In the following code, we use the quassi-likelihood approach to decompose the CNLS residuals with the pyStoNED.
+In the following code, we use the quassi-likelihood approach to decompose the CNLS residuals and display the StoNED frontier.
 
 .. code:: python
 
     # import packages
-    from pystoned import StoNED
-    import pandas as pd
-    import numpy as np
+    from pystoned import CNLS, StoNED
+    from pystoned.dataset import load_Finnish_electricity_firm
+    from pystoned.constant import CET_MULT, FUN_COST, RTS_VRS, RED_QLE
     
     # import Finnish electricity distribution firms data
-    url='https://raw.githubusercontent.com/ds2010/pyStoNED/master/pystoned/data/electricityFirms.csv'
-    df = pd.read_csv(url, error_bad_lines=False)
-    df.head(5)
+    data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'], y_select=['Energy'])
     
-    # output
-    y = df['Energy']
-
-    # inputs
-    x1 = df['OPEX']
-    x1 = np.asmatrix(x1).T
-    x2 = df['CAPEX']
-    x2 = np.asmatrix(x2).T
-    x = np.concatenate((x1, x2), axis=1)
-
-    # define and solve the StoNED model using QLE approach
-    model = StoNED.StoNED(y, x, z= None, cet = "mult", fun = "cost", rts = "vrs")
-    model.optimize(remote=True)
-
-    # retrive the unconditional expected inefficiency \mu
-    print(model.get_unconditional_expected_inefficiency('QLE'))
-
-    # retrive the technical inefficiency
-    print(model.get_technical_inefficiency(method='QLE'))
+    # build and optimize the CNLS model
+    model = CNLS.CNLS(data.y, data.x, z=None, cet=CET_MULT, fun=FUN_COST, rts=RTS_VRS)
+    model.optimize('email@address')
+    
+    # Residual decomposition
+    rd = StoNED.StoNED(model)
+    print(rd.get_technical_inefficiency(RED_QLE))
+    
+    # return the StoNED frontier
+    print(rd.get_frontier(RED_QLE))

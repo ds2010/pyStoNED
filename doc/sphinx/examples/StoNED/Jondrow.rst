@@ -41,11 +41,11 @@ as the conditional mean :math:`E(u_i|\varepsilon_i)`.
 
     - Production function
         - Logged Dependent Variable: :math:`\text{TE} = \text{exp}(-E(u_i \mid \varepsilon_i))` 
-        - Otherwise,  :math:`\text{TE} = \frac{\text{fitt}-E(u_i \mid \varepsilon_i)}{\text{fitt}}`
+        - Otherwise,  :math:`\text{TE} = \frac{Y - E(u_i \mid \varepsilon_i)}{Y}`
             
     - Cost function
         - Logged Dependent Variable: :math:`\text{TE} = \text{exp}(E(u_i \mid \varepsilon_i))`
-        - Otherwise,  :math:`\text{TE} = \frac{\text{fitt}+ E(u_i \mid \varepsilon_i)}{\text{fitt}}`
+        - Otherwise,  :math:`\text{TE} = \frac{Y+ E(u_i \mid \varepsilon_i)}{Y}`
 
 References:
 
