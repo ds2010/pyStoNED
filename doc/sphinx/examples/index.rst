@@ -69,9 +69,8 @@ CNLS-G Algorithm (for large sample)
    :maxdepth: 1
 
    CNLSG/cnls_g
-   CNLSG/cqer_g
 
-
+   
 
 Data Envelopment Analysis
 --------------------------
