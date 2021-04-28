@@ -3,7 +3,7 @@ StoNED with Z variables
 ========================
 
 A firm’s ability to operate efficiently often depends on operational conditions and practices, 
-such as the production environment and the firm specific characteristics for  example  
+such as the production environment and the firm specific characteristics for example  
 technology  selection  or  managerial  practices.  Banker  and  Natarajan (2008) refer to both variables that 
 characterize operational conditions and practices as `contextual variables`.
 
@@ -23,7 +23,7 @@ characterize operational conditions and practices as `contextual variables`.
 
 
 Taking the multiplicative model as our starting point, 
-we introduce the contextual variables, represented by `r`-dimensional vectorszi that 
+we introduce the contextual variables, represented by `r`-dimensional vectors :math:`z_i` that 
 represent the measured values of operational conditions and practices, to obtain 
 the following semi-nonparametric, partial log-linear equation
 
