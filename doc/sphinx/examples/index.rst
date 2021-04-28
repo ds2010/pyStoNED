@@ -70,7 +70,16 @@ CNLS-G Algorithm (for large sample)
 
    CNLSG/cnls_g
 
-   
+
+Plot the frontier/estimation function
+--------------------------------------
+.. toctree::
+   :maxdepth: 1
+
+   Plot/2d_plot
+   Plot/3d_plot
+
+
 
 Data Envelopment Analysis
 --------------------------
