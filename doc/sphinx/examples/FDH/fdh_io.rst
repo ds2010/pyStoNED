@@ -17,7 +17,7 @@ we measure the input oriented efficiency for observation :math:`i` by solving th
             X\lambda \le \phi_i x_i  \\
             Y\lambda \ge y_i  \\
             \sum \lambda = 1 \\
-            \lambda_j \in \{0, 1\} &{}& \forall j
+            \lambda_j \in \{0, 1\}, \forall j
     \end{align*}
 where :math:`\lambda = [\lambda_1, \lambda_2, \cdots, \lambda_n]` is the vector of intensity weights. The efficiency
 of observation :math:`i` is :math:`\phi^*_i`. The corresponding calculation processes are as follow: 
