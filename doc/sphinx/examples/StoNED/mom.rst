@@ -73,16 +73,16 @@ Next we use the method of moments to decompose the CNLSDDF residuals and display
 .. code:: python
     
     # import packages
-    from pystoned import CNLS, StoNED
-    from pystoned.dataset import load_Finnish_electricity_firm
-    from pystoned.constant import CET_MULT, FUN_COST, RTS_VRS, RED_MOM
+    from pystoned import CNLSDDF, StoNED
+    from pystoned.constant import FUN_PROD, OPT_LOCAL, RED_MOM
+    from pystoned import dataset as dataset
         
-    # import Finnish electricity distribution firms data
-    data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'], y_select=['Energy'])
+    # import the GHG example data
+    data = dataset.load_GHG_abatement_cost()
     
-    # build and optimize the CNLS model
-    model = CNLS.CNLS(data.y, data.x, z=None, cet=CET_MULT, fun=FUN_COST, rts=RTS_VRS)
-    model.optimize('email@address')
+    # define and solve the CNLS-DDF model
+    model = CNLSDDF.CNLSDDF(y=data.y, x=data.x, b=data.b, fun=FUN_PROD, gx=[0.0, 0.0], gb=-1.0, gy=1.0)
+    model.optimize(OPT_LOCAL)
         
     # Residual decomposition
     rd = StoNED.StoNED(model)
