@@ -60,7 +60,12 @@ Multiple Outputs (DDF Formulation)
 
 
 Monotonic Models
-----------------
+--------------------
+.. toctree::
+   :maxdepth: 1
+
+   Monotonic/icnls
+   Monotonic/icqer
 
 
 CNLS-G Algorithm (for large sample)
