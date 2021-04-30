@@ -17,8 +17,8 @@ convex quantile regression (CQR) (Wang et al. 2014, Kuosmanen et al. 2015) as fo
     & \text{s.t.} \\
     & y_i=\mathbf{\alpha}_i+ \beta_i^{'}x_i+\varepsilon _i^{+}-\varepsilon _i^{-} &\quad& \forall i\\
     & \mathbf{\alpha}_i+\beta_{i}^{'}x_i \le \mathbf{\alpha}_h+\beta _h^{'}x_i  &{}& \forall i,h \\
-    & \beta_i\ge 0 &{}& \forall i \\
-    & \varepsilon _i^{+}\ge 0,\ \varepsilon_i^{-} \ge 0 &{}& \forall i
+    & \beta_i\ge 0 \quad \forall i \\
+    & \varepsilon _i^{+}\ge 0,\ \varepsilon_i^{-} \ge 0 \quad \forall i
     \end{alignat*}
 
 Where :math:`\varepsilon^{+}_i` and :math:`\varepsilon^{-}_i` denotes the two non-negative components. The last set of constraints is the sign 
@@ -35,8 +35,8 @@ used to ensure unique estimates of the quantile functions.
     & \text{s.t.} \\
     & y_i=\mathbf{\alpha}_i+ \beta_i^{'}x_i+\varepsilon _i^{+}-\varepsilon _i^{-} &\quad& \forall i\\
     & \mathbf{\alpha}_i+\beta_{i}^{'}x_i \le \mathbf{\alpha}_h+\beta _h^{'}x_i  &{}& \forall i,h \\
-    & \beta_i\ge 0 &{}& \forall i \\
-    & \varepsilon _i^{+}\ge 0,\ \varepsilon_i^{-} \ge 0 &{}& \forall i
+    & \beta_i\ge 0 \quad \forall i \\
+    & \varepsilon _i^{+}\ge 0,\ \varepsilon_i^{-} \ge 0 \quad \forall i
     \end{alignat*}
 
 

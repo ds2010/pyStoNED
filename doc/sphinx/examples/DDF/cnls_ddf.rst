@@ -88,7 +88,7 @@ Now we take the undesirable outputs into considertion, the python code is presen
     from pystoned.constant import FUN_PROD, OPT_LOCAL
     from pystoned import dataset as dataset
     
-    # import the GHG example data
+    # import the GHG emissions data
     data = dataset.load_GHG_abatement_cost()
     
     # define and solve the CNLS-DDF model
