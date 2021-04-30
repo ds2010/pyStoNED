@@ -50,7 +50,7 @@ When considering undesirable outputs, the above CNLS-DDF problem can be reformul
 
 
 Example #1 `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DDF_withoutUndesirableOutput.ipynb>`_
------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------
 
 In the following code, we first estimate the DDF without considering the undesirable outputs.
 
@@ -76,8 +76,8 @@ In the following code, we first estimate the DDF without considering the undesir
     model.display_residual()
 
 
-Example #2 `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/DDF_UndesirableOutput.ipynb>`_
----------------------------------------------------------------------------------------------------------------------------------------------
+Example #2 `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DDF_UndesirableOutput.ipynb>`_
+---------------------------------------------------------------------------------------------------------------------------------------
 
 Now we take the undesirable outputs into considertion, the python code is presented as 
 

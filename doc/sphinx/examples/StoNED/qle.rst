@@ -25,7 +25,7 @@ where
 
 
 Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_QLE.ipynb>`_
--------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
 
 In the following code, we use the quassi-likelihood approach to decompose the CNLS residuals and display the StoNED frontier.
 
