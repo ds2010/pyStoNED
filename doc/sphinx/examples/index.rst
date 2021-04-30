@@ -85,7 +85,6 @@ Plot the frontier/estimation function
    Plot/3d_plot
 
 
-
 Data Envelopment Analysis
 --------------------------
 .. toctree::
@@ -94,6 +93,7 @@ Data Envelopment Analysis
    DEA/dea_io
    DEA/dea_oo
    DEA/dea_ddf
+   DEA/dea_und
    DEA/dea_ref
 
 

@@ -39,7 +39,7 @@ The VRA and CRS models are presented as follows
     \end{equation}
 
 
-Example: `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DEA_io_vrs.ipynb>`_
+Example: `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DEA_ddf_vrs.ipynb>`_
 -----------------------------------------------------------------------------------------------------------------------------
 
 
