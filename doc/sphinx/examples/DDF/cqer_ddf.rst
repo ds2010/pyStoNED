@@ -115,7 +115,7 @@ Example: CER-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pySt
         # import the GHG emissions data
         data = dataset.load_GHG_abatement_cost()
                 
-        # define and solve the CQR-DDF model (with undesirable outputs)
+        # define and solve the CER-DDF model (with undesirable outputs)
         model = CQERDDF.CQRDDF(y=data.y, x=data.x, b=data.b, tau=0.9, fun = FUN_PROD, gx= [0.0, 0.0], gb=[-1], gy=[1])
         model.optimize(OPT_LOCAL)
             
