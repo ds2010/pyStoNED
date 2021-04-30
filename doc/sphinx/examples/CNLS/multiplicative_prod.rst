@@ -56,8 +56,7 @@ In the following code, we estimate two multiplicative production functions with 
     from pystoned.dataset import load_Finnish_electricity_firm
     
     # import Finnish electricity distribution firms data
-    data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'],
-                                        y_select=['Energy'])
+    data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'], y_select=['Energy'])
 
     # define and solve the Multiplicative CNLS_vrs model
     model1 = CNLS.CNLS(y=data.y, x=data.x, z=None, cet = CET_MULT, fun = FUN_PROD, rts = RTS_VRS)
