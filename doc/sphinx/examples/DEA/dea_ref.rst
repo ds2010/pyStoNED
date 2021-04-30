@@ -10,7 +10,7 @@ However, by default, all DMUs serve both as benchmarks and evaluated units.
 Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/notebooks/DEA_changeReferenceSet.ipynb>`_
 ----------------------------------------------------------------------------------------------------------------------------------------------
 
-In the following code, we calculate the VRS radial model with pyStoNED.
+In the following code, we present how to evaluate the DMUs based on the any reference set:
 
 .. code:: python
 
