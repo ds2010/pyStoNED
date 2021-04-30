@@ -62,11 +62,11 @@ In the following code, we first estimate the DDF without considering the undesir
     from pystoned.dataset import load_Finnish_electricity_firm
     
     # import Finnish electricity distribution firms data
-    data = load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'],
-                                        y_select=['TOTEX', 'CAPEX'])
+    data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'],
+                                        y_select=['Energy', 'Length', 'Customers'])
     
     # define and solve the CNLS-DDF model
-    model = CNLSDDF.CNLSDDF(y=data.x, x=data.y, b=None, fun = FUN_PROD, gx= [0.0, 0.0], gb=None, gy= [0.0, 0.5, 0.5])
+    model = CNLSDDF.CNLSDDF(y=data.y, x=data.x, b=None, fun = FUN_PROD, gx= [1.0, 0.0], gb=None, gy= [0.0, 0.0, 0.0])
     model.optimize(OPT_LOCAL)
 
     # display the estimates (alpha, beta, gamma, and residual)
