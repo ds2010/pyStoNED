@@ -5,7 +5,7 @@ A ConcreteModel for CNLS estimation
 We also prepare a concrete model that does not need to call any of our developed functions in the pyStoNED package.
 In this concrete model, one can define the parameter specification by reading data from an Excel file.
 
-A concreteModel for CNLS estimation `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/docs/advanced/advanced_files/CNLS_ConcreteModel.ipynb>`_ :
+A concreteModel for CNLS estimation `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_ConcreteModel.ipynb>`_ :
 
 .. code:: python
     

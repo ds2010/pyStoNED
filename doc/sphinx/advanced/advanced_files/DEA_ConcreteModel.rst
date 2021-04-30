@@ -5,7 +5,7 @@ A ConcreteModel for DEA estimation
 We also prepare a concrete model that 
 can be used to calculate the input oriented VRS model.
 
-A ConcreteModel for DEA estimation `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/docs/advanced/advanced_files/DEA_ConcreteModel.ipynb>`_ :
+A ConcreteModel for DEA estimation `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DEA_ConcreteModel.ipynb>`_ :
 
 .. code:: python
     

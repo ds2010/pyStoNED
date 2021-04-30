@@ -6,7 +6,7 @@ Rewrite GAMS codes in Python
 from GAMS to Python. Thus, we prepare a short tutorial to help GAMSers to understand how to rewrite 
 the CNLS models, even other complicated models on Python.
 
-A brief comparison `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/gams2python.ipynb>`_ :
+A brief comparison `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/gams2python.ipynb>`_ :
 
 .. code:: python
     

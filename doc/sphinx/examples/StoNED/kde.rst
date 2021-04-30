@@ -17,7 +17,7 @@ where :math:`C` is a closed interval in he right tail of :math:`f_{\varepsilon^+
 
 
 Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_KDE.ipynb>`_
--------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
 
 In the following code, we use the kernel density approach to decompose the CNLS residuals and display the unconditional expected inefficiency.
 
