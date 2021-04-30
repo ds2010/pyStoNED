@@ -80,7 +80,7 @@ and we also consider modeling the undesirable outputs.
 
 
 
-Example: CER-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/CQR_DDF.ipynb>`_
+Example: CQR-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/CQR_DDF.ipynb>`_
 --------------------------------------------------------------------------------------------------------------------------------------------------------
     
 .. code:: python
@@ -102,7 +102,7 @@ Example: CER-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pySt
         model.display_residual()
 
 
-Example: CQR-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/CER_DDF.ipynb>`_
+Example: CER-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/sources/notebooks/CER_DDF.ipynb>`_
 --------------------------------------------------------------------------------------------------------------------------------------
             
 .. code:: python
