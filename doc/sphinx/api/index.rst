@@ -2,7 +2,7 @@
 API Documentation
 =================
 
-The API Documentation including 2 parts: Formulations classes and Peripheral methods.
+The API Documentation including 3 parts: Formulations classes, Residual decomposition and Peripheral methods.
 
 Formulations Classes
 ---------------------
@@ -18,10 +18,16 @@ Formulations Classes
    formulations/CQERG
    formulations/DEA
    formulations/FDH
-   formulations/Plot
    formulations/ICNLS
    formulations/ICQER
-   formulations/StoNED
+
+Residual Decomposition
+----------------------
+   
+   .. toctree::
+      :maxdepth: 1
+   
+      residualDecomposition/StoNED
 
 
 Peripheral Classes
@@ -29,8 +35,8 @@ Peripheral Classes
 
 .. toctree::
    :maxdepth: 1
-   
-   peripherals/Built-in
-   peripherals/Dataset
 
-
+   peripherals/plot
+   peripherals/dataset
+   peripherals/constant
+   peripherals/Inner

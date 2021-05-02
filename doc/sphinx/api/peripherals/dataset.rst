@@ -1,5 +1,5 @@
 ==================
-Dataset
+dataset
 ==================
 
 .. automodule:: pystoned.dataset

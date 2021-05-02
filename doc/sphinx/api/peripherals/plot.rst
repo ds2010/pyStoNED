@@ -1,8 +1,7 @@
 ===================
-StoNED
+plot
 ===================
 
-.. automodule:: pystoned.StoNED
+.. automodule:: pystoned.plot
     :special-members: __init__
     :members:
-    :inherited-members:
