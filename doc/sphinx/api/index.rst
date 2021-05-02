@@ -29,7 +29,6 @@ Residual Decomposition
    
    residualDecomposition/StoNED
 
-
 Peripheral Classes
 -------------------
 
