@@ -63,30 +63,3 @@ In the following code, we use the method of moments to decompose the CNLS residu
     
     # return the StoNED frontier
     print(rd.get_frontier(RED_MOM))
-
-
-Example: CNLSDDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_MoM_CNLSDDF.ipynb>`_
-----------------------------------------------------------------------------------------------------------------------------------------
-    
-Next we use the method of moments to decompose the CNLSDDF residuals and display the StoNED frontier.
-    
-.. code:: python
-    
-    # import packages
-    from pystoned import CNLSDDF, StoNED
-    from pystoned.constant import FUN_PROD, OPT_LOCAL, RED_MOM
-    from pystoned import dataset as dataset
-        
-    # import the GHG example data
-    data = dataset.load_GHG_abatement_cost()
-    
-    # define and solve the CNLS-DDF model
-    model = CNLSDDF.CNLSDDF(y=data.y, x=data.x, b=data.b, fun=FUN_PROD, gx=[0.0, 0.0], gb=-1.0, gy=1.0)
-    model.optimize(OPT_LOCAL)
-        
-    # Residual decomposition
-    rd = StoNED.StoNED(model)
-    print(rd.get_technical_inefficiency(RED_MOM))
-        
-    # return the StoNED frontier
-    print(rd.get_frontier(RED_MOM))

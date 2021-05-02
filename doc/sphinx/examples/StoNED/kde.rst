@@ -37,4 +37,4 @@ In the following code, we use the kernel density approach to decompose the CNLS 
     
     # retrive the unconditional expected inefficiency \mu
     rd = StoNED.StoNED(model)
-    print(rd.get_unconditional_expected_inefficiency('KDE'))
+    print(rd.get_unconditional_expected_inefficiency(RED_KDE))
