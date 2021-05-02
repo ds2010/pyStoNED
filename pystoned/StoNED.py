@@ -23,9 +23,10 @@ class StoNED:
             self.y = self.model.y
 
     def get_unconditional_expected_inefficiency(self, method=RED_MOM):
-        # method  = RED_MOM : Method of moments
-        #         = RED_QLE : Quassi-likelihood estimation
-        #         = RED_KDE : Kernel deconvolution estimation
+        """
+        Args:
+            method (String, optional): RED_MOM (Method of moments) or RED_QLE (Quassi-likelihood estimation) or RED_KDE (Kernel deconvolution estimation). Defaults to RED_MOM.
+        """
         if self.model.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
@@ -41,10 +42,12 @@ class StoNED:
         return self.mu
 
     def get_technical_inefficiency(self, method=RED_MOM):
-        # method  = RED_MOM : Method of moments
-        #         = RED_QLE : Quassi-likelihood estimation
+        """
+        Args:
+            method (String, optional): RED_MOM (Method of moments) or RED_QLE (Quassi-likelihood estimation). Defaults to RED_MOM.
 
-        # calculate sigma_u, sigma_v, mu, and epsilon value
+        calculate sigma_u, sigma_v, mu, and epsilon value
+        """
         if self.model.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
@@ -203,10 +206,12 @@ class StoNED:
             self.mu *= -1
 
     def get_frontier(self, method=RED_MOM):
-        # method  = RED_MOM : Method of moments
-        #         = RED_QLE : Quassi-likelihood estimation
+        """
+        Args:
+            method (String, optional): RED_MOM (Method of moments) or RED_QLE (Quassi-likelihood estimation). Defaults to RED_MOM.
 
-        # calculate sigma_u, sigma_v, mu, and epsilon value
+        calculate sigma_u, sigma_v, mu, and epsilon value
+        """
         if self.model.optimization_status == 0:
             print("Model isn't optimized. Use optimize() method to estimate the model.")
             return False
