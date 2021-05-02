@@ -27,7 +27,7 @@ and the third constraint imposes monotonicity.
 
 
 Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_cost.ipynb>`_
------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
 
 In the following code, we estimate an additive cost function with pyStoNED.
 
