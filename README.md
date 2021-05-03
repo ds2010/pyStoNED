@@ -1,6 +1,6 @@
 # pyStoNED [![Documentation Status](https://readthedocs.org/projects/pystoned/badge/?version=latest)](https://pystoned.readthedocs.io/en/latest/?badge=latest)
 
-`pyStoNED` is a Python package that provides functions for estimating Convex Nonparametric Least Square (CNLS), Stochastic Nonparametric Envelopment of Data (StoNED), and other various StoNED-related variants such as Convex Quantile Regression (CQR), Convex Expectile Regression (CER), and Isotonic CNLS (ICNLS). It allows the user to estimate the CNLS/StoNED frontiers in an open-access environment. It also provides efficiency analysis of Data Envelopement Analysis (DEA) and Free Disposal Hull (FDH)  MATLAB. The `pyStoNED` package is built based on the [PYOMO](http://www.pyomo.org/). 
+`pyStoNED` is a Python package that provides functions for estimating Convex Nonparametric Least Square (CNLS), Stochastic Nonparametric Envelopment of Data (StoNED), and other various StoNED-related variants such as Convex Quantile Regression (CQR), Convex Expectile Regression (CER), and Isotonic CNLS (ICNLS). It also provides efficiency measurement using Data Envelopement Analysis (DEA) and Free Disposal Hull (FDH). The `pyStoNED` package allows the user to estimate the CNLS/StoNED frontiers in an open-access environment and is built based on the [Pyomo](http://www.pyomo.org/). 
 
 # Installation
 
@@ -16,7 +16,7 @@ The [`pyStoNED`](https://pypi.org/project/pystoned/) package is now avaiable on 
 
 # Documentation
 
-A number of Jupyter Notebooks are provided in the [Documentation](https://pystoned.readthedocs.io/en/latest/) website, and more detailed technical reports are currently under development.
+A number of Jupyter Notebooks are provided in the [Documentation](https://pystoned.readthedocs.io/en/latest/) website, and more detailed technical reports are currently under development. 
 
 # Authors
 
@@ -27,4 +27,4 @@ A number of Jupyter Notebooks are provided in the [Documentation](https://pyston
 
 # Citation
 
-If you use [pyStoNED](https://pypi.org/project/pystoned/) for published work, we encourage you to cite our [papers and upcoming techinical report](https://pystoned.readthedocs.io/en/latest/citing/index.html). We appreciate it.
+If you use [pyStoNED](https://pypi.org/project/pystoned/) for published work, we encourage you to cite our [papers](https://pystoned.readthedocs.io/en/latest/citing/index.html). We appreciate it.
