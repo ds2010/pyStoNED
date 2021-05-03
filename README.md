@@ -1,6 +1,6 @@
 # pyStoNED [![Documentation Status](https://readthedocs.org/projects/pystoned/badge/?version=latest)](https://pystoned.readthedocs.io/en/latest/?badge=latest)
 
-`pyStoNED` is a Python package that provides functions for estimating Convex Nonparametric Least Square (CNLS), Stochastic Nonparametric Envelopment of Data (StoNED), and other various StoNED-related variants (e.g., CQR, ICNLS). It allows the user to estimate the CNLS/StoNED models in an open-access environment rather than in commercial software, e.g., GAMS, MATLAB. The `pyStoNED` package is built based on the [PYOMO](http://www.pyomo.org/). 
+`pyStoNED` is a Python package that provides functions for estimating Convex Nonparametric Least Square (CNLS), Stochastic Nonparametric Envelopment of Data (StoNED), and other various StoNED-related variants such as Convex Quantile Regression (CQR), Convex Expectile Regression (CER), and Isotonic CNLS (ICNLS). It allows the user to estimate the CNLS/StoNED frontiers in an open-access environment. It also provides efficiency analysis of Data Envelopement Analysis (DEA) and Free Disposal Hull (FDH)  MATLAB. The `pyStoNED` package is built based on the [PYOMO](http://www.pyomo.org/). 
 
 # Installation
 
