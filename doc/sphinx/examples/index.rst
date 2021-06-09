@@ -8,8 +8,8 @@ Consider a standard multivariate, cross-sectional model in production economics:
    :nowrap:
 
    \begin{align}
-      y_i & = f(\boldsymbol{x}_i) + \varepsilon_i  &{\quad}& \label{eq:eq1}\\
-          & = f(\boldsymbol{x}_i) + v_i - u_i  &{\quad}& \forall i \notag
+      y_i & = f(\boldsymbol{x}_i) + \varepsilon_i  \\
+          & = f(\boldsymbol{x}_i) + v_i - u_i  &{}& \forall i \notag
    \end{align}
 
 where :math:`y_i` is the output of unit :math:`i`, :math:`f: R_+^m \rightarrow R_+` is the production function (cost function) that characterizes the production technology (cost technology),
