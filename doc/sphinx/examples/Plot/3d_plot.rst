@@ -1,5 +1,5 @@
 ================================================================
-Plotting estimation function /fronter: two-input and one-output
+Plot of estimated function/frontier: two-input and one-output
 ================================================================
 
 
@@ -23,4 +23,8 @@ Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob
     model.optimize(OPT_LOCAL)
 
     # Plot the estimated function
-    plot3d(model,x_select_1=0, x_select_2=1)
+    plot3d(model,x_select_1=0, x_select_2=1, fig_name="CNLS_3d")
+
+.. image:: ../../notebooks/CNLS_3d.png
+    :width: 600
+    :alt: CNLS estimated function
