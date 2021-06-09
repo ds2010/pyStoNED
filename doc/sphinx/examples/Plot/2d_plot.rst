@@ -24,6 +24,6 @@ Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob
     # Plot the estimated function
     plot2d(model, x_select=0, label_name="CNLS estimated function", fig_name="CNLS_2d")
 
-.. image:: ../../notebooks/CNLS_2d.png
+.. image:: ../../../../notebooks/CNLS_2d.png
     :width: 600
     :alt: CNLS estiamted function
