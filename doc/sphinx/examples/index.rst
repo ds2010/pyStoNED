@@ -9,7 +9,7 @@ Consider a standard multivariate, cross-sectional model in production economics:
 
    \begin{align}
       y_i & = f(\boldsymbol{x}_i) + \varepsilon_i  \\
-          & = f(\boldsymbol{x}_i) + v_i - u_i  \forall i \notag
+          & = f(\boldsymbol{x}_i) + v_i - u_i  &{\quad}& \forall i \notag
    \end{align}
 
 where :math:`y_i` is the output of unit :math:`i`, :math:`f: R_+^m \rightarrow R_+` is the production function (cost function) that characterizes the production technology (cost technology),
@@ -24,9 +24,8 @@ Convex Nonparametric Least Square
 .. toctree::
    :maxdepth: 1
 
-   CNLS/additive_prod
+   CNLS/additive
    CNLS/multiplicative_prod
-   CNLS/additive_cost
    CNLS/multiplicative_cost
    CNLS/corrected_cnls
 
