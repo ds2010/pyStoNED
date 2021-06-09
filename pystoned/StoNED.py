@@ -14,7 +14,8 @@ class StoNED:
         model: The input model for residual decomposition
         """
         self.model = model
-
+        self.x = self.model.x
+        
         # If the model is a directional distance based, set cet to CET_ADDI
         if hasattr(self.model, 'gx'):
             self.model.cet = CET_ADDI
