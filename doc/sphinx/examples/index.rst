@@ -2,7 +2,21 @@
 Examples
 =========
 
-These examples show how to estimate the StoNED-related models in pyStoNED.
+Consider a standard multivariate, cross-sectional model in production economics:
+
+.. math::
+   :nowrap:
+
+   \begin{align}
+      y_i & = f(\boldsymbol{x}_i) + \varepsilon_i  &{\quad}& \label{eq:eq1}\\
+          & = f(\boldsymbol{x}_i) + v_i - u_i  &{\quad}& \forall i \notag
+   \end{align}
+
+where :math:`y_i` is the output of unit :math:`i`, :math:`f: R_+^m \rightarrow R_+` is the production function (cost function) that characterizes the production technology (cost technology),
+and :math:`\boldsymbol{x}_i = (x_{i1}, x_{i2}, \cdots, x_{im})^{'}` denotes the input vector of unit :math:`i`. Similar to the literature in Stochastic Frontier analysis (SFA), 
+the presented composite error term :math:`\varepsilon_i = v_i - u_i` consists of the inefficiency term :math:`u_i>0` and stochastic noise 
+term :math:`v_i`. Different estimation methods can be classified according to the specification of :math:`f` and error term :math:`\varepsilon`
+(see Table 1 in Kuosmanen and Johnson, 2010).
 
 Convex Nonparametric Least Square
 ----------------------------------
