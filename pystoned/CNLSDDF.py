@@ -26,8 +26,8 @@ class CNLSDDF(CNLS.CNLS):
             fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
         """
         # TODO(error/warning handling): Check the configuration of the model exist
-        self.y = y.tolist()
-        self.x = x.tolist()
+        self.y = tools.trans_list(y)
+        self.x = tools.trans_list(x)
         self.b = b
         self.gy = self.__to_1d_list(gy)
         self.gx = self.__to_1d_list(gx)
@@ -37,12 +37,12 @@ class CNLSDDF(CNLS.CNLS):
 
         if type(self.x[0]) != list:
             self.x = []
-            for x_value in x.tolist():
+            for x_value in tools.trans_list(x):
                 self.x.append([x_value])
 
         if type(self.y[0]) != list:
             self.y = []
-            for y_value in y.tolist():
+            for y_value in ytools.trans_list():
                 self.y.append([y_value])
 
         self.__model__ = ConcreteModel()
@@ -61,12 +61,12 @@ class CNLSDDF(CNLS.CNLS):
             self.__model__.I, self.__model__.K, bounds=(0.0, None), doc='gamma')
 
         if type(self.b) != type(None):
-            self.b = b.tolist()
+            self.b = tools.trans_list(b)
             self.gb = self.__to_1d_list(gb)
 
             if type(self.b[0]) != list:
                 self.b = []
-                for b_value in b.tolist():
+                for b_value in tools.trans_list(b):
                     self.b.append([b_value])
 
             self.__model__.L = Set(initialize=range(len(self.b[0])))

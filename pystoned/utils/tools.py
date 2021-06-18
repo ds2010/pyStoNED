@@ -48,3 +48,8 @@ def optimize_model(model, email, cet, solver=OPT_DEFAULT):
             print("Estimating the multiplicative model remotely with knitro solver")
         solver = SolverManagerFactory('neos')
         return solver.solve(model, tee=True, opt=opt), 1
+
+def trans_list(li):
+    if type(li) == list:
+        return li
+    return li.tolist()

@@ -1,10 +1,9 @@
 # import dependencies
 import numpy as np
 import pandas as pd
-from .utils import CNLSG1, CNLSG2, CNLSZG1, CNLSZG2, sweet
+from .utils import CNLSG1, CNLSG2, CNLSZG1, CNLSZG2, sweet, tools
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, OPT_DEFAULT, RTS_CRS, RTS_VRS, OPT_DEFAULT, OPT_LOCAL
 import time
-
 
 class CNLSG:
     """Convex Nonparametric Least Square (CNLS) with Genetic algorithm
@@ -23,8 +22,8 @@ class CNLSG:
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.cutactive = sweet.sweet(x)
-        self.x = x.tolist()
-        self.y = y.tolist()
+        self.x = tools.trans_list(x)
+        self.y = tools.trans_list(y)
         self.z = z
         self.cet = cet
         self.fun = fun
@@ -40,14 +39,14 @@ class CNLSG:
 
         if type(self.x[0]) != list:
             self.x = []
-            for x_value in x.tolist():
+            for x_value in tools.trans_list(x):
                 self.x.append([x_value])
 
         if type(self.z) != type(None):
-            self.z = z.tolist()
+            self.z = tools.trans_list(z)
             if type(self.z[0]) != list:
                 self.z = []
-                for z_value in z.tolist():
+                for z_value in tools.trans_list(z):
                     self.z.append([z_value])
 
         # Optimize model

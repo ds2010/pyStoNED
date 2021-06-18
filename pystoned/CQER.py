@@ -25,8 +25,8 @@ class CQR:
             rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
         """
         # TODO(error/warning handling): Check the configuration of the model exist
-        self.x = x.tolist()
-        self.y = y.tolist()
+        self.x = tools.trans_list(x)
+        self.y = tools.trans_list(y)
         self.z = z
         self.tau = tau
         self.cet = cet
@@ -35,7 +35,7 @@ class CQR:
 
         if type(self.x[0]) != list:
             self.x = []
-            for x_value in x.tolist():
+            for x_value in tools.trans_list(x):
                 self.x.append([x_value])
 
         if type(self.y[0]) == list:
@@ -45,10 +45,10 @@ class CQR:
         self.__model__ = ConcreteModel()
 
         if type(self.z) != type(None):
-            self.z = z.tolist()
+            self.z = tools.trans_list(z)
             if type(self.z[0]) != list:
                 self.z = []
-                for z_value in z.tolist():
+                for z_value in tools.trans_list(z):
                     self.z.append([z_value])
 
             # Initialize the set of z

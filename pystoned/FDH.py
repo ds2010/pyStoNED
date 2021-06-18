@@ -19,18 +19,18 @@ class FDH:
             orient (String): ORIENT_IO (input orientation) or ORIENT_OO (output orientation)
         """
         # TODO(error/warning handling): Check the configuration of the model exist
-        self.x = x.tolist()
-        self.y = y.tolist()
+        self.x = tools.trans_list(x)
+        self.y = tools.trans_list(y)
         self.orient = orient
 
         if type(self.x[0]) != list:
             self.x = []
-            for x_value in x.tolist():
+            for x_value in tools.trans_list(x):
                 self.x.append([x_value])
 
         if type(self.y[0]) != list:
             self.y = []
-            for y_value in y.tolist():
+            for y_value in tools.trans_list(y):
                 self.y.append([y_value])
 
         # Initialize DEA model

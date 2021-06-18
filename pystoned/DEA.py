@@ -25,8 +25,8 @@ class DEA:
         # Initialize DEA model
         self.__model__ = ConcreteModel()
 
-        self.x = self.__to_2d_list(x.tolist())
-        self.y = self.__to_2d_list(y.tolist())
+        self.x = self.__to_2d_list(tools.trans_list(x))
+        self.y = self.__to_2d_list(tools.trans_list(y))
         self.orient = orient
         self.rts = rts
         self.__reference = False
@@ -210,8 +210,8 @@ class DEADDF(DEA):
         # Initialize DEA model
         self.__model__ = ConcreteModel()
 
-        self.x = self._DEA__to_2d_list(x.tolist())
-        self.y = self._DEA__to_2d_list(y.tolist())
+        self.x = self._DEA__to_2d_list(tools.trans_list(x))
+        self.y = self._DEA__to_2d_list(tools.trans_list(y))
         self.rts = rts
         self.gy = self.__to_1d_list(gy)
         self.gx = self.__to_1d_list(gx)
@@ -220,7 +220,7 @@ class DEADDF(DEA):
 
         if type(b) != type(None):
             self.__undesirable_output = True
-            self.b = self._DEA__to_2d_list(b.tolist())
+            self.b = self._DEA__to_2d_list(tools.trans_list(b))
             self.gb = self.__to_1d_list(gb)
 
         if type(yref) != type(None):

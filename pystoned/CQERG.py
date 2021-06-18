@@ -1,7 +1,7 @@
 # import dependencies
 import numpy as np
 import pandas as pd
-from .utils import CQERG1, CQERG2, CQERZG1, CQERZG2, sweet
+from .utils import CQERG1, CQERG2, CQERZG1, CQERZG2, sweet, tools
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL, OPT_DEFAULT
 import time
 
@@ -24,8 +24,8 @@ class CQRG:
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.cutactive = sweet.sweet(x)
-        self.x = x.tolist()
-        self.y = y.tolist()
+        self.x = tools.trans_list(x)
+        self.y = tools.trans_list(y)
         self.tau = tau
         self.z = z
         self.cet = cet
@@ -42,14 +42,14 @@ class CQRG:
 
         if type(self.x[0]) != list:
             self.x = []
-            for x_value in x.tolist():
+            for x_value in tools.trans_list(x):
                 self.x.append([x_value])
 
         if type(self.z) != type(None):
-            self.z = z.tolist()
+            self.z = tools.trans_list(z)
             if type(self.z[0]) != list:
                 self.z = []
-                for z_value in z.tolist():
+                for z_value in tools.trans_list(z):
                     self.z.append([z_value])
 
         # Optimize model
@@ -313,8 +313,8 @@ class CERG:
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.cutactive = sweet.sweet(x)
-        self.x = x.tolist()
-        self.y = y.tolist()
+        self.x = tools.trans_list(x)
+        self.y = tools.trans_list(y)
         self.tau = tau
         self.z = z
         self.cet = cet
@@ -331,14 +331,14 @@ class CERG:
 
         if type(self.x[0]) != list:
             self.x = []
-            for x_value in x.tolist():
+            for x_value in tools.trans_list(x):
                 self.x.append([x_value])
 
         if type(self.z) != type(None):
-            self.z = z.tolist()
+            self.z = tools.trans_list(z)
             if type(self.z[0]) != list:
                 self.z = []
-                for z_value in z.tolist():
+                for z_value in tools.trans_list(z):
                     self.z.append([z_value])
 
         # Optimize model
