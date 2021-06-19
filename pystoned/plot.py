@@ -3,9 +3,9 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import numpy as np
 from .utils import interpolation
-from .constant import FUN_PROD, FUN_COST
+from .constant import FUN_PROD, FUN_COST, RED_MOM
 
-def plot2d(model, x_select=0, label_name="estimated function", fig_name=None):
+def plot2d(model, x_select=0, label_name="estimated function", fig_name=None, method= RED_MOM ):
     """Plot 2d estimated function/frontier
 
     Args:
@@ -19,8 +19,10 @@ def plot2d(model, x_select=0, label_name="estimated function", fig_name=None):
     if y.ndim != 1:
         print("Plot with mutiple y is unavailable now.")
         return False
-
-    yhat = np.array(model.get_frontier()).T
+    if model.__class__.__name__ != "StoNED":
+        yhat = np.array(model.get_frontier()).T
+    else:
+        yhat = np.array(model.get_frontier(method)).T
 
     data = (np.stack([x, y, yhat], axis=0)).T
 
