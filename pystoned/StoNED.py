@@ -4,6 +4,7 @@ import math
 import scipy.stats as stats
 import scipy.optimize as opt
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RED_MOM, RED_QLE, RED_KDE
+from .utils import interpolation
 
 class StoNED:
     """Stochastic nonparametric envelopment of data (StoNED)
@@ -220,12 +221,12 @@ class StoNED:
 
         if self.model.fun == FUN_PROD:
             if self.model.cet == CET_ADDI:
-                return (self.y - self.model.get_residual()) - self.sigma_u * math.sqrt(2 / math.pi)
+                return (self.y - self.model.get_residual()) + self.sigma_u * math.sqrt(2 / math.pi)
             elif self.model.cet == CET_MULT:
                 return  (self.y / np.exp(self.model.get_residual())) * np.exp(self.sigma_u * math.sqrt(2 / math.pi))
         elif self.model.fun == FUN_COST:
             if self.model.cet == CET_ADDI:
-                return (self.y - self.model.get_residual()) + self.sigma_u * math.sqrt(2 / math.pi)
+                return (self.y - self.model.get_residual()) - self.sigma_u * math.sqrt(2 / math.pi)
             elif self.model.cet == CET_MULT:
                 return (self.y / np.exp(self.model.get_residual())) * np.exp(-self.sigma_u * math.sqrt(2 / math.pi))
         # TODO(error/warning handling): Raise error while undefined fun/cet
