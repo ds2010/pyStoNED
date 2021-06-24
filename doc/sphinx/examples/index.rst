@@ -33,8 +33,8 @@ Convex Nonparametric Least Square
    CNLS/corrected_cnls
 
 
-Convex Quantile Approaches
---------------------------
+Convex Quantile and Expectile Approaches
+-----------------------------------------
 
 .. toctree::
    :maxdepth: 1
