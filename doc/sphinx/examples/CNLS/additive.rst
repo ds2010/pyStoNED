@@ -48,7 +48,7 @@ The additive CNLS model can be estimated in Python using the module CNLS(y, x, z
 in the package ``pyStoNED`` with the cet parameter set to CET\_ADDI (additive model), 
 rts parameter set to RTS\_VRS (VRS model), and \code{fun} parameter set to FUN\_PROD
 (production function) or FUN\_COST (cost function). Further, in this section we set the parameter 
-z=None and introduce it in section (2.4). The results can be displayed in the screen directly 
+z=None and introduce it in section (2.2). The results can be displayed in the screen directly 
 using the .display\_alpha() (i.e., display the coefficients :math:`\hat{\alpha}_i`) or stored in the memory 
 using the .get\_alpha().
 

@@ -3,7 +3,7 @@ Multiplicative CNLS model
 ==================================
 
 Similar to the most existing SFA literature, the Cobb-Douglas and translog functions are commonly assumed to be the 
-functional form for the function $f$, where inefficiency $u$ and noise $v$ affect production in a multiplicative fashion.
+functional form for the function :math:`f`, where inefficiency :math:`u` and noise :math:`v` affect production in a multiplicative fashion.
 We, thus, further consider the multiplicative specification in the nonparametric models. Note that the assumption of 
 CRS would also require multiplicative error structure. The multiplicative composite error structure CNLS model is rephrased as
 
@@ -14,7 +14,7 @@ CRS would also require multiplicative error structure. The multiplicative compos
         y_i = f(\boldsymbol{x}_i) \cdot \exp{(\varepsilon_i)} = f(\boldsymbol{x}_i) \cdot \exp{( v_i - u_i)} 
     \end{align}
 
-Applying the log-transformation to Eq.\eqref{eq:eq4}, we obtain
+Applying the log-transformation to Eq.(2.4), we obtain
 
 .. math::
     :nowrap:
@@ -23,20 +23,20 @@ Applying the log-transformation to Eq.\eqref{eq:eq4}, we obtain
         \ln y_i = \ln f(\boldsymbol{x}_i) + v_i - u_i 
     \end{align}
 
-To estimate the Eq.\eqref{eq:eq5}, we reformulate the additive production model 
-\eqref{eq:eq2} and obtain the following log-transformed CNLS formulation:
+To estimate the Eq.(2.5), we reformulate the additive production model 
+Eq.(2.2) and obtain the following log-transformed CNLS formulation:
 
 .. math::
     :nowrap:
     
-    \begin{align*}
+    \begin{alignat}{2}
         \underset{\alpha, \boldsymbol{\beta}, \varepsilon} \min & \sum_{i=1}^n\varepsilon_i^2  &{\quad}&\\
         \textit{s.t.}\quad 
         &  \ln y_i = \ln(\boldsymbol{\phi}_i+1) + \varepsilon_i  &{\quad}& \forall i  \notag\\
         & \boldsymbol{\phi}_i  = \alpha_i+\boldsymbol{\beta}_i^{'}\boldsymbol{x}_i -1 &{\quad}& \forall i  \notag \\
         &  \alpha_i + \boldsymbol{\beta}_i^{'}\boldsymbol{x}_i \le \alpha_j + \boldsymbol{\beta}_j^{'}\boldsymbol{x}_i  &{\quad}&  \forall i, j  \notag\\
         &  \boldsymbol{\beta}_i \ge 0 &{\quad}&  \forall i  \notag 
-    \end{align*}
+    \end{alignat}
 
 where :math:`\phi_i+1` is the CNLS estimator of :math:`E[y_i \, | \, x_i]`. 
 The value of one is added here to make sure that the computational 
@@ -52,8 +52,8 @@ the axiomatic property (i.e., concavity or convexity) of function :math:`f`.
 
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_mult_prod.ipynb>`_
-----------------------------------------------------------------------------------------------------------------------------------
+Example: production model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_mult_prod.ipynb>`_
+------------------------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
 
@@ -73,17 +73,15 @@ Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob
     model2 = CNLS.CNLS(y=data.y, x=data.x, z=None, cet = CET_MULT, fun = FUN_PROD, rts = RTS_CRS)
     model2.optimize('email@address')
 
-    # print residuals in the VRS model
-    print(model1.display_residual())
+    # display residuals in the VRS model
+    model1.display_residual()
 
-    # print residuals in the CRS model
-    print(model2.display_residual())
+    # display residuals in the CRS model
+    model2.display_residual()
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_mult_cost.ipynb>`_
------------------------------------------------------------------------------------------------------------------------------------
-
-In the following code, we estimate two multiplicative cost functions with pyStoNED.
+Example: cost model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_mult_cost.ipynb>`_
+------------------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
 
@@ -104,8 +102,8 @@ In the following code, we estimate two multiplicative cost functions with pyStoN
     model2 = CNLS.CNLS(y=data.y, x=data.x, z=None, cet = CET_MULT, fun = FUN_COST, rts = RTS_CRS)
     model2.optimize('email@address')
 
-    # print residuals in the VRS model
-    print(model1.display_residual())
+    # display residuals in the VRS model
+    model1.display_residual()
 
-    # print residuals in the CRS model
-    print(model2.display_residual())
+    # display residuals in the CRS model
+    model2.display_residual()
