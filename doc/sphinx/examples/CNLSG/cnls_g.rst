@@ -1,7 +1,3 @@
-===================
-CNLS-G Alogrithm
-===================
-
 
 Since convex regression approaches shape the convexity (concavity) of function using the Afrait inequality, 
 the estimation becomes excessively expensive due to the :math:`O(n^2)` linear constraints. e.g., If the data samples 
