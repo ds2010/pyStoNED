@@ -19,7 +19,7 @@ than the CNLS estimation.
     .. math::
         :nowrap:
     
-        \begin{alignat*}{2}
+        \begin{alignat}{2}
         \underset{\alpha,\boldsymbol{\beta},{{\varepsilon}^{\text{+}}},{{\varepsilon}^{-}}}{\mathop{\min }}&\,
          \tau \sum\limits_{i=1}^{n}{\varepsilon _{i}^{+}}+(1-\tau )\sum\limits_{i=1}^{n}{\varepsilon _{i}^{-}}  &{}&  \\ 
         \textit{s.t.}\quad 
@@ -27,7 +27,7 @@ than the CNLS estimation.
         & \alpha_i+\boldsymbol{\beta}_i^{'}x_i \le \alpha_h+\boldsymbol{\beta}_h^{'}x_i  &{}& \forall i,h  \notag \\
         & \boldsymbol{\beta}_i\ge 0 &{}& \forall i \notag  \\
         & \varepsilon _i^{+}\ge 0,\ \varepsilon_i^{-} \ge 0 &{}& \forall i \notag 
-        \end{alignat*}
+        \end{alignat}
 
     Where :math:`\varepsilon^{+}_i` and :math:`\varepsilon^{-}_i` denote the two non-negative components. 
     The last set of constraints is the sign constraint of the error terms. The other constraints are the same as in the CNLS problems.
@@ -36,13 +36,13 @@ than the CNLS estimation.
 - Convex expectile regression
 
     As shown in Kuosmanen et al (2015), the convex quantile regression may suffer from the non-uniqueness problem due to that 
-    Problem \eqref{eq:eq7} is a linear programming problem. To address this problem, Kuosmanen et al (2015) purpose a convex expectile regression
+    Problem (2.7) is a linear programming problem. To address this problem, Kuosmanen et al (2015) purpose a convex expectile regression
     (CER) approach, where a quadratic objective function is used to ensure unique estimates of the quantile functions. 
 
 .. math::
     :nowrap:
 
-    \begin{alignat*}{2}
+    \begin{alignat}{2}
     \underset{\alpha,\boldsymbol{\beta},{{\varepsilon}^{\text{+}}},{\varepsilon}^{-}}{\mathop{\min}}&\,
     \tilde{\tau} \sum\limits_{i=1}^n(\varepsilon _i^{+})^2+(1-\tilde{\tau} )\sum\limits_{i=1}^n(\varepsilon_i^{-})^2   &{}&  \\ 
     \textit{s.t.}\quad 
@@ -50,7 +50,7 @@ than the CNLS estimation.
     & \alpha_i+\boldsymbol{\beta}_i^{'}x_i \le \alpha_h+\boldsymbol{\beta}_h^{'}x_i  &{}& \forall i,h \notag  \\
     & \boldsymbol{\beta}_i\ge 0  &{}&  \forall i  \notag  \\
     & \varepsilon _i^{+}\ge 0,\ \varepsilon_i^{-} \ge 0  &{}& \forall i \notag 
-    \end{alignat*}
+    \end{alignat}
 
 
 Example: quantile estimation `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CQR.ipynb>`_
@@ -74,7 +74,7 @@ Example: quantile estimation `[.ipynb] <https://colab.research.google.com/github
                                                   rts=RTS_VRS)
     model.optimize(OPT_LOCAL)
 
-    # display estiamted alpha and beta
+    # display estimated alpha and beta
     model.display_alpha()
     model.display_beta() 
 
@@ -104,7 +104,7 @@ Example: expectile estimation `[.ipynb] <https://colab.research.google.com/githu
                                                   rts=RTS_VRS)
     model.optimize(OPT_LOCAL)
 
-    # display estiamted alpha and beta
+    # display estimated alpha and beta
     model.display_alpha()
     model.display_beta() 
 
