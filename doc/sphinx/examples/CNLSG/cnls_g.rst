@@ -4,10 +4,17 @@ CNLS-G Alogrithm
 
 
 Since convex regression approaches shape the convexity (concavity) of function using the Afrait inequality, 
-the estimation becomes excessively expensive due to the :math:`O(n^2)` linear constraints. e.g., If the sample has 
-500 observations, the total linear constraints is 250,000. To speed up the computational time, Lee et al., (2013) 
-propose a more efficient generic algorithm, CNLS-G, which uses the relaxed Afriat constraint set and iteratively 
-adds violated constraints to the relaxed model as necessary. See more discussion in Lee et al., (2013).
+the estimation becomes excessively expensive due to the :math:`O(n^2)` linear constraints. e.g., If the data samples 
+have 500 observations, the total number of linear constraints is equal to 250,000. To speed up the computational time, 
+Lee et al., (2013) propose a more efficient generic algorithm, CNLS-G, which uses the relaxed Afriat constraint set and 
+iteratively adds violated constraints to the relaxed model as necessary. See more discussion in Lee et al., (2013).
+
+To illustrate the CNLS-G algorithm, we follow Lee et al., (2013) to generate the input and output variables. 
+In this section, we assume an additive production function with two-input and one-output, :math:`y=x_1^{0.4}*x_2^{0.4}+u`. 
+We randomly draw the inputs :math:`x_1` and :math:`x_2` from a uniform distribution, :math:`x \sim U[1, 10]`, and the error term 
+:math:`u` from a normal distribution, :math:`u \sim N(0, 0.7^2)`. Based on these specifications, we first generate 
+500 artificial observations and then estimate the CNLS problem \eqref{eq:eq2} and the CER problem \eqref{eq:eq8} using the CNLS-G algorithm.
+
 
 Example: CNLS model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_g.ipynb>`_
 --------------------------------------------------------------------------------------------------------------------------------

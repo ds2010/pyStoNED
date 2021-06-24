@@ -49,8 +49,8 @@ Contextual Variables
 .. toctree::
    :maxdepth: 1
 
-   z/stoned_z
-
+   z/cnls_z
+   z/cqr_z
 
 Multiple Outputs (DDF Formulation)
 -----------------------------------

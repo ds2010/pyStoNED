@@ -38,7 +38,7 @@ Eq.(2.2) and obtain the following log-transformed CNLS formulation:
         &  \boldsymbol{\beta}_i \ge 0 &{\quad}&  \forall i  \notag 
     \end{alignat}
 
-where :math:`\phi_i+1` is the CNLS estimator of :math:`E[y_i \, | \, x_i]`. 
+where :math:`\phi_i+1` is the CNLS estimator of :math:`E[y_i \, | \, \boldsymbol{x}_i]`. 
 The value of one is added here to make sure that the computational 
 algorithms do not try to take logarithm of zero. The first equality 
 can be interpreted as the log transformed regression equation (using 

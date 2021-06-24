@@ -1,11 +1,11 @@
 ========================
-StoNED with Z variables
+CNLS with Z variables
 ========================
 
 A firm’s ability to operate efficiently often depends on operational conditions and practices, 
-such as the production environment and the firm specific characteristics for example  
+such as the production environment and the firm specific characteristics for example 
 technology  selection  or  managerial  practices.  Banker  and  Natarajan (2008) refer to both variables that 
-characterize operational conditions and practices as `contextual variables`.
+characterize operational conditions and practices as contextual variables.
 
 * Contextual variables are often (but not always) **external factors** that are beyond the control of firms
 
