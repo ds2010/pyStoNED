@@ -33,6 +33,14 @@ Convex Nonparametric Least Square
    CNLS/corrected_cnls
 
 
+Convex Quantile Approaches
+--------------------------
+.. toctree::
+   :maxdepth: 1
+         
+   quantile/cqer
+
+
 Contextual Variables
 ---------------------
 
@@ -60,13 +68,6 @@ Monotonic Models
    Monotonic/icnls
    Monotonic/icqer
 
-
-Convex Quantile Approaches
---------------------------
-.. toctree::
-   :maxdepth: 1
-      
-   quantile/cqer
       
       
 Stochastic Nonparametric Envelopment of Data
