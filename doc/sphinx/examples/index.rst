@@ -35,10 +35,12 @@ Convex Nonparametric Least Square
 
 Convex Quantile Approaches
 --------------------------
+
 .. toctree::
    :maxdepth: 1
          
-   quantile/cqer
+   quantile/cqr
+   quantile/cer
 
 
 Contextual Variables
