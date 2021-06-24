@@ -31,14 +31,10 @@ Example: expectile estimation `[.ipynb] <https://colab.research.google.com/githu
     from pystoned import dataset as dataset
 
     # import the GHG example data
-    data = dataset.load_GHG_abatement_cost(x_select=['HRSN', 'CPNK', 'GHG'],
-                                            y_select=['VALK'])
+    data = dataset.load_GHG_abatement_cost(x_select=['HRSN', 'CPNK', 'GHG'], y_select=['VALK'])
 
     # calculate the expectile model
-    model = CQER.CER(y=data.y, x=data.x, tau=0.5, z=None, 
-                                                  cet=CET_ADDI, 
-                                                  fun=FUN_PROD, 
-                                                  rts=RTS_VRS)
+    model = CQER.CER(y=data.y, x=data.x, tau=0.5, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS)
     model.optimize(OPT_LOCAL)
 
     # display estimated alpha and beta
