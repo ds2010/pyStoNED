@@ -1,6 +1,6 @@
-==================
-Additive model 
-==================
+============================
+Additive CNLS model 
+============================
 
 Hildreth (1954) is the first to consider the nonparametric regression subject to monotonicity and concavity constraints 
 in the case of a single input variable :math:`x`. Kuosmanen (2008) extends Hildreth’s approach to the multivariate setting 
@@ -44,17 +44,18 @@ of returns to scale can be imposed by an additional constraint on the intercept 
 If :math:`\alpha_i=0`, then the problem (2.2) or (2.2) is a constant returns to scale (CRS) 
 model, otherwise it is a variable returns to scale (VRS) model. 
 
-The additive CNLS model can be estimated in \proglang{Python} using the module CNLS(y, x, z, ...)
-in the package pyStoNED with the cet parameter set to CET\_ADDI (additive model), 
+The additive CNLS model can be estimated in Python using the module CNLS(y, x, z, ...)
+in the package ``pyStoNED`` with the cet parameter set to CET\_ADDI (additive model), 
 rts parameter set to RTS\_VRS (VRS model), and \code{fun} parameter set to FUN\_PROD
 (production function) or FUN\_COST (cost function). Further, in this section we set the parameter 
 z=None and introduce it in section (2.4). The results can be displayed in the screen directly 
 using the .display\_alpha() (i.e., display the coefficients :math:`\hat{\alpha}_i`) or stored in the memory 
 using the .get\_alpha().
 
+The following examples are to demonstrate how to estimate the VRS models:
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_prod.ipynb>`_: Estimating production function
---------------------------------------------------------------------------------------------------------------------------------------------------------
+Example: production model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_prod.ipynb>`_
+--------------------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
 
@@ -89,10 +90,8 @@ Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob
     residuals = model.get_residual()
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_cost.ipynb>`_: Estimating cost function
-------------------------------------------------------------------------------------------------------------------------------------------------
-
-In the following code, we estimate an additive cost function with pyStoNED.
+Example: cost model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_cost.ipynb>`_
+----------------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
 
