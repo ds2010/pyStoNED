@@ -16,15 +16,16 @@ We randomly draw the inputs :math:`x_1` and :math:`x_2` from a uniform distribut
 500 artificial observations and then estimate the CNLS problem \eqref{eq:eq2} and the CER problem \eqref{eq:eq8} using the CNLS-G algorithm.
 
 
-Example: CNLS model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_g.ipynb>`_
---------------------------------------------------------------------------------------------------------------------------------
+Example: solving CNLS model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_g.ipynb>`_
+----------------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
 
     # import packages
-    from pystoned import CNLSG
+    from pystoned import CNLSG, CNLS
     from pystoned.constant import CET_ADDI, FUN_PROD, OPT_LOCAL, RTS_VRS
     import numpy as np
+    import time
     
     # set seed
     np.random.seed(0)
@@ -36,26 +37,34 @@ Example: CNLS model `[.ipynb] <https://colab.research.google.com/github/ds2010/p
     y = x1**0.4*x2**0.4+u
     x = np.concatenate((x1.reshape(500, 1), x2.reshape(500, 1)), axis=1)
 
-    # define and solve the CNLS model
-    model = CNLSG.CNLSG(y, x, z=None, cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)
-    model.optimize(OPT_LOCAL)
+    # solve CNLS model without algorithm
+    t1 = time.time()
+    model1 = CNLS.CNLS(y, x, z=None, cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)
+    model1.optimize(OPT_LOCAL)
+    CNLS_time = time.time() -t1
+
+    # solve CNLS model using CNLS-G algorithm
+    model2 = CNLSG.CNLSG(y, x, z=None, cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)
+    model2.optimize(OPT_LOCAL)
 
     # display running time
-    print("The running time is " model.get_runningtime())
+    print("The running time with algorithm is ", model2.get_runningtime())
+    print("The running time without algorithm is ", CNLS_time)
 
     # display number of constraints
-    print("The total number of constraints is " model.get_totalconstr())
+    print("The total number of constraints is ", model2.get_totalconstr())
 
 
-Example: CQR/CER model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CQR_g.ipynb>`_
-----------------------------------------------------------------------------------------------------------------------------------
+Example: solving CER model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CQR_g.ipynb>`_
+---------------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
 
     # import packages
-    from pystoned import CQERG
-    from pystoned.constant import CET_ADDI, FUN_COST, OPT_LOCAL, RTS_VRS
+    from pystoned import CQERG, CQER
+    from pystoned.constant import CET_ADDI, FUN_PROD, OPT_LOCAL, RTS_VRS
     import numpy as np
+    import time
     
     # set seed
     np.random.seed(0)
@@ -67,20 +76,20 @@ Example: CQR/CER model `[.ipynb] <https://colab.research.google.com/github/ds201
     y = x1**0.4*x2**0.4+u
     x = np.concatenate((x1.reshape(500, 1), x2.reshape(500, 1)), axis=1)
 
-    # define and solve the CQR/CER model
+    # solve CER model without algorithm
     tau = 0.9
-    # CQR model
-    model1 = CQERG.CQRG(y, x, tau, z=None, cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)
+    t1 = time.time()
+    model1 = CQER.CER(y, x, tau, z=None, cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)
     model1.optimize(OPT_LOCAL)
+    CER_time = time.time() -t1
     
-    # CER model
+    # solve CER model using CNLS-G algorithm
     model2 = CQERG.CERG(y, x, tau, z=None, cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)
     model2.optimize(OPT_LOCAL)
 
     # display running time
-    print("The running time for CQR estimation is " model1.get_runningtime())
-    print("The running time for CER estimation is " model2.get_runningtime())
+    print("The running time with algorithm is ", model2.get_runningtime())
+    print("The running time without algorithm is ", CER_time)
 
     # display number of constraints
-    print("The total number of constraints in CQR model is " model1.get_totalconstr())
-    print("The total number of constraints in CER model is " model2.get_totalconstr())
+    print("The total number of constraints in CER model is ", model2.get_totalconstr())
