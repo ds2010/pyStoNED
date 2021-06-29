@@ -1,5 +1,5 @@
 ========================
-Contextual variables
+CNLS with z variables
 ========================
 
 In practice, a firm’s ability to operate efficiently often depends on operational conditions and practices, 
@@ -61,29 +61,8 @@ statistical properties of this estimator in detail, showing its unbiasedness, co
 and asymptotic efficiency. 
 
 
-CER with z variables
-----------------------
-
-Following Kuosmanen et al. (2021), we can also incorporate the contextual variable in 
-the multiplicative CER estimation.
-
-.. math::
-    :nowrap:
-
-    \begin{align}
-    \underset{\phi,\alpha,\boldsymbol{\beta},{{\varepsilon}^{\text{+}}},{\varepsilon}^{-}}{\mathop{\min}}&\,
-        \tilde{\tau} \sum\limits_{i=1}^n(\varepsilon _i^{+})^2+(1-\tilde{\tau} )\sum\limits_{i=1}^n(\varepsilon_i^{-})^2   &{}&  \\ 
-    \textit{s.t.}\quad 
-    &  \ln y_i = \ln(\phi_i+1) + \boldsymbol{\delta}^{'}\boldsymbol{z}_i + \varepsilon _i^{+}-\varepsilon _i^{-}  &{}&  \forall i \notag\\
-    &  \phi_i  = \alpha_i + \boldsymbol{\beta}_i^{'}\boldsymbol{x}_i -1 &{}&  \forall i \notag\\
-    &  \alpha_i + \boldsymbol{\beta}_i^{'}\boldsymbol{x}_i \le \alpha_j + \boldsymbol{\beta}_j^{'}\boldsymbol{x}_i  &{}&   \forall i, j \notag\\
-    &  \boldsymbol{\beta}_i \ge \boldsymbol{0} &{}&   \forall i \notag \\
-    &  \varepsilon _i^{+}\ge 0,\ \varepsilon_i^{-} \ge 0  &{}& \forall i \notag 
-    \end{align}
-
-
 Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNEZD.ipynb>`_
-------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
 
 In the following code, we estimatie a log-transformed cost function model with z-variable and 
 show how to obtain the firm-specific inefficiency.
