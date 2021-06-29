@@ -21,10 +21,7 @@ the multiplicative CER estimation.
 
 Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CER_Z.ipynb>`_
 -------------------------------------------------------------------------------------------------------------------
-    
-In the following code, we estimatie a log-transformed cost function model with z-variable and 
-show how to obtain the firm-specific inefficiency.
-    
+        
 .. code:: python
     
     # import packages
