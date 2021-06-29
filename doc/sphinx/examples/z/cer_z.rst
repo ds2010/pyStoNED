@@ -1,5 +1,5 @@
 ========================
-CER with z variables
+CER with Z variables
 ========================
 
 Following Kuosmanen et al. (2021), we can also incorporate the contextual variable in 
@@ -19,8 +19,8 @@ the multiplicative CER estimation.
     &  \varepsilon _i^{+}\ge 0,\ \varepsilon_i^{-} \ge 0  &{}& \forall i \notag 
     \end{align}
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNEZD.ipynb>`_
-------------------------------------------------------------------------------------------------------------------------------
+Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CER_Z.ipynb>`_
+-------------------------------------------------------------------------------------------------------------------
     
 In the following code, we estimatie a log-transformed cost function model with z-variable and 
 show how to obtain the firm-specific inefficiency.
@@ -28,19 +28,18 @@ show how to obtain the firm-specific inefficiency.
 .. code:: python
     
     # import packages
-    from pystoned import CNLS, StoNED
+    from pystoned import CQER
     from pystoned.constant import CET_MULT, FUN_COST, RTS_CRS, RED_MOM
     from pystoned.dataset import load_Finnish_electricity_firm
-        
+    
     # import all data (including the contextual varibale)
     data = load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'],   
-                                             y_select=['TOTEX'],
-                                             z_select=['PerUndGr'])
-    
-    # define and solve the StoNED model using MoM approach
-    model = CNLS.CNLS(y=data.y, x=data.x, z=data.x, cet = CET_MULT, fun = FUN_COST, rts = RTS_CRS) 
+                                         y_select=['TOTEX'],
+                                         z_select=['PerUndGr'])
+
+    # define and solve the CER-Z model
+    model = CQER.CER(y=data.y, x=data.x, z=data.z, tau=0.5, cet = CET_MULT, fun = FUN_COST, rts = RTS_CRS) 
     model.optimize('email@address')
-    
-    # Residual decomposition
-    rd = StoNED.StoNED(model)
-    print(rd.get_technical_inefficiency(RED_MOM))
+
+    # display the coefficient of contextual variable
+    model.display_lamda()
