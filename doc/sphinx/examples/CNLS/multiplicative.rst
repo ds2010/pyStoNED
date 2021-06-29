@@ -48,8 +48,8 @@ of a multiplicative relationship between output and input while assuring
 convexity of the production possibility set in original input-output space. 
 Note that one could not apply the log transformation directly to the input data 
 :math:`\boldsymbol{x}` due to the fact that the piece-wise log-linear frontier does not satisfy 
-the axiomatic property (i.e., concavity or convexity) of function :math:`f`.
-
+the axiomatic property (i.e., concavity or convexity) of function :math:`f`. Since the multiplicative model (2.6) 
+is a nonlinear programming problem, we have to use the nonlinear solver, e.g., MINOS, KNITRO.
 
 
 Example: production model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_mult_prod.ipynb>`_

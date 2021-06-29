@@ -41,8 +41,9 @@ denotes the CNLS residuals. The first constraint can be interpreted as a multiva
 regression equation, the second constraint imposes convexity (concavity), and the third 
 constraint imposes monotonicity. Similar to the DEA specification, other standard specification 
 of returns to scale can be imposed by an additional constraint on the intercept term :math:`\alpha_i`. 
-If :math:`\alpha_i=0`, then the problem (2.2) or (2.2) is a constant returns to scale (CRS) 
-model, otherwise it is a variable returns to scale (VRS) model. 
+If :math:`\alpha_i=0`, then the problem (2.2) or (2.3) is a constant returns to scale (CRS) 
+model, otherwise it is a variable returns to scale (VRS) model. Note that Problems (2.2) and (2.3) 
+are the quadratic programming problem, so we resort to the MOSEK and CPLEX solver to solve them.
 
 The additive CNLS model can be estimated in Python using the module CNLS(y, x, z, ...)
 in the package ``pyStoNED`` with the cet parameter set to CET\_ADDI (additive model), 
