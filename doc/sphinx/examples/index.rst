@@ -69,8 +69,7 @@ Monotonic Models
    
    Monotonic/icnls
    Monotonic/icqer
-
-      
+  
       
 Stochastic Nonparametric Envelopment of Data
 --------------------------------------------
@@ -90,6 +89,7 @@ CNLS-G Algorithm (for large sample)
    :maxdepth: 1
 
    CNLSG/cnls_g
+   CNLSG/cer_g
 
 
 Plot the frontier/estimation function

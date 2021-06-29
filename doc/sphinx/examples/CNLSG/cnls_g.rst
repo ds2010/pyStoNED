@@ -1,3 +1,6 @@
+======================
+Solving CNLS model
+======================
 
 Since convex regression approaches shape the convexity (concavity) of function using the Afrait inequality, 
 the estimation becomes excessively expensive due to the :math:`O(n^2)` linear constraints. e.g., If the data samples 
@@ -11,9 +14,8 @@ We randomly draw the inputs :math:`x_1` and :math:`x_2` from a uniform distribut
 :math:`u` from a normal distribution, :math:`u \sim N(0, 0.7^2)`. Based on these specifications, we first generate 
 500 artificial observations and then estimate the CNLS problem \eqref{eq:eq2} and the CER problem \eqref{eq:eq8} using the CNLS-G algorithm.
 
-
-Example: solving CNLS model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_g.ipynb>`_
-----------------------------------------------------------------------------------------------------------------------------------------
+Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_g.ipynb>`_
+-------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
 
@@ -49,43 +51,3 @@ Example: solving CNLS model `[.ipynb] <https://colab.research.google.com/github/
 
     # display number of constraints
     print("The total number of constraints is ", model2.get_totalconstr())
-
-
-Example: solving CER model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CQR_g.ipynb>`_
----------------------------------------------------------------------------------------------------------------------------------------
-
-.. code:: python
-
-    # import packages
-    from pystoned import CQERG, CQER
-    from pystoned.constant import CET_ADDI, FUN_PROD, OPT_LOCAL, RTS_VRS
-    import numpy as np
-    import time
-    
-    # set seed
-    np.random.seed(0)
-    
-    # generate DMUs: DGP
-    x1 = np.random.uniform(low=1, high=10, size=500)
-    x2 = np.random.uniform(low=1, high=10, size=500)
-    u = np.random.normal(loc=0, scale=0.7, size=500)
-    y = x1**0.4*x2**0.4+u
-    x = np.concatenate((x1.reshape(500, 1), x2.reshape(500, 1)), axis=1)
-
-    # solve CER model without algorithm
-    tau = 0.9
-    t1 = time.time()
-    model1 = CQER.CER(y, x, tau, z=None, cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)
-    model1.optimize(OPT_LOCAL)
-    CER_time = time.time() -t1
-    
-    # solve CER model using CNLS-G algorithm
-    model2 = CQERG.CERG(y, x, tau, z=None, cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)
-    model2.optimize(OPT_LOCAL)
-
-    # display running time
-    print("The running time with algorithm is ", model2.get_runningtime())
-    print("The running time without algorithm is ", CER_time)
-
-    # display number of constraints
-    print("The total number of constraints in CER model is ", model2.get_totalconstr())
