@@ -29,11 +29,9 @@ Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob
     np.random.seed(0)
     
     # generate DMUs: DGP
-    x1 = np.random.uniform(low=1, high=10, size=500)
-    x2 = np.random.uniform(low=1, high=10, size=500)
+    x = np.random.uniform(low=1, high=10, size=(500, 2))
     u = np.random.normal(loc=0, scale=0.7, size=500)
-    y = x1**0.4*x2**0.4+u
-    x = np.concatenate((x1.reshape(500, 1), x2.reshape(500, 1)), axis=1)
+    y = x[:, 0]**0.4*x[:, 1]**0.4+u
 
     # solve CNLS model without algorithm
     t1 = time.time()
