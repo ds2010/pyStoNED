@@ -16,8 +16,8 @@ where :math:`y_i` is the output of unit :math:`i`, :math:`f: R_+^m \rightarrow R
 and :math:`\boldsymbol{x}_i = (x_{i1}, x_{i2}, \cdots, x_{im})^{'}` denotes the input vector of unit :math:`i`. Similar to the literature in Stochastic Frontier analysis (SFA), 
 the presented composite error term :math:`\varepsilon_i = v_i - u_i` consists of the inefficiency term :math:`u_i>0` and stochastic noise 
 term :math:`v_i`. To estimate the function :math:`f`, one could use the parametric and nonparametric methods or neoclassical and frontier models, 
-of which methods are classified based on the specification of :math:`f` and error term :math:`\varepsilon` (see \citeauthor{Kuosmanen2010a}, \citeyear{Kuosmanen2010a}). In this paper, 
-we assume certain axiomatic properties (e.g., monotonicity, concavity) instead of \textit{a priori} functional form for the function :math:`f` 
+of which methods are classified based on the specification of :math:`f` and error term :math:`\varepsilon` (see Kuosmanen and Johnson, 2010). In this paper, 
+we assume certain axiomatic properties (e.g., monotonicity, concavity) instead of :math:`\textit{a priori}` functional form for the function :math:`f` 
 and apply the nonparametric methods to estimate the function :math:`f`.
 
 
