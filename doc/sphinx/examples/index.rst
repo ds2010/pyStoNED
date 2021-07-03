@@ -77,6 +77,7 @@ Stochastic Nonparametric Envelopment of Data
 .. toctree::
    :maxdepth: 1
 
+   StoNED/intro
    StoNED/mom
    StoNED/qle
    StoNED/kde

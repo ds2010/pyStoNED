@@ -23,6 +23,10 @@ where
         \hat{\sigma} &= \Bigg\{\frac{1}{n}\sum(\hat{\varepsilon}_i^{CNLS})^2 / \bigg[1 - \frac{2\lambda^2}{\pi(1+\lambda^2)}\bigg]  \Bigg\}  
     \end{align*}
 
+Note that the quasi-likelihood function only consists of a single parameter :math:`\lambda` (i.e., the signal-to-noise ratio :math:`\lambda = \sigma_u/\sigma_v`).  
+The symbol :math:`\Phi` represents the cumulative distribution function of the standard normal distribution. In the `pyStoNED` 
+package, we use the Broyden–Fletcher–Goldfarb–Shanno (BFGS) algorithm to solve the maximum likelihood function.
+
 
 Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_QLE.ipynb>`_
 ------------------------------------------------------------------------------------------------------------------------

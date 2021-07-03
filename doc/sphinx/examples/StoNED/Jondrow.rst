@@ -1,58 +1,55 @@
-JLMS estimator
-==================
+Estimating firm-specific inefficiencies (JLMS estimator)
+==========================================================
 
-After estimating the expected inefficiency using methods of moment (MOM) or quasi-likelihood estimation (QLE), 
-We can use JLMS estimator proposed by Jondrow et al. (1982) 
-to estimate the firm-specific inefficiencies (Johnson & Kuosmanen, 2015). 
-Under the assumption of a normally distributed error term and a half-normally 
-distributed inefficiency term, they formulate the conditional distribution of 
-inefficiency :math:`u_i`, given :math:`\varepsilon_i`, and propose the inefficiency estimator 
-as the conditional mean :math:`E(u_i|\varepsilon_i)`.
+After estimating the expected inefficiency :math:`\mu` using methods of moment (MOM) or quasi-likelihood estimation (QLE), [1]_ 
+we then employ JLMS estimator proposed by Jondrow et al. (1982) to estimate the firm-specific inefficiencies (Johnson and Kuosmanen, 2015). 
+Under the assumption of a normally distributed error term and a half-normally distributed inefficiency term, JLMS formulates the 
+conditional distribution of inefficiency :math:`u_i`, given :math:`\varepsilon_i`, and propose the inefficiency estimator as the 
+conditional mean :math:`E[u_i|\varepsilon_i]`.
 
-1. :math:`E(u_i \mid \varepsilon_i)`: Following Kumbhakar & Lovell (2000), the conditional expected value of inefficiency are
+Following Kumbhakar & Lovell (2000), the conditional expected value of inefficiency :math:`E[u_i|\varepsilon_i]` 
+for production function and cost function are shown as follow, respectively:
 
-    * Production function
+* Production function
     
-    .. math::
-       :nowrap:
+.. math::
+    :nowrap:
 
-        \begin{align*}
-        E(u_i \mid \varepsilon_i)
+    \begin{align*}
+        E[u_i \mid \varepsilon_i]
         &= \mu_{*i} + \sigma_* \Bigg[ \frac{\phi(-\mu_{*i}/\sigma_*)}{1-\Phi(-\mu_{*i}/\sigma_*)} \Bigg] \\
         &= \sigma_* \Bigg[ \frac{\phi(\varepsilon_i \lambda/\sigma)}{1-\Phi(\varepsilon_i \lambda/\sigma)} - \frac{\varepsilon_i \lambda}{\sigma} \Bigg].
-        \end{align*}
+    \end{align*}
         
-        where $\mu_*= -\varepsilon \sigma_u^2/\sigma^2$ and $\sigma_*^2 = \sigma_u^2\sigma_v^2/\sigma^2$.
-
+where :math:`\mu_*= -\varepsilon \sigma_u^2/\sigma^2`, :math:`\sigma_*^2 = \sigma_u^2\sigma_v^2/\sigma^2`, 
+:math:`\lambda = \sigma_u/\sigma_v`, and :math:`\sigma^2 = \sigma_u^2 +\sigma_v^2`. The symbol :math:`\phi` is 
+the standard normal density function, and the symbol :math:`\Phi` denotes the cumulative distribution 
+function of the standard normal distribution.
     
-    * Cost function
+* Cost function
     
-    .. math::
-       :nowrap:
+.. math::
+    :nowrap:
 
-        \begin{align*}
-        E(u_i \mid \varepsilon_i)&= \mu_{*i} + \sigma_* \Bigg[ \frac{\phi(-\mu_{*i}/\sigma_*)}{1-\Phi(-\mu_{*i}/\sigma_*)} \Bigg] \\
+    \begin{align*}
+        E[u_i \mid \varepsilon_i]&= \mu_{*i} + \sigma_* \Bigg[ \frac{\phi(-\mu_{*i}/\sigma_*)}{1-\Phi(-\mu_{*i}/\sigma_*)} \Bigg] \\
         &= \sigma_* \Bigg[ \frac{\phi(\varepsilon_i \lambda/\sigma)}{1-\Phi(-\varepsilon_i \lambda/\sigma)} + \frac{\varepsilon_i \lambda}{\sigma} \Bigg].
-        \end{align*}
+    \end{align*}
 
-        where $\mu_*= \varepsilon \sigma_u^2/\sigma^2$ and $\sigma_*^2 = \sigma_u^2\sigma_v^2/\sigma^2$.
+where :math:`\mu_*= \varepsilon \sigma_u^2/\sigma^2`, :math:`\sigma_*^2 = \sigma_u^2\sigma_v^2/\sigma^2`, 
+:math:`\lambda = \sigma_u/\sigma_v`, and :math:`\sigma^2 = \sigma_u^2 +\sigma_v^2`.
 
-2. Technical inefficiency (TE)
+The firm-level technical efficiency (TE) is then measured based on the estimated conditional mean. For different model, the technical efficiency is calculated as 
 
-    - Production function
-        - Logged Dependent Variable: :math:`\text{TE} = \text{exp}(-E(u_i \mid \varepsilon_i))` 
-        - Otherwise,  :math:`\text{TE} = \frac{Y - E(u_i \mid \varepsilon_i)}{Y}`
-            
-    - Cost function
-        - Logged Dependent Variable: :math:`\text{TE} = \text{exp}(E(u_i \mid \varepsilon_i))`
-        - Otherwise,  :math:`\text{TE} = \frac{Y+ E(u_i \mid \varepsilon_i)}{Y}`
+- Production function
+    
+    - Multiplicative model: :math:`\text{TE} = \exp(-E[u_i \mid  \varepsilon_i])` 
+    - Additive model: :math:`\text{TE} = \frac{y - E[u_i \mid  \varepsilon_i]}{y}`
 
-References:
+- Cost function
 
-[1] Johnson, A. L. & Kuosmanen, T. (2015), An Introduction to CNLS and StoNED Methods for Efficiency Analysis: Economic Insights and Computational Aspects, in S. C. Ray, S. C. Kumbhakar & P. Dua (eds), Benchmarking for Performance Evaluation: A Production Frontier Approach, Springer, chapter 3, pp. 117–186.
-
-[2] Jondrow, J., Lovell, C. A. K., Materov, I. S. & Schmidt, P. (1982), On the estimation of technical inefficiency in the stochastic frontier production function model, Journal of Econometrics 19, 233–238.
-
-[3] Kumbhakar, S. C. & Lovell, C. A. K. (2000), Stochastic Frontier Analysis, Cambridge University Press.
+    - Multiplicative model: :math:`\text{TE} = \exp(E[u_i \mid  \varepsilon_i])`
+    - Additive model: :math:`\text{TE} = \frac{y+ E[u_i \mid  \varepsilon_i]}{y}`
 
 
+.. [1] For the expected inefficiency $\mu$ estimated by kernel deconvolution, Dai (2016) proposes a non-parametric strategy where the Richardson–Lucy blind deconvolution algorithm is used to identify firm-specific inefficiencies. However, the `pyStoNED` package only supports the parametric estimation of firm-specific inefficiencies due to the fact that the parametric method is more widely used in efficiency analysis literature.
