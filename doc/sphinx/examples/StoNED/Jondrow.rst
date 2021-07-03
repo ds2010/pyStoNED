@@ -1,5 +1,5 @@
-Estimating firm-specific inefficiencies (JLMS estimator)
-==========================================================
+JLMS estimator
+=================
 
 After estimating the expected inefficiency :math:`\mu` using methods of moment (MOM) or quasi-likelihood estimation (QLE), [1]_ 
 we then employ JLMS estimator proposed by Jondrow et al. (1982) to estimate the firm-specific inefficiencies (Johnson and Kuosmanen, 2015). 
@@ -50,6 +50,30 @@ The firm-level technical efficiency (TE) is then measured based on the estimated
 
     - Multiplicative model: :math:`\text{TE} = \exp(E[u_i \mid  \varepsilon_i])`
     - Additive model: :math:`\text{TE} = \frac{y+ E[u_i \mid  \varepsilon_i]}{y}`
+
+
+
+Example: CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_MoM_CNLS_TE.ipynb>`_
+---------------------------------------------------------------------------------------------------------------------------------------
+    
+.. code:: python
+    
+    # import packages
+    from pystoned import CNLS, StoNED
+    from pystoned.dataset import load_Finnish_electricity_firm
+    from pystoned.constant import CET_MULT, FUN_COST, RTS_VRS, RED_MOM
+        
+    # import Finnish electricity distribution firms data
+    data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'], y_select=['Energy'])
+        
+    # build and optimize the CNLS model
+    model = CNLS.CNLS(data.y, data.x, z=None, cet=CET_MULT, fun=FUN_COST, rts=RTS_VRS)
+    model.optimize('email@address')
+        
+    # print firm-level efficiency using MOM method
+    rd = StoNED.StoNED(model)
+    print(rd.get_technical_inefficiency(RED_MOM))  
+
 
 
 .. [1] For the expected inefficiency $\mu$ estimated by kernel deconvolution, Dai (2016) proposes a non-parametric strategy where the Richardson–Lucy blind deconvolution algorithm is used to identify firm-specific inefficiencies. However, the `pyStoNED` package only supports the parametric estimation of firm-specific inefficiencies due to the fact that the parametric method is more widely used in efficiency analysis literature.

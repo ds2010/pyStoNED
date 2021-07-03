@@ -42,8 +42,6 @@ frontier), we can estimate :math:`\sigma_u` and :math:`\sigma_v` by
 Example: CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_MoM_CNLS.ipynb>`_
 ------------------------------------------------------------------------------------------------------------------------------------
 
-In the following code, we use the method of moments to decompose the CNLS residuals and display the StoNED frontier.
-
 .. code:: python
 
     # import packages
@@ -58,36 +56,7 @@ In the following code, we use the method of moments to decompose the CNLS residu
     model = CNLS.CNLS(data.y, data.x, z=None, cet=CET_MULT, fun=FUN_COST, rts=RTS_VRS)
     model.optimize('email@address')
     
-    # Residual decomposition
+    # print unconditional expected inefficiency (mu)
     rd = StoNED.StoNED(model)
-    print(rd.get_technical_inefficiency(RED_MOM))
-    
-    # return the StoNED frontier
-    print(rd.get_frontier(RED_MOM))
+    print(rd.get_unconditional_expected_inefficiency(RED_MOM))
 
-
-Example: CNLSG `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_MoM_CNLSG.ipynb>`_
-------------------------------------------------------------------------------------------------------------------------------------
-    
-We next use the method of moments to decompose the CNLSG residuals and display the StoNED frontier.
-    
-.. code:: python
-    
-    # import packages
-    from pystoned import CNLSG, StoNED
-    from pystoned.dataset import load_Finnish_electricity_firm
-    from pystoned.constant import CET_MULT, FUN_COST, RTS_VRS, RED_MOM
-    
-    # import Finnish electricity distribution firms data
-    data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'], y_select=['Energy'])
-    
-    # build and optimize the CNLS model
-    model = CNLS.CNLS(data.y, data.x, z=None, cet=CET_MULT, fun=FUN_COST, rts=RTS_VRS)
-    model.optimize('email@address')
-    
-    # Residual decomposition
-    rd = StoNED.StoNED(model)
-    print(rd.get_technical_inefficiency(RED_MOM))
-    
-    # return the StoNED frontier
-    print(rd.get_frontier(RED_MOM))

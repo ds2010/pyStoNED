@@ -91,6 +91,7 @@ CNLS-G Algorithm (for large sample)
 
    CNLSG/cnls_g
    CNLSG/cer_g
+   CNLSG/stoned_g
 
 
 Plot the frontier/estimation function

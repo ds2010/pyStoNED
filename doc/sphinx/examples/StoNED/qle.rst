@@ -47,9 +47,7 @@ In the following code, we use the quassi-likelihood approach to decompose the CN
     model = CNLS.CNLS(data.y, data.x, z=None, cet=CET_MULT, fun=FUN_COST, rts=RTS_VRS)
     model.optimize('email@address')
     
-    # Residual decomposition
+    # print unconditional expected inefficiency (mu)
     rd = StoNED.StoNED(model)
-    print(rd.get_technical_inefficiency(RED_QLE))
+    print(rd.get_unconditional_expected_inefficiency(RED_QLE))
     
-    # return the StoNED frontier
-    print(rd.get_frontier(RED_QLE))
