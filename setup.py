@@ -5,8 +5,8 @@ with open('README.md') as readme_file:
 
 setup_args = dict(
     name='pystoned',
-    version='0.4.7',
-    description='A Package for Stochastic Nonparametric Envelopment of Data (StoNED) in Python',
+    version='0.4.8',
+    description='A Python Package for Stochastic Nonparametric Envelopment of Data',
     long_description_content_type="text/markdown",
     long_description=README,
     license='GPLv3',

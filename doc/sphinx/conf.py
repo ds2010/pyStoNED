@@ -106,7 +106,7 @@ html_theme = 'alabaster'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    'description': 'A package for StoNED in Python',
+    'description': 'A Python package for StoNED',
     'github_user': 'ds2010',
     'github_repo': 'pyStoNED',
     'github_type': 'star',
