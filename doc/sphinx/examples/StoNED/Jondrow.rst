@@ -75,5 +75,26 @@ Example: CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNE
     print(rd.get_technical_inefficiency(RED_MOM))  
 
 
+Example: CNLS with Z variable `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNEZD_MoM_CNLS_TE.ipynb>`_
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+        
+    .. code:: python
+        
+        # import packages
+        from pystoned import CNLS, StoNED
+        from pystoned.dataset import load_Finnish_electricity_firm
+        from pystoned.constant import CET_MULT, FUN_COST, RTS_VRS, RED_MOM
+            
+        # import Finnish electricity distribution firms data
+        data=load_Finnish_electricity_firm(x_select=['Energy','Length','Customers'], y_select=['TOTEX'], z_select=['PerUndGr'])
+            
+        # build and optimize the CNLS model
+        model = CNLS.CNLS(y=data.y, x=data.x, z=data.z, cet=CET_MULT, fun=FUN_COST, rts=RTS_VRS)
+        model.optimize('email@address')
+            
+        # print firm-level efficiency using MOM method
+        rd = StoNED.StoNED(model)
+        print(rd.get_technical_inefficiency(RED_MOM))  
+
 
 .. [1] For the expected inefficiency $\mu$ estimated by kernel deconvolution, Dai (2016) proposes a non-parametric strategy where the Richardson–Lucy blind deconvolution algorithm is used to identify firm-specific inefficiencies. However, the `pyStoNED` package only supports the parametric estimation of firm-specific inefficiencies due to the fact that the parametric method is more widely used in efficiency analysis literature.
