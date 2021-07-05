@@ -2,9 +2,11 @@
 Isotonic CNLS 
 ======================
 
-This section introduces the Isotonic Convex Nonparametric Least squares (ICNLS) regression that is treated as a convexity related CNLS.
-To relax the concavity assuption (i.e., in the context of production function estimation) of CNLS, we need to
-modify the Afriat inequality constraint. To do that, we have to define a binary matrix :math:`P=[p_{ij}]_{n x n}` to represent the isotonicity.
+This section introduces a variant of CNLS estimator, Isotonic Convex Nonparametric Least squares (ICNLS), 
+where ICNLS only relies on the monotonic assumption. To relax the concavity assumption in CNLS estimation
+(i.e., estimating a production function), we have to rephrase the Afriat inequality constraint in Problem 
+（2.2). To do that, we define a binary matrix :math:`P=[p_{ij}]_{n x n}` to represent 
+the isotonicity (Keshvari and Kuosmanen, 2013).
 
 Define the binary matrix :math:`P=[p_{ij}]_{n x n}` as follows
 

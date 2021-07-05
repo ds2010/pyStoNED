@@ -76,12 +76,12 @@ Similarly to CNLS with DDF, we present another two approaches integrating DDF to
 
 
 Example: CQR-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CQR_DDF.ipynb>`_
-------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------
     
 .. code:: python
     
         # import packages
-        from pystoned import CNLSDDF
+        from pystoned import CQERDDF
         from pystoned.constant import FUN_PROD, OPT_LOCAL
         from pystoned import dataset as dataset
         
@@ -94,25 +94,26 @@ Example: CQR-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pySt
         model.optimize(OPT_LOCAL)
     
         # display the residual
-        model.display_residual()
+        model.display_positive_residual()
+        model.display_negative_residual()
 
 
-Example: CER-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CER_DDF.ipynb>`_
------------------------------------------------------------------------------------------------------------------------------
+Example: CQR-DDF with bad output `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CQR_DDF-b.ipynb>`_
+------------------------------------------------------------------------------------------------------------------------------------------------
             
 .. code:: python
             
         # import packages
-        from pystoned import CNLSDDF
+        from pystoned import CQERDDF
         from pystoned.constant import FUN_PROD, OPT_LOCAL
         from pystoned import dataset as dataset
                 
         # import the GHG emissions data
         data = dataset.load_GHG_abatement_cost()
                 
-        # define and solve the CER-DDF model (with undesirable outputs)
+        # define and solve the CQR-DDF model (with undesirable outputs)
         model = CQERDDF.CQRDDF(y=data.y, x=data.x, b=data.b, tau=0.9, fun = FUN_PROD, gx= [0.0, 0.0], gb=[-1], gy=[1])
         model.optimize(OPT_LOCAL)
             
-        # display the residual
-        model.display_residual()
+        # display the delta
+        model.display_delta()
