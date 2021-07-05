@@ -3,6 +3,7 @@ from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constrai
 from pyomo.core.expr.numvalue import NumericValue
 from .constant import FUN_PROD, FUN_COST
 from . import CNLSDDF, CQER
+from .utils import tools
 
 
 class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
