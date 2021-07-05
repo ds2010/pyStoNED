@@ -94,8 +94,8 @@ CNLS-G Algorithm (for large sample)
    CNLSG/stoned_g
 
 
-Plot the frontier/estimation function
---------------------------------------
+Plot of estimated function
+-----------------------------
 .. toctree::
    :maxdepth: 1
 
