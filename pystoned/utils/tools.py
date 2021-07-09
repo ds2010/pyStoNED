@@ -24,12 +24,11 @@ def set_neos_email(address):
 
 
 def optimize_model(model, email, cet, solver=OPT_DEFAULT):
-    if solver is not OPT_DEFAULT and SolverFactory(solver).available():
-        solver = SolverFactory(solver)
-        return solver.solve(model, tee=True), 1
-
     if not set_neos_email(email):
-        if cet == CET_ADDI:
+        if solver is not OPT_DEFAULT and SolverFactory(solver).available():
+            solver = SolverFactory(solver)
+            return solver.solve(model, tee=True), 1
+        elif cet == CET_ADDI:
             solver = SolverFactory("mosek")
             print("Estimating the additive model locally with mosek solver")
             return solver.solve(model, tee=True), 1
@@ -40,14 +39,14 @@ def optimize_model(model, email, cet, solver=OPT_DEFAULT):
             )
             return False, 0
     else:
-        if cet == CET_ADDI:
-            opt = "mosek"
+        if solver is OPT_DEFAULT and cet is CET_ADDI:
+            solver = "mosek"
             print("Estimating the additive model remotely with mosek solver")
-        elif cet == CET_MULT:
-            opt = "knitro"
+        elif solver is OPT_DEFAULT and cet == CET_MULT:
+            solver = "knitro"
             print("Estimating the multiplicative model remotely with knitro solver")
-        solver = SolverManagerFactory('neos')
-        return solver.solve(model, tee=True, opt=opt), 1
+        remote_solver = SolverManagerFactory('neos')
+        return remote_solver.solve(model, tee=True, opt=solver), 1
 
 def trans_list(li):
     if type(li) == list:
