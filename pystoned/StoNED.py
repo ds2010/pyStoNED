@@ -16,11 +16,12 @@ class StoNED:
         """
         self.model = model
         self.x = model.x
-        
+
         # If the model is a directional distance based, set cet to CET_ADDI
         if hasattr(self.model, 'gx'):
             self.model.cet = CET_ADDI
-            self.y = np.diag(np.tensordot(self.model.y, self.model.get_gamma(),axes=([1],[1])))
+            self.y = np.diag(np.tensordot(
+                self.model.y, self.model.get_gamma(), axes=([1], [1])))
         else:
             self.y = self.model.y
 
@@ -223,7 +224,7 @@ class StoNED:
             if self.model.cet == CET_ADDI:
                 return (self.y - self.model.get_residual()) + self.sigma_u * math.sqrt(2 / math.pi)
             elif self.model.cet == CET_MULT:
-                return  (self.y / np.exp(self.model.get_residual())) * np.exp(self.sigma_u * math.sqrt(2 / math.pi))
+                return (self.y / np.exp(self.model.get_residual())) * np.exp(self.sigma_u * math.sqrt(2 / math.pi))
         elif self.model.fun == FUN_COST:
             if self.model.cet == CET_ADDI:
                 return (self.y - self.model.get_residual()) - self.sigma_u * math.sqrt(2 / math.pi)
