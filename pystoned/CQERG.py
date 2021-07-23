@@ -113,6 +113,13 @@ class CQRG:
                         elif self.fun == FUN_COST:
                             self.active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
+                    if self.rts == RTS_CRS:
+                        if self.fun == FUN_PROD:
+                            self.active2[i, j] = np.sum(beta[i, :] * x[i, :]) \
+                                - np.sum(beta[j, :] * x[i, :])
+                        elif self.fun == FUN_COST:
+                            self.active2[i, j] = - np.sum(beta[i, :] * x[i, :]) \
+                                + np.sum(beta[j, :] * x[i, :])
                 if self.cet == CET_MULT:
                     if self.rts == RTS_VRS:
                         if self.fun == FUN_PROD:
@@ -402,6 +409,13 @@ class CERG:
                         elif self.fun == FUN_COST:
                             self.Active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
+                    if self.rts == RTS_VRS:
+                        if self.fun == FUN_PROD:
+                            self.Active2[i, j] = np.sum(beta[i, :] * x[i, :]) \
+                                - np.sum(beta[j, :] * x[i, :])
+                        elif self.fun == FUN_COST:
+                            self.Active2[i, j] = - np.sum(beta[i, :] * x[i, :]) \
+                                + np.sum(beta[j, :] * x[i, :])
                 if self.cet == CET_MULT:
                     if self.rts == RTS_VRS:
                         if self.fun == FUN_PROD:
