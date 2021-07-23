@@ -20,10 +20,10 @@ def interpolation(alpha, beta, x, fun=FUN_PROD):
 
     if fun == FUN_PROD:
         def fun_est(x):
-                return min(alpha + np.sum(beta[:,0:d] * np.tile(x,(len(beta[:,0:d]), 1)), axis=1))
+            return min(alpha + np.sum(beta[:, 0:d] * np.tile(x, (len(beta[:, 0:d]), 1)), axis=1))
     elif fun == FUN_COST:
         def fun_est(x):
-                return max(alpha + np.sum(beta[:,0:d] * np.tile(x,(len(beta[:,0:d]), 1)), axis=1))
+            return max(alpha + np.sum(beta[:, 0:d] * np.tile(x, (len(beta[:, 0:d]), 1)), axis=1))
 
     yhat = np.zeros((n, 1))
     for i in range(n):

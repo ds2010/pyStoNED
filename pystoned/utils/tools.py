@@ -31,7 +31,8 @@ def optimize_model(model, email, cet, solver=OPT_DEFAULT):
             print("Estimating the additive model locally with mosek solver")
             return solver.solve(model, tee=True), 1
         elif cet == CET_MULT:
-            raise ValueError("Please specify the solver for optimizing multiplicative model locally.")
+            raise ValueError(
+                "Please specify the solver for optimizing multiplicative model locally.")
     else:
         if solver is OPT_DEFAULT and cet is CET_ADDI:
             solver = "mosek"
@@ -41,6 +42,7 @@ def optimize_model(model, email, cet, solver=OPT_DEFAULT):
             print("Estimating the multiplicative model remotely with knitro solver")
         remote_solver = SolverManagerFactory('neos')
         return remote_solver.solve(model, tee=True, opt=solver), 1
+
 
 def trans_list(li):
     if type(li) == list:
