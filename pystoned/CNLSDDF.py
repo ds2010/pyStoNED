@@ -42,7 +42,7 @@ class CNLSDDF(CNLS.CNLS):
 
         if type(self.y[0]) != list:
             self.y = []
-            for y_value in ytools.trans_list():
+            for y_value in tools.trans_list():
                 self.y.append([y_value])
 
         self.__model__ = ConcreteModel()
