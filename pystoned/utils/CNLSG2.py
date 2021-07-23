@@ -239,7 +239,6 @@ class CNLSG2:
                     return Constraint.Skip
 
                 return sweet_rule
-                return False
         elif self.cet == CET_MULT:
             if self.rts == RTS_VRS:
 
