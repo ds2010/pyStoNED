@@ -244,35 +244,42 @@ class CNLS:
     def display_status(self):
         """Display the status of problem"""
         if self.optimization_status == 0:
-            raise Exception("Model isn't optimized. Use optimize() method to estimate the model.")
+            raise Exception(
+                "Model isn't optimized. Use optimize() method to estimate the model.")
         print(self.display_status)
 
     def display_alpha(self):
         """Display alpha value"""
         if self.optimization_status == 0:
-            raise Exception("Model isn't optimized. Use optimize() method to estimate the model.")
+            raise Exception(
+                "Model isn't optimized. Use optimize() method to estimate the model.")
         if self.rts == RTS_CRS:
-            raise Exception("Estimated intercept (alpha) cannot be retrieved due to the constant returns-to-scale assumption.")
+            raise Exception(
+                "Estimated intercept (alpha) cannot be retrieved due to the constant returns-to-scale assumption.")
         self.__model__.alpha.display()
 
     def display_beta(self):
         """Display beta value"""
         if self.optimization_status == 0:
-            raise Exception("Model isn't optimized. Use optimize() method to estimate the model.")
+            raise Exception(
+                "Model isn't optimized. Use optimize() method to estimate the model.")
         self.__model__.beta.display()
 
     def display_lamda(self):
         """Display lamda value"""
         if self.optimization_status == 0:
-            raise Exception("Model isn't optimized. Use optimize() method to estimate the model.")
+            raise Exception(
+                "Model isn't optimized. Use optimize() method to estimate the model.")
         if type(self.z) == type(None):
-            raise Exception("Estimated coefficient (lambda) cannot be retrieved due to no z variable included in the model.")
+            raise Exception(
+                "Estimated coefficient (lambda) cannot be retrieved due to no z variable included in the model.")
         self.__model__.lamda.display()
 
     def display_residual(self):
         """Dispaly residual value"""
         if self.optimization_status == 0:
-            raise Exception("Model isn't optimized. Use optimize() method to estimate the model.")
+            raise Exception(
+                "Model isn't optimized. Use optimize() method to estimate the model.")
         self.__model__.epsilon.display()
 
     def get_status(self):
@@ -282,16 +289,19 @@ class CNLS:
     def get_alpha(self):
         """Return alpha value by array"""
         if self.optimization_status == 0:
-            raise Exception("Model isn't optimized. Use optimize() method to estimate the model.")
+            raise Exception(
+                "Model isn't optimized. Use optimize() method to estimate the model.")
         if self.rts == RTS_CRS:
-            raise Exception("Estimated intercept (alpha) cannot be retrieved due to the constant returns-to-scale assumption.")
+            raise Exception(
+                "Estimated intercept (alpha) cannot be retrieved due to the constant returns-to-scale assumption.")
         alpha = list(self.__model__.alpha[:].value)
         return np.asarray(alpha)
 
     def get_beta(self):
         """Return beta value by array"""
         if self.optimization_status == 0:
-            raise Exception("Model isn't optimized. Use optimize() method to estimate the model.")
+            raise Exception(
+                "Model isn't optimized. Use optimize() method to estimate the model.")
         beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
                                                           list(self.__model__.beta[:, :].value))])
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
@@ -301,23 +311,27 @@ class CNLS:
     def get_residual(self):
         """Return residual value by array"""
         if self.optimization_status == 0:
-            raise Exception("Model isn't optimized. Use optimize() method to estimate the model.")
+            raise Exception(
+                "Model isn't optimized. Use optimize() method to estimate the model.")
         residual = list(self.__model__.epsilon[:].value)
         return np.asarray(residual)
 
     def get_lamda(self):
         """Return beta value by array"""
         if self.optimization_status == 0:
-            raise Exception("Model isn't optimized. Use optimize() method to estimate the model.")
+            raise Exception(
+                "Model isn't optimized. Use optimize() method to estimate the model.")
         if type(self.z) == type(None):
-            raise Exception("Estimated coefficient (lambda) cannot be retrieved due to no z variable included in the model.")
+            raise Exception(
+                "Estimated coefficient (lambda) cannot be retrieved due to no z variable included in the model.")
         lamda = list(self.__model__.lamda[:].value)
         return np.asarray(lamda)
 
     def get_frontier(self):
         """Return estimated frontier value by array"""
         if self.optimization_status == 0:
-            raise Exception("Model isn't optimized. Use optimize() method to estimate the model.")
+            raise Exception(
+                "Model isn't optimized. Use optimize() method to estimate the model.")
         if self.cet == CET_MULT and type(self.z) == type(None):
             frontier = np.asarray(list(self.__model__.frontier[:].value)) + 1
         elif self.cet == CET_MULT and type(self.z) != type(None):
@@ -330,11 +344,13 @@ class CNLS:
     def get_adjusted_residual(self):
         """Return the shifted residuals(epsilon) tern by CCNLS"""
         if self.optimization_status == 0:
-            raise Exception("Model isn't optimized. Use optimize() method to estimate the model.")
+            raise Exception(
+                "Model isn't optimized. Use optimize() method to estimate the model.")
         return self.get_residual() - np.amax(self.get_residual())
 
     def get_adjusted_alpha(self):
         """Return the shifted constatnt(alpha) term by CCNLS"""
         if self.optimization_status == 0:
-            raise Exception("Model isn't optimized. Use optimize() method to estimate the model.")
+            raise Exception(
+                "Model isn't optimized. Use optimize() method to estimate the model.")
         return self.get_alpha() + np.amax(self.get_residual())
