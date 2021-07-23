@@ -252,7 +252,7 @@ class CNLS:
         if self.optimization_status == 0:
             raise Exception("Model isn't optimized. Use optimize() method to estimate the model.")
         if self.rts == RTS_CRS:
-            raise Exception("Estimated intercept (alpha) cannot be retrieved due the CRS model is built without intercept.")
+            raise Exception("Estimated intercept (alpha) cannot be retrieved due to the constant returns-to-scale assumption.")
         self.__model__.alpha.display()
 
     def display_beta(self):
@@ -284,7 +284,7 @@ class CNLS:
         if self.optimization_status == 0:
             raise Exception("Model isn't optimized. Use optimize() method to estimate the model.")
         if self.rts == RTS_CRS:
-            raise Exception("Estimated intercept (alpha) cannot be retrieved due the CRS model is built without intercept.")
+            raise Exception("Estimated intercept (alpha) cannot be retrieved due to the constant returns-to-scale assumption.")
         alpha = list(self.__model__.alpha[:].value)
         return np.asarray(alpha)
 
