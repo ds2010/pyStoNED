@@ -5,6 +5,7 @@ from .utils import CNLSG1, CNLSG2, CNLSZG1, CNLSZG2, sweet, tools
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, OPT_DEFAULT, RTS_CRS, RTS_VRS, OPT_DEFAULT, OPT_LOCAL
 import time
 
+
 class CNLSG:
     """Convex Nonparametric Least Square (CNLS) with Genetic algorithm
     """
@@ -110,6 +111,13 @@ class CNLSG:
                         elif self.fun == FUN_COST:
                             self.active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
+                    if self.rts == RTS_CRS:
+                        if self.fun == FUN_PROD:
+                            self.active2[i, j] = np.sum(beta[i, :] * x[i, :]) \
+                                - np.sum(beta[j, :] * x[i, :])
+                        elif self.fun == FUN_COST:
+                            self.active2[i, j] = - np.sum(beta[i, :] * x[i, :]) \
+                                + np.sum(beta[j, :] * x[i, :])
                 if self.cet == CET_MULT:
                     if self.rts == RTS_VRS:
                         if self.fun == FUN_PROD:

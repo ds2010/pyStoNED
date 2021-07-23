@@ -52,8 +52,18 @@ class ICNLS(CNLS.CNLS):
                 return afriat_rule
 
             elif self.rts == RTS_CRS:
-                # TODO(warning handling): replace with model requested not exist
-                return False
+
+                def afriat_rule(model, i, h):
+                    if i == h or self.__pmatrix[i][h] == 0:
+                        return Constraint.Skip
+                    return __operator(
+                        self.__pmatrix[i][i] * sum(
+                            model.beta[i, j] * self.x[i][j] for j in model.J),
+                        self.__pmatrix[i][h] * sum(
+                            model.beta[h, j] * self.x[i][j] for j in model.J)
+                    )
+
+                return afriat_rule
         elif self.cet == CET_MULT:
             if self.rts == RTS_VRS:
 

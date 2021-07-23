@@ -136,8 +136,13 @@ class CQRZG1:
 
                 return regression_rule
             elif self.rts == RTS_CRS:
-                # TODO(warning handling): replace with model requested not exist
-                return False
+
+                def regression_rule(model, i):
+                    return self.y[i] == sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
+                        + sum(model.lamda[k] * self.z[i][k]
+                              for k in model.K) + model.epsilon[i]
+
+                return regression_rule
 
         elif self.cet == CET_MULT:
 
@@ -191,8 +196,15 @@ class CQRZG1:
 
                 return afriat_rule
             elif self.rts == RTS_CRS:
-                # TODO(warning handling): replace with model requested not exist
-                return False
+
+                def afriat_rule(model, i):
+                    return __operator(
+                        sum(model.beta[i, j] * self.x[i][j]
+                            for j in model.J),
+                        sum(model.beta[self.__model__.I.nextw(i), j] * self.x[i][j]
+                            for j in model.J))
+
+                return afriat_rule
         elif self.cet == CET_MULT:
             if self.rts == RTS_VRS:
 
@@ -239,8 +251,17 @@ class CQRZG1:
 
                 return sweet_rule
             elif self.rts == RTS_CRS:
-                # TODO(warning handling): replace with model requested not exist
-                return False
+                def sweet_rule(model, i, h):
+                    if self.cutactive[i, h]:
+                        if i == h:
+                            return Constraint.Skip
+                        return __operator(sum(model.beta[i, j] * self.x[i][j]
+                                              for j in model.J),
+                                          sum(model.beta[h, j] * self.x[i][j]
+                                              for j in model.J))
+                    return Constraint.Skip
+
+                return sweet_rule
         elif self.cet == CET_MULT:
             if self.rts == RTS_VRS:
 

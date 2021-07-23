@@ -5,7 +5,8 @@ import numpy as np
 from .utils import interpolation
 from .constant import FUN_PROD, FUN_COST, RED_MOM
 
-def plot2d(model, x_select=0, label_name="estimated function", fig_name=None, method= RED_MOM ):
+
+def plot2d(model, x_select=0, label_name="estimated function", fig_name=None, method=RED_MOM):
     """Plot 2d estimated function/frontier
 
     Args:
@@ -28,7 +29,7 @@ def plot2d(model, x_select=0, label_name="estimated function", fig_name=None, me
 
     # sort
     data = data[np.argsort(data[:, 0])].T
-    
+
     x, y, f = data[0], data[1], data[2]
 
     # create figure and axes objects
@@ -56,7 +57,8 @@ def plot2d(model, x_select=0, label_name="estimated function", fig_name=None, me
     else:
         plt.savefig(fig_name)
 
-def plot3d(model, x_select_1=0, x_select_2=1,fig_name=None, line_transparent=False, pane_transparent=False):
+
+def plot3d(model, x_select_1=0, x_select_2=1, fig_name=None, line_transparent=False, pane_transparent=False):
     """Plot 3d estimated function/frontier
 
     Args:
@@ -81,16 +83,16 @@ def plot3d(model, x_select_1=0, x_select_2=1,fig_name=None, line_transparent=Fal
     dp = ax.scatter(x[x_select_1], x[x_select_2], y, marker='.', s=10)
 
     # Revise the Z-axis left side
-    tmp_planes = ax.zaxis._PLANES 
-    ax.zaxis._PLANES = (tmp_planes[2], tmp_planes[3], 
-                        tmp_planes[0], tmp_planes[1], 
+    tmp_planes = ax.zaxis._PLANES
+    ax.zaxis._PLANES = (tmp_planes[2], tmp_planes[3],
+                        tmp_planes[0], tmp_planes[1],
                         tmp_planes[4], tmp_planes[5])
 
     # make the grid lines transparent
     if line_transparent == False:
-        ax.xaxis._axinfo["grid"]['color'] =  (1,1,1,0)
-        ax.yaxis._axinfo["grid"]['color'] =  (1,1,1,0)
-        ax.zaxis._axinfo["grid"]['color'] =  (1,1,1,0)
+        ax.xaxis._axinfo["grid"]['color'] = (1, 1, 1, 0)
+        ax.yaxis._axinfo["grid"]['color'] = (1, 1, 1, 0)
+        ax.zaxis._axinfo["grid"]['color'] = (1, 1, 1, 0)
 
     # make the panes transparent
     if pane_transparent != False:
@@ -98,24 +100,25 @@ def plot3d(model, x_select_1=0, x_select_2=1,fig_name=None, line_transparent=Fal
         ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
         ax.zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
 
-    xlin1 = np.linspace(min(x[x_select_1]),max(x[x_select_1]),30)
-    xlin2 = np.linspace(min(x[x_select_2]),max(x[x_select_2]),30)
-    XX, YY = np.meshgrid(xlin1,xlin2)
+    xlin1 = np.linspace(min(x[x_select_1]), max(x[x_select_1]), 30)
+    xlin2 = np.linspace(min(x[x_select_2]), max(x[x_select_2]), 30)
+    XX, YY = np.meshgrid(xlin1, xlin2)
 
-    ZZ = np.zeros((len(XX),len(XX)))
+    ZZ = np.zeros((len(XX), len(XX)))
     for i in range(len(XX)):
         for j in range(len(XX)):
-            ZZ[i,j] = interpolation.interpolation(alpha, beta,
-                                                    x=np.array([XX[i,j],YY[i,j]],ndmin=2),
-                                                    fun=model.fun)
+            ZZ[i, j] = interpolation.interpolation(alpha, beta,
+                                                   x=np.array(
+                                                       [XX[i, j], YY[i, j]], ndmin=2),
+                                                   fun=model.fun)
 
-    fl = ax.plot_surface(XX, YY, ZZ, rstride=1, cstride=1, cmap='viridis', 
-                                    edgecolor='none', alpha=0.5)
+    fl = ax.plot_surface(XX, YY, ZZ, rstride=1, cstride=1, cmap='viridis',
+                         edgecolor='none', alpha=0.5)
 
     # add x, y, z label
     ax.set_xlabel("Input $x1$")
     ax.set_ylabel("Input $x2$")
-    ax.set_zlabel("Output $y$", rotation=0) 
+    ax.set_zlabel("Output $y$", rotation=0)
 
     if fig_name == None:
         plt.show()
