@@ -1,9 +1,9 @@
 # import dependencies
-import re
-import os
+from re import compile
+from os import environ
 from pyomo.opt import SolverFactory, SolverManagerFactory
 from ..constant import CET_ADDI, CET_MULT, OPT_LOCAL, OPT_DEFAULT
-__email_re = re.compile(r'([^@]+@[^@]+\.[a-zA-Z0-9]+)$')
+__email_re = compile(r'([^@]+@[^@]+\.[a-zA-Z0-9]+)$')
 
 
 def set_neos_email(address):
@@ -16,10 +16,8 @@ def set_neos_email(address):
         print("Optimizing locally.")
         return False
     if not __email_re.match(address):
-        # TODO: Replace with log system
-        print("Invalid email address.\n")
-        return False
-    os.environ['NEOS_EMAIL'] = address
+        raise ValueError("Invalid email address.")
+    environ['NEOS_EMAIL'] = address
     return True
 
 
@@ -33,11 +31,7 @@ def optimize_model(model, email, cet, solver=OPT_DEFAULT):
             print("Estimating the additive model locally with mosek solver")
             return solver.solve(model, tee=True), 1
         elif cet == CET_MULT:
-            # TODO(warning handling): Use log system instead of print()
-            print(
-                "Estimating the multiplicative model will be available in near future."
-            )
-            return False, 0
+            raise ValueError("Please specify the solver for optimizing multiplicative model locally.")
     else:
         if solver is OPT_DEFAULT and cet is CET_ADDI:
             solver = "mosek"
