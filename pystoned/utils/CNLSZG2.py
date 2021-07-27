@@ -140,8 +140,7 @@ class CNLSZG2:
 
             return regression_rule
 
-        # TODO(error handling): replace with undefined model attribute
-        return False
+        raise ValueError("Undefined model parameters.")
 
     def __log_rule(self):
         """Return the proper log constraint"""
@@ -161,8 +160,7 @@ class CNLSZG2:
 
                 return log_rule
 
-        # TODO(error handling): replace with undefined model attribute
-        return False
+        raise ValueError("Undefined model parameters.")
 
     def __afriat_rule(self):
         """Return the proper elementary Afriat approach constraint"""
@@ -214,8 +212,7 @@ class CNLSZG2:
 
                 return afriat_rule
 
-        # TODO(error handling): replace with undefined model attribute
-        return False
+        raise ValueError("Undefined model parameters.")
 
     def __sweet_rule(self, ):
         """Return the proper sweet spot approach constraint"""
@@ -276,8 +273,7 @@ class CNLSZG2:
 
                 return sweet_rule
 
-        # TODO(error handling): replace with undefined model attribute
-        return False
+        raise ValueError("Undefined model parameters.")
 
     def __sweet_rule2(self, ):
         """Return the proper sweet spot (step2) approach constraint"""
@@ -338,8 +334,7 @@ class CNLSZG2:
 
                 return sweet_rule2
 
-        # TODO(error handling): replace with undefined model attribute
-        return False
+        raise ValueError("Undefined model parameters.")
 
     def get_alpha(self):
         """Return alpha value by array"""

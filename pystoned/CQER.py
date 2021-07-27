@@ -1,4 +1,5 @@
 # import dependencies
+from pyomo.core.base.plugin import TransformationInfo
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint, log
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
@@ -184,8 +185,7 @@ class CQR:
 
             return regression_rule
 
-        # TODO(error handling): replace with undefined model attribute
-        return False
+        raise ValueError("Undefined model parameters.")
 
     def __log_rule(self):
         """Return the proper log constraint"""
@@ -205,8 +205,7 @@ class CQR:
 
                 return log_rule
 
-        # TODO(error handling): replace with undefined model attribute
-        return False
+        raise ValueError("Undefined model parameters.")
 
     def __afriat_rule(self):
         """Return the proper afriat inequality constraint"""
@@ -263,60 +262,42 @@ class CQR:
 
                 return afriat_rule
 
-        # TODO(error handling): replace with undefined model attribute
-        return False
+        raise ValueError("Undefined model parameters.")
 
     def display_status(self):
         """Display the status of problem"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
-        print(self.display_status)
+        print(self.optimization_status)
 
     def display_alpha(self):
         """Display alpha value"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
+        tools.assert_various_return_to_scale(self.rts)
         self.__model__.alpha.display()
 
     def display_beta(self):
         """Display beta value"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         self.__model__.beta.display()
 
     def display_lamda(self):
         """Display lamda value"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
-        if type(self.z) == type(None):
-            # TODO: Replace print by warning
-            print("Without z variable")
-            return
+        tools.assert_optimized(self.optimization_status)
+        tools.assert_contextual_variable(self.z)
         self.__model__.lamda.display()
 
     def display_residual(self):
         """Dispaly residual value"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         self.__model__.epsilon.display()
 
     def display_positive_residual(self):
         """Dispaly positive residual value"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         self.__model__.epsilon_plus.display()
 
     def display_negative_residual(self):
         """Dispaly negative residual value"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         self.__model__.epsilon_minus.display()
 
     def get_status(self):
@@ -325,17 +306,16 @@ class CQR:
 
     def get_alpha(self):
         """Return alpha value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
+        if self.rts == RTS_CRS:
+            raise Exception(
+                "Estimated intercept (alpha) cannot be retrieved due to the constant returns-to-scale assumption.")
         alpha = list(self.__model__.alpha[:].value)
         return np.asarray(alpha)
 
     def get_beta(self):
         """Return beta value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
                                                           list(self.__model__.beta[:, :].value))])
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
@@ -344,45 +324,32 @@ class CQR:
 
     def get_lamda(self):
         """Return beta value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
-        if type(self.z) == type(None):
-            # TODO: Replace print by warning
-            print("Without z variable")
-            return
+        tools.assert_optimized(self.optimization_status)
+        tools.assert_contextual_variable(self.z)
         lamda = list(self.__model__.lamda[:].value)
         return np.asarray(lamda)
 
     def get_residual(self):
         """Return residual value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         residual = list(self.__model__.epsilon[:].value)
         return np.asarray(residual)
 
     def get_positive_residual(self):
         """Return positive residual value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         residual_plus = list(self.__model__.epsilon_plus[:].value)
         return np.asarray(residual_plus)
 
     def get_negative_residual(self):
         """Return negative residual value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         residual_minus = list(self.__model__.epsilon_minus[:].value)
         return np.asarray(residual_minus)
 
     def get_frontier(self):
         """Return estimated frontier value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         if self.cet == CET_MULT:
             frontier = np.asarray(list(self.__model__.frontier[:].value)) + 1
         elif self.cet == CET_ADDI:
