@@ -183,28 +183,18 @@ class CNLSDDF(CNLS.CNLS):
 
     def display_gamma(self):
         """Display gamma value"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         self.__model__.gamma.display()
 
     def display_delta(self):
         """Display delta value"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
-        if type(self.b) == type(None):
-            # TODO(warning handling): replace print to warning
-            print("No undesirable output given.")
-            return False
-
+        tools.assert_optimized(self.optimization_status)
+        tools.assert_undesirable_output(self.b)
         self.__model__.delta.display()
 
     def get_gamma(self):
         """Return gamma value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         gamma = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.gamma),
                                                            list(self.__model__.gamma[:, :].value))])
         gamma = pd.DataFrame(gamma, columns=['Name', 'Key', 'Value'])
@@ -213,14 +203,8 @@ class CNLSDDF(CNLS.CNLS):
 
     def get_delta(self):
         """Return delta value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
-        if type(self.b) == type(None):
-            # TODO(warning handling): replace print to warning
-            print("No undesirable output given.")
-            return False
-
+        tools.assert_optimized(self.optimization_status)
+        tools.assert_undesirable_output(self.b)
         delta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.delta),
                                                            list(self.__model__.delta[:, :].value))])
         delta = pd.DataFrame(delta, columns=['Name', 'Key', 'Value'])

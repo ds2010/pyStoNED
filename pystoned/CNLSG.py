@@ -145,41 +145,28 @@ class CNLSG:
 
     def display_status(self):
         """Display the status of problem"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
-        print(self.display_status)
+        print(self.optimization_status)
 
     def display_alpha(self):
         """Display alpha value"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
+        tools.assert_various_return_to_scale(self.rts)
         self.__model__.alpha.display()
 
     def display_beta(self):
         """Display beta value"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         self.__model__.beta.display()
 
     def display_lamda(self):
         """Display lamda value"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
-        if type(self.z) == type(None):
-            # TODO: Replace print by warning
-            print("Without z variable")
-            return
+        tools.assert_optimized(self.optimization_status)
+        tools.assert_contextual_variable(self.z)
         self.__model__.lamda.display()
 
     def display_residual(self):
         """Dispaly residual value"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self)
         self.__model__.epsilon.display()
 
     def get_status(self):
@@ -188,17 +175,14 @@ class CNLSG:
 
     def get_alpha(self):
         """Return alpha value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self)
+        tools.assert_various_return_to_scale(self.rts)
         alpha = list(self.__model__.alpha[:].value)
         return np.asarray(alpha)
 
     def get_beta(self):
         """Return beta value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
                                                           list(self.__model__.beta[:, :].value))])
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
@@ -207,29 +191,20 @@ class CNLSG:
 
     def get_residual(self):
         """Return residual value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         residual = list(self.__model__.epsilon[:].value)
         return np.asarray(residual)
 
     def get_lamda(self):
         """Return beta value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
-        if type(self.z) == type(None):
-            # TODO: Replace print by warning
-            print("Without z variable")
-            return
+        tools.assert_optimized(self.optimization_status)
+        tools.assert_contextual_variable(self.z)
         lamda = list(self.__model__.lamda[:].value)
         return np.asarray(lamda)
 
     def get_frontier(self):
         """Return estimated frontier value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         if self.cet == CET_MULT and type(self.z) == type(None):
             frontier = np.asarray(list(self.__model__.frontier[:].value)) + 1
         elif self.cet == CET_MULT and type(self.z) != type(None):
@@ -241,9 +216,7 @@ class CNLSG:
 
     def get_totalconstr(self):
         """Return the number of total constraints"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         activeconstr = 0
         cutactiveconstr = 0
         for i in range(len(np.matrix(self.active))):
@@ -257,14 +230,10 @@ class CNLSG:
 
     def get_runningtime(self):
         """Return the running time"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         return self.tt
 
     def get_blocks(self):
         """Return the number of blocks"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         return self.count

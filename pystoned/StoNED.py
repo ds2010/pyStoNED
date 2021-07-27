@@ -3,6 +3,7 @@ import numpy as np
 import math
 import scipy.stats as stats
 import scipy.optimize as opt
+from .utils import tools
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RED_MOM, RED_QLE, RED_KDE
 
 
@@ -30,9 +31,7 @@ class StoNED:
         Args:
             method (String, optional): RED_MOM (Method of moments) or RED_QLE (Quassi-likelihood estimation) or RED_KDE (Kernel deconvolution estimation). Defaults to RED_MOM.
         """
-        if self.model.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.model.optimization_status)
         if method == RED_MOM:
             self.__method_of_moment(self.model.get_residual())
         elif method == RED_QLE:
@@ -40,8 +39,7 @@ class StoNED:
         elif method == RED_KDE:
             self.__gaussian_kernel_estimation(self.model.get_residual())
         else:
-            # TODO(error/warning handling): Raise error while undefined method
-            return False
+            raise ValueError("Undefined estimation technique.")
         return self.mu
 
     def get_technical_inefficiency(self, method=RED_MOM):
@@ -51,9 +49,7 @@ class StoNED:
 
         calculate sigma_u, sigma_v, mu, and epsilon value
         """
-        if self.model.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.model.optimization_status)
         self.get_unconditional_expected_inefficiency(method)
         sigma = self.sigma_u * self.sigma_v / math.sqrt(self.sigma_u ** 2 +
                                                         self.sigma_v ** 2)
@@ -74,8 +70,7 @@ class StoNED:
                 return (self.y + Eu) / self.y
             elif self.model.cet == CET_MULT:
                 return np.exp(Eu)
-        # TODO(error/warning handling): Raise error while undefined fun/cet
-        return False
+        raise ValueError("Undefined model parameters.")
 
     def __method_of_moment(self, residual):
         """Method of moment"""
@@ -98,8 +93,7 @@ class StoNED:
                                         (1 - 4 / math.pi))) ** (1 / 3)
 
         else:
-            # TODO(error/warning handling): Raise error while undefined fun
-            return False
+            raise ValueError("Undefined model parameters.")
 
         self.sigma_v = (M2_mean -
                         ((math.pi - 2) / math.pi) * self.sigma_u ** 2) ** (1 / 2)
@@ -215,9 +209,7 @@ class StoNED:
 
         calculate sigma_u, sigma_v, mu, and epsilon value
         """
-        if self.model.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.model.optimization_status)
         self.get_unconditional_expected_inefficiency(method)
 
         if self.model.fun == FUN_PROD:
@@ -230,5 +222,5 @@ class StoNED:
                 return (self.y - self.model.get_residual()) - self.sigma_u * math.sqrt(2 / math.pi)
             elif self.model.cet == CET_MULT:
                 return (self.y / np.exp(self.model.get_residual())) * np.exp(-self.sigma_u * math.sqrt(2 / math.pi))
-        # TODO(error/warning handling): Raise error while undefined fun/cet
-        return False
+
+        raise ValueError("Undefined model parameters.")

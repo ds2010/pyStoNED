@@ -148,45 +148,31 @@ class DEA:
 
     def display_status(self):
         """Display the status of problem"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
-        print(self.display_status)
+        print(self.optimization_status)
 
     def display_theta(self):
         """Display theta value"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         self.__model__.theta.display()
 
     def display_lamda(self):
         """Display lamda value"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         self.__model__.lamda.display()
 
     def get_status(self):
         """Return status"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
         return self.optimization_status
 
     def get_theta(self):
         """Return theta value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         theta = list(self.__model__.theta[:].value)
         return np.asarray(theta)
 
     def get_lamda(self):
         """Return lamda value by array"""
-        if self.optimization_status == 0:
-            print("Model isn't optimized. Use optimize() method to estimate the model.")
-            return False
+        tools.assert_optimized(self.optimization_status)
         lamda = list(self.__model__.lamda[:].value)
         return np.asarray(lamda)
 

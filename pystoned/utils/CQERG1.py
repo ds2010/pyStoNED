@@ -139,8 +139,7 @@ class CQRG1:
 
             return regression_rule
 
-        # TODO(error handling): replace with undefined model attribute
-        return False
+        raise ValueError("Undefined model parameters.")
 
     def __log_rule(self):
         """Return the proper log constraint"""
@@ -160,8 +159,7 @@ class CQRG1:
 
                 return log_rule
 
-        # TODO(error handling): replace with undefined model attribute
-        return False
+        raise ValueError("Undefined model parameters.")
 
     def __afriat_rule(self):
         """Return the proper elementary Afriat approach constraint"""
@@ -213,8 +211,7 @@ class CQRG1:
 
                 return afriat_rule
 
-        # TODO(error handling): replace with undefined model attribute
-        return False
+        raise ValueError("Undefined model parameters.")
 
     def __sweet_rule(self, ):
         """Return the proper sweet spot approach constraint"""
@@ -275,8 +272,7 @@ class CQRG1:
 
                 return sweet_rule
 
-        # TODO(error handling): replace with undefined model attribute
-        return False
+        raise ValueError("Undefined model parameters.")
 
     def get_alpha(self):
         """Return alpha value by array"""
