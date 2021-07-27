@@ -2,7 +2,7 @@
 from re import compile
 from os import environ
 from pyomo.opt import SolverFactory, SolverManagerFactory
-from ..constant import CET_ADDI, CET_MULT, OPT_LOCAL, OPT_DEFAULT
+from ..constant import CET_ADDI, CET_MULT, OPT_LOCAL, OPT_DEFAULT, RTS_CRS
 __email_re = compile(r'([^@]+@[^@]+\.[a-zA-Z0-9]+)$')
 
 
@@ -48,3 +48,27 @@ def trans_list(li):
     if type(li) == list:
         return li
     return li.tolist()
+
+
+def assert_optimized(optimization_status):
+    if optimization_status == 0:
+        raise Exception(
+            "Model isn't optimized. Use optimize() method to estimate the model.")
+
+
+def assert_contextual_variable(z):
+    if type(z) == type(None):
+        raise Exception(
+            "Estimated coefficient (lambda) cannot be retrieved due to no contextual variable (z variable) included in the model.")
+
+
+def assert_undesirable_output(b):
+    if type(b) == type(None):
+        raise Exception(
+            "Estimated coefficient (delta) cannot be retrieved due to no undesirable output (b variable) included in the model.")
+
+
+def assert_various_return_to_scale(rts):
+    if rts == RTS_CRS:
+        raise Exception(
+            "Estimated intercept (alpha) cannot be retrieved due to the constant returns-to-scale assumption.")
