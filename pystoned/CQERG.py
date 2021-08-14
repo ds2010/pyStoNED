@@ -24,10 +24,8 @@ class CQRG:
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.cutactive = sweet.sweet(x)
-        self.x = tools.trans_list(x)
-        self.y = tools.trans_list(y)
+        self.y, self.x, self.z = tools.assert_valid_basic_data(y,x,z)
         self.tau = tau
-        self.z = z
         self.cet = cet
         self.fun = fun
         self.rts = rts
@@ -36,21 +34,6 @@ class CQRG:
         self.active = np.zeros((len(x), len(x)))
         # violated concavity constraint
         self.active2 = np.zeros((len(x), len(x)))
-
-        if type(self.y[0]) == list:
-            self.y = self.__to_1d_list(self.y)
-
-        if type(self.x[0]) != list:
-            self.x = []
-            for x_value in tools.trans_list(x):
-                self.x.append([x_value])
-
-        if type(self.z) != type(None):
-            self.z = tools.trans_list(z)
-            if type(self.z[0]) != list:
-                self.z = []
-                for z_value in tools.trans_list(z):
-                    self.z.append([z_value])
 
         # Optimize model
         self.optimization_status = 0
@@ -89,12 +72,6 @@ class CQRG:
             self.count += 1
         self.optimization_status = 1
         self.tt = time.time() - self.t0
-
-    def __to_1d_list(self, l):
-        rl = []
-        for i in range(len(l)):
-            rl.append(l[i][0])
-        return rl
 
     def __convergence_test(self, alpha, beta):
         x = np.asarray(self.x)

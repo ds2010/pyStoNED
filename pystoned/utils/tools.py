@@ -1,8 +1,9 @@
 # import dependencies
 from re import compile
 from os import environ
+from numpy import asarray
 from pyomo.opt import SolverFactory, SolverManagerFactory
-from ..constant import CET_ADDI, CET_MULT, OPT_LOCAL, OPT_DEFAULT, RTS_CRS
+from ..constant import CET_ADDI, CET_MULT, FUN_PROD, OPT_LOCAL, OPT_DEFAULT, RTS_CRS, RTS_VRS
 __email_re = compile(r'([^@]+@[^@]+\.[a-zA-Z0-9]+)$')
 
 
@@ -49,6 +50,46 @@ def trans_list(li):
         return li
     return li.tolist()
 
+
+def to_1d_list(li):
+    rl = []
+    for i in range(len(li)):
+        rl.append(li[i][0])
+    return rl
+
+def to_2d_list(li):
+    rl = []
+    for value in li:
+        rl.append([value])
+    return rl
+        
+def assert_valid_basic_data(y, x, z=None):
+    y = trans_list(y)
+    x = trans_list(x)
+    y_shape = asarray(y).shape
+    x_shape = asarray(x).shape
+
+    if len(y_shape) == 2 and y_shape[1] != 1:
+        raise ValueError("The multidimensional output data is supported by direciontal based models.")
+
+    if type(y[0]) == list:
+        y = to_1d_list(y)
+
+    if type(x[0]) != list:
+        x = to_2d_list(x)
+
+    if y_shape[0] != x_shape[0]:
+        raise ValueError("The number of dmu from output data(y) is not equal to number of dmu from input data(x).")
+
+    if type(z) != type(None):
+        z = trans_list(z)
+        if type(z[0]) != list:
+            z = to_2d_list(z)
+        z_shape = asarray(z).shape
+        if y_shape[0] != z_shape[0]:
+            raise ValueError("The number of dmu from output data(y) is not equal to number of dmu from contexual variable(z).")
+
+    return y, x, z
 
 def assert_optimized(optimization_status):
     if optimization_status == 0:
