@@ -45,14 +45,14 @@ def load_GHG_abatement_cost(year=None, x_select=['HRSN', 'CPNK'], y_select=['VAL
     else:
         dataframe['Country'] = dataframe['Country'] + \
             dataframe['Year'].apply(str)
-    dmu = np.asmatrix(dataframe['Country']).T
-    x = np.concatenate(
-        [np.asmatrix(dataframe[selected]).T for selected in x_select], axis=1)
-    y = np.concatenate(
-        [np.asmatrix(dataframe[selected]).T for selected in y_select], axis=1)
+    dmu = np.asanyarray(dataframe['Country']).T
+    x = np.column_stack(
+        [np.asanyarray(dataframe[selected]).T for selected in x_select])
+    y = np.column_stack(
+        [np.asanyarray(dataframe[selected]).T for selected in y_select])
     if b_select != None:
-        b = np.concatenate(
-            [np.asmatrix(dataframe[selected]).T for selected in b_select], axis=1)
+        b = np.column_stack(
+            [np.asanyarray(dataframe[selected]).T for selected in b_select])
     return production_data(dmu, x, y, b)
 
 
@@ -69,14 +69,14 @@ def load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'], y_
     """
     dataframe = pd.read_csv(
         file_path+"/data/electricityFirms.csv", error_bad_lines=True)
-    dmu = np.asmatrix(dataframe.index.tolist()).T
-    x = np.concatenate(
-        [np.asmatrix(dataframe[selected]).T for selected in x_select], axis=1)
-    y = np.concatenate(
-        [np.asmatrix(dataframe[selected]).T for selected in y_select], axis=1)
+    dmu = np.asanyarray(dataframe.index.tolist()).T
+    x = np.column_stack(
+        [np.asanyarray(dataframe[selected]).T for selected in x_select])
+    y = np.column_stack(
+        [np.asanyarray(dataframe[selected]).T for selected in y_select])
     if z_select != None:
-        z = np.concatenate(
-            [np.asmatrix(dataframe[selected]).T for selected in z_select], axis=1)
+        z = np.column_stack(
+            [np.asanyarray(dataframe[selected]).T for selected in z_select])
     return production_data(dmu, x, y, z=z)
 
 
@@ -92,11 +92,11 @@ def load_Tim_Coelli_frontier(x_select=['capital', 'labour'], y_select=['output']
     """
     dataframe = pd.read_csv(
         file_path+"/data/41Firm.csv", error_bad_lines=True)
-    dmu = np.asmatrix(dataframe['firm']).T
-    x = np.concatenate(
-        [np.asmatrix(dataframe[selected]).T for selected in x_select], axis=1)
-    y = np.concatenate(
-        [np.asmatrix(dataframe[selected]).T for selected in y_select], axis=1)
+    dmu = np.asanyarray(dataframe['firm']).T
+    x = np.column_stack(
+        [np.asanyarray(dataframe[selected]).T for selected in x_select])
+    y = np.column_stack(
+        [np.asanyarray(dataframe[selected]).T for selected in y_select])
     return production_data(dmu, x, y)
 
 
@@ -119,9 +119,9 @@ def load_Philipines_rice_production(year=None, x_select=['AREA', 'LABOR', 'NPK',
     else:
         dataframe['FMERCODE'] = dataframe['FMERCODE'].apply(
             str) + ": " + (dataframe['YEARDUM'].apply(int)+1989).apply(str)
-    dmu = np.asmatrix(dataframe['FMERCODE']).T
-    x = np.concatenate(
-        [np.asmatrix(dataframe[selected]).T for selected in x_select], axis=1)
-    y = np.concatenate(
-        [np.asmatrix(dataframe[selected]).T for selected in y_select], axis=1)
+    dmu = np.asanyarray(dataframe['FMERCODE']).T
+    x = np.column_stack(
+        [np.asanyarray(dataframe[selected]).T for selected in x_select])
+    y = np.column_stack(
+        [np.asanyarray(dataframe[selected]).T for selected in y_select])
     return production_data(dmu, x, y)
