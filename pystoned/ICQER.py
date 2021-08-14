@@ -1,7 +1,7 @@
 # import dependencies
 from . import CQER, ICNLS
 from pyomo.environ import Constraint
-from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS
+from .constant import CET_ADDI, FUN_PROD, RTS_VRS
 
 
 class ICQR(ICNLS.ICNLS, CQER.CQR):
