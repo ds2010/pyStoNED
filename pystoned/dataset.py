@@ -114,7 +114,6 @@ def load_Philipines_rice_production(year=None, x_select=['AREA', 'LABOR', 'NPK',
     dataframe = pd.read_csv(
         file_path+"/data/riceProduction.csv", error_bad_lines=True)
     if year != None:
-        print(dataframe['YEARDUM'])
         dataframe = dataframe[dataframe['YEARDUM'] == year-1989]
     else:
         dataframe['FMERCODE'] = dataframe['FMERCODE'].apply(
