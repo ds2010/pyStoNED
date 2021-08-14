@@ -23,7 +23,7 @@ class CNLSG:
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.cutactive = sweet.sweet(x)
-        self.y, self.x, self.z = tools.assert_valid_basic_data(y,x,z)
+        self.y, self.x, self.z = tools.assert_valid_basic_data(y, x, z)
         self.cet = cet
         self.fun = fun
         self.rts = rts
