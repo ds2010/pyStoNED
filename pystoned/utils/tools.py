@@ -52,44 +52,94 @@ def trans_list(li):
 
 
 def to_1d_list(li):
-    rl = []
-    for i in range(len(li)):
-        rl.append(li[i][0])
-    return rl
+    if type(li) == int or type(li) == float:
+        return [li]
+    if type(li[0]) == list:
+        rl = []
+        for i in range(len(li)):
+            rl.append(li[i][0])
+        return rl
+    return li
+
 
 def to_2d_list(li):
-    rl = []
-    for value in li:
-        rl.append([value])
-    return rl
-        
+    if type(li[0]) != list:
+        rl = []
+        for value in li:
+            rl.append([value])
+        return rl
+    return li
+
+
 def assert_valid_basic_data(y, x, z=None):
     y = trans_list(y)
     x = trans_list(x)
+
+    y = to_1d_list(y)
+    x = to_2d_list(x)
+
     y_shape = asarray(y).shape
     x_shape = asarray(x).shape
 
     if len(y_shape) == 2 and y_shape[1] != 1:
-        raise ValueError("The multidimensional output data is supported by direciontal based models.")
+        raise ValueError(
+            "The multidimensional output data is supported by direciontal based models.")
 
-    if type(y[0]) == list:
-        y = to_1d_list(y)
-
-    if type(x[0]) != list:
-        x = to_2d_list(x)
 
     if y_shape[0] != x_shape[0]:
-        raise ValueError("The number of dmu from output data(y) is not equal to number of dmu from input data(x).")
+        raise ValueError(
+            "The number of dmu from output data(y) is not equal to the number of dmu from input data(x).")
 
     if type(z) != type(None):
         z = trans_list(z)
-        if type(z[0]) != list:
-            z = to_2d_list(z)
+        z = to_2d_list(z)
         z_shape = asarray(z).shape
         if y_shape[0] != z_shape[0]:
-            raise ValueError("The number of dmu from output data(y) is not equal to number of dmu from contexual variable(z).")
+            raise ValueError(
+                "The number of dmu from output data(y) is not equal to the number of dmu from contexual variable(z).")
 
     return y, x, z
+
+
+def assert_valid_direciontal_data(y, x, b=None, gy=[1], gx=[1], gb=None):
+    y = trans_list(y)
+    x = trans_list(x)
+
+    y = to_2d_list(y)
+    x = to_2d_list(x)
+
+    gy = to_1d_list(gy)
+    gx = to_1d_list(gx)
+
+
+
+    y_shape = asarray(y).shape
+    x_shape = asarray(x).shape
+
+    if y_shape[0] != x_shape[0]:
+        raise ValueError(
+            "The number of dmu from output data(y) is not equal to the number of dmu from input data(x).")
+
+    if y_shape[1] != len(gy):
+        raise ValueError("The vector of output does not fit the data")
+
+    if x_shape[1] != len(gx):
+        raise ValueError("The vector of input does not fit the data")
+
+    if type(b) != type(None):
+        b = trans_list(b)
+        b = to_2d_list(b)
+        gb = to_1d_list(gb)
+        b_shape = asarray(b).shape
+        if b_shape[0] != b_shape[0]:
+            raise ValueError(
+                "The number of dmu from output data(y) is not equal to the number of dmu from undesirable output(b).")
+        if b_shape[1] != len(gb):
+            raise ValueError(
+                "The vector of undesirable output does not fit the data")
+
+    return y, x, b, gy, gx, gb
+
 
 def assert_optimized(optimization_status):
     if optimization_status == 0:

@@ -24,25 +24,9 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
             tau (float, optional): quantile. Defaults to 0.5.
         """
         # TODO(error/warning handling): Check the configuration of the model exist
-        self.x = tools.trans_list(x)
-        self.y = tools.trans_list(y)
-        self.b = b
+        self.y, self.x, self.b, self.gy, self.gx, self.gb = tools.assert_valid_direciontal_data(y,x,b,gy,gx,gb)
         self.tau = tau
         self.fun = fun
-
-        self.gy = self._CNLSDDF__to_1d_list(gy)
-        self.gx = self._CNLSDDF__to_1d_list(gx)
-        self.gb = self._CNLSDDF__to_1d_list(gb)
-
-        if type(self.x[0]) != list:
-            self.x = []
-            for x_value in tools.trans_list(x):
-                self.x.append([x_value])
-
-        if type(self.y[0]) != list:
-            self.y = []
-            for y_value in tools.trans_list(y):
-                self.y.append([y_value])
 
         self.__model__ = ConcreteModel()
 
@@ -65,14 +49,6 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
             self.__model__.I, bounds=(0.0, None), doc='negative error term')
 
         if type(self.b) != type(None):
-            self.b = tools.trans_list(b)
-            self.gb = self._CNLSDDF__to_1d_list(gb)
-
-            if type(self.b[0]) != list:
-                self.b = []
-                for b_value in tools.trans_list(b):
-                    self.b.append([b_value])
-
             self.__model__.L = Set(initialize=range(len(self.b[0])))
             self.__model__.delta = Var(
                 self.__model__.I, self.__model__.L, bounds=(0.0, None), doc='delta')

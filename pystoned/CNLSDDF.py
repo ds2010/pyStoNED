@@ -26,25 +26,9 @@ class CNLSDDF(CNLS.CNLS):
             fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
         """
         # TODO(error/warning handling): Check the configuration of the model exist
-        self.y = tools.trans_list(y)
-        self.x = tools.trans_list(x)
-        self.b = b
-        self.gy = self.__to_1d_list(gy)
-        self.gx = self.__to_1d_list(gx)
-        self.gb = self.__to_1d_list(gb)
-
+        self.y, self.x, self.b, self.gy, self.gx, self.gb = tools.assert_valid_direciontal_data(y,x,b,gy,gx,gb)
         self.fun = fun
-
-        if type(self.x[0]) != list:
-            self.x = []
-            for x_value in tools.trans_list(x):
-                self.x.append([x_value])
-
-        if type(self.y[0]) != list:
-            self.y = []
-            for y_value in tools.trans_list():
-                self.y.append([y_value])
-
+    
         self.__model__ = ConcreteModel()
 
         # Initialize the sets
@@ -61,14 +45,6 @@ class CNLSDDF(CNLS.CNLS):
             self.__model__.I, self.__model__.K, bounds=(0.0, None), doc='gamma')
 
         if type(self.b) != type(None):
-            self.b = tools.trans_list(b)
-            self.gb = self.__to_1d_list(gb)
-
-            if type(self.b[0]) != list:
-                self.b = []
-                for b_value in tools.trans_list(b):
-                    self.b.append([b_value])
-
             self.__model__.L = Set(initialize=range(len(self.b[0])))
             self.__model__.delta = Var(
                 self.__model__.I, self.__model__.L, bounds=(0.0, None), doc='delta')
@@ -102,12 +78,6 @@ class CNLSDDF(CNLS.CNLS):
         # TODO(error/warning handling): Check problem status after optimization
         self.problem_status, self.optimization_status = tools.optimize_model(
             self.__model__, email, CET_ADDI, solver)
-
-    def __to_1d_list(self, l):
-        if type(l) == int or type(l) == float:
-            return [l]
-        else:
-            return l
 
     def __regression_rule(self):
         """Return the proper regression constraint"""
