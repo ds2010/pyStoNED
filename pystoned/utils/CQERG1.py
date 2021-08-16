@@ -31,11 +31,6 @@ class CQRG1:
         self.fun = fun
         self.rts = rts
 
-        if type(self.x[0]) != list:
-            self.x = []
-            for x_value in x.tolist():
-                self.x.append([x_value])
-
         self.cutactive = cutactive
 
         # Initialize the CNLS model

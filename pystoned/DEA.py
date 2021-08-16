@@ -25,8 +25,7 @@ class DEA:
         # Initialize DEA model
         self.__model__ = ConcreteModel()
 
-        self.x = self.__to_2d_list(tools.trans_list(x))
-        self.y = self.__to_2d_list(tools.trans_list(y))
+        self.y, self.x = tools.assert_valid_mupltiple_y_data(y, x)
         self.orient = orient
         self.rts = rts
         self.__reference = False
@@ -196,24 +195,16 @@ class DEADDF(DEA):
         # Initialize DEA model
         self.__model__ = ConcreteModel()
 
-        self.x = self._DEA__to_2d_list(tools.trans_list(x))
-        self.y = self._DEA__to_2d_list(tools.trans_list(y))
+        self.y, self.x, self.b, self.gy, self.gx, self.gb = tools.assert_valid_direciontal_data(y,x,b,gy,gx,gb)
         self.rts = rts
-        self.gy = self.__to_1d_list(gy)
-        self.gx = self.__to_1d_list(gx)
-        self.__undesirable_output = False
-        self.__reference = False
 
-        if type(b) != type(None):
-            self.__undesirable_output = True
-            self.b = self._DEA__to_2d_list(tools.trans_list(b))
-            self.gb = self.__to_1d_list(gb)
+        self.__reference = False
 
         if type(yref) != type(None):
             self.__reference = True
             self.yref = self._DEA__to_2d_list(yref)
             self.xref = self._DEA__to_2d_list(xref)
-            if self.__undesirable_output:
+            if type(b) != type(None):
                 self.bref = self._DEA__to_2d_list(bref)
             self.__model__.R = Set(initialize=range(len(self.yref)))
 
@@ -221,7 +212,7 @@ class DEADDF(DEA):
         self.__model__.I = Set(initialize=range(len(self.y)))
         self.__model__.J = Set(initialize=range(len(self.x[0])))
         self.__model__.K = Set(initialize=range(len(self.y[0])))
-        if self.__undesirable_output:
+        if type(b) != type(None):
             self.__model__.L = Set(initialize=range(len(self.b[0])))
 
         # Initialize variable
@@ -242,7 +233,7 @@ class DEADDF(DEA):
         self.__model__.output = Constraint(
             self.__model__.I, self.__model__.K, rule=self.__output_rule(), doc='output constraint')
 
-        if self.__undesirable_output:
+        if type(b) != type(None):
             self.__model__.undesirable_output = Constraint(
                 self.__model__.I, self.__model__.L, rule=self.__undesirable_output_rule(), doc='undesirable output constraint')
 
@@ -253,11 +244,6 @@ class DEADDF(DEA):
         # Optimize model
         self.optimization_status = 0
         self.problem_status = 0
-
-    def __to_1d_list(self, l):
-        if type(l) == int or type(l) == float:
-            return [l]
-        return l
 
     def __input_rule(self):
         """Return the proper input constraint"""

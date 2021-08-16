@@ -88,7 +88,7 @@ def assert_valid_basic_data(y, x, z=None):
 
     if y_shape[0] != x_shape[0]:
         raise ValueError(
-            "The number of dmu from output data(y) is not equal to the number of dmu from input data(x).")
+            "Number of DMUs must be the same in x and y.")
 
     if type(z) != type(None):
         z = trans_list(z)
@@ -96,10 +96,25 @@ def assert_valid_basic_data(y, x, z=None):
         z_shape = asarray(z).shape
         if y_shape[0] != z_shape[0]:
             raise ValueError(
-                "The number of dmu from output data(y) is not equal to the number of dmu from contexual variable(z).")
+                "Number of DMUs must be the same in y and z")
 
     return y, x, z
 
+
+def assert_valid_mupltiple_y_data(y, x):
+    y = trans_list(y)
+    x = trans_list(x)
+
+    y = to_2d_list(y)
+    x = to_2d_list(x)
+
+    y_shape = asarray(y).shape
+    x_shape = asarray(x).shape
+
+    if y_shape[0] != x_shape[0]:
+        raise ValueError(
+            "Number of DMUs must be the same in x and y.")
+    return y, x
 
 def assert_valid_direciontal_data(y, x, b=None, gy=[1], gx=[1], gb=None):
     y = trans_list(y)
@@ -111,20 +126,18 @@ def assert_valid_direciontal_data(y, x, b=None, gy=[1], gx=[1], gb=None):
     gy = to_1d_list(gy)
     gx = to_1d_list(gx)
 
-
-
     y_shape = asarray(y).shape
     x_shape = asarray(x).shape
 
     if y_shape[0] != x_shape[0]:
         raise ValueError(
-            "The number of dmu from output data(y) is not equal to the number of dmu from input data(x).")
+            "Number of DMUs must be the same in x and y.")
 
     if y_shape[1] != len(gy):
-        raise ValueError("The vector of output does not fit the data")
+        raise ValueError("Number of outputs must be the same in y and gy")
 
     if x_shape[1] != len(gx):
-        raise ValueError("The vector of input does not fit the data")
+        raise ValueError("Number of inputs must be the same in x and gx")
 
     if type(b) != type(None):
         b = trans_list(b)
@@ -133,10 +146,10 @@ def assert_valid_direciontal_data(y, x, b=None, gy=[1], gx=[1], gb=None):
         b_shape = asarray(b).shape
         if b_shape[0] != b_shape[0]:
             raise ValueError(
-                "The number of dmu from output data(y) is not equal to the number of dmu from undesirable output(b).")
+                "Number of DMUs must be the same in y and b.")
         if b_shape[1] != len(gb):
             raise ValueError(
-                "The vector of undesirable output does not fit the data")
+                "Number of undesirable outputs must be the same in b and gb.")
 
     return y, x, b, gy, gx, gb
 

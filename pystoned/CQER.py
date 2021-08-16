@@ -26,9 +26,7 @@ class CQR:
             rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
         """
         # TODO(error/warning handling): Check the configuration of the model exist
-        self.x = tools.trans_list(x)
-        self.y = tools.trans_list(y)
-        self.z = z
+        self.y, self.x, self.z = tools.assert_valid_basic_data(y, x, z)
         self.tau = tau
         self.cet = cet
         self.fun = fun

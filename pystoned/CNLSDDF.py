@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 
 from . import CNLS
-from .constant import CET_ADDI, FUN_COST, FUN_PROD, OPT_DEFAULT, OPT_LOCAL
+from .constant import CET_ADDI, FUN_COST, FUN_PROD, RTS_VRS, OPT_DEFAULT, OPT_LOCAL
 from .utils import tools
 
 
@@ -28,6 +28,7 @@ class CNLSDDF(CNLS.CNLS):
         # TODO(error/warning handling): Check the configuration of the model exist
         self.y, self.x, self.b, self.gy, self.gx, self.gb = tools.assert_valid_direciontal_data(y,x,b,gy,gx,gb)
         self.fun = fun
+        self.rts = RTS_VRS
     
         self.__model__ = ConcreteModel()
 

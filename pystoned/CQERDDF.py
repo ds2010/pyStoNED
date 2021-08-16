@@ -1,7 +1,7 @@
 # import dependencies
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint
 from pyomo.core.expr.numvalue import NumericValue
-from .constant import FUN_PROD, FUN_COST
+from .constant import FUN_PROD, FUN_COST, RTS_VRS
 from . import CNLSDDF, CQER
 from .utils import tools
 
@@ -27,7 +27,7 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
         self.y, self.x, self.b, self.gy, self.gx, self.gb = tools.assert_valid_direciontal_data(y,x,b,gy,gx,gb)
         self.tau = tau
         self.fun = fun
-
+        self.rts = RTS_VRS
         self.__model__ = ConcreteModel()
 
         # Initialize the sets
