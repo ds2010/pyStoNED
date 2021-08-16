@@ -24,31 +24,16 @@ class CNLS:
             rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
         """
         # TODO(error/warning handling): Check the configuration of the model exist
-        self.x = tools.trans_list(x)
-        self.y = tools.trans_list(y)
-        self.z = z
+        self.y, self.x, self.z = tools.assert_valid_basic_data(y, x, z)
+
         self.cet = cet
         self.fun = fun
         self.rts = rts
-
-        if type(self.x[0]) != list:
-            self.x = []
-            for x_value in tools.trans_list(x):
-                self.x.append([x_value])
-
-        if type(self.y[0]) == list:
-            self.y = self.__to_1d_list(self.y)
 
         # Initialize the CNLS model
         self.__model__ = ConcreteModel()
 
         if type(self.z) != type(None):
-            self.z = tools.trans_list(z)
-            if type(self.z[0]) != list:
-                self.z = []
-                for z_value in tools.trans_list(z):
-                    self.z.append([z_value])
-
             # Initialize the set of z
             self.__model__.K = Set(initialize=range(len(self.z[0])))
 
@@ -89,12 +74,6 @@ class CNLS:
         # Optimize model
         self.optimization_status = 0
         self.problem_status = 0
-
-    def __to_1d_list(self, l):
-        rl = []
-        for i in range(len(l)):
-            rl.append(l[i][0])
-        return rl
 
     def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
         """Optimize the function by requested method
