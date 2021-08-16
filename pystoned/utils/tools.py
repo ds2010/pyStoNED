@@ -96,7 +96,7 @@ def assert_valid_basic_data(y, x, z=None):
         z_shape = asarray(z).shape
         if y_shape[0] != z_shape[0]:
             raise ValueError(
-                "Number of DMUs must be the same in y and z")
+                "Number of DMUs must be the same in y and z.")
 
     return y, x, z
 
@@ -134,10 +134,10 @@ def assert_valid_direciontal_data(y, x, b=None, gy=[1], gx=[1], gb=None):
             "Number of DMUs must be the same in x and y.")
 
     if y_shape[1] != len(gy):
-        raise ValueError("Number of outputs must be the same in y and gy")
+        raise ValueError("Number of outputs must be the same in y and gy.")
 
     if x_shape[1] != len(gx):
-        raise ValueError("Number of inputs must be the same in x and gx")
+        raise ValueError("Number of inputs must be the same in x and gx.")
 
     if type(b) != type(None):
         b = trans_list(b)
