@@ -1,5 +1,4 @@
 # import dependencies
-from pyomo.core.base.plugin import TransformationInfo
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constraint, log
 from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
