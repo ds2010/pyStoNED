@@ -39,7 +39,7 @@ def load_GHG_abatement_cost(year=None, x_select=['HRSN', 'CPNK'], y_select=['VAL
         Numbers: selected input-output
     """
     dataframe = pd.read_csv(
-        file_path+"/data/abatementCost.csv", error_bad_lines=True)
+        file_path+"/data/abatementCost.csv")
     if year != None:
         dataframe = dataframe[dataframe['Year'] == year]
     else:
@@ -68,7 +68,7 @@ def load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'], y_
         Numbers: selected input-output
     """
     dataframe = pd.read_csv(
-        file_path+"/data/electricityFirms.csv", error_bad_lines=True)
+        file_path+"/data/electricityFirms.csv")
     dmu = np.asanyarray(dataframe.index.tolist()).T
     x = np.column_stack(
         [np.asanyarray(dataframe[selected]).T for selected in x_select])
@@ -91,7 +91,7 @@ def load_Tim_Coelli_frontier(x_select=['capital', 'labour'], y_select=['output']
         Numbers: selected input-output
     """
     dataframe = pd.read_csv(
-        file_path+"/data/41Firm.csv", error_bad_lines=True)
+        file_path+"/data/41Firm.csv")
     dmu = np.asanyarray(dataframe['firm']).T
     x = np.column_stack(
         [np.asanyarray(dataframe[selected]).T for selected in x_select])
@@ -112,7 +112,7 @@ def load_Philipines_rice_production(year=None, x_select=['AREA', 'LABOR', 'NPK',
         Numbers: selected input-output
     """
     dataframe = pd.read_csv(
-        file_path+"/data/riceProduction.csv", error_bad_lines=True)
+        file_path+"/data/riceProduction.csv")
     if year != None:
         dataframe = dataframe[dataframe['YEARDUM'] == year-1989]
     else:
