@@ -20,7 +20,7 @@ Problem (2.7) is a linear programming problem. To address this problem, Kuosmane
     \end{alignat}
 
 
-Example: expectile estimation `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CER.ipynb>`_
+Example: Expectile estimation `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CER.ipynb>`_
 ----------------------------------------------------------------------------------------------------------------------------------------
     
 .. code:: python

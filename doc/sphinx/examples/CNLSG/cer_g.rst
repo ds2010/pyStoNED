@@ -2,7 +2,7 @@
 Solving CER model
 ======================
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CQR_g.ipynb>`_
+Example: Solving CER `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CQR_g.ipynb>`_
 -------------------------------------------------------------------------------------------------------------------
 
 .. code:: python

@@ -28,7 +28,7 @@ The symbol :math:`\Phi` represents the cumulative distribution function of the s
 package, we use the Broyden–Fletcher–Goldfarb–Shanno (BFGS) algorithm to solve the maximum likelihood function.
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_QLE.ipynb>`_
+Example: StoNED with CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_QLE.ipynb>`__
 ------------------------------------------------------------------------------------------------------------------------
 
 In the following code, we use the quassi-likelihood approach to decompose the CNLS residuals and display the StoNED frontier.
@@ -47,7 +47,7 @@ In the following code, we use the quassi-likelihood approach to decompose the CN
     model = CNLS.CNLS(data.y, data.x, z=None, cet=CET_MULT, fun=FUN_COST, rts=RTS_VRS)
     model.optimize('email@address')
     
-    # print unconditional expected inefficiency (mu)
+    # calculate and print unconditional expected inefficiency (mu)
     rd = StoNED.StoNED(model)
     print(rd.get_unconditional_expected_inefficiency(RED_QLE))
     

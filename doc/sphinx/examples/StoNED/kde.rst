@@ -30,7 +30,7 @@ a robust nonparametric estimator of expected inefficiency :math:`\mu` is obtaine
 where :math:`C` is a closed interval in he right tail of :math:`f_{e^o}`.
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_KDE.ipynb>`_
+Example: StoNED with CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_KDE.ipynb>`__
 ------------------------------------------------------------------------------------------------------------------------
 
 In the following code, we use the kernel density approach to decompose the CNLS residuals and display the unconditional expected inefficiency.
@@ -49,6 +49,6 @@ In the following code, we use the kernel density approach to decompose the CNLS 
     model = CNLS.CNLS(data.y, data.x, z=None, cet=CET_MULT, fun=FUN_COST, rts=RTS_VRS)
     model.optimize('email@address')
     
-    # print unconditional expected inefficiency (mu)
+    # calculate and print unconditional expected inefficiency (mu)
     rd = StoNED.StoNED(model)
     print(rd.get_unconditional_expected_inefficiency(RED_KDE))

@@ -57,8 +57,8 @@ as the optimal solution to above nonlinear problem. Johnson and Kuosmanen (2011)
 statistical properties of this estimator in detail, showing its unbiasedness, consistency, 
 and asymptotic efficiency.
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_Z.ipynb>`_
---------------------------------------------------------------------------------------------------------------------
+Example: CNLS-Z `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_Z.ipynb>`_
+--------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
 

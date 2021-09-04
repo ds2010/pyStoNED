@@ -39,8 +39,8 @@ and :math:`\alpha_i^{C2NLS}` is the :math:`\text{C}^2\text{NLS}` estimator. Slop
 for :math:`\text{C}^2\text{NLS}` are obtained directly as the optimal solution to the CNLS problem.
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CCNLS.ipynb>`_
-------------------------------------------------------------------------------------------------------------------------------
+Example: Corrected CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CCNLS.ipynb>`_
+---------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
 

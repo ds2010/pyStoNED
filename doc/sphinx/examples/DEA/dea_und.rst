@@ -37,7 +37,7 @@ VRS models are presented as follows
     \end{equation}
 
 
-Example: `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DEA_UndesirableOutput.ipynb>`_
+Example: DEA-DDF with bad outputs `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DEA_UndesirableOutput.ipynb>`_
 --------------------------------------------------------------------------------------------------------------------------------------
 
 

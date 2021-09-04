@@ -39,7 +39,7 @@ If the :math:`P_{ij}=1` for all :math:`i` and :math:`j`, then the above QP probl
 CNLS problem.
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/ICNLS.ipynb>`_
+Example: Isotonic CNLS(ICNLS) `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/ICNLS.ipynb>`_
 -----------------------------------------------------------------------------------------------------------------
 
 In the following code, we estimate an additive production function using ICNLS approach.
@@ -54,7 +54,7 @@ In the following code, we estimate an additive production function using ICNLS a
     # import Finnish electricity distribution firms data
     data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'], y_select=['Energy'])
     
-    # define and solve the CNLS model
+    # define and solve the ICNLS model
     model = ICNLS.ICNLS(y=data.y, x=data.x, z=None, cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)
     model.optimize(OPT_LOCAL)
 

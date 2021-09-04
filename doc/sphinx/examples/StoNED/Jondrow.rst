@@ -92,7 +92,7 @@ Example: CNLS with Z variable `[.ipynb] <https://colab.research.google.com/githu
     model = CNLS.CNLS(y=data.y, x=data.x, z=data.z, cet=CET_MULT, fun=FUN_COST, rts=RTS_VRS)
     model.optimize('email@address')
             
-    # print firm-level efficiency using MOM method
+    # calculate and print firm-level efficiency using MOM method
     rd = StoNED.StoNED(model)
     print(rd.get_technical_inefficiency(RED_MOM))  
 

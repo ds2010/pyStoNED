@@ -14,7 +14,7 @@ We randomly draw the inputs :math:`x_1` and :math:`x_2` from a uniform distribut
 :math:`u` from a normal distribution, :math:`u \sim N(0, 0.7^2)`. Based on these specifications, we first generate 
 500 artificial observations and then estimate the CNLS problem \eqref{eq:eq2} and the CER problem \eqref{eq:eq8} using the CNLS-G algorithm.
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_g.ipynb>`_
+Example: Solving CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_g.ipynb>`_
 -------------------------------------------------------------------------------------------------------------------
 
 .. code:: python

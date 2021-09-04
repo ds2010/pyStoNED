@@ -3,7 +3,7 @@ Plot of estimated function/frontier: one-input and one-output
 =================================================================
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/2dplot.ipynb>`_
+Example: 2D plot with CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/2dplot.ipynb>`_
 ---------------------------------------------------------------------------------------------------------------------
 
 .. code:: python

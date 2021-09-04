@@ -24,7 +24,7 @@ where :math:`\lambda = [\lambda_1, \lambda_2, \cdots, \lambda_n]` is the vector 
 of observation :math:`i` is :math:`\phi^*_i`. The corresponding calculation processes are as follow: 
 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/FDH_io.ipynb>`_
+Example: Intput oriented FDH  `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/FDH_io.ipynb>`_
 --------------------------------------------------------------------------------------------------------------------
     
         .. code:: python

@@ -35,7 +35,7 @@ ICER estimator:
     \end{alignat*}
 
 
-Example ICQR `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/ICQR.ipynb>`__
+Example: Isotonic CQR(ICQR) `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/ICQR.ipynb>`__
 ------------------------------------------------------------------------------------------------------------------------
     
 In the following code, we estimate an additive production function using ICQR approach.
@@ -50,7 +50,7 @@ In the following code, we estimate an additive production function using ICQR ap
         # import Finnish electricity distribution firms data
         data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'], y_select=['Energy'])
         
-        # define and solve the CNLS model
+        # define and solve the ICQR model
         model = ICQER.ICQR(y=data.y, x=data.x, tau = 0.9, z=None, cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)
         model.optimize(OPT_LOCAL)
     
@@ -58,7 +58,7 @@ In the following code, we estimate an additive production function using ICQR ap
         model.display_residual()
 
 
-Example ICER `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/ICER.ipynb>`__
+Example: Isotonic CER(ICER)`[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/ICER.ipynb>`__
 -----------------------------------------------------------------------------------------------------------------------
         
 We next demostrate how to estimate an additive production function using ICER approach.
@@ -73,7 +73,7 @@ We next demostrate how to estimate an additive production function using ICER ap
         # import Finnish electricity distribution firms data
         data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'], y_select=['Energy'])
             
-        # define and solve the CNLS model
+        # define and solve the ICER model
         model = ICQER.ICER(y=data.y, x=data.x, tau = 0.9, z=None, cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)
         model.optimize(OPT_LOCAL)
         

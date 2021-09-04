@@ -2,7 +2,7 @@
 Calculating firm-level efficiency
 ====================================
 
-Example: CNLSG `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_MoM_CNLSG.ipynb>`_
+Example: Using StoNED with CNLSG `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_MoM_CNLSG.ipynb>`_
 ------------------------------------------------------------------------------------------------------------------------------------
     
 .. code:: python

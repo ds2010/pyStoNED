@@ -39,7 +39,7 @@ frontier), we can estimate :math:`\sigma_u` and :math:`\sigma_v` by
     \end{align*}
 
 
-Example: CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_MoM_CNLS.ipynb>`_
+Example: StoNED with CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_MoM_CNLS.ipynb>`__
 ------------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
@@ -56,7 +56,7 @@ Example: CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNE
     model = CNLS.CNLS(data.y, data.x, z=None, cet=CET_MULT, fun=FUN_COST, rts=RTS_VRS)
     model.optimize('email@address')
     
-    # print unconditional expected inefficiency (mu)
+    # calculate and print unconditional expected inefficiency (mu)
     rd = StoNED.StoNED(model)
     print(rd.get_unconditional_expected_inefficiency(RED_MOM))
 

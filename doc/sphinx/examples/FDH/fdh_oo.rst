@@ -23,7 +23,7 @@ we measure the output oriented efficiency for observation :math:`i` by solving t
 where :math:`\lambda = [\lambda_1, \lambda_2, \cdots, \lambda_n]` is the vector of intensity weights. The efficiency
 of observation :math:`i` is :math:`\phi^*_i`. The corresponding calculation processes are as follow: 
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/FDH_oo.ipynb>`_
+Example: Output oriented FDH `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/FDH_oo.ipynb>`_
 ---------------------------------------------------------------------------------------------------------------------
 
     .. code:: python

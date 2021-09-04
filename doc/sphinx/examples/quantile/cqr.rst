@@ -31,7 +31,7 @@ Where :math:`\varepsilon^{+}_i` and :math:`\varepsilon^{-}_i` denote the two non
 The last set of constraints is the sign constraint of the error terms. The other constraints are the same as in the CNLS problems.
 
 
-Example: quantile estimation `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CQR.ipynb>`_
+Example: Quantile estimation `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CQR.ipynb>`_
 -----------------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python

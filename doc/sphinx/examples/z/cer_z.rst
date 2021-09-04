@@ -19,8 +19,8 @@ the multiplicative CER estimation.
     &  \varepsilon _i^{+}\ge 0,\ \varepsilon_i^{-} \ge 0  &{}& \forall i \notag 
     \end{align}
 
-Example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CER_Z.ipynb>`_
--------------------------------------------------------------------------------------------------------------------
+Example: CER-Z `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CER_Z.ipynb>`_
+------------------------------------------------------------------------------------------------------------------------
         
 .. code:: python
     

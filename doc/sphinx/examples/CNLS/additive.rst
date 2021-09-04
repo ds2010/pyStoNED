@@ -55,8 +55,8 @@ using the .get\_alpha().
 
 The following examples are to demonstrate how to estimate the VRS models:
 
-Example: production model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_prod.ipynb>`__
---------------------------------------------------------------------------------------------------------------------------------------------
+Example: CNLS as production function `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_prod.ipynb>`__
+---------------------------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
 
@@ -91,8 +91,8 @@ Example: production model `[.ipynb] <https://colab.research.google.com/github/ds
     residuals = model.get_residual()
 
 
-Example: cost model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_cost.ipynb>`__
-----------------------------------------------------------------------------------------------------------------------------------------
+Example: CNLS as cost function `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_cost.ipynb>`__
+---------------------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
 
