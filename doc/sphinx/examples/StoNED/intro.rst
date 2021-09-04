@@ -1,3 +1,6 @@
+The introduction to StoNED
+=================================
+
 Combing virtues of SFA and DEA in a unified framework, Stochastic Nonparametric Envelopment 
 of Data (StoNED) (kuosmanen, 2006) uses a composed error 
 term to model both inefficiency :math:`u` and noise :math:`v` without assuming a 
