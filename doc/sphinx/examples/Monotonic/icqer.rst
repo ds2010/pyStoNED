@@ -35,7 +35,7 @@ ICER estimator:
     \end{alignat*}
 
 
-Example ICQR `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/ICQR.ipynb>`_
+Example ICQR `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/ICQR.ipynb>`__
 ------------------------------------------------------------------------------------------------------------------------
     
 In the following code, we estimate an additive production function using ICQR approach.
@@ -58,7 +58,7 @@ In the following code, we estimate an additive production function using ICQR ap
         model.display_residual()
 
 
-Example ICER `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/ICER.ipynb>`_
+Example ICER `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/ICER.ipynb>`__
 -----------------------------------------------------------------------------------------------------------------------
         
 We next demostrate how to estimate an additive production function using ICER approach.

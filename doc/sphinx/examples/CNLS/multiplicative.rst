@@ -52,7 +52,7 @@ the axiomatic property (i.e., concavity or convexity) of function :math:`f`. Sin
 is a nonlinear programming problem, we have to use the nonlinear solver, e.g., MINOS, KNITRO.
 
 
-Example: production model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_mult_prod.ipynb>`_
+Example: production model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_mult_prod.ipynb>`__
 ------------------------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
@@ -80,7 +80,7 @@ Example: production model `[.ipynb] <https://colab.research.google.com/github/ds
     model2.display_residual()
 
 
-Example: cost model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_mult_cost.ipynb>`_
+Example: cost model `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_mult_cost.ipynb>`__
 ------------------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python

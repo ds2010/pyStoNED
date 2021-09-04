@@ -75,7 +75,7 @@ Similarly to CNLS with DDF, we present another two approaches integrating DDF to
             \end{alignat}
 
 
-Example: CQR-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CQR_DDF.ipynb>`_
+Example: CQR-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CQR_DDF.ipynb>`__
 -------------------------------------------------------------------------------------------------------------------------------
     
 .. code:: python
@@ -98,7 +98,7 @@ Example: CQR-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pySt
         model.display_negative_residual()
 
 
-Example: CQR-DDF with bad output `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CQR_DDF-b.ipynb>`_
+Example: CQR-DDF with bad output `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CQR_DDF-b.ipynb>`__
 ------------------------------------------------------------------------------------------------------------------------------------------------
             
 .. code:: python
