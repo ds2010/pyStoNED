@@ -48,7 +48,7 @@ When considering undesirable outputs, the CNLS-DDF problem (2.12) can be reformu
 
 where the coefficients :math:`\boldsymbol{\delta_i}` denotes marginal effects of undesirable outputs to the DDF.
 
-Example: CNLS-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DDF_withoutUndesirableOutput.ipynb>`_
+Example: CNLS-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DDF_withoutUndesirableOutput.ipynb>`__
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
@@ -72,8 +72,8 @@ Example: CNLS-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pyS
     model.display_gamma()
     model.display_residual()
 
-Example: CNLS_DDF-b`[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DDF_UndesirableOutput.ipynb>`_
-------------------------------------------------------------------------------------------------------------------------------------------------
+Example: CNLS-DDF with bad output `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DDF_UndesirableOutput.ipynb>`__
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
 
