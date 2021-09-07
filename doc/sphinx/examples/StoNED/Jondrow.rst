@@ -52,7 +52,6 @@ The firm-level technical efficiency (TE) is then measured based on the estimated
     - Additive model: :math:`\text{TE} = \frac{y+ E[u_i \mid  \varepsilon_i]}{y}`
 
 
-
 Example: CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_MoM_CNLS_TE.ipynb>`__
 ---------------------------------------------------------------------------------------------------------------------------------------
     
@@ -61,14 +60,15 @@ Example: CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNE
     # import packages
     from pystoned import CNLS, StoNED
     from pystoned.dataset import load_Finnish_electricity_firm
-    from pystoned.constant import CET_ADDI, FUN_PROD, RTS_VRS, RED_MOM, OPT_LOCAL
+    from pystoned.constant import CET_MULT, FUN_COST, RTS_VRS, RED_MOM
         
     # import Finnish electricity distribution firms data
-    data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'], y_select=['Energy'])
+    data = load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'],
+                                        y_select=['TOTEX'])
         
     # build and optimize the CNLS model
-    model = CNLS.CNLS(data.y, data.x, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS)
-    model.optimize(OPT_LOCAL)
+    model = CNLS.CNLS(data.y, data.x, z=None, cet=CET_MULT, fun=FUN_COST, rts=RTS_VRS)
+    model.optimize('email@address')
         
     # print firm-level efficiency using MOM method
     rd = StoNED.StoNED(model)
@@ -86,7 +86,9 @@ Example: CNLS with Z variable `[.ipynb] <https://colab.research.google.com/githu
     from pystoned.constant import CET_MULT, FUN_COST, RTS_VRS, RED_MOM
             
     # import Finnish electricity distribution firms data
-    data=load_Finnish_electricity_firm(x_select=['Energy','Length','Customers'], y_select=['TOTEX'], z_select=['PerUndGr'])
+    data=load_Finnish_electricity_firm(x_select=['Energy','Length','Customers'], 
+                                    y_select=['TOTEX'], 
+                                    z_select=['PerUndGr'])
             
     # build and optimize the CNLS model
     model = CNLS.CNLS(y=data.y, x=data.x, z=data.z, cet=CET_MULT, fun=FUN_COST, rts=RTS_VRS)
