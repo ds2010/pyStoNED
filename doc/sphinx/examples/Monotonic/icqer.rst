@@ -36,7 +36,7 @@ ICER estimator:
 
 
 Example: Isotonic CQR(ICQR) `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/ICQR.ipynb>`__
-------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------
     
 In the following code, we estimate an additive production function using ICQR approach.
     

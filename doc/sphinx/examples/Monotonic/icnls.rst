@@ -40,7 +40,7 @@ CNLS problem.
 
 
 Example: Isotonic CNLS(ICNLS) `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/ICNLS.ipynb>`_
------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------
 
 In the following code, we estimate an additive production function using ICNLS approach.
 
