@@ -61,14 +61,14 @@ Example: CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNE
     # import packages
     from pystoned import CNLS, StoNED
     from pystoned.dataset import load_Finnish_electricity_firm
-    from pystoned.constant import CET_MULT, FUN_COST, RTS_VRS, RED_MOM
+    from pystoned.constant import CET_ADDI, FUN_PROD, RTS_VRS, RED_MOM, OPT_LOCAL
         
     # import Finnish electricity distribution firms data
     data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'], y_select=['Energy'])
         
     # build and optimize the CNLS model
-    model = CNLS.CNLS(data.y, data.x, z=None, cet=CET_MULT, fun=FUN_COST, rts=RTS_VRS)
-    model.optimize('email@address')
+    model = CNLS.CNLS(data.y, data.x, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS)
+    model.optimize(OPT_LOCAL)
         
     # print firm-level efficiency using MOM method
     rd = StoNED.StoNED(model)

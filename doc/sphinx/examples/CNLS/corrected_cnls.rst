@@ -50,8 +50,8 @@ Example: Corrected CNLS `[.ipynb] <https://colab.research.google.com/github/ds20
     from pystoned.dataset import load_Finnish_electricity_firm
     
     # import Finnish electricity distribution firms data
-    data = load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'],
-                                        y_select=['TOTEX'])
+    data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'],
+                                          y_select=['Energy'])
     
     # First stage: solve the CNLS model
     model = CNLS.CNLS(y=data.y, x=data.x, z=None, cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)

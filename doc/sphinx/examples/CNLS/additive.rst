@@ -66,8 +66,8 @@ Example: CNLS as production function `[.ipynb] <https://colab.research.google.co
     from pystoned.dataset import load_Finnish_electricity_firm
     
     # import Finnish electricity distribution firms data
-    data = load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'],
-                                          y_select=['TOTEX'])
+    data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'],
+                                          y_select=['Energy'])
 
     # define and solve the CNLS model
     model = CNLS.CNLS(y=data.y, x=data.x, z=None, 

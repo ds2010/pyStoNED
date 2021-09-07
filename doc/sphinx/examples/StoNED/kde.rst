@@ -43,7 +43,8 @@ In the following code, we use the kernel density approach to decompose the CNLS 
     from pystoned.constant import CET_MULT, FUN_COST, RTS_VRS, RED_KDE
     
     # import Finnish electricity distribution firms data
-    data = load_Finnish_electricity_firm(x_select=['OPEX', 'CAPEX'], y_select=['Energy'])
+    data = load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'],
+                                        y_select=['TOTEX'])
     
     # build and optimize the CNLS model
     model = CNLS.CNLS(data.y, data.x, z=None, cet=CET_MULT, fun=FUN_COST, rts=RTS_VRS)
