@@ -28,8 +28,8 @@ The symbol :math:`\Phi` represents the cumulative distribution function of the s
 package, we use the Broyden–Fletcher–Goldfarb–Shanno (BFGS) algorithm to solve the maximum likelihood function.
 
 
-Example: StoNED with CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_QLE.ipynb>`__
-------------------------------------------------------------------------------------------------------------------------
+Example: StoNED with CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_QLE.ipynb>`_
+-----------------------------------------------------------------------------------------------------------------------------------------
 
 In the following code, we use the quassi-likelihood approach to decompose the CNLS residuals and display the StoNED frontier.
 

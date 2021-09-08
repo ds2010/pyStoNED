@@ -39,8 +39,9 @@ frontier), we can estimate :math:`\sigma_u` and :math:`\sigma_v` by
     \end{align*}
 
 
-Example: StoNED with CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_MoM_CNLS.ipynb>`__
-------------------------------------------------------------------------------------------------------------------------------------
+Example: StoNED with CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_MoM_CNLS.ipynb>`_
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
 
 .. code:: python
 

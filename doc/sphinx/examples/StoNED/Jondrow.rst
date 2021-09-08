@@ -52,8 +52,8 @@ The firm-level technical efficiency (TE) is then measured based on the estimated
     - Additive model: :math:`\text{TE} = \frac{y+ E[u_i \mid  \varepsilon_i]}{y}`
 
 
-Example: CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_MoM_CNLS_TE.ipynb>`__
----------------------------------------------------------------------------------------------------------------------------------------
+Example: CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_MoM_CNLS_TE.ipynb>`_
+--------------------------------------------------------------------------------------------------------------------------------------
     
 .. code:: python
     
@@ -75,8 +75,8 @@ Example: CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNE
     print(rd.get_technical_inefficiency(RED_MOM))  
 
 
-Example: CNLS with Z variable `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNEZD_MoM_CNLS_TE.ipynb>`__
----------------------------------------------------------------------------------------------------------------------------------------------------------
+Example: CNLS with Z variable `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNEZD_MoM_CNLS_TE.ipynb>`_
+-------------------------------------------------------------------------------------------------------------------------------------------------------
         
 .. code:: python
         
