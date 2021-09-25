@@ -5,8 +5,8 @@ with open('README.md') as readme_file:
 
 setup_args = dict(
     name='pystoned',
-    version='0.5.1',
-    description='A Python Package for Stochastic Nonparametric Envelopment of Data',
+    version='0.5.2',
+    description='A Python Package for Convex Regression and Frontier Estimation',
     long_description_content_type="text/markdown",
     long_description=README,
     license='GPLv3',
@@ -19,7 +19,7 @@ setup_args = dict(
     include_package_data=True,
     zip_safe=False,
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
@@ -29,7 +29,7 @@ setup_args = dict(
 )
 
 install_requires = [
-    'pyomo>=5.7.3',
+    'pyomo>=6.1.2',
     'pandas>=1.1.3',
     'numpy>=1.19.2',
     'scipy>=1.5.2',
