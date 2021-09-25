@@ -1,6 +1,6 @@
 # pyStoNED [![Documentation Status](https://readthedocs.org/projects/pystoned/badge/?version=latest)](https://pystoned.readthedocs.io/en/latest/?badge=latest)
 
-`pyStoNED` is a Python package that provides functions for estimating multivariate convex regression, convex quantile regression, convex expectile regression, isotonic regression, stochastic nonparametric envelopment of data, and related methods. It also facilitates eﬃciency measurement using the conventional Data Envelopement Analysis (DEA) and Free Disposable Hull (FDH) approaches. The `pyStoNED` package allows the user to estimate the CNLS/StoNED frontiers in an open-access environment and is built based on the [Pyomo](http://www.pyomo.org/).
+`pyStoNED` is a Python package that provides functions for estimating multivariate convex regression, convex quantile regression, convex expectile regression, isotonic regression, stochastic nonparametric envelopment of data, and related methods. It also facilitates eﬃciency measurement using the conventional Data Envelopement Analysis (DEA) and Free Disposable Hull (FDH) approaches. The pyStoNED package allows practitioners to estimate these models in an open access environment under a GPL-3.0 License.
 
 # Installation
 
