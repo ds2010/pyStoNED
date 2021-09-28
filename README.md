@@ -1,4 +1,4 @@
-# pyStoNED [![Documentation Status](https://readthedocs.org/projects/pystoned/badge/?version=latest)](https://pystoned.readthedocs.io/en/latest/?badge=latest)
+# [pyStoNED](https://pystoned.readthedocs.io/en/latest/) [![Documentation Status](https://readthedocs.org/projects/pystoned/badge/?version=latest)](https://pystoned.readthedocs.io/en/latest/?badge=latest)
 
 pyStoNED is a Python package that provides functions for estimating multivariate convex regression, convex quantile regression, convex expectile regression, isotonic regression, stochastic nonparametric envelopment of data, and related methods. It also facilitates eﬃciency measurement using the conventional Data Envelopement Analysis (DEA) and Free Disposable Hull (FDH) approaches. The pyStoNED package allows practitioners to estimate these models in an open access environment under a GPL-3.0 License.
 
@@ -14,10 +14,6 @@ The [`pyStoNED`](https://pypi.org/project/pystoned/) package is now avaiable on 
 
     pip install -U git+https://github.com/ds2010/pyStoNED
 
-# Documentation
-
-A number of Jupyter Notebooks are provided in the [Documentation](https://pystoned.readthedocs.io/en/latest/) website, and more detailed technical reports are currently under development. 
-
 # Authors
 
  + [Sheng Dai](https://www.researchgate.net/profile/Sheng_Dai8), Ph.D. candidate, Aalto University School of Business.
@@ -27,4 +23,7 @@ A number of Jupyter Notebooks are provided in the [Documentation](https://pyston
 
 # Citation
 
-If you use [pyStoNED](https://pypi.org/project/pystoned/) for published work, we encourage you to cite our [papers](https://pystoned.readthedocs.io/en/latest/citing/index.html). We appreciate it.
+If you use [pyStoNED](https://pypi.org/project/pystoned/) for published work, we encourage you to cite our following paper and other related [works](https://pystoned.readthedocs.io/en/latest/citing/index.html). We appreciate it.
+
+    Dai S, Fang YH, Lee CY, Kuosmanen T. (2021). pyStoNED: A Python Package for Convex Regression and Frontier Estimation. arXiv preprint arXiv:2109.12962.
+
