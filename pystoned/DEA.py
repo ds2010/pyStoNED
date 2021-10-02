@@ -32,8 +32,8 @@ class DEA:
 
         if type(yref) != type(None):
             self.__reference = True
-            self.yref = self._DEA__to_2d_list(yref)
-            self.xref = self._DEA__to_2d_list(xref)
+            self.yref, self.xref = tools.assert_valid_reference_data(
+                self.y, self.x, yref, xref)
             self.__model__.R = Set(initialize=range(len(self.yref)))
 
         # Initialize sets
@@ -64,15 +64,6 @@ class DEA:
         # Optimize model
         self.optimization_status = 0
         self.problem_status = 0
-
-    def __to_2d_list(self, l):
-        """If the given list l is 1d list, return its 2d adaption"""
-        if type(l[0]) != list:
-            r = []
-            for value in l:
-                r.append([value])
-            return r
-        return l
 
     def __objective_rule(self):
         """Return the proper objective function"""
@@ -195,17 +186,16 @@ class DEADDF(DEA):
         # Initialize DEA model
         self.__model__ = ConcreteModel()
 
-        self.y, self.x, self.b, self.gy, self.gx, self.gb = tools.assert_valid_direciontal_data(y,x,b,gy,gx,gb)
+        self.y, self.x, self.b, self.gy, self.gx, self.gb = tools.assert_valid_direciontal_data(
+            y, x, b, gy, gx, gb)
         self.rts = rts
 
         self.__reference = False
 
         if type(yref) != type(None):
             self.__reference = True
-            self.yref = self._DEA__to_2d_list(yref)
-            self.xref = self._DEA__to_2d_list(xref)
-            if type(b) != type(None):
-                self.bref = self._DEA__to_2d_list(bref)
+            self.yref, self.xref, self.bref = tools.assert_valid_reference_data_with_bad_outputs(
+                self.y, self.x, self.b, yref, xref, bref)
             self.__model__.R = Set(initialize=range(len(self.yref)))
 
         # Initialize sets

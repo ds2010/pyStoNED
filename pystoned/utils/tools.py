@@ -116,6 +116,45 @@ def assert_valid_mupltiple_y_data(y, x):
             "Number of DMUs must be the same in x and y.")
     return y, x
 
+def assert_valid_reference_data(y, x, yref, xref):
+    yref = trans_list(yref)
+    xref = trans_list(xref)
+
+    yref = to_2d_list(yref)
+    xref = to_2d_list(xref)
+
+    yref_shape = asarray(yref).shape
+    xref_shape = asarray(xref).shape
+
+    if yref_shape[0] != xref_shape[0]:
+        raise ValueError(
+            "Number of DMUs must be the same in xref and yref.")
+    if yref_shape[1] != asarray(y).shape[1]:
+        raise ValueError(
+            "Number of outputs must be the same in y and yref.")
+    if xref_shape[1] != asarray(x).shape[1]:
+        raise ValueError(
+            "Number of inputs must be the same in x and xref.")
+    return yref, xref
+
+def assert_valid_reference_data_with_bad_outputs(y, x, b, yref, xref, bref):
+    yref, xref = assert_valid_reference_data(y, x, yref, xref)
+    
+    if type(b) != type(None):
+        return yref, xref, None
+    
+    bref = to_2d_list(bref)
+    bref_shape = asarray(bref).shape
+
+    if bref_shape[0] != asarray(yref).shape[0]:
+        raise ValueError(
+            "Number of DMUs must be the same in yref and bref.")
+    if bref_shape[1] != asarray(b).shape[1]:
+        raise ValueError(
+            "Number of undesirable outputs  must be the same in b and bref.")
+    
+    return yref, xref, bref
+
 def assert_valid_direciontal_data(y, x, b=None, gy=[1], gx=[1], gb=None):
     y = trans_list(y)
     x = trans_list(x)
