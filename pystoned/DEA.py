@@ -348,10 +348,10 @@ class DUAL(DEA):
         tools.assert_optimized(self.optimization_status)
         self.__model__.nu.display()
 
-    # Omega only exists in VRS model. So, print a similar info like: https://github.com/ds2010/pyStoNED/blob/dfdddd9e143933880ac1444dfd895157f8277122/pystoned/utils/tools.py#L202
     def display_omega(self):
          """Display omega value"""
          tools.assert_optimized(self.optimization_status)
+         tools.assert_various_return_to_scale_omega(self.rts)
          self.__model__.omega.display()       
 
     def get_mu(self):
@@ -376,6 +376,7 @@ class DUAL(DEA):
     def get_omega(self):
         """Return omega value by array"""
         tools.assert_optimized(self.optimization_status)
+        tools.assert_various_return_to_scale_omega(self.rts)
         omega = list(self.__model__.omega[:].value)
         return np.asarray(omega)
 

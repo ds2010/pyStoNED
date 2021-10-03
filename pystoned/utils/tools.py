@@ -219,7 +219,7 @@ def assert_various_return_to_scale(rts):
             "Estimated intercept (alpha) cannot be retrieved due to the constant returns-to-scale assumption.")
 
 
-def assert_various_return_to_scale(rts):
+def assert_various_return_to_scale_omega(rts):
     if rts == RTS_CRS:
         raise Exception(
-            "Estimated intercept (alpha) cannot be retrieved due to the constant returns-to-scale assumption.")
+            "Omega cannot be retrieved due to the constant returns-to-scale assumption.")
