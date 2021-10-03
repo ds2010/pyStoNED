@@ -407,12 +407,11 @@ class DUAL(DEA):
         tools.assert_optimized(self.optimization_status)
         if self.orient == ORIENT_IO:
             if self.rts == RTS_CRS:
-                return self.get_mu()*self.y
+                return (np.sum(self.get_mu()*self.y, axis=1)).reshape(len(self.y), 1)
             elif self.rts == RTS_VRS:
-                return self.get_mu()*self.y + self.get_omega().reshape(len(self.y), 1)
+                return (np.sum(self.get_mu()*self.y, axis=1)).reshape(len(self.y), 1) + self.get_omega().reshape(len(self.y), 1)
         elif self.orient == ORIENT_OO:
             if self.rts == RTS_CRS:
                 return (np.sum(self.get_nu()*self.x, axis=1)).reshape(len(self.x), 1)
             elif self.rts == RTS_VRS:
                 return (np.sum(self.get_nu()*self.x, axis=1)).reshape(len(self.x), 1) + self.get_omega().reshape(len(self.x), 1)
-
