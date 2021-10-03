@@ -22,7 +22,7 @@ Example: DEA dual models `[.ipynb] <https://colab.research.google.com/github/ds2
     # import packages
     from pystoned import DEA
     from pystoned import dataset as dataset
-    from pystoned.constant import RTS_VRS, OPT_LOCAL
+    from pystoned.constant import RTS_VRS, OPT_LOCAL, ORIENT_IO
         
     # import the data provided with Tim Coelli’s Frontier 4.1
     data = dataset.load_Tim_Coelli_frontier()
