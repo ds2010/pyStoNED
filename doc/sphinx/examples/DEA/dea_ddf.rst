@@ -11,36 +11,36 @@ frontier using direction :math:`g = (−g_x , g_y) \neq 0_{m+s}`, where :math:`g
 The VRA and CRS models are presented as follows
 
 1. CRS
-   
+
 .. math::
     :nowrap:
-
-    \begin{equation}
-        \underset{\mathbf{\theta},\mathbf{\lambda }}max \quad \theta \\ 
-        \mbox{s.t.} \quad 
-        X\lambda \le x_o - \theta g_x   \\
-        Y\lambda \ge y_o + \theta g_y\\
-        \lambda \ge 0
-    \end{equation}
-
+    
+    \begin{align*}
+            \underset{\mathbf{\theta},\mathbf{\lambda }}max \quad \theta \\ 
+            \mbox{s.t.} \quad 
+            X\lambda \le x_o - \theta g_x   \\
+            Y\lambda \ge y_o + \theta g_y\\
+            \lambda \ge 0
+    \end{align*}
+    
 
 2. VRS
 
 .. math::
     :nowrap:
-
-    \begin{equation}
-        \underset{\mathbf{\theta},\mathbf{\lambda }}max \quad \theta \\ 
-        \mbox{s.t.} \quad 
-        X\lambda \le x_o - \theta g_x   \\
-        Y\lambda \ge y_o + \theta g_y\\
-        \sum_{j=1}^{n}\lambda_j = 1 \\
-        \lambda \ge 0
-    \end{equation}
+    
+    \begin{align*}
+            \underset{\mathbf{\theta},\mathbf{\lambda }}max \quad \theta \\ 
+            \mbox{s.t.} \quad 
+            X\lambda \le x_o - \theta g_x   \\
+            Y\lambda \ge y_o + \theta g_y\\
+            \sum_{j=1}^{n}\lambda_j = 1 \\
+            \lambda \ge 0
+    \end{align*}
 
 
 Example: DEA with DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DEA_ddf_vrs.ipynb>`_
------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
 
 
 .. code:: python
@@ -54,7 +54,7 @@ Example: DEA with DDF `[.ipynb] <https://colab.research.google.com/github/ds2010
     data = dataset.load_Tim_Coelli_frontier()
         
     # define and solve the DEA DDF model
-    model = DEA.DEADDF(y=data.y, x=data.x, b=None, gy=[1], gx=[0.0, 0.0], gb=None, rts=RTS_VRS, yref=None, xref=None, bref=None)
+    model = DEA.DDF(y=data.y, x=data.x, b=None, gy=[1], gx=[0.0, 0.0], gb=None, rts=RTS_VRS, yref=None, xref=None, bref=None)
     model.optimize(OPT_LOCAL)
     
     # display the technical efficiency

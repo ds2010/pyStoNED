@@ -112,6 +112,7 @@ Data Envelopment Analysis
    DEA/dea_oo
    DEA/dea_ddf
    DEA/dea_und
+   DEA/dea_dual
    DEA/dea_ref
 
 

@@ -7,34 +7,33 @@ With help of DDF, we can resort to DEA to evulate the DMUs with undesirable outp
 VRS models are presented as follows
 
 1. CRS
-   
+
 .. math::
     :nowrap:
-
-    \begin{equation}
-    \underset{\mathbf{\theta},\mathbf{\lambda }}max \quad \theta \\ 
-    \mbox{s.t.} \quad 
-    X\lambda \le x_o - \theta g_x   \\
-    B\lambda = b_o - \theta g_b \\
-    Y\lambda \ge y_o + \theta g_y\\
-    \lambda \ge 0
-    \end{equation}
-
+    
+    \begin{align*}
+            \underset{\mathbf{\theta},\mathbf{\lambda }}max \quad \theta \\ 
+            \mbox{s.t.} \quad 
+            X\lambda \le x_o - \theta g_x   \\
+            B\lambda = b_o - \theta g_b \\
+            Y\lambda \ge y_o + \theta g_y\\
+            \lambda \ge 0
+    \end{align*}
 
 2. VRS
 
 .. math::
     :nowrap:
-
-    \begin{equation}
-    \underset{\mathbf{\theta},\mathbf{\lambda }}max \quad \theta \\ 
-    \mbox{s.t.} \quad 
-    X\lambda \le x_o - \theta g_x   \\
-    B\lambda = b_o - \theta g_b \\
-    Y\lambda \ge y_o + \theta g_y\\
-    \sum_{j=1}^{n}\lambda_j = 1 \\
-    \lambda \ge 0
-    \end{equation}
+    
+    \begin{align*}
+            \underset{\mathbf{\theta},\mathbf{\lambda }}max \quad \theta \\ 
+            \mbox{s.t.} \quad 
+            X\lambda \le x_o - \theta g_x   \\
+            B\lambda = b_o - \theta g_b \\
+            Y\lambda \ge y_o + \theta g_y\\
+            \sum_{j=1}^{n}\lambda_j = 1 \\
+            \lambda \ge 0
+    \end{align*}
 
 
 Example: DEA-DDF with bad outputs `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DEA_UndesirableOutput.ipynb>`_
@@ -52,7 +51,7 @@ Example: DEA-DDF with bad outputs `[.ipynb] <https://colab.research.google.com/g
     data = dataset.load_GHG_abatement_cost()
     
     # define and solve the DEA DDF model
-    model = DEA.DEADDF(y=data.y, x=data.x, b=data.b, gy=[1], gx=[0.0, 0.0], gb=[-1], rts=RTS_VRS, yref=None, xref=None, bref=None)
+    model = DEA.DDF(y=data.y, x=data.x, b=data.b, gy=[1], gx=[0.0, 0.0], gb=[-1], rts=RTS_VRS, yref=None, xref=None, bref=None)
     model.optimize(OPT_LOCAL)
     
     # display the technical efficiency
