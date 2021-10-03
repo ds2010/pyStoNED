@@ -143,7 +143,7 @@ class DEA:
         return lamda.to_numpy()
 
 
-class DDF(DEA):
+class DEADDF(DEA):
     def __init__(self,  y, x, b=None, gy=[1], gx=[1], gb=None, rts=RTS_VRS, yref=None, xref=None, bref=None):
         """DEA: Directional distance function
 
@@ -232,7 +232,7 @@ class DDF(DEA):
         return vrs_rule
 
 
-class DUAL(DEA):
+class DEADUAL(DEA):
     def __init__(self, y, x, orient, rts, yref=None, xref=None):
         """DEA: Multiplier problem
 
