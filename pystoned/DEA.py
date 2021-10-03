@@ -168,13 +168,14 @@ class DDF(DEA):
             y, x, b, gy, gx, gb)
         self.rts = rts
 
-        self.__reference = False
 
         if type(yref) != type(None):
-            self.__reference = True
             self.yref, self.xref, self.bref = tools.assert_valid_reference_data_with_bad_outputs(
                 self.y, self.x, self.b, yref, xref, bref)
-            self.__model__.R = Set(initialize=range(len(self.yref)))
+        else:
+            self.yref, self.xref, self.bref = self.y, self.x, self.b
+        
+        self.__model__.R = Set(initialize=range(len(self.yref)))
 
         # Initialize sets
         self.__model__.I = Set(initialize=range(len(self.y)))
@@ -186,12 +187,9 @@ class DDF(DEA):
         # Initialize variable
         self.__model__.theta = Var(
             self.__model__.I, doc='directional distance')
-        if self.__reference:
-            self.__model__.lamda = Var(self.__model__.I, self.__model__.R, bounds=(
-                0.0, None), doc='intensity variables')
-        else:
-            self.__model__.lamda = Var(self.__model__.I, self.__model__.I, bounds=(
-                0.0, None), doc='intensity variables')
+
+        self.__model__.lamda = Var(self.__model__.I, self.__model__.R, bounds=(
+            0.0, None), doc='intensity variables')
 
         # Setup the objective function and constraints
         self.__model__.objective = Objective(
@@ -215,47 +213,26 @@ class DDF(DEA):
 
     def __input_rule(self):
         """Return the proper input constraint"""
-        if self.__reference == False:
-            def input_rule(model, o, j):
-                return self.x[o][j] - model.theta[o]*self.gx[j] >= sum(model.lamda[o, i] * self.x[i][j] for i in model.I)
-            return input_rule
-        else:
-            def input_rule(model, o, j):
-                return self.x[o][j] - model.theta[o]*self.gx[j] >= sum(model.lamda[o, r] * self.xref[r][j] for r in model.R)
-            return input_rule
+        def input_rule(model, o, j):
+            return self.x[o][j] - model.theta[o]*self.gx[j] >= sum(model.lamda[o, r] * self.xref[r][j] for r in model.R)
+        return input_rule
 
     def __output_rule(self):
         """Return the proper output constraint"""
-        if self.__reference == False:
-            def output_rule(model, o, k):
-                return self.y[o][k] + model.theta[o]*self.gy[k] <= sum(model.lamda[o, i] * self.y[i][k] for i in model.I)
-            return output_rule
-        else:
-            def output_rule(model, o, k):
-                return self.y[o][k] + model.theta[o]*self.gy[k] <= sum(model.lamda[o, r] * self.yref[r][k] for r in model.R)
-            return output_rule
+        def output_rule(model, o, k):
+            return self.y[o][k] + model.theta[o]*self.gy[k] <= sum(model.lamda[o, r] * self.yref[r][k] for r in model.R)
+        return output_rule
 
     def __undesirable_output_rule(self):
         """Return the proper undesirable output constraint"""
-        if self.__reference == False:
-            def undesirable_output_rule(model, o, l):
-                return self.b[o][l] - model.theta[o]*self.gb[l] == sum(model.lamda[o, i] * self.b[i][l] for i in model.I)
-            return undesirable_output_rule
-        else:
-            def undesirable_output_rule(model, o, l):
-                return self.b[o][l] + model.theta[o]*self.gb[l] == sum(model.lamda[o, r] * self.bref[r][l] for r in model.R)
-            return undesirable_output_rule
+        def undesirable_output_rule(model, o, l):
+            return self.b[o][l] + model.theta[o]*self.gb[l] == sum(model.lamda[o, r] * self.bref[r][l] for r in model.R)
+        return undesirable_output_rule
 
     def __vrs_rule(self):
-        if self.__reference == False:
-            def vrs_rule(model, o):
-                return sum(model.lamda[o, i] for i in model.I) == 1
-            return vrs_rule
-        else:
             def vrs_rule(model, o):
                 return sum(model.lamda[o, r] for r in model.R) == 1
             return vrs_rule
-
 
 class DUAL(DEA):
     def __init__(self, y, x, orient, rts, yref=None, xref=None):
@@ -371,10 +348,10 @@ class DUAL(DEA):
         tools.assert_optimized(self.optimization_status)
         self.__model__.nu.display()
 
-    # Omega only exists in VRS model. So, print a similar info like: https://github.com/ds2010/pyStoNED/blob/dfdddd9e143933880ac1444dfd895157f8277122/pystoned/utils/tools.py#L202
     def display_omega(self):
          """Display omega value"""
          tools.assert_optimized(self.optimization_status)
+         tools.assert_various_return_to_scale_omega(self.rts)
          self.__model__.omega.display()       
 
     def get_mu(self):
@@ -399,6 +376,7 @@ class DUAL(DEA):
     def get_omega(self):
         """Return omega value by array"""
         tools.assert_optimized(self.optimization_status)
+        tools.assert_various_return_to_scale_omega(self.rts)
         omega = list(self.__model__.omega[:].value)
         return np.asarray(omega)
 
