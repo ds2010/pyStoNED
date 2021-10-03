@@ -67,10 +67,8 @@ class DEA:
 
     def __objective_rule(self):
         """Return the proper objective function"""
-
         def objective_rule(model):
             return sum(model.theta[i] for i in model.I)
-
         return objective_rule
 
     def __input_rule(self):
@@ -168,13 +166,11 @@ class DDF(DEA):
             y, x, b, gy, gx, gb)
         self.rts = rts
 
-
         if type(yref) != type(None):
             self.yref, self.xref, self.bref = tools.assert_valid_reference_data_with_bad_outputs(
                 self.y, self.x, self.b, yref, xref, bref)
         else:
             self.yref, self.xref, self.bref = self.y, self.x, self.b
-        
         self.__model__.R = Set(initialize=range(len(self.yref)))
 
         # Initialize sets
@@ -226,13 +222,15 @@ class DDF(DEA):
     def __undesirable_output_rule(self):
         """Return the proper undesirable output constraint"""
         def undesirable_output_rule(model, o, l):
-            return self.b[o][l] + model.theta[o]*self.gb[l] == sum(model.lamda[o, r] * self.bref[r][l] for r in model.R)
+            return self.b[o][l] - model.theta[o]*self.gb[l] == sum(model.lamda[o, r] * self.bref[r][l] for r in model.R)
         return undesirable_output_rule
 
     def __vrs_rule(self):
-            def vrs_rule(model, o):
-                return sum(model.lamda[o, r] for r in model.R) == 1
-            return vrs_rule
+        """Return the VRS constraint"""
+        def vrs_rule(model, o):
+            return sum(model.lamda[o, r] for r in model.R) == 1
+        return vrs_rule
+
 
 class DUAL(DEA):
     def __init__(self, y, x, orient, rts, yref=None, xref=None):
@@ -372,7 +370,6 @@ class DUAL(DEA):
         nu = nu.pivot(index='Name', columns='Key', values='Value')
         return nu.to_numpy()
 
-    # SEE above
     def get_omega(self):
         """Return omega value by array"""
         tools.assert_optimized(self.optimization_status)
@@ -393,3 +390,4 @@ class DUAL(DEA):
                 return (np.sum(self.get_nu()*self.x, axis=1)).reshape(len(self.x), 1)
             elif self.rts == RTS_VRS:
                 return (np.sum(self.get_nu()*self.x, axis=1)).reshape(len(self.x), 1) + self.get_omega().reshape(len(self.x), 1)
+                
