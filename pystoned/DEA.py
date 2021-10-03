@@ -43,7 +43,7 @@ class DEA:
 
         # Initialize variable
         self.__model__.theta = Var(self.__model__.I, doc='efficiency')
-        self.__model__.lamda = Var(self.__model__.I, self.__model__.I, bounds=(
+        self.__model__.lamda = Var(self.__model__.I, self.__model__.R, bounds=(
             0.0, None), doc='intensity variables')
 
         # Setup the objective function and constraints
@@ -147,7 +147,7 @@ class DEA:
 
 class DDF(DEA):
     def __init__(self,  y, x, b=None, gy=[1], gx=[1], gb=None, rts=RTS_VRS, yref=None, xref=None, bref=None):
-        """DEA DDF model 
+        """DEA: directional distance function
 
         Args:
             y (float): output variable. 
