@@ -85,7 +85,6 @@ def assert_valid_basic_data(y, x, z=None):
         raise ValueError(
             "The multidimensional output data is supported by direciontal based models.")
 
-
     if y_shape[0] != x_shape[0]:
         raise ValueError(
             "Number of DMUs must be the same in x and y.")
@@ -116,6 +115,7 @@ def assert_valid_mupltiple_y_data(y, x):
             "Number of DMUs must be the same in x and y.")
     return y, x
 
+
 def assert_valid_reference_data(y, x, yref, xref):
     yref = trans_list(yref)
     xref = trans_list(xref)
@@ -137,12 +137,13 @@ def assert_valid_reference_data(y, x, yref, xref):
             "Number of inputs must be the same in x and xref.")
     return yref, xref
 
+
 def assert_valid_reference_data_with_bad_outputs(y, x, b, yref, xref, bref):
     yref, xref = assert_valid_reference_data(y, x, yref, xref)
-    
-    if type(b) != type(None):
+
+    if type(b) == type(None):
         return yref, xref, None
-    
+
     bref = to_2d_list(bref)
     bref_shape = asarray(bref).shape
 
@@ -152,8 +153,9 @@ def assert_valid_reference_data_with_bad_outputs(y, x, b, yref, xref, bref):
     if bref_shape[1] != asarray(b).shape[1]:
         raise ValueError(
             "Number of undesirable outputs  must be the same in b and bref.")
-    
+
     return yref, xref, bref
+
 
 def assert_valid_direciontal_data(y, x, b=None, gy=[1], gx=[1], gb=None):
     y = trans_list(y)
@@ -209,6 +211,12 @@ def assert_undesirable_output(b):
     if type(b) == type(None):
         raise Exception(
             "Estimated coefficient (delta) cannot be retrieved due to no undesirable output (b variable) included in the model.")
+
+
+def assert_various_return_to_scale(rts):
+    if rts == RTS_CRS:
+        raise Exception(
+            "Estimated intercept (alpha) cannot be retrieved due to the constant returns-to-scale assumption.")
 
 
 def assert_various_return_to_scale(rts):
