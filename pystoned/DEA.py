@@ -147,7 +147,7 @@ class DEA:
 
 class DDF(DEA):
     def __init__(self,  y, x, b=None, gy=[1], gx=[1], gb=None, rts=RTS_VRS, yref=None, xref=None, bref=None):
-        """DEA: directional distance function
+        """DEA: Directional distance function
 
         Args:
             y (float): output variable. 
