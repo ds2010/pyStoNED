@@ -1,7 +1,7 @@
 # import dependencies
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, maximize, Constraint
 import numpy as np
-
+import pandas as pd
 from .constant import CET_ADDI, ORIENT_IO, ORIENT_OO, RTS_VRS, OPT_DEFAULT, OPT_LOCAL
 from .utils import tools
 
@@ -163,8 +163,11 @@ class DEA:
     def get_lamda(self):
         """Return lamda value by array"""
         tools.assert_optimized(self.optimization_status)
-        lamda = list(self.__model__.lamda[:].value)
-        return np.asarray(lamda)
+        lamda = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.lamda),
+                                                          list(self.__model__.lamda[:, :].value))])
+        lamda = pd.DataFrame(lamda, columns=['Name', 'Key', 'Value'])
+        lamda = lamda.pivot(index='Name', columns='Key', values='Value')
+        return lamda.to_numpy()
 
 
 class DEADDF(DEA):
@@ -277,3 +280,20 @@ class DEADDF(DEA):
             def vrs_rule(model, o):
                 return sum(model.lamda[o, r] for r in model.R) == 1
             return vrs_rule
+
+
+class DUAL(DEA):
+    def __init__(self, y, x, orient, rts, yref=None, xref=None):
+        """DEA: Multiplier problem
+
+        Args:
+            y (float): output variable. 
+            x (float): input variables.
+            orient (String): ORIENT_IO (input orientation) or ORIENT_OO (output orientation)
+            rts (String): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale)
+            yref (String, optional): reference output. Defaults to None.
+            xref (String, optional): reference inputs. Defaults to None.
+        """
+        # Initialize DEA model
+        self.__model__ = ConcreteModel()
+

@@ -1,7 +1,7 @@
 # import dependencies
 from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, maximize, Constraint, Binary
 import numpy as np
-
+import pandas as pd
 from .constant import CET_ADDI, ORIENT_IO, ORIENT_OO, OPT_DEFAULT, OPT_LOCAL
 from .utils import tools
 
@@ -126,5 +126,9 @@ class FDH:
     def get_lamda(self):
         """Return lamda value by array"""
         tools.assert_optimized(self.optimization_status)
-        lamda = list(self.__model__.lamda[:].value)
-        return np.asarray(lamda)
+        lamda = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.lamda),
+                                                          list(self.__model__.lamda[:, :].value))])
+        lamda = pd.DataFrame(lamda, columns=['Name', 'Key', 'Value'])
+        lamda = lamda.pivot(index='Name', columns='Key', values='Value')
+        return lamda.to_numpy()
+
