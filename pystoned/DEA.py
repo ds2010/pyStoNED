@@ -79,7 +79,7 @@ class DEA:
             return input_rule
         elif self.orient == ORIENT_OO:
             def input_rule(model, o, j):
-                return sum(model.lamda[o, r] * self.x[r][j] for r in model.I) <= self.x[o][j]
+                return sum(model.lamda[o, r] * self.xref[r][j] for r in model.R) <= self.x[o][j]
             return input_rule
 
     def __output_rule(self):
@@ -90,7 +90,7 @@ class DEA:
             return output_rule
         elif self.orient == ORIENT_OO:
             def output_rule(model, o, k):
-                return model.theta[o]*self.y[o][k] <= sum(model.lamda[o, r]*self.y[r][k] for r in model.R)
+                return model.theta[o]*self.y[o][k] <= sum(model.lamda[o, r]*self.yref[r][k] for r in model.R)
             return output_rule
 
     def __vrs_rule(self):
