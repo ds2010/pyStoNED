@@ -11,7 +11,7 @@ class FDH:
     """
 
     def __init__(self, y, x, orient):
-        """DEA model
+        """FDH model
 
         Args:
             y (float): output variable.
