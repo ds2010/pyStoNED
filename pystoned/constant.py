@@ -14,6 +14,11 @@ CET_Categories = {
     CET_MULT: "Multiplicative composite error term"
 }
 
+CET_Model_Categories = {
+    CET_ADDI: "additive model",
+    CET_MULT: "multiplicative model"
+}
+
 # Frontier
 FUN_PROD = "prod"
 """

@@ -3,7 +3,7 @@ from re import compile
 from os import environ
 from numpy import asarray
 from pyomo.opt import SolverFactory, SolverManagerFactory
-from ..constant import CET_ADDI, CET_MULT, FUN_PROD, OPT_LOCAL, OPT_DEFAULT, RTS_CRS, RTS_VRS
+from ..constant import CET_ADDI, CET_MULT, CET_Model_Categories, OPT_LOCAL, OPT_DEFAULT, RTS_CRS
 __email_re = compile(r'([^@]+@[^@]+\.[a-zA-Z0-9]+)$')
 
 
@@ -24,25 +24,26 @@ def set_neos_email(address):
 
 def optimize_model(model, email, cet, solver=OPT_DEFAULT):
     if not set_neos_email(email):
-        if solver is not OPT_DEFAULT and SolverFactory(solver).available():
-            solver = SolverFactory(solver)
-            return solver.solve(model, tee=True), 1
+        if solver is not OPT_DEFAULT:
+            assert_solver_available_locally(solver)
         elif cet == CET_ADDI:
-            solver = SolverFactory("mosek")
-            print("Estimating the additive model locally with mosek solver")
-            return solver.solve(model, tee=True), 1
+            solver = "mosek"
         elif cet == CET_MULT:
             raise ValueError(
                 "Please specify the solver for optimizing multiplicative model locally.")
+        solver_instance = SolverFactory(solver)
+        print("Estimating the {} model locally with {} solver".format(
+            CET_Model_Categories[cet], solver))
+        return solver_instance.solve(model, tee=True), 1
     else:
         if solver is OPT_DEFAULT and cet is CET_ADDI:
             solver = "mosek"
-            print("Estimating the additive model remotely with mosek solver")
         elif solver is OPT_DEFAULT and cet == CET_MULT:
             solver = "knitro"
-            print("Estimating the multiplicative model remotely with knitro solver")
-        remote_solver = SolverManagerFactory('neos')
-        return remote_solver.solve(model, tee=True, opt=solver), 1
+        solver_instance = SolverManagerFactory('neos')
+        print("Estimating the {} model remotely with {} solver".format(
+            CET_Model_Categories[cet], solver))
+        return solver_instance.solve(model, tee=True, opt=solver), 1
 
 
 def trans_list(li):
@@ -223,3 +224,8 @@ def assert_various_return_to_scale_omega(rts):
     if rts == RTS_CRS:
         raise Exception(
             "Omega cannot be retrieved due to the constant returns-to-scale assumption.")
+
+
+def assert_solver_available_locally(solver):
+    if not SolverFactory(solver).available():
+        raise ValueError("Solver {} is not available locally.".format(solver))
