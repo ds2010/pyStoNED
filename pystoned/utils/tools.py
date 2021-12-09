@@ -32,7 +32,7 @@ def optimize_model(model, email, cet, solver=OPT_DEFAULT):
             raise ValueError(
                 "Please specify the solver for optimizing multiplicative model locally.")
         solver_instance = SolverFactory(solver)
-        print("Estimating the {} model locally with {} solver.".format(
+        print("Estimating the {} locally with {} solver.".format(
             CET_Model_Categories[cet], solver))
         return solver_instance.solve(model, tee=True), 1
     else:
@@ -41,7 +41,7 @@ def optimize_model(model, email, cet, solver=OPT_DEFAULT):
         elif solver is OPT_DEFAULT and cet == CET_MULT:
             solver = "knitro"
         solver_instance = SolverManagerFactory('neos')
-        print("Estimating the {} model remotely with {} solver.".format(
+        print("Estimating the {} remotely with {} solver.".format(
             CET_Model_Categories[cet], solver))
         return solver_instance.solve(model, tee=True, opt=solver), 1
 
