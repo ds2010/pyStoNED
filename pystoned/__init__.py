@@ -8,9 +8,12 @@ from . import CQERG
 from . import dataset
 from . import DEA
 from . import FDH
+from . import pCQER
 from . import plot
 from . import ICNLS
 from . import ICQER
+from . import uCNLS
+from . import uCQER
 from . import StoNED
 
 __all__ = [
@@ -24,8 +27,11 @@ __all__ = [
     'dataset',
     'DEA',
     'FDH',
+    'pCQER',
     'plot',
     'ICNLS',
     'ICQER',
+    'uCNLS',
+    'uCQER',
     'StoNED',
 ]

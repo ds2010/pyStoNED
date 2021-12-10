@@ -1,7 +1,7 @@
 # import dependencies
 from re import compile
 from os import environ
-from numpy import asarray
+import numpy as np
 from pyomo.opt import SolverFactory, SolverManagerFactory
 from ..constant import CET_ADDI, CET_MULT, CET_Model_Categories, OPT_LOCAL, OPT_DEFAULT, RTS_CRS
 __email_re = compile(r'([^@]+@[^@]+\.[a-zA-Z0-9]+)$')
@@ -79,8 +79,8 @@ def assert_valid_basic_data(y, x, z=None):
     y = to_1d_list(y)
     x = to_2d_list(x)
 
-    y_shape = asarray(y).shape
-    x_shape = asarray(x).shape
+    y_shape = np.asarray(y).shape
+    x_shape = np.asarray(x).shape
 
     if len(y_shape) == 2 and y_shape[1] != 1:
         raise ValueError(
@@ -93,7 +93,7 @@ def assert_valid_basic_data(y, x, z=None):
     if type(z) != type(None):
         z = trans_list(z)
         z = to_2d_list(z)
-        z_shape = asarray(z).shape
+        z_shape = np.asarray(z).shape
         if y_shape[0] != z_shape[0]:
             raise ValueError(
                 "Number of DMUs must be the same in y and z.")
@@ -108,8 +108,8 @@ def assert_valid_mupltiple_y_data(y, x):
     y = to_2d_list(y)
     x = to_2d_list(x)
 
-    y_shape = asarray(y).shape
-    x_shape = asarray(x).shape
+    y_shape = np.asarray(y).shape
+    x_shape = np.asarray(x).shape
 
     if y_shape[0] != x_shape[0]:
         raise ValueError(
@@ -124,16 +124,16 @@ def assert_valid_reference_data(y, x, yref, xref):
     yref = to_2d_list(yref)
     xref = to_2d_list(xref)
 
-    yref_shape = asarray(yref).shape
-    xref_shape = asarray(xref).shape
+    yref_shape = np.asarray(yref).shape
+    xref_shape = np.asarray(xref).shape
 
     if yref_shape[0] != xref_shape[0]:
         raise ValueError(
             "Number of DMUs must be the same in xref and yref.")
-    if yref_shape[1] != asarray(y).shape[1]:
+    if yref_shape[1] != np.asarray(y).shape[1]:
         raise ValueError(
             "Number of outputs must be the same in y and yref.")
-    if xref_shape[1] != asarray(x).shape[1]:
+    if xref_shape[1] != np.asarray(x).shape[1]:
         raise ValueError(
             "Number of inputs must be the same in x and xref.")
     return yref, xref
@@ -146,12 +146,12 @@ def assert_valid_reference_data_with_bad_outputs(y, x, b, yref, xref, bref):
         return yref, xref, None
 
     bref = to_2d_list(bref)
-    bref_shape = asarray(bref).shape
+    bref_shape = np.asarray(bref).shape
 
-    if bref_shape[0] != asarray(yref).shape[0]:
+    if bref_shape[0] != np.asarray(yref).shape[0]:
         raise ValueError(
             "Number of DMUs must be the same in yref and bref.")
-    if bref_shape[1] != asarray(b).shape[1]:
+    if bref_shape[1] != np.asarray(b).shape[1]:
         raise ValueError(
             "Number of undesirable outputs  must be the same in b and bref.")
 
@@ -168,8 +168,8 @@ def assert_valid_direciontal_data(y, x, b=None, gy=[1], gx=[1], gb=None):
     gy = to_1d_list(gy)
     gx = to_1d_list(gx)
 
-    y_shape = asarray(y).shape
-    x_shape = asarray(x).shape
+    y_shape = np.asarray(y).shape
+    x_shape = np.asarray(x).shape
 
     if y_shape[0] != x_shape[0]:
         raise ValueError(
@@ -185,7 +185,7 @@ def assert_valid_direciontal_data(y, x, b=None, gy=[1], gx=[1], gb=None):
         b = trans_list(b)
         b = to_2d_list(b)
         gb = to_1d_list(gb)
-        b_shape = asarray(b).shape
+        b_shape = np.asarray(b).shape
         if b_shape[0] != b_shape[0]:
             raise ValueError(
                 "Number of DMUs must be the same in y and b.")
@@ -229,3 +229,31 @@ def assert_various_return_to_scale_omega(rts):
 def assert_solver_available_locally(solver):
     if not SolverFactory(solver).available():
         raise ValueError("Solver {} is not available locally.".format(solver))
+
+
+def assert_valid_univariate_data(y, x):
+    y_shape = np.asarray(y).shape
+    x_shape = np.asarray(x).shape
+
+    if y_shape[0] != x_shape[0]:
+        raise ValueError(
+            "Number of DMUs must be the same in x and y.")
+
+    if x_shape[1] != 1:
+        raise ValueError(
+            "univariate CNLS only allows single x as the input.")
+
+    y = np.asarray(y).reshape(y_shape[0], 1)
+    x = np.asarray(x).reshape(x_shape[0], 1)
+
+    # sorting the observed data in ascending order according to x
+    data = np.concatenate((y, x), axis=1)
+    data = data[np.argsort(data[:, 1])].T
+
+    y = trans_list(data[0])
+    x = trans_list(data[1])
+
+    y = to_1d_list(y)
+    x = to_1d_list(x)
+
+    return y, x
