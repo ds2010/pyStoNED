@@ -97,12 +97,6 @@ class CQR:
         self.problem_status, self.optimization_status = tools.optimize_model(
             self.__model__, email, self.cet, solver)
 
-    def __to_1d_list(self, l):
-        rl = []
-        for i in range(len(l)):
-            rl.append(l[i][0])
-        return rl
-
     def __objective_rule(self):
         """Return the proper objective function"""
 
@@ -290,9 +284,7 @@ class CQR:
     def get_alpha(self):
         """Return alpha value by array"""
         tools.assert_optimized(self.optimization_status)
-        if self.rts == RTS_CRS:
-            raise Exception(
-                "Estimated intercept (alpha) cannot be retrieved due to the constant returns-to-scale assumption.")
+        tools.assert_various_return_to_scale(self.rts)
         alpha = list(self.__model__.alpha[:].value)
         return np.asarray(alpha)
 
