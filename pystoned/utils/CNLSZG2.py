@@ -204,7 +204,7 @@ class CNLSZG2:
 
         raise ValueError("Undefined model parameters.")
 
-    def __sweet_rule(self, ):
+    def __sweet_rule(self):
         """Return the proper sweet spot approach constraint"""
         if self.fun == FUN_PROD:
             __operator = NumericValue.__le__
