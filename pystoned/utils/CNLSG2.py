@@ -4,7 +4,7 @@ from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
 from ..constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_DEFAULT, OPT_LOCAL
-from .tools import optimize_model
+from .tools import optimize_model, trans_list, to_2d_list
 
 
 class CNLSG2:
@@ -31,7 +31,7 @@ class CNLSG2:
         self.rts = rts
 
         self.cutactive = cutactive
-        self.active = active
+        self.active = to_2d_list(trans_list(active))
 
         # Initialize the CNLS model
         self.__model__ = ConcreteModel()
@@ -270,7 +270,7 @@ class CNLSG2:
             if self.rts == RTS_VRS:
 
                 def sweet_rule2(model, i, h):
-                    if self.active[i, h]:
+                    if self.active[i][h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
@@ -282,7 +282,7 @@ class CNLSG2:
                 return sweet_rule2
             elif self.rts == RTS_CRS:
                 def sweet_rule2(model, i, h):
-                    if self.active[i, h]:
+                    if self.active[i][h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(sum(model.beta[i, j] * self.x[i][j]
@@ -295,7 +295,7 @@ class CNLSG2:
             if self.rts == RTS_VRS:
 
                 def sweet_rule2(model, i, h):
-                    if self.active[i, h]:
+                    if self.active[i][h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
@@ -308,7 +308,7 @@ class CNLSG2:
             elif self.rts == RTS_CRS:
 
                 def sweet_rule2(model, i, h):
-                    if self.active[i, h]:
+                    if self.active[i][h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(sum(model.beta[i, j] * self.x[i][j] for j in model.J),
