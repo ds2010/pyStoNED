@@ -12,8 +12,6 @@ from . import pCQER
 from . import plot
 from . import ICNLS
 from . import ICQER
-from . import uCNLS
-from . import uCQER
 from . import StoNED
 
 __all__ = [
@@ -31,7 +29,5 @@ __all__ = [
     'plot',
     'ICNLS',
     'ICQER',
-    'uCNLS',
-    'uCQER',
     'StoNED',
 ]
