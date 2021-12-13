@@ -208,7 +208,7 @@ class CNLSG2:
             if self.rts == RTS_VRS:
 
                 def sweet_rule(model, i, h):
-                    if self.cutactive[i, h]:
+                    if self.cutactive[i][h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
@@ -221,7 +221,7 @@ class CNLSG2:
             elif self.rts == RTS_CRS:
 
                 def sweet_rule(model, i, h):
-                    if self.cutactive[i, h]:
+                    if self.cutactive[i][h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(sum(model.beta[i, j] * self.x[i][j]
@@ -235,7 +235,7 @@ class CNLSG2:
             if self.rts == RTS_VRS:
 
                 def sweet_rule(model, i, h):
-                    if self.cutactive[i, h]:
+                    if self.cutactive[i][h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
@@ -248,7 +248,7 @@ class CNLSG2:
             elif self.rts == RTS_CRS:
 
                 def sweet_rule(model, i, h):
-                    if self.cutactive[i, h]:
+                    if self.cutactive[i][h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(sum(model.beta[i, j] * self.x[i][j] for j in model.J),

@@ -219,7 +219,7 @@ class CQRG1:
             if self.rts == RTS_VRS:
 
                 def sweet_rule(model, i, h):
-                    if self.cutactive[i, h]:
+                    if self.cutactive[i][h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
@@ -231,7 +231,7 @@ class CQRG1:
                 return sweet_rule
             elif self.rts == RTS_CRS:
                 def sweet_rule(model, i, h):
-                    if self.cutactive[i, h]:
+                    if self.cutactive[i][h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(sum(model.beta[i, j] * self.x[i][j]
@@ -245,7 +245,7 @@ class CQRG1:
             if self.rts == RTS_VRS:
 
                 def sweet_rule(model, i, h):
-                    if self.cutactive[i, h]:
+                    if self.cutactive[i][h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
@@ -258,7 +258,7 @@ class CQRG1:
             elif self.rts == RTS_CRS:
 
                 def sweet_rule(model, i, h):
-                    if self.cutactive[i, h]:
+                    if self.cutactive[i][h]:
                         if i == h:
                             return Constraint.Skip
                         return __operator(sum(model.beta[i, j] * self.x[i][j] for j in model.J),

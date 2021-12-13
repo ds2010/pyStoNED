@@ -1,6 +1,7 @@
 # import dependencies
 import numpy as np
 from scipy.spatial.distance import cdist
+from .tools import trans_list, to_2d_list
 
 
 def sweet(x):
@@ -31,4 +32,4 @@ def sweet(x):
             if distance[i, j] <= distcut[:, i]:
                 cutactive[i, j] = 1
 
-    return cutactive
+    return to_2d_list(trans_list(cutactive))
