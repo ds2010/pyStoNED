@@ -1,5 +1,6 @@
 # import dependencies
 import numpy as np
+from scipy.spatial.distance import cdist
 
 
 def sweet(x):
@@ -16,14 +17,8 @@ def sweet(x):
     df = np.asmatrix(x)
 
     # calculate distance matrix
-    distance = np.zeros((len(df), len(df)))
-    for i in range(len(df)):
-        for j in range(len(df)):
-            if i != j:
-                distance[i, j] = np.sqrt(
-                    np.sum(np.square(df[i, :] - df[j, :])))
-            else:
-                distance[i, j] = np.nan
+    distance = cdist(df, df)
+    distance[np.diag_indices_from(distance)] = np.nan
 
     # calculate distance cut
     distcut = np.asmatrix(np.nanpercentile(distance, 3, axis=0))
