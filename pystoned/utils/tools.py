@@ -229,31 +229,3 @@ def assert_various_return_to_scale_omega(rts):
 def assert_solver_available_locally(solver):
     if not SolverFactory(solver).available():
         raise ValueError("Solver {} is not available locally.".format(solver))
-
-
-def assert_valid_univariate_data(y, x):
-    y_shape = np.asarray(y).shape
-    x_shape = np.asarray(x).shape
-
-    if y_shape[0] != x_shape[0]:
-        raise ValueError(
-            "Number of DMUs must be the same in x and y.")
-
-    if x_shape[1] != 1:
-        raise ValueError(
-            "univariate CNLS only allows single x as the input.")
-
-    y = np.asarray(y).reshape(y_shape[0], 1)
-    x = np.asarray(x).reshape(x_shape[0], 1)
-
-    # sorting the observed data in ascending order according to x
-    data = np.concatenate((y, x), axis=1)
-    data = data[np.argsort(data[:, 1])].T
-
-    y = trans_list(data[0])
-    x = trans_list(data[1])
-
-    y = to_1d_list(y)
-    x = to_1d_list(x)
-
-    return y, x
