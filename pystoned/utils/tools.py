@@ -229,3 +229,39 @@ def assert_various_return_to_scale_omega(rts):
 def assert_solver_available_locally(solver):
     if not SolverFactory(solver).available():
         raise ValueError("Solver {} is not available locally.".format(solver))
+
+
+def assert_valid_wp_data(y, x, b, z=None):
+    y = trans_list(y)
+    x = trans_list(x)
+    b = trans_list(b)
+
+    y = to_1d_list(y)
+    x = to_2d_list(x)
+    b = to_2d_list(b)
+
+    y_shape = np.asarray(y).shape
+    x_shape = np.asarray(x).shape
+    b_shape = np.asarray(b).shape
+
+    if len(y_shape) == 2 and y_shape[1] != 1:
+        raise ValueError(
+            "The multidimensional output data is supported by direciontal based models.")
+
+    if y_shape[0] != x_shape[0]:
+        raise ValueError(
+            "Number of DMUs must be the same in x and y.")
+
+    if x_shape[0] != b_shape[0]:
+        raise ValueError(
+            "Number of DMUs must be the same in x and b.")
+
+    if type(z) != type(None):
+        z = trans_list(z)
+        z = to_2d_list(z)
+        z_shape = np.asarray(z).shape
+        if y_shape[0] != z_shape[0]:
+            raise ValueError(
+                "Number of DMUs must be the same in y and z.")
+
+    return y, x, b, z
