@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath('../../'))
 # -- Project information -----------------------------------------------------
 
 project = u'pyStoNED'
-copyright = u'2020-2021, The pyStoNED authors'
+copyright = u'2020-2022, The pyStoNED authors'
 author = u'Sheng Dai, Yu-Hsueh Fang, Chia-Yen Lee, Kuosmanen Timo'
 
 # The version info for the project you're documenting, acts as replacement for
