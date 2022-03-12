@@ -33,7 +33,8 @@ install_requires = [
     'pandas>=1.1.3',
     'numpy>=1.19.2',
     'scipy>=1.5.2',
-    'matplotlib'
+    'matplotlib',
+    'mosek'
 ]
 
 if __name__ == '__main__':
