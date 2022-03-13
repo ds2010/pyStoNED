@@ -13,6 +13,7 @@ from . import plot
 from . import ICNLS
 from . import ICQER
 from . import StoNED
+from . import wdCNLS
 
 __all__ = [
     'CNLS',
@@ -30,4 +31,5 @@ __all__ = [
     'ICNLS',
     'ICQER',
     'StoNED',
+    'wdCNLS',
 ]
