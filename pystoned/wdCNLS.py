@@ -8,12 +8,12 @@ from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, OPT_DEFAULT, RTS_C
 from .utils import tools
 
 
-class wdCNLS:
+class wCNLS:
     """Convex Nonparametric Least Square (CNLS) with weak disposability
     """
 
     def __init__(self, y, x, b, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
-        """wdCNLS model
+        """wCNLS model
 
         Args:
             y (float): output variable. 
