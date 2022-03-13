@@ -40,30 +40,27 @@ In the pyStoNED, one can free to choose the solvers by changing the argument in 
 
       model.optimize('email@address')
 
-Please replace with your own email address reqired by NEOS server, see `NEOS FAQ <https://neos-guide.org/content/FAQ#email>`_.
+As of January 2021, NOES requires a valid email address in all submission. 
+Please replace with your own email address.  See `NEOS FAQ <https://neos-guide.org/content/FAQ#email>`_.
 
-For local solver, the pyStoNED currently only supports the additive model estimation by using the `MOSEK <https://www.mosek.com/>`_. If you do that, you have to install MOSEK API by yourself. The installation tutorial is provided as follows:
+For local solver, the pyStoNED currently only supports the additive model estimation by using the `MOSEK <https://www.mosek.com/>`_. 
+If you do that, you have to install MOSEK license
 
 ::
 
-   ## MOSEK Optimizer API Installation ##
+   ## MOSEK Optimizer: License installation ##
 
-   1. Requrest Personal Academic License MOSEK-Academic License.
+   1. Requrest Personal Academic License
+     
+      https://www.mosek.com/license/request/personal-academic/
 
-   2. Save the license file under the user's home directory with a folder named "mosek". For example:
+   2. Save the license file under the user's home directory 
+      with a folder named "mosek". e.g.,
+      
       Windows: c:\users\xxxx\mosek\mosek.lic
       Unix/OS X: /home/xxxx/mosek/mosek.lic
 
       Note: xxxx is the User ID on the computer
-
-   3. Install mosek Package
-      pip: pip install Mosek
-      anconda: conda install -c mosek mosek
-
-   4. Testing the Installation
-      start Python and try: import mosek
-
-   Other detailed installation process can be seen in MOSEK docs.
 
 
 For remote solver, the additive model and multiplicative model are calculated by ``MOSEK`` and ``KNITRO`` on NEOS server, respectively.

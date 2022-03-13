@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to pyStoNED 0.5.5
+Welcome to pyStoNED 0.5.6
 ====================================
 
 `pyStoNED <https://pypi.org/project/pystoned/>`_ is a Python package that provides functions for estimating Convex Nonparametric Least Square (CNLS), 
