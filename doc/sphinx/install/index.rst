@@ -1,7 +1,7 @@
-.. _install:
+.. _Installation:
 
-Install
-=======
+Installation
+==============
 
 pyStoNED supports Python 3 on Linux, macOS, and Windows. You can use pip or GitHub for installation.
 
