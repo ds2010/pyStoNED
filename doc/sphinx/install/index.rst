@@ -26,19 +26,19 @@ To estimate the StoNED-related models, we usually use two types of solvers: quad
 
   2. For local solvers, we can use the solvers embedded in GAMS or API solvers (e.g., MOSEK). Compared with the remote solvers, the local solver is pretty robust to performance, but the amount of solvers is limit.
 
-In the pyStoNED, one can free to choose the solvers by changing the argument in ``model.optimize()``. For examples:
+In the pyStoNED, one can free to choose the solvers by changing the argument in ``model.optimize()``. For example:
 
   * Using local solver
    
    ::
 
-      model.optimize(OPT_LOCAL)
+      model.optimize(OPT_LOCAL, solver='mosek')
 
   * Using remote solver
 
    ::
 
-      model.optimize('email@address')
+      model.optimize('email@address', solver='mosek')
 
 As of January 2021, NOES requires a valid email address in all submission. 
 Please replace with your own email address.  See `NEOS FAQ <https://neos-guide.org/content/FAQ#email>`_.
