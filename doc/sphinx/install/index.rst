@@ -3,67 +3,83 @@
 Installation
 ==============
 
-pyStoNED supports Python 3 on Linux, macOS, and Windows. You can use pip or GitHub for installation.
+pyStoNED supports Python 3.8 or later versions on Linux, macOS, and Windows. We can install the package
+using pip or GitHub.
 
 PyPI
 ----
-  ::
+::
 
    pip install pystoned
 
 GitHub [1]_
 -----------
-  ::
+::
 
    pip install -U git+https://github.com/ds2010/pyStoNED
 
 Solver
 ------
 
-To estimate the StoNED-related models, we usually use two types of solvers: quadratic programming solver (QP-solver) and nonlinear programming solver (NLP-solver). In the pyStoNED package, we can import these two kind of solvers locally or remotely. Specifically,
+All modules supported by pyStoNED are either additive or multiplicative models, depending on the specification of the error term's structure.
+From the perspective of optimization, the additive models are usually the QP problem with an exception of the CQR model, which is a linear programming
+(LP) problem, and all multiplicative models are the NLP problem. The attribute of models determines which type of solver will meet our needs, 
+i.e., QP/LP-solver (e.g., ``CPLEX``, ``MOSEK``) or NLP-solver (e.g., ``MINOS``, ``KNITRO``). 
 
-  1. For remote solvers, we usually rely on the solvers provided by the `NEOS server <https://neos-server.org/neos/>`_, where we can choose such solvers as `cplex`, `mosek`, `minos`, and `knitro`. The first two solvers can be used to calculate the LP models, the last two can be used to estimate the NLP models, and the second is more suit for the QP models. However, sometimes, the NEOS server is not so stable, and some unknown errors could appear.
+`Pyomo <http://www.pyomo.org/>`_ provides a complete application programming interface to import those commercial off-the-shelf solvers. 
+pyStoNED interfaces with Pyomo to connect the network-enabled optimization system (`NEOS <https://neos-server.org/neos/>`_) server that 
+freely provides a large number of academic solvers for solving the additive or multiplicative models remotely. pyStoNED also provides 
+support for ``MOSEK`` through Pyomo to calculate the additive models locally. Specifically,
 
-  2. For local solvers, we can use the solvers embedded in GAMS or API solvers (e.g., MOSEK). Compared with the remote solvers, the local solver is pretty robust to performance, but the amount of solvers is limit.
 
-In the pyStoNED, one can free to choose the solvers by changing the argument in ``model.optimize()``. For example:
+   * Remote solver
 
-  * Using local solver
-   
+   In pyStoNED, we use the following code to estimate the additive or multiplicative models via the remote solver provided by NEOS.
+
    ::
 
-      model.optimize(OPT_LOCAL, solver='mosek')
+      model.optimize('email@address')
 
-  * Using remote solver
+   Replace the argument ``email@address`` with your own email address. [2]_  
+   By default, the additive and multiplicative models will be solved by ``MOSEK`` and ``KNITRO``, respectively. 
+   In addition, the users can freely choose their prefer solver, e.g., ``CPLEX``, using
 
    ::
 
-      model.optimize('email@address', solver='mosek')
+      model.optimize(email="email@address", solver='cplex')
 
-As of January 2021, NOES requires a valid email address in all submission. 
-Please replace with your own email address.  See `NEOS FAQ <https://neos-guide.org/content/FAQ#email>`_.
+   * Local solver
 
-For local solver, the pyStoNED currently only supports the additive model estimation by using the `MOSEK <https://www.mosek.com/>`_. 
-If you do that, you have to install MOSEK license
+   To solve the additive models with MOSEK, the academic license is required to install on the user's machine in advance.
 
-::
+   ::
 
-   ## MOSEK Optimizer: License installation ##
+      ## MOSEK Optimizer: License installation ##
 
-   1. Requrest Personal Academic License
-     
-      https://www.mosek.com/license/request/personal-academic/
-
-   2. Save the license file under the user's home directory 
-      with a folder named "mosek". e.g.,
+      1. Requrest Personal Academic License
       
-      Windows: c:\users\xxxx\mosek\mosek.lic
-      Unix/OS X: /home/xxxx/mosek/mosek.lic
+         https://www.mosek.com/license/request/personal-academic/
 
-      Note: xxxx is the User ID on the computer
+      2. Save the license file under the user's home directory 
+         with a folder named "mosek". e.g.,
+         
+         Windows: c:\users\xxxx\mosek\mosek.lic
+         Unix/OS X: /home/xxxx/mosek/mosek.lic
 
+         Note: xxxx is the User ID on the computer
 
-For remote solver, the additive model and multiplicative model are calculated by ``MOSEK`` and ``KNITRO`` on NEOS server, respectively.
+   After that, we can use the following code to calculate the additive models.
 
+   ::
+
+      model.optimize(OPT_LOCAL)
+
+   The parameter  ``OPT_LOCAL`` is added in the function ``.optimize(...)`` to indicate that the model is computed locally. 
+   Similarly, one can use the parameter ``solver`` to select other solver if the corresponding license is available. 
+
+Since the free and stable NLP solver remains scant, pyStoNED currently does not support the multiplicative model estimation 
+locally. Hence, we recommend the user solve their multiplicative models remotely. We will update the package immediately when the
+free and stable NLP solver is available. Furthermore, the remote optimization is highly recommended for light computing jobs. 
 
 .. [1] The GitHub repo provides the latest development version.
+.. [2] As of January 2021, NOES requires a valid email address in all submission; see `NEOS Server FAQ <https://neos-guide.org/content/FAQ#email>`_.
