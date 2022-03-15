@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath('../../'))
 
 project = u'pyStoNED'
 copyright = u'2020-2022, The pyStoNED authors'
-author = u'Sheng Dai, Yu-Hsueh Fang, Chia-Yen Lee, Kuosmanen Timo'
+author = u'Sheng Dai, Yu-Hsueh Fang, Chia-Yen Lee, Timo Kuosmanen'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
