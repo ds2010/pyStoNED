@@ -12,7 +12,8 @@ Convex Expectile Regression (CER), and Isotonic CNLS (ICNLS). It also provides e
 and Free Disposal Hull (FDH). The pyStoNED package allows the user to estimate the CNLS/StoNED frontiers in an open-access environment and 
 is built based on the Pyomo.
 
-For example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/Ex1.ipynb>`_, the following code estimates the basic CNLS model and plot the production frontier.
+For example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/Ex1.ipynb>`_, the following code estimates 
+the basic CNLS model and plot the production frontier. [1]_
 
 .. code:: python
 
@@ -97,3 +98,4 @@ The CNLS production frontier is shown as follows:
 
    acronyms/index.md
 
+.. [1] Please read `Solver <https://pystoned.readthedocs.io/en/latest/install/index.html#solver>`_ in Installation before running the example.
