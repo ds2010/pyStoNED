@@ -50,7 +50,7 @@ support for ``MOSEK`` through Pyomo to calculate the additive models locally. Sp
 
    * Local solver
 
-   To solve the additive models with MOSEK, the academic license is required to install on the user's machine in advance.
+   To solve the additive models with ``MOSEK``, the academic license is required to install on the user's machine in advance.
 
    ::
 
@@ -77,9 +77,10 @@ support for ``MOSEK`` through Pyomo to calculate the additive models locally. Sp
    The parameter  ``OPT_LOCAL`` is added in the function ``.optimize(...)`` to indicate that the model is computed locally. 
    Similarly, one can use the parameter ``solver`` to select other solver if the corresponding license is available. 
 
-Since the free and stable NLP solver remains scant, pyStoNED currently does not support the multiplicative model estimation 
-locally. Hence, we recommend the user solve their multiplicative models remotely. We will update the package immediately when the
-free and stable NLP solver is available. Furthermore, the remote optimization is highly recommended for light computing jobs. 
+
+Overall, the remote solver through the NEOS server is highly recommended for ALL light computing jobs. The local solver for 
+computing the multiplicative model will be supported in pyStoNED when the free and stable NLP solver is available.
+
 
 .. [1] The GitHub repo provides the latest development version.
 .. [2] As of January 2021, NOES requires a valid email address in all submission; see `NEOS Server FAQ <https://neos-guide.org/content/FAQ#email>`_.
