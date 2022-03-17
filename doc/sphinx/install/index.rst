@@ -78,7 +78,7 @@ support for ``MOSEK`` through Pyomo to calculate the additive models locally. Sp
    Similarly, one can use the parameter ``solver`` to select other solver if the corresponding license is available. 
 
 
-Overall, the remote solver through the NEOS server is highly recommended for ALL light computing jobs. The local solver for 
+Overall, the remote solver is highly recommended for ALL light computing jobs. The local solver for 
 computing the multiplicative model will be supported in pyStoNED when the free and stable NLP solver is available.
 
 

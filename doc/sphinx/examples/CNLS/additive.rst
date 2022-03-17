@@ -55,8 +55,8 @@ using the .get\_alpha().
 
 The following examples are to demonstrate how to estimate the VRS models:
 
-Example: CNLS as production function `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_prod.ipynb>`__
----------------------------------------------------------------------------------------------------------------------------------------------------
+Example: Estimating production function (additive CNLS model) `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_prod.ipynb>`__
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 .. code:: python
 
@@ -73,12 +73,10 @@ Example: CNLS as production function `[.ipynb] <https://colab.research.google.co
     model = CNLS.CNLS(y=data.y, x=data.x, z=None, 
                         cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)
     
-    # estimate the model: 1) local estimation; 2) remote estimation
-    model.optimize(OPT_LOCAL)
-
-    # Please replace with your own email address reqired by NEOS server 
-    #               (see https://neos-guide.org/content/FAQ#email)
-    # model.optimize('email@address') 
+    # estimate the model using: 1) remote solver; 2) local solver
+    # Please replace with your own email address reqired by NEOS server (see https://neos-guide.org/content/FAQ#email)
+    model.optimize('email@address') 
+    #model.optimize(OPT_LOCAL)
 
     # display the estimates
     model.display_alpha()
@@ -89,26 +87,3 @@ Example: CNLS as production function `[.ipynb] <https://colab.research.google.co
     alpha = model.get_alpha()
     beta = model.get_beta()
     residuals = model.get_residual()
-
-
-Example: CNLS as cost function `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_cost.ipynb>`__
----------------------------------------------------------------------------------------------------------------------------------------------
-
-.. code:: python
-
-    # import packages
-    from pystoned import CNLS
-    from pystoned.constant import CET_ADDI, FUN_COST, OPT_LOCAL, RTS_VRS
-    from pystoned.dataset import load_Finnish_electricity_firm
-    
-    # import Finnish electricity distribution firms data
-    data = load_Finnish_electricity_firm(x_select=['Energy', 'Length', 'Customers'],
-                                            y_select=['TOTEX'])
-    
-    # define and solve the CNLS model
-    model = CNLS.CNLS(y=data.y, x=data.x, z=None, 
-                        cet = CET_ADDI, fun = FUN_COST, rts = RTS_VRS)
-    model.optimize(OPT_LOCAL)
-
-    # display residuals
-    model.display_residual()
