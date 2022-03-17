@@ -20,7 +20,7 @@ For example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/
    import numpy as np
    from pystoned import CNLS
    from pystoned.plot import plot2d
-   from pystoned.constant import CET_ADDI, FUN_PROD, OPT_LOCAL, RTS_VRS
+   from pystoned.constant import CET_ADDI, FUN_PROD, RTS_VRS
    
    # set seed
    np.random.seed(0)  
@@ -33,8 +33,8 @@ For example `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/
 
    # define the CNLS model
    model = CNLS.CNLS(y, x, z=None, cet = CET_ADDI, fun = FUN_PROD, rts = RTS_VRS)
-   # solve the model
-   model.optimize(OPT_LOCAL)
+   # solve the model with remote solver
+   model.optimize('email@address')
 
    # display the residuals
    model.display_residual()
