@@ -1,6 +1,6 @@
-=================
+===================
 API Documentation
-=================
+===================
 
 The API Documentation including 3 parts: Formulations classes, Residual decomposition and Peripheral methods.
 
@@ -20,6 +20,9 @@ Formulations Classes
    formulations/FDH
    formulations/ICNLS
    formulations/ICQER
+   formulations/pCQER
+   formulations/sCQER
+   formulations/wCNLS
 
 Residual Decomposition
 ----------------------
