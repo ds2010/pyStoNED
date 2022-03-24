@@ -1,7 +1,7 @@
 ===================
-sCQER
+pCQER
 ===================
 
-.. automodule:: pystoned.sCQER
+.. automodule:: pystoned.pCQER
    :special-members: __init__
    :members:

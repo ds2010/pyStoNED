@@ -2,6 +2,6 @@
 wCNLS
 ===================
 
-.. automodule:: pystoned.CQER
+.. automodule:: pystoned.wCNLS
    :special-members: __init__
    :members:
