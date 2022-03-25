@@ -29,12 +29,12 @@ setup_args = dict(
 )
 
 install_requires = [
-    'pyomo>=6.1.2',
+    'pyomo>=6.4.0',
     'pandas>=1.1.3',
     'numpy>=1.19.2',
     'scipy>=1.5.2',
-    'matplotlib',
-    'mosek>=9.3.17'
+    'matplotlib>=3.5.1',
+    'mosek>=9.3.18'
 ]
 
 if __name__ == '__main__':
