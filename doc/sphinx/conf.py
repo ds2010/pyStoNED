@@ -28,7 +28,7 @@ author = u'Sheng Dai, Yu-Hsueh Fang, Chia-Yen Lee, Timo Kuosmanen'
 # The short X.Y version.
 version = '0.5'
 # The full version, including alpha/beta/rc tags.
-release = '0.5.6'
+release = '0.5.7'
 
 # -- General configuration ---------------------------------------------------
 
