@@ -72,11 +72,13 @@ With the help of `Pyomo <http://www.pyomo.org/>`_, all models supported by pySto
    Otherwise, the following error message will display on the screen when calculating CNLS/StoNED or other variants.
    
    ::
+
       MOSEK error 1008: License cannot be located. The default search path is ':/home/user/mosek/mosek.lic:'.
 
    After that, we can use the following code to calculate the additive models.
 
    ::
+
       model.optimize(OPT_LOCAL)
 
    The parameter ``OPT_LOCAL`` is added in the function ``.optimize(...)`` to indicate that the model is computed locally. 
