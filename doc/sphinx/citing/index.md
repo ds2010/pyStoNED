@@ -6,10 +6,10 @@ If you use `pyStoNED` for published work, we encourage you to cite our [pyStoNED
 
 ```
 @techreport{Dai2021,
-	title   = {{pyStoNED: A Python package for convex regression and frontier estimation}},
-	author  = {Dai, Sheng and Fang, Yu Hsueh and Lee, Chia Yen and Kuosmanen, Timo},
-	year    = 2021,
-	type    = {{arXiv preprint arXiv:2109.12962}}
+	title    = {{pyStoNED: A Python package for convex regression and frontier estimation}},
+	author   = {Dai, Sheng and Fang, Yu Hsueh and Lee, Chia Yen and Kuosmanen, Timo},
+	year     = 2021,
+	type     = {{arXiv preprint arXiv:2109.12962}}
 }
 ```
 
