@@ -32,7 +32,7 @@ With the help of `Pyomo <http://www.pyomo.org/>`_, all models supported by pySto
 
    * Remote solver
 
-   \pkg{pyStoNED} interfaces with Pyomo to access the network-enabled optimization system (`NEOS <https://neos-server.org/neos/>`_) server that 
+   pyStoNED interfaces with Pyomo to access the network-enabled optimization system (`NEOS <https://neos-server.org/neos/>`_) server that 
    freely provides a large number of academic solvers for solving the additive or multiplicative models remotely. In this case, the users do not 
    need to install solvers and corresponding licenses on their own machine. Here we have a model estimated by remote solver
 
@@ -40,7 +40,7 @@ With the help of `Pyomo <http://www.pyomo.org/>`_, all models supported by pySto
 
       model.optimize('email@address')
 
-   Replace the argument \code{email@address} with your email address. [2]_  
+   Replace the argument ``email@address`` with your email address. [2]_  
    By default, the additive and multiplicative models will be solved by ``MOSEK`` and ``KNITRO``, respectively. In addition, 
    the users can freely choose their preferred solver, e.g., ``MINOS``, using
 
@@ -84,11 +84,9 @@ With the help of `Pyomo <http://www.pyomo.org/>`_, all models supported by pySto
    The parameter ``OPT_LOCAL`` is added in the function ``.optimize(...)`` to indicate that the model is computed locally. 
    Similarly, one can use the parameter ``solver`` to select another solver when it is available. 
 
-
 Overall, the remote solver through the NEOS server is highly recommended for all light computing jobs, where, in general, 
 the number of observations is no more than 500. The local solver for calculating the multiplicative model will be supported 
 in pyStoNED when the free and stable NLP solver is available.
-
 
 .. [1] The GitHub repo provides the latest development version.
 .. [2] As of January 2021, NOES requires a valid email address in all submission; see `NEOS Server FAQ <https://neos-guide.org/content/FAQ#email>`_.
