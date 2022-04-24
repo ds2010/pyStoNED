@@ -21,20 +21,22 @@ GitHub [1]_
 Solver
 ------
 
-All models supported by pyStoNED are either additive or multiplicative models, depending on the specification of the error term's structure. 
-From the perspective of optimization, the additive models are usually the QP problem with an exception of the CQR model, which is a linear 
-programming (LP) problem, and all multiplicative models are the NLP problem. 
+All models supported by pyStoNED are either additive or multiplicative models, depending on the specification of the error term. 
+From the perspective of optimization, the additive models are usually stated as QP problems with an exception of the CQR model, 
+which is a linear programming (LP) problem, whereas all multiplicative models are NLP problems. 
 
-To calculate these models, external off-the-shelf solvers are required. In our experience, ``CPLEX`` or ``MOSEK`` provides a very reliable 
-and convenient platform to solve the QP/LP problems. The NLP problem can be efficiently solved by ``MINOS`` or ``KNITRO``. Note that the tailored 
-algorithm for specific estimators could be used to solve these models. However, it is not a good choice for our general application purposes. 
-With the help of `Pyomo <http://www.pyomo.org/>`_, all models supported by pyStoNED are calculated by these off-the-shelf solvers. 
+To solve the relevant QP or NLP problems, external off-the-shelf solvers are required. In our experience, ``CPLEX`` or ``MOSEK``
+ provide reliable and convenient platforms for solving the QP and LP problems. 
+The NLP problem can be efficiently solved by ``MINOS`` or ``KNITRO``. 
+Note that the tailored algorithm for specific estimators could also 
+be used to solve these models. However, tailored algorithms are not the most convenient choice for our general 
+application purposes. With the help of `Pyomo <http://www.pyomo.org/>`_, all models supported by pyStoNED are computable by these off-the-shelf solvers. 
 
    * Remote solver
 
    pyStoNED interfaces with Pyomo to access the network-enabled optimization system (`NEOS <https://neos-server.org/neos/>`_) server that 
    freely provides a large number of academic solvers for solving the additive or multiplicative models remotely. In this case, the users do not 
-   need to install solvers and corresponding licenses on their own machine. Here we have a model estimated by remote solver
+   need to install solvers and corresponding licenses on their own computer. Here we have a model estimated by remote solver
 
    ::
 
@@ -86,7 +88,7 @@ With the help of `Pyomo <http://www.pyomo.org/>`_, all models supported by pySto
 
 Overall, the remote solver through the NEOS server is highly recommended for all light computing jobs, where, in general, 
 the number of observations is no more than 500. The local solver for calculating the multiplicative model will be supported 
-in pyStoNED when the free and stable NLP solver is available.
+in pyStoNED when a free and stable NLP solver is available.
 
 .. [1] The GitHub repo provides the latest development version.
 .. [2] As of January 2021, NOES requires a valid email address in all submission; see `NEOS Server FAQ <https://neos-guide.org/content/FAQ#email>`_.
