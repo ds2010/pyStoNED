@@ -26,10 +26,8 @@ From the perspective of optimization, the additive models are usually stated as 
 which is a linear programming (LP) problem, whereas all multiplicative models are NLP problems. 
 
 To solve the relevant QP or NLP problems, external off-the-shelf solvers are required. In our experience, ``CPLEX`` or ``MOSEK``
- provide reliable and convenient platforms for solving the QP and LP problems. 
-The NLP problem can be efficiently solved by ``MINOS`` or ``KNITRO``. 
-Note that the tailored algorithm for specific estimators could also 
-be used to solve these models. However, tailored algorithms are not the most convenient choice for our general 
+provide reliable and convenient platforms for solving the QP and LP problems. The NLP problem can be efficiently solved by ``MINOS`` or ``KNITRO``. 
+Note that the tailored algorithm for specific estimators could also be used to solve these models. However, tailored algorithms are not the most convenient choice for our general 
 application purposes. With the help of `Pyomo <http://www.pyomo.org/>`_, all models supported by pyStoNED are computable by these off-the-shelf solvers. 
 
    * Remote solver
