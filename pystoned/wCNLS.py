@@ -49,7 +49,7 @@ class wCNLS:
         self.__model__.alpha = Var(self.__model__.I, doc='alpha')
         self.__model__.beta = Var(self.__model__.I,
                                   self.__model__.J,
-                                  #bounds=(0.0, None),
+                                  bounds=(0.0, None),
                                   doc='beta')
         self.__model__.epsilon = Var(self.__model__.I, doc='residual')
         self.__model__.frontier = Var(self.__model__.I,
