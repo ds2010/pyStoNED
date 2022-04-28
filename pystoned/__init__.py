@@ -8,6 +8,7 @@ from . import CQERG
 from . import dataset
 from . import DEA
 from . import FDH
+from . import pCNLS
 from . import pCQER
 from . import plot
 from . import ICNLS
@@ -15,6 +16,8 @@ from . import ICQER
 from . import sCQER
 from . import StoNED
 from . import wCNLS
+from . import wCQER
+from . import weakCNLS
 
 __all__ = [
     'CNLS',
@@ -27,6 +30,7 @@ __all__ = [
     'dataset',
     'DEA',
     'FDH',
+    'pCNLS',
     'pCQER',
     'plot',
     'ICNLS',
@@ -34,4 +38,6 @@ __all__ = [
     'sCQER',
     'StoNED',
     'wCNLS',
+    'wCQER',
+    'weakCNLS',
 ]

@@ -4,45 +4,37 @@ from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
 
-from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL, OPT_DEFAULT
+from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, OPT_DEFAULT, RTS_CRS, RTS_VRS, OPT_LOCAL
 from .utils import tools
 
 
-class pCQR:
-    """Convex quantile regression with squared L2-norm regularization (pCQR)
+class pCNLS:
+    """Convex Nonparametric Least Square with squared L2-norm regularization (pCNLS)
     """
 
-    def __init__(self, y, x, tau, eta, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
-        """pCQR model
+    def __init__(self, y, x, eta, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
+        """pCNLS model
 
         Args:
             y (float): output variable. 
             x (float): input variables.
-            z (float, optional): Contextual variable(s). Defaults to None.
-            tau (float): quantile.
             eta (float): regularization parameter.
+            z (float, optional): Contextual variable(s). Defaults to None.
             cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
             fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
             rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.y, self.x, self.z = tools.assert_valid_basic_data(y, x, z)
-        self.tau = tau
         self.eta = eta
         self.cet = cet
         self.fun = fun
         self.rts = rts
 
-        # Initialize the CQR model
+        # Initialize the CNLS model
         self.__model__ = ConcreteModel()
 
         if type(self.z) != type(None):
-            self.z = z.tolist()
-            if type(self.z[0]) != list:
-                self.z = []
-                for z_value in z.tolist():
-                    self.z.append([z_value])
-
             # Initialize the set of z
             self.__model__.K = Set(initialize=range(len(self.z[0])))
 
@@ -59,11 +51,7 @@ class pCQR:
                                   self.__model__.J,
                                   bounds=(0.0, None),
                                   doc='beta')
-        self.__model__.epsilon = Var(self.__model__.I, doc='error term')
-        self.__model__.epsilon_plus = Var(
-            self.__model__.I, bounds=(0.0, None), doc='positive error term')
-        self.__model__.epsilon_minus = Var(
-            self.__model__.I, bounds=(0.0, None), doc='negative error term')
+        self.__model__.epsilon = Var(self.__model__.I, doc='residual')
         self.__model__.frontier = Var(self.__model__.I,
                                       bounds=(0.0, None),
                                       doc='estimated frontier')
@@ -72,11 +60,6 @@ class pCQR:
         self.__model__.objective = Objective(rule=self.__objective_rule(),
                                              sense=minimize,
                                              doc='objective function')
-
-        self.__model__.error_decomposition = Constraint(self.__model__.I,
-                                                        rule=self.__error_decomposition(),
-                                                        doc='decompose error term')
-
         self.__model__.regression_rule = Constraint(self.__model__.I,
                                                     rule=self.__regression_rule(),
                                                     doc='regression equation')
@@ -84,7 +67,6 @@ class pCQR:
             self.__model__.log_rule = Constraint(self.__model__.I,
                                                  rule=self.__log_rule(),
                                                  doc='log-transformed regression equation')
-
         self.__model__.afriat_rule = Constraint(self.__model__.I,
                                                 self.__model__.I,
                                                 rule=self.__afriat_rule(),
@@ -109,19 +91,10 @@ class pCQR:
         """Return the proper objective function"""
 
         def objective_rule(model):
-            return self.tau * sum(model.epsilon_plus[i] for i in model.I) \
-                   + (1 - self.tau) * sum(model.epsilon_minus[i] for i in model.I) \
+            return sum(model.epsilon[i] ** 2 for i in model.I) \
                    + self.eta * sum(model.beta[ij] ** 2 for ij in model.I * model.J)
 
         return objective_rule
-
-    def __error_decomposition(self):
-        """Return the constraint decomposing error to positive and negative terms"""
-
-        def error_decompose_rule(model, i):
-            return model.epsilon[i] == model.epsilon_plus[i] - model.epsilon_minus[i]
-
-        return error_decompose_rule
 
     def __regression_rule(self):
         """Return the proper regression constraint"""
@@ -214,14 +187,13 @@ class pCQR:
 
                 return afriat_rule
             elif self.rts == RTS_CRS:
+
                 def afriat_rule(model, i, h):
                     if i == h:
                         return Constraint.Skip
                     return __operator(
-                        sum(model.beta[i, j] * self.x[i][j]
-                            for j in model.J),
-                        sum(model.beta[h, j] * self.x[i][j]
-                            for j in model.J))
+                        sum(model.beta[i, j] * self.x[i][j] for j in model.J),
+                        sum(model.beta[h, j] * self.x[i][j] for j in model.J))
 
                 return afriat_rule
         elif self.cet == CET_MULT:
@@ -258,6 +230,7 @@ class pCQR:
     def display_alpha(self):
         """Display alpha value"""
         tools.assert_optimized(self.optimization_status)
+        tools.assert_various_return_to_scale(self.rts)
         self.__model__.alpha.display()
 
     def display_beta(self):
@@ -276,16 +249,6 @@ class pCQR:
         tools.assert_optimized(self.optimization_status)
         self.__model__.epsilon.display()
 
-    def display_positive_residual(self):
-        """Dispaly positive residual value"""
-        tools.assert_optimized(self.optimization_status)
-        self.__model__.epsilon_plus.display()
-
-    def display_negative_residual(self):
-        """Dispaly negative residual value"""
-        tools.assert_optimized(self.optimization_status)
-        self.__model__.epsilon_minus.display()
-
     def get_status(self):
         """Return status"""
         return self.optimization_status
@@ -293,6 +256,7 @@ class pCQR:
     def get_alpha(self):
         """Return alpha value by array"""
         tools.assert_optimized(self.optimization_status)
+        tools.assert_various_return_to_scale(self.rts)
         alpha = list(self.__model__.alpha[:].value)
         return np.asarray(alpha)
 
@@ -305,6 +269,12 @@ class pCQR:
         beta = beta.pivot(index='Name', columns='Key', values='Value')
         return beta.to_numpy()
 
+    def get_residual(self):
+        """Return residual value by array"""
+        tools.assert_optimized(self.optimization_status)
+        residual = list(self.__model__.epsilon[:].value)
+        return np.asarray(residual)
+
     def get_lamda(self):
         """Return beta value by array"""
         tools.assert_optimized(self.optimization_status)
@@ -312,61 +282,24 @@ class pCQR:
         lamda = list(self.__model__.lamda[:].value)
         return np.asarray(lamda)
 
-    def get_residual(self):
-        """Return residual value by array"""
-        tools.assert_optimized(self.optimization_status)
-        residual = list(self.__model__.epsilon[:].value)
-        return np.asarray(residual)
-
-    def get_positive_residual(self):
-        """Return positive residual value by array"""
-        tools.assert_optimized(self.optimization_status)
-        residual_plus = list(self.__model__.epsilon_plus[:].value)
-        return np.asarray(residual_plus)
-
-    def get_negative_residual(self):
-        """Return negative residual value by array"""
-        tools.assert_optimized(self.optimization_status)
-        residual_minus = list(self.__model__.epsilon_minus[:].value)
-        return np.asarray(residual_minus)
-
     def get_frontier(self):
         """Return estimated frontier value by array"""
         tools.assert_optimized(self.optimization_status)
-        if self.cet == CET_MULT:
+        if self.cet == CET_MULT and type(self.z) == type(None):
             frontier = np.asarray(list(self.__model__.frontier[:].value)) + 1
+        elif self.cet == CET_MULT and type(self.z) != type(None):
+            frontier = list(np.divide(self.y, np.exp(
+                self.get_residual() + self.get_lamda() * np.asarray(self.z)[:, 0])) - 1)
         elif self.cet == CET_ADDI:
             frontier = np.asarray(self.y) - self.get_residual()
         return np.asarray(frontier)
 
+    def get_adjusted_residual(self):
+        """Return the shifted residuals(epsilon) tern by CCNLS"""
+        tools.assert_optimized(self.optimization_status)
+        return self.get_residual() - np.amax(self.get_residual())
 
-class pCER(pCQR):
-    """Convex expectile regression with squared L2-norm regularization (pCER)
-    """
-
-    def __init__(self, y, x, tau, eta, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
-        """pCER model
-
-        Args:
-            y (float): output variable. 
-            x (float): input variables.
-            z (float, optional): Contextual variable(s). Defaults to None.
-            tau (float): expectile.
-            eta (float): tuning parameter.
-            cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
-            fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
-            rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
-        """
-        super().__init__(y, x, tau, eta, z, cet, fun, rts)
-        self.__model__.objective.deactivate()
-        self.__model__.squared_objective = Objective(
-            rule=self.__squared_objective_rule(), sense=minimize, doc='squared objective rule')
-
-    def __squared_objective_rule(self):
-        def squared_objective_rule(model):
-            return self.tau * sum(model.epsilon_plus[i] ** 2 for i in model.I) \
-                   + (1 - self.tau) * \
-                   sum(model.epsilon_minus[i] ** 2 for i in model.I) \
-                   + self.eta * sum(model.beta[ij] ** 2 for ij in model.I * model.J)
-
-        return squared_objective_rule
+    def get_adjusted_alpha(self):
+        """Return the shifted constatnt(alpha) term by CCNLS"""
+        tools.assert_optimized(self.optimization_status)
+        return self.get_alpha() + np.amax(self.get_residual())
