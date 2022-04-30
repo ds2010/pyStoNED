@@ -20,9 +20,13 @@ Formulations Classes
    formulations/FDH
    formulations/ICNLS
    formulations/ICQER
+   formulations/pCNLS
    formulations/pCQER
    formulations/sCQER
    formulations/wCNLS
+   formulations/wCQER
+   formulations/weakCNLS
+   
 
 Residual Decomposition
 ----------------------
