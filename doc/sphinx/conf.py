@@ -47,7 +47,8 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
-    'sphinx.ext.autosummary'
+    'sphinx.ext.autosummary',
+    'myst_parser'
 ]
 source_suffix = ['.rst', '.md', '.ipynb']
 nbsphinx_execute = 'never'
