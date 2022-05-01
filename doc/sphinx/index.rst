@@ -76,7 +76,7 @@ The CNLS production frontier is shown as follows:
 .. toctree::
    :hidden:
 
-   advanced/index   
+   advanced/index.md   
 
 .. toctree::
    :hidden:
