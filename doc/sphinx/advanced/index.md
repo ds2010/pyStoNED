@@ -5,23 +5,22 @@
 We can remove the constrinat on $\beta$ by adding `model.__model__.beta.setlb(None)` before the model optimization (i.e., `model.optimize()`). Now the estimated $\beta$ can take the value from $[-\infty, \infty]$. For example, the constraint $\beta \ge 0$ is removed in CQR:
 
 ```python
-    # import packages
-    from pystoned import CQER
-    from pystoned.constant import CET_ADDI, FUN_PROD, OPT_LOCAL, RTS_VRS
-    from pystoned import dataset as dataset
+# import packages
+from pystoned import CQER
+from pystoned.constant import CET_ADDI, FUN_PROD, OPT_LOCAL, RTS_VRS
+from pystoned import dataset as dataset
 
-    # import the GHG example data
-    data = dataset.load_GHG_abatement_cost(x_select=['HRSN', 'CPNK', 'GHG'], y_select=['VALK'])
+# import the GHG example data
+data = dataset.load_GHG_abatement_cost(x_select=['HRSN', 'CPNK', 'GHG'], y_select=['VALK'])
 
-    # calculate the quantile model
-    model = CQER.CQR(y=data.y, x=data.x, tau=0.5, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS)
-    # remove the constraint beta >= 0
-    model.__model__.beta.setlb(None)
-    model.optimize(OPT_LOCAL)
+# calculate the quantile model
+model = CQER.CQR(y=data.y, x=data.x, tau=0.5, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS)
+# remove the constraint beta >= 0
+model.__model__.beta.setlb(None)
+model.optimize(OPT_LOCAL)
 
-    # display estimated beta
-    model.display_beta()
-
+# display estimated beta
+model.display_beta()
 ```
 
 ## Adding an additional constraint 
@@ -30,7 +29,7 @@ The extral constraint, e.g., $ 0 \le \beta \le 1$, can be added using
 
 ```python
 def constraint_rule(model, i, j):
-    upperbound = [1.0, 1.0]
+    upperbound = [1.0, 1.0, 1.0]
     return model.beta[i, j] <= upperbound[j]
 
 res.__model__.beta_constraint_rule = Constraint(res.__model__.I,
@@ -42,31 +41,30 @@ res.__model__.beta_constraint_rule = Constraint(res.__model__.I,
 A simple CQR example:
 
 ```python
-    # import packages
-    from pystoned import CQER
-    from pystoned.constant import CET_ADDI, FUN_PROD, OPT_LOCAL, RTS_VRS
-    from pystoned import dataset as dataset
-    from pyomo.environ import Constraint
+# import packages
+from pystoned import CQER
+from pystoned.constant import CET_ADDI, FUN_PROD, OPT_LOCAL, RTS_VRS
+from pystoned import dataset as dataset
+from pyomo.environ import Constraint
 
-    # import the GHG example data
-    data = dataset.load_GHG_abatement_cost(x_select=['HRSN', 'CPNK', 'GHG'], y_select=['VALK'])
+# import the GHG example data
+data = dataset.load_GHG_abatement_cost(x_select=['HRSN', 'CPNK', 'GHG'], y_select=['VALK'])
 
-    # calculate the quantile model
-    res = CQER.CQR(y=data.y, x=data.x, tau=0.5, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS)
-    # add an extral constraint on beta
-    def constraint_rule(model, i, j):
-        upperbound = [1.0, 1.0, 1.0]
-        return model.beta[i, j] <= upperbound[j]
+# calculate the quantile model
+res = CQER.CQR(y=data.y, x=data.x, tau=0.5, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS)
+# add an extral constraint on beta
+def constraint_rule(model, i, j):
+    upperbound = [1.0, 1.0, 1.0]
+    return model.beta[i, j] <= upperbound[j]
 
-    res.__model__.beta_constraint_rule = Constraint(res.__model__.I,
-                                                    res.__model__.J,
-                                                    rule=constraint_rule,
-                                                    doc='beta constraint')
-    res.optimize(OPT_LOCAL)
+res.__model__.beta_constraint_rule = Constraint(res.__model__.I,
+                                                res.__model__.J,
+                                                rule=constraint_rule,
+                                                doc='beta constraint')
+res.optimize(OPT_LOCAL)
 
-    # display estimated beta
-    res.display_beta()
-
+# display estimated beta
+res.display_beta()
 ```
 
 ## Miscellaneous
@@ -80,25 +78,25 @@ the CNLS models, even other complicated models on Python.
 [A short comparison](https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/gams2python.ipynb):
 
 ```python
-    ### We first present the GAMS code,
-    #sets 
-    #     i        "DMU's"  /1*10/
-    #     j        'outputs' /Energy, Length, Customers/;
+### We first present the GAMS code,
+#sets 
+#     i        "DMU's"  /1*10/
+#     j        'outputs' /Energy, Length, Customers/;
     
-    ### then the Python code is added to compare.
-    from pyomo.environ import *
-    model = ConcreteModel(name = "CNLS")
-    model.i = Set(initialize=['i1', 'i2', 'i3', 'i4', 'i5', 'i6','i7', 'i8', 'i9','i10'], doc='DMUS', ordered=True)
-    model.j = Set(initialize=['Energy', 'Length', 'Customers'], doc='outputs')
+### then the Python code is added to compare.
+from pyomo.environ import *
+model = ConcreteModel(name = "CNLS")
+model.i = Set(initialize=['i1', 'i2', 'i3', 'i4', 'i5', 'i6','i7', 'i8', 'i9','i10'], doc='DMUS', ordered=True)
+model.j = Set(initialize=['Energy', 'Length', 'Customers'], doc='outputs')
 
-    # alias(i,h); 
+# alias(i,h); 
 
-    model.h = SetOf(model.i)
+model.h = SetOf(model.i)
 
-    #Table data(i,j)
-    #$Include energy.txt;
+#Table data(i,j)
+#$Include energy.txt;
 
-    dtab = {
+dtab = {
         ('i1',  'Energy')   : 75,
         ('i1',  'Length')   : 878,
         ('i1',  'Customers'): 4933,
@@ -130,84 +128,84 @@ the CNLS models, even other complicated models on Python.
         ('i10', 'Length')   : 740,
         ('i10', 'Customers'): 10134,
         }
-    model.d = Param(model.i, model.j, initialize=dtab, doc='output data')
+model.d = Param(model.i, model.j, initialize=dtab, doc='output data')
 
-    #PARAMETERS
-    #c(i)         "Total cost of firm i"
-    #y(i,j)       "Output j of firm i";
-    model.c = Param(model.i, initialize={'i1': 1612,
-                                        'i2': 1659,
-                                        'i3': 1708,
-                                        'i4': 18918,
-                                        'i5': 1167,
-                                        'i6': 3395,
-                                        'i7': 1333,
-                                        'i8': 3518,
-                                        'i9': 1415,
-                                        'i10':2469,
-                                        }, 
-                        doc='Cost data')
+#PARAMETERS
+#c(i)         "Total cost of firm i"
+#y(i,j)       "Output j of firm i";
+model.c = Param(model.i, initialize={'i1': 1612,
+                                     'i2': 1659,
+                                     'i3': 1708,
+                                     'i4': 18918,
+                                     'i5': 1167,
+                                     'i6': 3395,
+                                     'i7': 1333,
+                                     'i8': 3518,
+                                     'i9': 1415,
+                                     'i10':2469,
+                                    }, 
+                      doc='Cost data')
 
-    def y_init(model, i, j):
-        return  model.d[i, j]
-    model.y = Param(model.i, model.j, initialize=y_init, doc='output data')
+def y_init(model, i, j):
+    return  model.d[i, j]
+model.y = Param(model.i, model.j, initialize=y_init, doc='output data')
 
-    #VARIABLES
-    #E(i)            "Composite error term (v + u)"
-    #SSE             "Sum of squares of residuals";
-    #POSITIVE VARIABLES
-    #b(i,j)    "Beta-coefficients (positivity ensures monotonicity)"
-    #Chat(i)  ;
+#VARIABLES
+#E(i)            "Composite error term (v + u)"
+#SSE             "Sum of squares of residuals";
+#POSITIVE VARIABLES
+#b(i,j)    "Beta-coefficients (positivity ensures monotonicity)"
+#Chat(i)  ;
 
-    model.b = Var(model.i, model.j, bounds=(0.0,None), doc='beta-coeff')
-    model.e = Var(model.i, doc='res')
-    model.f = Var(model.i, bounds=(0.0,None), doc='frontier')
+model.b = Var(model.i, model.j, bounds=(0.0,None), doc='beta-coeff')
+model.e = Var(model.i, doc='res')
+model.f = Var(model.i, bounds=(0.0,None), doc='frontier')
 
-    #Equations
-    #QSSE                  objective function = sum of squares of residuals
-    #QREGRESSION(i)        log-transformed regression equation
-    #Qlog(i)               supporting hyperplanes of the nonparametric cost function
-    #QCONC(i,h)            concavity constraint (Afriat inequalities);
+#Equations
+#QSSE                  objective function = sum of squares of residuals
+#QREGRESSION(i)        log-transformed regression equation
+#Qlog(i)               supporting hyperplanes of the nonparametric cost function
+#QCONC(i,h)            concavity constraint (Afriat inequalities);
 
-    #QSSE..                SSE=e=sum(i,E(i)*E(i)) ;
-    #QREGRESSION(i)..      log(C(i)) =e= log(Chat(i) + 1) + E(i);
-    #Qlog(i)..             Chat(i) =e= sum(j, b(i,j)*Y(i,j)) - 1;
-    #QCONC(i,h)..          sum(j, b(i,j)*Y(i,j)) =g= sum(j, b(h,j)*Y(i,j));
+#QSSE..                SSE=e=sum(i,E(i)*E(i)) ;
+#QREGRESSION(i)..      log(C(i)) =e= log(Chat(i) + 1) + E(i);
+#Qlog(i)..             Chat(i) =e= sum(j, b(i,j)*Y(i,j)) - 1;
+#QCONC(i,h)..          sum(j, b(i,j)*Y(i,j)) =g= sum(j, b(h,j)*Y(i,j));
 
-    def objective_rule(model):
-        return sum(model.e[i]*model.e[i] for i in model.i)
-    model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
+def objective_rule(model):
+    return sum(model.e[i]*model.e[i] for i in model.i)
+model.objective = Objective(rule=objective_rule, sense=minimize, doc='objective function')
 
-    def qreg_rule(model, i):
-        return log(model.c[i]) == log(model.f[i] + 1) + model.e[i]
-    model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression')
+def qreg_rule(model, i):
+    return log(model.c[i]) == log(model.f[i] + 1) + model.e[i]
+model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression')
 
-    def qlog_rule(model, i):
-        return model.f[i] == sum(model.b[i, j]*model.y[i, j] for j in model.j) - 1
-    model.qlog = Constraint(model.i, rule=qlog_rule, doc='cost function')
+def qlog_rule(model, i):
+    return model.f[i] == sum(model.b[i, j]*model.y[i, j] for j in model.j) - 1
+model.qlog = Constraint(model.i, rule=qlog_rule, doc='cost function')
 
-    def qconvex_rule(model, i, h):
-        return sum(model.b[i,j]*model.y[i,j] for j in model.j) >= sum(model.b[h,j]*model.y[i,j] for j in model.j)
-    model.qconvex = Constraint(model.i, model.h, rule=qconvex_rule, doc='convexity constraint')
+def qconvex_rule(model, i, h):
+    return sum(model.b[i,j]*model.y[i,j] for j in model.j) >= sum(model.b[h,j]*model.y[i,j] for j in model.j)
+model.qconvex = Constraint(model.i, model.h, rule=qconvex_rule, doc='convexity constraint')
 
-    # Execute the model
-    #MODEL StoNED /all/;
-    #SOLVE StoNED using NLP Minimizing SSE;
+# Execute the model
+#MODEL StoNED /all/;
+#SOLVE StoNED using NLP Minimizing SSE;
     
-    from pyomo.opt import SolverFactory
-    import pyomo.environ
-    solver_manager = SolverManagerFactory('neos')
-    results = solver_manager.solve(model, opt='minos')
+from pyomo.opt import SolverFactory
+import pyomo.environ
+from os import environ
+solver_manager = SolverManagerFactory('neos')
+environ['NEOS_EMAIL'] = 'email@address'
+results = solver_manager.solve(model, opt='minos')
 
-    #display E.l, b.l;
+#display E.l, b.l;
 
-    model.e.display()
-    model.b.display()  
+model.e.display()
+model.b.display()      
 ```
 
-
 ### CNLS_ConcreteModel
-
 
 We also prepare a concrete model that does not need to call any of our developed functions in the pyStoNED package.
 In this concrete model, one can define the parameter specification by reading data from an Excel file.
@@ -215,78 +213,80 @@ In this concrete model, one can define the parameter specification by reading da
 [A concreteModel for CNLS estimation](https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/CNLS_ConcreteModel.ipynb):
 
 ```python
-    # Import packages
-    import pd as pd
-    import numpy as np
-    import sys
-    from pyomo.environ import *
+# Import packages
+import pd as pd
+import numpy as np
+import sys
+from pyomo.environ import *
 
-    # Sets
-    i = np.array(['i{}'.format(i) for i in range(1, 90)])
-    model.i = Set(initialize=i, doc='DMUs', ordered=True )
-    model.j = Set(initialize=['j1', 'j2', 'j3'], doc='inputs and outputs')
+# Sets
+i = np.array(['i{}'.format(i) for i in range(1, 90)])
+model.i = Set(initialize=i, doc='DMUs', ordered=True )
+model.j = Set(initialize=['j1', 'j2', 'j3'], doc='inputs and outputs')
 
-    # alias
-    model.h = SetOf(model.i) 
+# alias
+model.h = SetOf(model.i) 
 
-    # Parameters 
-    # output (y1,y2,y3), avaiable at https://raw.githubusercontent.com/ds2010/pyStoNED/master/pystoned/data/electricityFirms.csv.
-    df1 = pd.read_excel('y.xlsx', header=0, index_col=0)
-    Dict1 = dict()
-    for i in df1.index:
-        for j in df1.columns:
-            Dict1[i, j] = float(df1[j][i])
-    model.y = Param(model.i, model.j, initialize = Dict1) 
+# Parameters 
+# output (y1,y2,y3), avaiable at https://raw.githubusercontent.com/ds2010/pyStoNED/master/pystoned/data/electricityFirms.csv.
+df1 = pd.read_excel('y.xlsx', header=0, index_col=0)
+Dict1 = dict()
+for i in df1.index:
+    for j in df1.columns:
+        Dict1[i, j] = float(df1[j][i])
+model.y = Param(model.i, model.j, initialize = Dict1) 
 
-    # input (cost)
-    df2 = pd.read_excel('x.xlsx', header=0, index_col=0)
-    Dict2 = dict()
-    for i in df2.index:
-            Dict2[i] = float(df2['TOTEX'][i])
-    model.c = Param(model.i, initialize = Dict2) 
+# input (cost)
+df2 = pd.read_excel('x.xlsx', header=0, index_col=0)
+Dict2 = dict()
+for i in df2.index:
+    Dict2[i] = float(df2['TOTEX'][i])
+model.c = Param(model.i, initialize = Dict2) 
 
-    #Variables
-    model.b = Var(model.i, model.j, bounds=(0.0,None), doc='beta-coeff')
-    model.e = Var(model.i, doc='res')
-    model.f = Var(model.i, bounds=(0.0,None), doc='frontier')
+#Variables
+model.b = Var(model.i, model.j, bounds=(0.0,None), doc='beta-coeff')
+model.e = Var(model.i, doc='res')
+model.f = Var(model.i, bounds=(0.0,None), doc='frontier')
 
-    # Constraints and objective f.
-    def qreg_rule(model, i):
-        return log(model.c[i]) == log(model.f[i] + 1) + model.e[i]
-    model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression')
+# Constraints and objective f.
+def qreg_rule(model, i):
+    return log(model.c[i]) == log(model.f[i] + 1) + model.e[i]
+model.qreg = Constraint(model.i, rule=qreg_rule, doc='log-transformed regression')
 
-    def qlog_rule(model, i):
-        return model.f[i] == sum(model.b[i, j]*model.y[i, j] for j in model.j) - 1
-    model.qlog = Constraint(model.i, rule=qlog_rule, doc='cost function')
+def qlog_rule(model, i):
+    return model.f[i] == sum(model.b[i, j]*model.y[i, j] for j in model.j) - 1
+model.qlog = Constraint(model.i, rule=qlog_rule, doc='cost function')
 
-    def qconcav_rule(model, i, h):
-        return sum(model.b[i,j]*model.y[i,j] for j in model.j) >= sum(model.b[h,j]*model.y[i,j] for j in model.j)
-    model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
+def qconcav_rule(model, i, h):
+    return sum(model.b[i,j]*model.y[i,j] for j in model.j) >= sum(model.b[h,j]*model.y[i,j] for j in model.j)
+model.qconcav = Constraint(model.i, model.h, rule=qconcav_rule, doc='concavity constraint')
 
-    def objective_rule(model):
-        return sum(model.e[i]*model.e[i] for i in model.i)
-    model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')
+def objective_rule(model):
+    return sum(model.e[i]*model.e[i] for i in model.i)
+model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')
 
-    #Solve the model
-    solver_manager = SolverManagerFactory('neos')
-    results = solver_manager.solve(model, opt='knitro', tee=True)
+#Solve the model
+from os import environ
+solver_manager = SolverManagerFactory('neos')
+environ['NEOS_EMAIL'] = 'email@address'
+results = solver_manager.solve(model, opt='knitro', tee=True)
 
-    #retrive the beta
-    ind = list(model.b)
-    val = list(model.b[:,:].value)
-    df_b = [ i + tuple([j]) for i, j in zip(ind, val)]
-    df_b = np.asarray(df_b)
-    # display beta coefficients
-    df_b
+#retrive the beta
+ind = list(model.b)
+val = list(model.b[:,:].value)
+df_b = [ i + tuple([j]) for i, j in zip(ind, val)]
+df_b = np.asarray(df_b)
+# display beta coefficients
+df_b
 
-    df_b = pd.DataFrame(df_b,columns = ['Name', 'Key', 'Value'])
-    df_b = df_b.pivot(index='Name', columns='Key', values='Value')
-    # retrive the residuals
-    ind = list(model.e)
-    val = list(model.e[:].value)
-    df_e = np.asarray(val)
-    #display residuals
-    df_e
+df_b = pd.DataFrame(df_b,columns = ['Name', 'Key', 'Value'])
+df_b = df_b.pivot(index='Name', columns='Key', values='Value')
+# retrive the residuals
+ind = list(model.e)
+val = list(model.e[:].value)
+df_e = np.asarray(val)
+#display residuals
+df_e
 ```
 
 
@@ -298,21 +298,21 @@ can be used to calculate the input oriented VRS model.
  [A ConcreteModel for DEA estimation](https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DEA_ConcreteModel.ipynb):
 
 ```python
-    # import PYOMO package
-    from pyomo.environ import *
-    # creat a concrete model
-    model = ConcreteModel()
+# import PYOMO package
+from pyomo.environ import *
+# creat a concrete model
+model = ConcreteModel()
 
-    # Sets
-    model.i = Set(initialize=['i1', 'i2','i3', 'i4','i5', 'i6','i7', 'i8','i9', 'i10'], doc='DMUs', ordered=True)
-    model.j = Set(initialize=['OPEX', 'CAPEX'])   # inputs
-    model.k = Set(initialize=['Energy', 'Length', 'Customers'])   #outputs
+# Sets
+model.i = Set(initialize=['i1', 'i2','i3', 'i4','i5', 'i6','i7', 'i8','i9', 'i10'], doc='DMUs', ordered=True)
+model.j = Set(initialize=['OPEX', 'CAPEX'])   # inputs
+model.k = Set(initialize=['Energy', 'Length', 'Customers'])   #outputs
 
-    # Alias
-    model.io = SetOf(model.i) 
+# Alias
+model.io = SetOf(model.i) 
 
-    # Parameters (define and import the input-output data)
-    inputdata = {
+# Parameters (define and import the input-output data)
+inputdata = {
                 ('OPEX', 'i1') :   681,
                 ('OPEX', 'i2') :   559,
                 ('OPEX', 'i3') :   836,
@@ -334,9 +334,9 @@ can be used to calculate the input oriented VRS model.
                 ('CAPEX', 'i9') :  564,
                 ('CAPEX', 'i10'):  1108,
                 }
-    model.x = Param(model.j, model.i, initialize=inputdata)
+model.x = Param(model.j, model.i, initialize=inputdata)
 
-    outputdata = {
+outputdata = {
                 ('Energy', 'i1'):   75,
                 ('Energy', 'i2'):   62,
                 ('Energy', 'i3'):   78,
@@ -368,37 +368,38 @@ can be used to calculate the input oriented VRS model.
                 ('Customers', 'i9'):377,
                 ('Customers', 'i10'):10134,
                 }
-    model.y = Param(model.k, model.i, initialize=outputdata)  
+model.y = Param(model.k, model.i, initialize=outputdata)  
 
-    # Variables
-    model.lamda = Var(model.io, model.i, bounds=(0.0, None), doc='envelopment efficiency') 
-    model.theta = Var(model.io, doc='intensity variable') 
+# Variables
+model.lamda = Var(model.io, model.i, bounds=(0.0, None), doc='envelopment efficiency') 
+model.theta = Var(model.io, doc='intensity variable') 
 
-    # objective
-    def objective_rule(model):
-        return sum(model.theta[io] for io in model.io)
-    model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')       
-    # Constraints
-    def output_rule(model, io, k):
-        return sum(model.lamda[io, i] * model.y[k, i] for i in model.i) >= model.y[k, io]
-    model.output = Constraint(model.io, model.k, rule=output_rule, doc='output constraints')
-    def input_rule(model, io, j):
-        return (model.theta[io] * model.x[j, io]) >= sum(
+# objective
+def objective_rule(model):
+    return sum(model.theta[io] for io in model.io)
+model.objective = Objective(rule=objective_rule, sense=minimize, doc='Define objective function')       
+# Constraints
+def output_rule(model, io, k):
+    return sum(model.lamda[io, i] * model.y[k, i] for i in model.i) >= model.y[k, io]
+model.output = Constraint(model.io, model.k, rule=output_rule, doc='output constraints')
+def input_rule(model, io, j):
+    return (model.theta[io] * model.x[j, io]) >= sum(
              model.lamda[io, i] * model.x[j, i] for i in model.i)
-    model.input = Constraint(model.io, model.j, rule=input_rule, doc='input constraints')
-    def vrs_rule(model, io):
-        return sum(model.lamda[io, i] for i in model.i) == 1
-    model.vrs = Constraint(model.io, rule=vrs_rule, doc='VRS constraints')
+model.input = Constraint(model.io, model.j, rule=input_rule, doc='input constraints')
+def vrs_rule(model, io):
+    return sum(model.lamda[io, i] for i in model.i) == 1
+model.vrs = Constraint(model.io, rule=vrs_rule, doc='VRS constraints')
 
-    # calculate the DEA model 
-    from pyomo.opt import SolverFactory
-    solver_manager = SolverManagerFactory('neos')
-    results = solver_manager.solve(model, opt='cplex')
+# calculate the DEA model 
+from pyomo.opt import SolverFactory
+from os import environ
+solver_manager = SolverManagerFactory('neos')
+environ['NEOS_EMAIL'] = 'email@address'
+results = solver_manager.solve(model, opt='cplex')
 
-    # display the estimates
-    # efficiency
-    model.theta.display()
-    # intensity
-    model.lamda.display()
-
+# display the estimates
+# efficiency
+model.theta.display()
+# intensity
+model.lamda.display()
 ```
