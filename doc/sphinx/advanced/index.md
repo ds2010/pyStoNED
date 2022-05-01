@@ -25,9 +25,11 @@ model.display_beta()
 
 ## Adding an additional constraint 
 
-The extral constraint, e.g.,0 <= Beta <= 1, can be added using
+The extral constraint, e.g., 0 <= Beta <= 1, can be added using
 
 ```python
+from pyomo.environ import Constraint
+
 def constraint_rule(model, i, j):
     upperbound = [1.0, 1.0, 1.0]
     return model.beta[i, j] <= upperbound[j]
