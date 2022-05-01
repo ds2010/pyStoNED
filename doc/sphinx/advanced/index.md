@@ -1,8 +1,8 @@
 # Advanced topics
 
-## Removing the constraint on $\beta$
+## Removing the constraint on Beta
 
-We can remove the constrinat on $\beta$ by adding `model.__model__.beta.setlb(None)` before the model optimization (i.e., `model.optimize()`). Now the estimated $\beta$ can take the value from $[-\infty, \infty]$. For example, the constraint $\beta \ge 0$ is removed in CQR:
+We can remove the constrinat on Beta by adding `model.__model__.beta.setlb(None)` before the model optimization (i.e., `model.optimize()`). Now the estimated Beta can take any value in Reals. For example, the constraint Beta >= 0 is removed in CQR:
 
 ```python
 # import packages
@@ -25,7 +25,7 @@ model.display_beta()
 
 ## Adding an additional constraint 
 
-The extral constraint, e.g., $ 0 \le \beta \le 1$, can be added using
+The extral constraint, e.g.,0 <= Beta <= 1, can be added using
 
 ```python
 def constraint_rule(model, i, j):
