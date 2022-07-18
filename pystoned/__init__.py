@@ -5,6 +5,7 @@ from . import constant
 from . import CQER
 from . import CQERDDF
 from . import CQERG
+from . import CSVR
 from . import dataset
 from . import DEA
 from . import FDH
@@ -27,6 +28,7 @@ __all__ = [
     'CQER',
     'CQERDDF',
     'CQERG',
+    'CSVR',
     'dataset',
     'DEA',
     'FDH',
