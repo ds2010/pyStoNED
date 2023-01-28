@@ -16,6 +16,7 @@ Formulations Classes
    formulations/CQER
    formulations/CQERDDF
    formulations/CQERG
+   formulations/CSVR
    formulations/DEA
    formulations/FDH
    formulations/ICNLS
