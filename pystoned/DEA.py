@@ -22,9 +22,6 @@ class DEA:
             xref (String, optional): reference inputs. Defaults to None.
         """
         # TODO(error/warning handling): Check the configuration of the model exist
-        # Initialize DEA model
-        self.__model__ = ConcreteModel()
-
         self.y, self.x = tools.assert_valid_mupltiple_y_data(y, x)
         self.orient = orient
         self.rts = rts
@@ -34,6 +31,9 @@ class DEA:
                 self.y, self.x, yref, xref)
         else:
             self.yref, self.xref = self.y, self.x
+        
+        # Initialize DEA model
+        self.__model__ = ConcreteModel()
         self.__model__.R = Set(initialize=range(len(self.yref)))
 
         # Initialize sets
@@ -59,7 +59,7 @@ class DEA:
             self.__model__.I, self.__model__.K, rule=self.__output_rule(), doc='output constraint')
         if self.rts == RTS_VRS:
             self.__model__.vrs = Constraint(
-                self.__model__.I, rule=self.__vrs_rule(), doc='various return to scale rule')
+                self.__model__.I, rule=self.__vrs_rule(), doc='variable return to scale rule')
 
         # Optimize model
         self.optimization_status = 0

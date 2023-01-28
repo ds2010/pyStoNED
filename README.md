@@ -16,10 +16,10 @@ The [`pyStoNED`](https://pypi.org/project/pystoned/) package is now avaiable on 
 
 # Authors
 
- + [Sheng Dai](https://daisheng.io), Ph.D. candidate, Aalto University School of Business.
+ + [Sheng Dai](https://daisheng.io), PhD, Turku School of Economics, University of Turku.
  + [Yu-Hsueh Fang](https://github.com/Fangop), Computer Engineer, Institute of Manufacturing Information and Systems, National Cheng Kung University.
  + [Chia-Yen Lee](http://polab.im.ntu.edu.tw/), Professor, College of Management, National Taiwan University.
- + [Timo Kuosmanen](https://www.researchgate.net/profile/Timo_Kuosmanen), Professor, Aalto University School of Business.
+ + [Timo Kuosmanen](https://www.researchgate.net/profile/Timo_Kuosmanen), Professor, Turku School of Economics, University of Turku.
 
 # Citation
 

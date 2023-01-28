@@ -37,7 +37,7 @@ Example: Output oriented FDH `[.ipynb] <https://colab.research.google.com/github
         data = dataset.load_Tim_Coelli_frontier()
         
         # define and solve the FDH model
-        model = FDH.FDH(data.y, data.x, orient=ORIENT_OO)
+        model = FDH.FDH(data.y, data.x, orient=ORIENT_OO, yref=None, xref=None)
         model.optimize(OPT_LOCAL)
     
         # display the technical efficiency

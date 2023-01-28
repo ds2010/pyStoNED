@@ -5,14 +5,14 @@ with open('README.md') as readme_file:
 
 setup_args = dict(
     name='pystoned',
-    version='0.5.8',
+    version='0.5.9',
     description='A Python Package for Convex Regression and Frontier Estimation',
     long_description_content_type="text/markdown",
     long_description=README,
     license='GPLv3',
     packages=find_packages(),
     author='Sheng Dai, Yu-Hsueh Fang, Chia-Yen Lee, Timo Kuosmanen',
-    author_email='sheng.dai@aalto.fi',
+    author_email='sheng.dai@utu.fi',
     keywords=['StoNED', 'CNLS', 'CER', 'CQR', 'Z-variables','CNLSG'],
     url='https://github.com/ds2010/pyStoNED',
     download_url='https://pypi.org/project/pystoned/',
@@ -29,7 +29,7 @@ setup_args = dict(
 )
 
 install_requires = [
-    'pyomo>=6.4.0',
+    'pyomo>=6.4.4',
     'pandas>=1.1.3',
     'numpy>=1.19.2',
     'scipy>=1.5.2',

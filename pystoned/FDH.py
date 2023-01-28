@@ -10,20 +10,29 @@ class FDH:
     """Free Disposal Hull (FDH)
     """
 
-    def __init__(self, y, x, orient):
+    def __init__(self, y, x, orient, yref=None, xref=None):
         """FDH model
 
         Args:
             y (float): output variable.
             x (float): input variables.
             orient (String): ORIENT_IO (input orientation) or ORIENT_OO (output orientation)
+            yref (String, optional): reference output. Defaults to None.
+            xref (String, optional): reference inputs. Defaults to None.
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.y, self.x = tools.assert_valid_mupltiple_y_data(y, x)
         self.orient = orient
+        
+        if type(yref) != type(None):
+            self.yref, self.xref = tools.assert_valid_reference_data(
+                self.y, self.x, yref, xref)
+        else:
+            self.yref, self.xref = self.y, self.x
 
-        # Initialize DEA model
+        # Initialize FDH model
         self.__model__ = ConcreteModel()
+        self.__model__.R = Set(initialize=range(len(self.yref)))
 
         # Initialize sets
         self.__model__.I = Set(initialize=range(len(self.y)))
@@ -33,7 +42,7 @@ class FDH:
         # Initialize variable
         self.__model__.theta = Var(self.__model__.I, doc='efficiency')
         self.__model__.lamda = Var(
-            self.__model__.I, self.__model__.I, within=Binary, doc='intensity variables')
+            self.__model__.I, self.__model__.R, within=Binary, doc='intensity variables')
 
         # Setup the objective function and constraints
         if self.orient == ORIENT_IO:
@@ -47,7 +56,7 @@ class FDH:
         self.__model__.output = Constraint(
             self.__model__.I, self.__model__.K, rule=self.__output_rule(), doc='output constraint')
         self.__model__.vrs = Constraint(
-            self.__model__.I, rule=self.__vrs_rule(), doc='various return to scale rule')
+            self.__model__.I, rule=self.__vrs_rule(), doc='variable return to scale rule')
 
         # Optimize model
         self.optimization_status = 0
@@ -65,27 +74,27 @@ class FDH:
         """Return the proper input constraint"""
         if self.orient == ORIENT_IO:
             def input_rule(model, o, j):
-                return model.theta[o]*self.x[o][j] >= sum(model.lamda[o, i]*self.x[i][j] for i in model.I)
+                return model.theta[o]*self.x[o][j] >= sum(model.lamda[o, r]*self.xref[r][j] for r in model.R)
             return input_rule
         elif self.orient == ORIENT_OO:
             def input_rule(model, o, j):
-                return sum(model.lamda[o, i] * self.x[i][j] for i in model.I) <= self.x[o][j]
+                return sum(model.lamda[o, r] * self.xref[r][j] for r in model.R) <= self.x[o][j]
             return input_rule
 
     def __output_rule(self):
         """Return the proper output constraint"""
         if self.orient == ORIENT_IO:
             def output_rule(model, o, k):
-                return sum(model.lamda[o, i] * self.y[i][k] for i in model.I) >= self.y[o][k]
+                return sum(model.lamda[o, r] * self.yref[r][k] for r in model.R) >= self.y[o][k]
             return output_rule
         elif self.orient == ORIENT_OO:
             def output_rule(model, o, k):
-                return model.theta[o]*self.y[o][k] <= sum(model.lamda[o, i]*self.y[i][k] for i in model.I)
+                return model.theta[o]*self.y[o][k] <= sum(model.lamda[o, r]*self.yref[r][k] for r in model.R)
             return output_rule
 
     def __vrs_rule(self):
         def vrs_rule(model, o):
-            return sum(model.lamda[o, i] for i in model.I) == 1
+            return sum(model.lamda[o, r] for r in model.R) == 1
         return vrs_rule
 
     def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
