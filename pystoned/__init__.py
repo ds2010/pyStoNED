@@ -11,6 +11,7 @@ from . import DEA
 from . import FDH
 from . import pCNLS
 from . import pCQER
+from . import pICQER
 from . import plot
 from . import ICNLS
 from . import ICQER
@@ -34,6 +35,7 @@ __all__ = [
     'FDH',
     'pCNLS',
     'pCQER',
+    'pICQER',
     'plot',
     'ICNLS',
     'ICQER',
