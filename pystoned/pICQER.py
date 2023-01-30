@@ -32,7 +32,8 @@ class pICQR(ICNLS.ICNLS, pCQER.pCQR):
 
 
 class pICER(ICNLS.ICNLS, pCQER.pCER):
-    """penalized Isotonic convex expectile regression (pICER)"""
+    """penalized Isotonic convex expectile regression (pICER)
+    """
 
     def __init__(self, y, x, tau, eta, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
         """pICER model

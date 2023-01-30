@@ -5,7 +5,7 @@ from .constant import CET_ADDI, FUN_PROD, RTS_VRS
 
 
 class pCQR(CQER.CQR):
-    """Convex quantile regression with squared L2-norm regularization
+    """Convex quantile regression with squared L2-norm regularization (pCQR)
     """
 
     def __init__(self, y, x, tau, eta, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
@@ -24,7 +24,7 @@ class pCQR(CQER.CQR):
         self.eta = eta
         CQER.CQR.__init__(self, y, x, tau, z, cet, fun, rts)
         self.__model__.objective.deactivate()
-        self.__model__.new_objective_rule = Objective(rule=self.__new_objective_rule(),
+        self.__model__.new_objective = Objective(rule=self.__new_objective_rule(),
                                              sense=minimize,
                                              doc='objective function')
     
@@ -40,7 +40,7 @@ class pCQR(CQER.CQR):
 
 
 class pCER(CQER.CER):
-    """Convex expectile regression with squared L2-norm regularization
+    """Convex expectile regression with squared L2-norm regularization (pCER)
     """
 
     def __init__(self, y, x, tau, eta, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
@@ -59,11 +59,11 @@ class pCER(CQER.CER):
         self.eta = eta
         CQER.CER.__init__(self, y, x, tau, z, cet, fun, rts)
         self.__model__.squared_objective.deactivate()
-        self.__model__.new_objective_rule = Objective(rule=self.__new_objective_rule(),
+        self.__model__.new_squared_objective = Objective(rule=self.__new_squared_objective_rule(),
                                              sense=minimize,
                                              doc='objective function')
     
-    def __new_objective_rule(self):
+    def __new_squared_objective_rule(self):
         """Return the proper objective function"""
 
         def objective_rule(model):
