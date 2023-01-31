@@ -23,6 +23,7 @@ Formulations Classes
    formulations/ICQER
    formulations/pCNLS
    formulations/pCQER
+   formulations/pICQER
    formulations/sCQER
    formulations/wCNLS
    formulations/wCQER
