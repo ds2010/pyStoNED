@@ -7,7 +7,7 @@ from .utils import tools
 
 
 class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
-    """Convex quantile regression with DDF formulation
+    """Convex quantile regression with directional distance function
     """
 
     def __init__(self, y, x, b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD, tau=0.5):
