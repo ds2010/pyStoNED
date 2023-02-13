@@ -10,7 +10,7 @@ from .utils import tools
 
 
 class CNLSDDF(CNLS.CNLS):
-    """Convex Nonparametric Least Square with DDF formulation
+    """Convex Nonparametric Least Square with directional distance function
     """
 
     def __init__(self, y, x, b=None, gy=[1], gx=[1], gb=None, fun=FUN_PROD):
