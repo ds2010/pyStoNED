@@ -274,7 +274,7 @@ class CNLS:
         return np.asarray(residual)
 
     def get_lamda(self):
-        """Return beta value by array"""
+        """Return lamda value by array"""
         tools.assert_optimized(self.optimization_status)
         tools.assert_contextual_variable(self.z)
         lamda = list(self.__model__.lamda[:].value)
