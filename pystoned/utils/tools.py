@@ -153,7 +153,7 @@ def assert_valid_reference_data_with_bad_outputs(y, x, b, yref, xref, bref):
             "Number of DMUs must be the same in yref and bref.")
     if bref_shape[1] != np.asarray(b).shape[1]:
         raise ValueError(
-            "Number of undesirable outputs  must be the same in b and bref.")
+            "Number of undesirable outputs must be the same in b and bref.")
 
     return yref, xref, bref
 
