@@ -15,7 +15,7 @@ def sweet(x):
     """
 
     # transform data
-    df = np.asmatrix(x)
+    df = np.asmatrix(to_2d_list(trans_list(x)))
 
     # calculate distance matrix
     distance = cdist(df, df)
