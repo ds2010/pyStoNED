@@ -218,15 +218,9 @@ class CQRG:
     def get_totalconstr(self):
         """Return the number of total constraints"""
         tools.assert_optimized(self.optimization_status)
-        activeconstr = 0
-        cutactiveconstr = 0
-        for i in range(len(np.matrix(self.active))):
-            for j in range(len(np.matrix(self.active))):
-                if i != j:
-                    activeconstr += self.active[i, j]
-                    cutactiveconstr += self.cutactive[i, j]
-        totalconstr = activeconstr + cutactiveconstr + \
-            2 * len(np.matrix(self.active)) + 1
+        activeconstr = np.sum(self.active) - np.trace(self.active)
+        cutactiveconstr = np.sum(self.cutactive) - np.trace(self.cutactive)
+        totalconstr = activeconstr + cutactiveconstr + 2 * len(self.active) + 1
         return totalconstr
 
     def get_runningtime(self):
@@ -250,7 +244,7 @@ class CERG:
         Args:
             y (float): output variable. 
             x (float): input variables.
-            tau (float): expectile.
+            tau (float): quantile.
             z (float, optional): Contextual variable(s). Defaults to None.
             cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
             fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
@@ -258,33 +252,16 @@ class CERG:
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.cutactive = sweet.sweet(x)
-        self.x = tools.trans_list(x)
-        self.y = tools.trans_list(y)
+        self.y, self.x, self.z = tools.assert_valid_basic_data(y, x, z)
         self.tau = tau
-        self.z = z
         self.cet = cet
         self.fun = fun
         self.rts = rts
 
         # active (added) violated concavity constraint by iterative procedure
-        self.Active = np.zeros((len(x), len(x)))
+        self.active = np.zeros((len(x), len(x)))
         # violated concavity constraint
-        self.Active2 = np.zeros((len(x), len(x)))
-
-        if type(self.y[0]) == list:
-            self.y = self.__to_1d_list(self.y)
-
-        if type(self.x[0]) != list:
-            self.x = []
-            for x_value in tools.trans_list(x):
-                self.x.append([x_value])
-
-        if type(self.z) != type(None):
-            self.z = tools.trans_list(z)
-            if type(self.z[0]) != list:
-                self.z = []
-                for z_value in tools.trans_list(z):
-                    self.z.append([z_value])
+        self.active2 = np.zeros((len(x), len(x)))
 
         # Optimize model
         self.optimization_status = 0
@@ -295,10 +272,10 @@ class CERG:
         # TODO(error/warning handling): Check problem status after optimization
         self.t0 = time.time()
         if type(self.z) != type(None):
-            model1 = CQERZG1.CERZG1(
+            model1 = CQERZG1.CQRZG1(
                 self.y, self.x, self.z, self.tau, self.cutactive, self.cet, self.fun, self.rts)
         else:
-            model1 = CQERG1.CERG1(
+            model1 = CQERG1.CQRG1(
                 self.y, self.x, self.tau, self.cutactive, self.cet, self.fun, self.rts)
         model1.optimize(email, solver)
         self.alpha = model1.get_alpha()
@@ -309,10 +286,10 @@ class CERG:
         while self.__convergence_test(self.alpha, self.beta) > 0.0001:
             if type(self.z) != type(None):
                 model2 = CQERZG2.CERZG2(
-                    self.y, self.x, self.z, self.tau, self.Active, self.cutactive, self.cet, self.fun, self.rts)
+                    self.y, self.x, self.z, self.tau, self.active, self.cutactive, self.cet, self.fun, self.rts)
             else:
                 model2 = CQERG2.CERG2(
-                    self.y, self.x, self.tau, self.Active, self.cutactive, self.cet, self.fun, self.rts)
+                    self.y, self.x, self.tau, self.active, self.cutactive, self.cet, self.fun, self.rts)
             model2.optimize(email, solver)
             self.alpha = model2.get_alpha()
             self.beta = model2.get_beta()
@@ -324,60 +301,54 @@ class CERG:
         self.optimization_status = 1
         self.tt = time.time() - self.t0
 
-    def __to_1d_list(self, l):
-        rl = []
-        for i in range(len(l)):
-            rl.append(l[i][0])
-        return rl
-
     def __convergence_test(self, alpha, beta):
         x = np.asarray(self.x)
-        Activetmp1 = 0.0
+        activetmp1 = 0.0
 
         # go into the loop
         for i in range(len(x)):
-            Activetmp = 0.0
+            activetmp = 0.0
             # go into the sub-loop and find the violated concavity constraints
             for j in range(len(x)):
                 if self.cet == CET_ADDI:
                     if self.rts == RTS_VRS:
                         if self.fun == FUN_PROD:
-                            self.Active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
+                            self.active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
                                 alpha[j] - np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
-                            self.Active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
+                            self.active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
-                    if self.rts == RTS_VRS:
+                    if self.rts == RTS_CRS:
                         if self.fun == FUN_PROD:
-                            self.Active2[i, j] = np.sum(beta[i, :] * x[i, :]) \
+                            self.active2[i, j] = np.sum(beta[i, :] * x[i, :]) \
                                 - np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
-                            self.Active2[i, j] = - np.sum(beta[i, :] * x[i, :]) \
+                            self.active2[i, j] = - np.sum(beta[i, :] * x[i, :]) \
                                 + np.sum(beta[j, :] * x[i, :])
                 if self.cet == CET_MULT:
                     if self.rts == RTS_VRS:
                         if self.fun == FUN_PROD:
-                            self.Active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
+                            self.active2[i, j] = alpha[i] + np.sum(beta[i, :] * x[i, :]) - \
                                 alpha[j] - np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
-                            self.Active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
+                            self.active2[i, j] = - alpha[i] - np.sum(beta[i, :] * x[i, :]) + \
                                 alpha[j] + np.sum(beta[j, :] * x[i, :])
                     if self.rts == RTS_CRS:
                         if self.fun == FUN_PROD:
-                            self.Active2[i, j] = np.sum(beta[i, :] * x[i, :]) - \
+                            self.active2[i, j] = np.sum(beta[i, :] * x[i, :]) - \
                                 np.sum(beta[j, :] * x[i, :])
                         elif self.fun == FUN_COST:
-                            self.Active2[i, j] = - np.sum(beta[i, :] * x[i, :]) + \
+                            self.active2[i, j] = - np.sum(beta[i, :] * x[i, :]) + \
                                 np.sum(beta[j, :] * x[i, :])
-                if self.Active2[i, j] > Activetmp:
-                    Activetmp = self.Active2[i, j]
+                if self.active2[i, j] > activetmp:
+                    activetmp = self.active2[i, j]
             # find the maximal violated constraint in sub-loop and added into the active matrix
             for j in range(len(x)):
-                if self.Active2[i, j] >= Activetmp and Activetmp > 0:
-                    self.Active[i, j] = 1
-            if Activetmp > Activetmp1:
-                Activetmp1 = Activetmp
-        return Activetmp
+                if self.active2[i, j] >= activetmp and activetmp > 0:
+                    self.active[i, j] = 1
+            if activetmp > activetmp1:
+                activetmp1 = activetmp
+        return activetmp
 
     def display_status(self):
         """Display the status of problem"""
@@ -475,15 +446,9 @@ class CERG:
     def get_totalconstr(self):
         """Return the number of total constraints"""
         tools.assert_optimized(self.optimization_status)
-        Activeconstr = 0
-        cutactiveconstr = 0
-        for i in range(len(np.matrix(self.Active))):
-            for j in range(len(np.matrix(self.Active))):
-                if i != j:
-                    Activeconstr += self.Active[i, j]
-                    cutactiveconstr += self.cutactive[i, j]
-        totalconstr = Activeconstr + cutactiveconstr + \
-            2 * len(np.matrix(self.Active)) + 1
+        activeconstr = np.sum(self.active) - np.trace(self.active)
+        cutactiveconstr = np.sum(self.cutactive) - np.trace(self.cutactive)
+        totalconstr = activeconstr + cutactiveconstr + 2 * len(self.active) + 1
         return totalconstr
 
     def get_runningtime(self):
