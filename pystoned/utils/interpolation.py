@@ -1,6 +1,7 @@
 # import dependencies
 import numpy as np
 from ..constant import FUN_PROD, FUN_COST
+from .tools import trans_list, to_2d_list
 
 
 def interpolation(alpha, beta, x, fun=FUN_PROD):
@@ -15,8 +16,13 @@ def interpolation(alpha, beta, x, fun=FUN_PROD):
     Returns:
         yat: interpolated frontier
     """
+    x = np.array(to_2d_list(trans_list(x)))
     n = len(x)
     d = len(x[0])
+
+    if len(beta[0]) != d:
+        raise ValueError(
+            "The dimensions of x_test must be equal to those of x.")
 
     if fun == FUN_PROD:
         def fun_est(x):
