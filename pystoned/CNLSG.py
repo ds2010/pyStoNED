@@ -194,15 +194,9 @@ class CNLSG:
     def get_totalconstr(self):
         """Return the number of total constraints"""
         tools.assert_optimized(self.optimization_status)
-        activeconstr = 0
-        cutactiveconstr = 0
-        for i in range(len(np.matrix(self.active))):
-            for j in range(len(np.matrix(self.active))):
-                if i != j:
-                    activeconstr += self.active[i, j]
-                    cutactiveconstr += self.cutactive[i, j]
-        totalconstr = activeconstr + cutactiveconstr + \
-            2 * len(np.matrix(self.active)) + 1
+        activeconstr = np.sum(self.active) - np.trace(self.active)
+        cutactiveconstr = np.sum(self.cutactive) - np.trace(self.cutactive)
+        totalconstr = activeconstr + cutactiveconstr + 2 * len(self.active) + 1
         return totalconstr
 
     def get_runningtime(self):
