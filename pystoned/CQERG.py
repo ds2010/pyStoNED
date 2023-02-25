@@ -272,10 +272,10 @@ class CERG:
         # TODO(error/warning handling): Check problem status after optimization
         self.t0 = time.time()
         if type(self.z) != type(None):
-            model1 = CQERZG1.CQRZG1(
+            model1 = CQERZG1.CERZG1(
                 self.y, self.x, self.z, self.tau, self.cutactive, self.cet, self.fun, self.rts)
         else:
-            model1 = CQERG1.CQRG1(
+            model1 = CQERG1.CERG1(
                 self.y, self.x, self.tau, self.cutactive, self.cet, self.fun, self.rts)
         model1.optimize(email, solver)
         self.alpha = model1.get_alpha()
