@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL, OPT_DEFAULT
-from .utils import tools
+from .utils import tools, interpolation
 
 
 class CQR:
@@ -330,6 +330,11 @@ class CQR:
         elif self.cet == CET_ADDI:
             frontier = np.asarray(self.y) - self.get_residual()
         return np.asarray(frontier)
+    
+    def get_predict(self, x_test):
+        """Return the estimated function in testing sample"""
+        tools.assert_optimized(self.optimization_status)
+        return interpolation.interpolation(self.get_alpha(), self.get_beta(), x_test, fun=self.fun)
 
 
 class CER(CQR):

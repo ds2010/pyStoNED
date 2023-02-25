@@ -1,7 +1,7 @@
 # import dependencies
 import numpy as np
 import pandas as pd
-from .utils import CQERG1, CQERG2, CQERZG1, CQERZG2, sweet, tools
+from .utils import CQERG1, CQERG2, CQERZG1, CQERZG2, sweet, tools, interpolation
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RTS_CRS, RTS_VRS, OPT_LOCAL, OPT_DEFAULT
 import time
 
@@ -233,6 +233,11 @@ class CQRG:
         tools.assert_optimized(self.optimization_status)
         return self.count
 
+    def get_predict(self, x_test):
+        """Return the estimated function in testing sample"""
+        tools.assert_optimized(self.optimization_status)
+        return interpolation.interpolation(self.get_alpha(), self.get_beta(), x_test, fun=self.fun)
+    
 
 class CERG:
     """Convex expectile regression (CER) with Genetic algorithm
@@ -460,3 +465,8 @@ class CERG:
         """Return the number of blocks"""
         tools.assert_optimized(self.optimization_status)
         return self.count
+
+    def get_predict(self, x_test):
+        """Return the estimated function in testing sample"""
+        tools.assert_optimized(self.optimization_status)
+        return interpolation.interpolation(self.get_alpha(), self.get_beta(), x_test, fun=self.fun)

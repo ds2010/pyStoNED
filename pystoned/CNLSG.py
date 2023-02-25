@@ -1,7 +1,7 @@
 # import dependencies
 import numpy as np
 import pandas as pd
-from .utils import CNLSG1, CNLSG2, CNLSZG1, CNLSZG2, sweet, tools
+from .utils import CNLSG1, CNLSG2, CNLSZG1, CNLSZG2, sweet, tools, interpolation
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, OPT_DEFAULT, RTS_CRS, RTS_VRS, OPT_DEFAULT, OPT_LOCAL
 import time
 
@@ -208,3 +208,8 @@ class CNLSG:
         """Return the number of blocks"""
         tools.assert_optimized(self.optimization_status)
         return self.count
+
+    def get_predict(self, x_test):
+        """Return the estimated function in testing sample"""
+        tools.assert_optimized(self.optimization_status)
+        return interpolation.interpolation(self.get_alpha(), self.get_beta(), x_test, fun=self.fun)
