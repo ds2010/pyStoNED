@@ -1,5 +1,4 @@
 # import dependencies
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import numpy as np
 from .utils import interpolation
@@ -79,7 +78,7 @@ def plot3d(model, x_select_1=0, x_select_2=1, fig_name=None, line_transparent=Fa
         return False
 
     fig = plt.figure()
-    ax = Axes3D(fig)
+    ax = fig.add_subplot(projection='3d')
     dp = ax.scatter(x[x_select_1], x[x_select_2], y, marker='.', s=10)
 
     # Revise the Z-axis left side
