@@ -267,26 +267,20 @@ def assert_valid_wp_data(y, x, b, z=None):
     return y, x, b, z
 
 
-def assert_valid_basic_data_weight(y, x, w, z=None):
+def assert_valid_mupltiple_x_y_data(y, x, z=None):
     y = trans_list(y)
     x = trans_list(x)
-    w = trans_list(w)
 
-    y = to_1d_list(y)
+    y = to_2d_list(y)
     x = to_2d_list(x)
-    w = to_1d_list(w)
 
     y_shape = np.asarray(y).shape
     x_shape = np.asarray(x).shape
 
-    if len(y_shape) == 2 and y_shape[1] != 1:
-        raise ValueError(
-            "The multidimensional output data is supported by direciontal based models.")
-
     if y_shape[0] != x_shape[0]:
         raise ValueError(
             "Number of DMUs must be the same in x and y.")
-
+    
     if type(z) != type(None):
         z = trans_list(z)
         z = to_2d_list(z)
@@ -294,5 +288,5 @@ def assert_valid_basic_data_weight(y, x, w, z=None):
         if y_shape[0] != z_shape[0]:
             raise ValueError(
                 "Number of DMUs must be the same in y and z.")
-
-    return y, x, w, z
+        
+    return y, x, z
