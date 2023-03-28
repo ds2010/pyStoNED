@@ -33,14 +33,14 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
         # Initialize the sets
         self.__model__.I = Set(initialize=range(len(self.y)))
         self.__model__.J = Set(initialize=range(len(self.x[0])))
-        self.__model__.K = Set(initialize=range(len(self.y[0])))
+        self.__model__.Q = Set(initialize=range(len(self.y[0])))
 
         # Initialize the variables
         self.__model__.alpha = Var(self.__model__.I, doc='alpha')
         self.__model__.beta = Var(
             self.__model__.I, self.__model__.J, bounds=(0.0, None), doc='beta')
         self.__model__.gamma = Var(
-            self.__model__.I, self.__model__.K, bounds=(0.0, None), doc='gamma')
+            self.__model__.I, self.__model__.Q, bounds=(0.0, None), doc='gamma')
 
         self.__model__.epsilon = Var(self.__model__.I, doc='residuals')
         self.__model__.epsilon_plus = Var(
@@ -82,7 +82,7 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
         """Return the proper regression constraint"""
         if type(self.b) == type(None):
             def regression_rule(model, i):
-                return sum(model.gamma[i, k] * self.y[i][k] for k in model.K) \
+                return sum(model.gamma[i, q] * self.y[i][q] for q in model.Q) \
                     == model.alpha[i] \
                     + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
                     + model.epsilon[i]
@@ -90,7 +90,7 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
             return regression_rule
 
         def regression_rule(model, i):
-            return sum(model.gamma[i, k] * self.y[i][k] for k in model.K) \
+            return sum(model.gamma[i, q] * self.y[i][q] for q in model.Q) \
                 == model.alpha[i] \
                 + sum(model.beta[i, j] * self.x[i][j] for j in model.J) \
                 + sum(model.delta[i, l] * self.b[i][l] for l in model.L) \
@@ -112,12 +112,12 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
                 return __operator(model.alpha[i]
                                   + sum(model.beta[i, j] * self.x[i][j]
                                         for j in model.J)
-                                  - sum(model.gamma[i, k] * self.y[i][k]
-                                        for k in model.K),
+                                  - sum(model.gamma[i, q] * self.y[i][q]
+                                        for q in model.Q),
                                   model.alpha[h]
                                   + sum(model.beta[h, j] * self.x[i][j]
                                         for j in model.J)
-                                  - sum(model.gamma[h, k] * self.y[i][k] for k in model.K))
+                                  - sum(model.gamma[h, q] * self.y[i][q] for q in model.Q))
 
             return afriat_rule
 
@@ -129,14 +129,14 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
                                     for j in model.J)
                               + sum(model.delta[i, l] * self.b[i][l]
                                     for l in model.L)
-                              - sum(model.gamma[i, k] * self.y[i][k]
-                                    for k in model.K),
+                              - sum(model.gamma[i, q] * self.y[i][q]
+                                    for q in model.Q),
                               model.alpha[h]
                               + sum(model.beta[h, j] * self.x[i][j]
                                     for j in model.J)
                               + sum(model.delta[h, l] * self.b[i][l]
                                     for l in model.L)
-                              - sum(model.gamma[h, k] * self.y[i][k] for k in model.K))
+                              - sum(model.gamma[h, q] * self.y[i][q] for q in model.Q))
 
         return afriat_rule
 
