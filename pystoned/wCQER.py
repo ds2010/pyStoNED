@@ -3,7 +3,7 @@ from pyomo.environ import Objective, minimize
 
 from . import CQER
 from .constant import CET_ADDI, FUN_PROD, RTS_VRS
-from .utils import tools
+from .utils import tools, interpolation
 
 
 class wCQR(CQER.CQR):

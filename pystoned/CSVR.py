@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 from .constant import CET_ADDI, FUN_PROD, FUN_COST, OPT_DEFAULT, OPT_LOCAL
-from .utils import tools
+from .utils import tools, interpolation
 
 
 class CSVR:
