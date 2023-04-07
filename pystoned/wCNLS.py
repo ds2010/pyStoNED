@@ -3,7 +3,7 @@ from pyomo.environ import Objective, minimize
 
 from . import CNLS
 from .constant import CET_ADDI, FUN_PROD, RTS_VRS
-from .utils import tools, interpolation
+from .utils import tools
 
 
 class wCNLS(CNLS.CNLS):
