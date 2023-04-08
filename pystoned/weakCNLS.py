@@ -4,11 +4,12 @@ from pyomo.core.expr.numvalue import NumericValue
 import numpy as np
 import pandas as pd
 
+from . import CNLS
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, OPT_DEFAULT, RTS_CRS, RTS_VRS, OPT_LOCAL
-from .utils import tools, interpolation
+from .utils import tools
 
 
-class weakCNLS:
+class weakCNLS(CNLS.CNLS):
     """Convex Nonparametric Least Square with weak disposability (weakCNLS)
     """
 
@@ -62,7 +63,7 @@ class weakCNLS:
                                       doc='estimated frontier')
 
         # Setup the objective function and constraints
-        self.__model__.objective = Objective(rule=self.__objective_rule(),
+        self.__model__.objective = Objective(rule=self._CNLS__objective_rule(),
                                              sense=minimize,
                                              doc='objective function')
         self.__model__.regression_rule = Constraint(self.__model__.I,
@@ -95,14 +96,6 @@ class weakCNLS:
         # TODO(error/warning handling): Check problem status after optimization
         self.problem_status, self.optimization_status = tools.optimize_model(
             self.__model__, email, self.cet, solver)
-
-    def __objective_rule(self):
-        """Return the proper objective function"""
-
-        def objective_rule(model):
-            return sum(model.epsilon[i] ** 2 for i in model.I)
-
-        return objective_rule
 
     def __regression_rule(self):
         """Return the proper regression constraint"""
@@ -247,83 +240,11 @@ class weakCNLS:
         
         return disposability_rule
         
-    def display_status(self):
-        """Display the status of problem"""
-        tools.assert_optimized(self.optimization_status)
-        print(self.display_status)
-
-    def display_alpha(self):
-        """Display alpha value"""
-        tools.assert_optimized(self.optimization_status)
-        tools.assert_various_return_to_scale(self.rts)
-        self.__model__.alpha.display()
-
-    def display_beta(self):
-        """Display beta value"""
-        tools.assert_optimized(self.optimization_status)
-        self.__model__.beta.display()
-
-    def display_lamda(self):
-        """Display lamda value"""
-        tools.assert_optimized(self.optimization_status)
-        tools.assert_contextual_variable(self.z)
-        self.__model__.lamda.display()
-
-    def display_residual(self):
-        """Dispaly residual value"""
-        tools.assert_optimized(self.optimization_status)
-        self.__model__.epsilon.display()
-
     def display_delta(self):
         """Display delta value"""
         tools.assert_optimized(self.optimization_status)
         tools.assert_undesirable_output(self.b)
         self.__model__.delta.display()
-
-    def get_status(self):
-        """Return status"""
-        return self.optimization_status
-
-    def get_alpha(self):
-        """Return alpha value by array"""
-        tools.assert_optimized(self.optimization_status)
-        tools.assert_various_return_to_scale(self.rts)
-        alpha = list(self.__model__.alpha[:].value)
-        return np.asarray(alpha)
-
-    def get_beta(self):
-        """Return beta value by array"""
-        tools.assert_optimized(self.optimization_status)
-        beta = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.beta),
-                                                          list(self.__model__.beta[:, :].value))])
-        beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
-        beta = beta.pivot(index='Name', columns='Key', values='Value')
-        return beta.to_numpy()
-
-    def get_residual(self):
-        """Return residual value by array"""
-        tools.assert_optimized(self.optimization_status)
-        residual = list(self.__model__.epsilon[:].value)
-        return np.asarray(residual)
-
-    def get_lamda(self):
-        """Return beta value by array"""
-        tools.assert_optimized(self.optimization_status)
-        tools.assert_contextual_variable(self.z)
-        lamda = list(self.__model__.lamda[:].value)
-        return np.asarray(lamda)
-
-    def get_frontier(self):
-        """Return estimated frontier value by array"""
-        tools.assert_optimized(self.optimization_status)
-        if self.cet == CET_MULT and type(self.z) == type(None):
-            frontier = np.asarray(list(self.__model__.frontier[:].value)) + 1
-        elif self.cet == CET_MULT and type(self.z) != type(None):
-            frontier = list(np.divide(self.y, np.exp(
-                self.get_residual() + self.get_lamda() * np.asarray(self.z)[:, 0])) - 1)
-        elif self.cet == CET_ADDI:
-            frontier = np.asarray(self.y) - self.get_residual()
-        return np.asarray(frontier)
 
     def get_delta(self):
         """Return delta value by array"""
