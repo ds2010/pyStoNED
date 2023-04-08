@@ -5,10 +5,10 @@ from .constant import CET_ADDI, FUN_PROD, RTS_VRS
 
 
 class pICQR(ICNLS.ICNLS, pCQER.pCQR):
-    """penalized Isotonic convex quantile regression (pICQR)
+    """Penalized isotonic convex quantile regression (pICQR)
     """
 
-    def __init__(self, y, x, tau, eta, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
+    def __init__(self, y, x, tau, eta, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS, penalty=1):
         """pICQR model
 
         Args:
@@ -20,8 +20,9 @@ class pICQR(ICNLS.ICNLS, pCQER.pCQR):
              cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
              fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
              rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
+             penalty (int, optional): penalty=1 (L1 norm), penalty=2 (L2 norm), and penalty=3 (Lipschitz norm). Defaults to 1.
         """
-        pCQER.pCQR.__init__(self, y, x, tau, eta, z, cet, fun, rts)
+        pCQER.pCQR.__init__(self, y, x, tau, eta, z, cet, fun, rts, penalty)
 
         self._ICNLS__pmatrix = self._ICNLS__binaryMatrix()
         self.__model__.afriat_rule.deactivate()
@@ -32,10 +33,10 @@ class pICQR(ICNLS.ICNLS, pCQER.pCQR):
 
 
 class pICER(ICNLS.ICNLS, pCQER.pCER):
-    """penalized Isotonic convex expectile regression (pICER)
+    """penalized isotonic convex expectile regression (pICER)
     """
 
-    def __init__(self, y, x, tau, eta, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS):
+    def __init__(self, y, x, tau, eta, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS, penalty=1):
         """pICER model
 
         Args:
@@ -47,8 +48,9 @@ class pICER(ICNLS.ICNLS, pCQER.pCER):
              cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
              fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
              rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
+             penalty (int, optional): penalty=1 (L1 norm), penalty=2 (L2 norm), and penalty=3 (Lipschitz norm). Defaults to 1.
         """
-        pCQER.pCER.__init__(self, y, x, tau, eta, z, cet, fun, rts)
+        pCQER.pCER.__init__(self, y, x, tau, eta, z, cet, fun, rts, penalty)
 
         self._ICNLS__pmatrix = self._ICNLS__binaryMatrix()
         self.__model__.afriat_rule.deactivate()
