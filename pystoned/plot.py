@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from .utils import interpolation
-from .constant import FUN_PROD, FUN_COST, RED_MOM
+from .constant import FUN_PROD, FUN_COST, RED_MOM, RTS_VRS, RTS_CRS
 
 
 def plot2d(model, x_select=0, label_name="estimated function", fig_name=None, method=RED_MOM):
@@ -71,8 +71,10 @@ def plot3d(model, x_select_1=0, x_select_2=1, fig_name=None, line_transparent=Fa
     """
     x = np.array(model.x).T
     y = np.array(model.y).T
-    alpha = model.get_alpha()
-    beta = model.get_beta()
+    if model.rts == RTS_VRS:
+        alpha, beta = model.get_alpha(), model.get_beta()
+    elif model.rts == RTS_CRS:
+        alpha, beta = np.zeros((model.get_beta()).shape[0]), model.get_beta()
     if y.ndim != 1:
         print("Plot with mutiple y is unavailable now.")
         return False
@@ -111,7 +113,7 @@ def plot3d(model, x_select_1=0, x_select_2=1, fig_name=None, line_transparent=Fa
                                                        [XX[i, j], YY[i, j]], ndmin=2),
                                                    fun=model.fun)
 
-    fl = ax.plot_surface(XX, YY, ZZ, rstride=1, cstride=1, cmap='viridis',
+    ax.plot_surface(XX, YY, ZZ, rstride=1, cstride=1, cmap='viridis',
                          edgecolor='none', alpha=0.5)
 
     # add x, y, z label
