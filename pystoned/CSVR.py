@@ -159,3 +159,9 @@ class CSVR:
         beta = pd.DataFrame(beta, columns=['Name', 'Key', 'Value'])
         beta = beta.pivot(index='Name', columns='Key', values='Value')
         return beta.to_numpy()
+
+    def get_predict(self, x_test):
+        """Return the estimated function in testing sample"""
+        tools.assert_optimized(self.optimization_status)
+        alpha, beta = self.get_alpha(), self.get_beta()
+        return interpolation.interpolation(alpha, beta, x_test, fun=self.fun)

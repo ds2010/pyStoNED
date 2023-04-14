@@ -7,6 +7,7 @@ import pandas as pd
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, OPT_DEFAULT, RTS_CRS, RTS_VRS, OPT_LOCAL
 from .utils import tools, interpolation
 
+
 class CNLS:
     """Convex Nonparametric Least Square (CNLS)
     """

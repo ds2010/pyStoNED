@@ -334,7 +334,11 @@ class CQR:
     def get_predict(self, x_test):
         """Return the estimated function in testing sample"""
         tools.assert_optimized(self.optimization_status)
-        return interpolation.interpolation(self.get_alpha(), self.get_beta(), x_test, fun=self.fun)
+        if self.rts == RTS_VRS:
+            alpha,  beta = self.get_alpha(), self.get_beta()
+        elif self.rts == RTS_CRS:
+            alpha, beta = np.zeros((self.get_beta()).shape[0]), self.get_beta()
+        return interpolation.interpolation(alpha, beta, x_test, fun=self.fun)
 
 
 class CER(CQR):
