@@ -17,8 +17,7 @@ def interpolation(alpha, beta, x, fun=FUN_PROD):
         yat: interpolated frontier
     """
     x = np.array(to_2d_list(trans_list(x)))
-    n = len(x)
-    d = len(x[0])
+    n, d = len(x), len(x[0])
 
     if len(beta[0]) != d:
         raise ValueError(
