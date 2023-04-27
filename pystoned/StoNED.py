@@ -1,6 +1,6 @@
 # import dependencies
 import numpy as np
-import math
+from math import sqrt, pi, log 
 import scipy.stats as stats
 import scipy.optimize as opt
 from .utils import tools
@@ -15,8 +15,7 @@ class StoNED:
         """StoNED
         model: The input model for residual decomposition
         """
-        self.model = model
-        self.x = model.x
+        self.model, self.x = model, model.x
 
         # If the model is a directional distance based, set cet to CET_ADDI
         if hasattr(self.model, 'gx'):
@@ -51,10 +50,10 @@ class StoNED:
         """
         tools.assert_optimized(self.model.optimization_status)
         self.get_unconditional_expected_inefficiency(method)
-        sigma = self.sigma_u * self.sigma_v / math.sqrt(self.sigma_u ** 2 +
+        sigma = self.sigma_u * self.sigma_v / sqrt(self.sigma_u ** 2 +
                                                         self.sigma_v ** 2)
         mu = self.epsilon * self.sigma_u / (
-            self.sigma_v * math.sqrt(self.sigma_u ** 2 + self.sigma_v ** 2))
+            self.sigma_v * sqrt(self.sigma_u ** 2 + self.sigma_v ** 2))
 
         if self.model.fun == FUN_PROD:
             Eu = sigma * ((stats.norm.pdf(mu) /
@@ -83,21 +82,20 @@ class StoNED:
         if self.model.fun == FUN_PROD:
             if M3_mean > 0:
                 M3_mean = 0.0
-            self.sigma_u = (M3_mean / ((2 / math.pi) ** (1 / 2) *
-                                       (1 - 4 / math.pi))) ** (1 / 3)
+            self.sigma_u = (M3_mean / ((2 / pi) ** (1 / 2) *
+                                       (1 - 4 / pi))) ** (1 / 3)
 
         elif self.model.fun == FUN_COST:
             if M3_mean < 0:
                 M3_mean = 0.00001
-            self.sigma_u = (-M3_mean / ((2 / math.pi) ** (1 / 2) *
-                                        (1 - 4 / math.pi))) ** (1 / 3)
+            self.sigma_u = (-M3_mean / ((2 / pi) ** (1 / 2) *
+                                        (1 - 4 / pi))) ** (1 / 3)
 
         else:
             raise ValueError("Undefined model parameters.")
 
-        self.sigma_v = (M2_mean -
-                        ((math.pi - 2) / math.pi) * self.sigma_u ** 2) ** (1 / 2)
-        self.mu = (self.sigma_u ** 2 * 2 / math.pi) ** (1 / 2)
+        self.sigma_v = (M2_mean - ((pi - 2) / pi) * self.sigma_u ** 2) ** (1 / 2)
+        self.mu = (self.sigma_u ** 2 * 2 / pi) ** (1 / 2)
         if self.model.fun == FUN_PROD:
             self.epsilon = residual - self.mu
         else:
@@ -117,20 +115,18 @@ class StoNED:
             """
             # sigma Eq. (3.26) in Johnson and Kuosmanen (2015)
             sigma = np.sqrt(
-                np.mean(eps ** 2) / (1 - 2 * lamda ** 2 / (math.pi *
-                                                           (1 + lamda ** 2))))
+                np.mean(eps ** 2) / (1 - 2 * lamda ** 2 / (pi * (1 + lamda ** 2))))
 
             # bias adjusted residuals Eq. (3.25)
             # mean
-            mu = math.sqrt(
-                2 / math.pi) * sigma * lamda / math.sqrt(1 + lamda ** 2)
+            mu = sqrt(2 / pi) * sigma * lamda / sqrt(1 + lamda ** 2)
 
             # adj. res.
             epsilon = eps - mu
 
             # log-likelihood function Eq. (3.24)
             pn = stats.norm.cdf(-epsilon * lamda / sigma)
-            return -(-len(epsilon) * math.log(sigma) + np.sum(np.log(pn)) -
+            return -(-len(epsilon) * log(sigma) + np.sum(np.log(pn)) -
                      0.5 * np.sum(epsilon ** 2) / sigma ** 2)
 
         if self.model.fun == FUN_PROD:
@@ -147,14 +143,11 @@ class StoNED:
             # TODO(error/warning handling): Raise error while undefined fun
             return False
         # use estimate of lambda to calculate sigma Eq. (3.26) in Johnson and Kuosmanen (2015)
-        sigma = math.sqrt(
-            np.mean(residual ** 2) / (1 - (2 * lamda ** 2) / (math.pi *
-                                                              (1 + lamda ** 2))))
+        sigma = sqrt(np.mean(residual ** 2) / (1 - (2 * lamda ** 2) / (pi * (1 + lamda ** 2))))
 
         # calculate bias correction
         # (unconditional) mean
-        self.mu = math.sqrt(2) * sigma * lamda / math.sqrt(math.pi *
-                                                           (1 + lamda ** 2))
+        self.mu = sqrt(2) * sigma * lamda / sqrt(pi * (1 + lamda ** 2))
 
         # calculate sigma.u and sigma.v
         self.sigma_v = (sigma ** 2 / (1 + lamda ** 2)) ** (1 / 2)
@@ -168,7 +161,7 @@ class StoNED:
     def __gaussian_kernel_estimation(self, residual):
         def __gaussian_kernel_estimator(g):
             """Gaussian kernel estimator"""
-            return (1 / math.sqrt(2 * math.pi)) * np.exp(-0.5 * g ** 2)
+            return (1 / sqrt(2 * pi)) * np.exp(-0.5 * g ** 2)
 
         x = np.array(residual)
 
@@ -214,13 +207,13 @@ class StoNED:
 
         if self.model.fun == FUN_PROD:
             if self.model.cet == CET_ADDI:
-                return (self.y - self.model.get_residual()) + self.sigma_u * math.sqrt(2 / math.pi)
+                return (self.y - self.model.get_residual()) + self.sigma_u * sqrt(2 / pi)
             elif self.model.cet == CET_MULT:
-                return (self.y / np.exp(self.model.get_residual())) * np.exp(self.sigma_u * math.sqrt(2 / math.pi))
+                return (self.y / np.exp(self.model.get_residual())) * np.exp(self.sigma_u * sqrt(2 / pi))
         elif self.model.fun == FUN_COST:
             if self.model.cet == CET_ADDI:
-                return (self.y - self.model.get_residual()) - self.sigma_u * math.sqrt(2 / math.pi)
+                return (self.y - self.model.get_residual()) - self.sigma_u * sqrt(2 / pi)
             elif self.model.cet == CET_MULT:
-                return (self.y / np.exp(self.model.get_residual())) * np.exp(-self.sigma_u * math.sqrt(2 / math.pi))
+                return (self.y / np.exp(self.model.get_residual())) * np.exp(-self.sigma_u * sqrt(2 / pi))
 
         raise ValueError("Undefined model parameters.")

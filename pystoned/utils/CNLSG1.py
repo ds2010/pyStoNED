@@ -23,12 +23,7 @@ class CNLSG1:
             rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
         """
         # TODO(error/warning handling): Check the configuration of the model exist
-        self.x = x
-        self.y = y
-        self.cet = cet
-        self.fun = fun
-        self.rts = rts
-
+        self.x, self.y, self.cet, self.fun, self.rts = x, y, cet, fun, rts
         self.cutactive = cutactive
 
         # Initialize the CNLS model
@@ -69,8 +64,7 @@ class CNLSG1:
                                                doc='sweet spot approach')
 
         # Optimize model
-        self.optimization_status = 0
-        self.problem_status = 0
+        self.optimization_status, self.problem_status = 0, 0
 
     def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
         """Optimize the function by requested method

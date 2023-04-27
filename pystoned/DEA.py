@@ -23,8 +23,7 @@ class DEA:
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.y, self.x = tools.assert_valid_mupltiple_y_data(y, x)
-        self.orient = orient
-        self.rts = rts
+        self.orient, self.rts = orient, rts
 
         if type(yref) != type(None):
             self.yref, self.xref = tools.assert_valid_reference_data(
@@ -62,8 +61,7 @@ class DEA:
                 self.__model__.I, rule=self.__vrs_rule(), doc='variable return to scale rule')
 
         # Optimize model
-        self.optimization_status = 0
-        self.problem_status = 0
+        self.optimization_status, self.problem_status = 0, 0
 
     def __objective_rule(self):
         """Return the proper objective function"""
@@ -204,8 +202,7 @@ class DDF(DEA):
                 self.__model__.I, rule=self.__vrs_rule(), doc='various return to scale rule')
 
         # Optimize model
-        self.optimization_status = 0
-        self.problem_status = 0
+        self.optimization_status, self.problem_status = 0, 0
 
     def __input_rule(self):
         """Return the proper input constraint"""
@@ -248,8 +245,7 @@ class DUAL(DEA):
         self.__model__ = ConcreteModel()
 
         self.y, self.x = tools.assert_valid_mupltiple_y_data(y, x)
-        self.orient = orient
-        self.rts = rts
+        self.orient, self.rts = orient, rts
 
         if type(yref) != type(None):
             self.yref, self.xref = tools.assert_valid_reference_data(
@@ -284,8 +280,7 @@ class DUAL(DEA):
             self.__model__.I, rule=self.__second_rule(), doc='normalization constraint')
 
         # Optimize model
-        self.optimization_status = 0
-        self.problem_status = 0
+        self.optimization_status, self.problem_status = 0, 0
 
     def __objective_rule(self):
         """Return the proper objective function"""

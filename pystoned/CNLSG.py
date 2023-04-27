@@ -24,9 +24,7 @@ class CNLSG:
         # TODO(error/warning handling): Check the configuration of the model exist
         self.cutactive = sweet.sweet(x)
         self.y, self.x, self.z = tools.assert_valid_basic_data(y, x, z)
-        self.cet = cet
-        self.fun = fun
-        self.rts = rts
+        self.cet, self.fun, self.rts = cet, fun, rts
 
         # active (added) violated concavity constraint by iterative procedure
         self.active = np.zeros((len(x), len(x)))
@@ -34,8 +32,7 @@ class CNLSG:
         self.active2 = np.zeros((len(x), len(x)))
 
         # Optimize model
-        self.optimization_status = 0
-        self.problem_status = 0
+        self.optimization_status, self.problem_status = 0, 0
 
     def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
         """Optimize the function by requested method"""

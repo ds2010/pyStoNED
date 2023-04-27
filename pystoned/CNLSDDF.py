@@ -27,9 +27,9 @@ class CNLSDDF(CNLS.CNLS):
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.y, self.x, self.b, self.gy, self.gx, self.gb = tools.assert_valid_direciontal_data(y,x,b,gy,gx,gb)
-        self.fun = fun
-        self.rts = RTS_VRS
-    
+        self.fun, self.rts = fun, RTS_VRS
+
+        # Initialize the CNLSDDF model    
         self.__model__ = ConcreteModel()
 
         # Initialize the sets
@@ -66,8 +66,7 @@ class CNLSDDF(CNLS.CNLS):
                                                 doc='afriat inequality')
 
         # Optimize model
-        self.optimization_status = 0
-        self.problem_status = 0
+        self.optimization_status, self.problem_status = 0, 0
 
     def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
         """Optimize the function by requested method

@@ -3,7 +3,7 @@ from pyomo.environ import ConcreteModel, Set, Var, Objective, minimize, Constrai
 import numpy as np
 import pandas as pd
 
-from .constant import CET_ADDI,  OPT_LOCAL, OPT_DEFAULT
+from .constant import CET_ADDI, OPT_LOCAL, OPT_DEFAULT
 from .utils import tools
 
 
@@ -23,8 +23,7 @@ class sCQR:
         # TODO(error/warning handling): Check the configuration of the model exist
         self.y, self.x = tools.to_1d_list(tools.trans_list(y)), tools.to_2d_list(tools.trans_list(x))
         self.tau = tools.to_1d_list(tools.trans_list(tau))
-        self.C = C
-        self.cet = CET_ADDI
+        self.C, self.cet = C, CET_ADDI
 
         # Initialize the CQR model
         self.__model__ = ConcreteModel()
@@ -54,8 +53,7 @@ class sCQR:
                                                      doc='non-crossing constraint')
 
         # Optimize model
-        self.optimization_status = 0
-        self.problem_status = 0
+        self.optimization_status, self.problem_status = 0, 0
 
     def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
         """Optimize the function by requested method

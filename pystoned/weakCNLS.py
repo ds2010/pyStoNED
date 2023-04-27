@@ -27,10 +27,7 @@ class weakCNLS(CNLS.CNLS):
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.y, self.x, self.b, self.z = tools.assert_valid_wp_data(y, x, b, z)
-
-        self.cet = cet
-        self.fun = fun
-        self.rts = rts
+        self.cet, self.fun, self.rts = cet, fun, rts
 
         # Initialize the CNLS model
         self.__model__ = ConcreteModel()
@@ -83,8 +80,7 @@ class weakCNLS(CNLS.CNLS):
                                                         doc='weak disposibility')
 
         # Optimize model
-        self.optimization_status = 0
-        self.problem_status = 0
+        self.optimization_status, self.problem_status = 0, 0
 
     def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
         """Optimize the function by requested method

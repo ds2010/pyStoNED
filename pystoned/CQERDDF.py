@@ -25,9 +25,9 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.y, self.x, self.b, self.gy, self.gx, self.gb = tools.assert_valid_direciontal_data(y,x,b,gy,gx,gb)
-        self.tau = tau
-        self.fun = fun
-        self.rts = RTS_VRS
+        self.tau, self.fun, self.rts = tau, fun, RTS_VRS
+        
+        # Initialize the CQRDDF model
         self.__model__ = ConcreteModel()
 
         # Initialize the sets
@@ -75,8 +75,7 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
                                                 doc='afriat inequality')
 
         # Optimize model
-        self.optimization_status = 0
-        self.problem_status = 0
+        self.optimization_status, self.problem_status = 0, 0
 
     def __regression_rule(self):
         """Return the proper regression constraint"""

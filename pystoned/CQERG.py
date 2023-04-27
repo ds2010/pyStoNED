@@ -25,10 +25,7 @@ class CQRG:
         # TODO(error/warning handling): Check the configuration of the model exist
         self.cutactive = sweet.sweet(x)
         self.y, self.x, self.z = tools.assert_valid_basic_data(y, x, z)
-        self.tau = tau
-        self.cet = cet
-        self.fun = fun
-        self.rts = rts
+        self.tau, self.cet, self.fun, self.rts = tau, cet, fun, rts
 
         # active (added) violated concavity constraint by iterative procedure
         self.active = np.zeros((len(x), len(x)))
@@ -36,8 +33,7 @@ class CQRG:
         self.active2 = np.zeros((len(x), len(x)))
 
         # Optimize model
-        self.optimization_status = 0
-        self.problem_status = 0
+        self.optimization_status, self.problem_status = 0, 0
 
     def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
         """Optimize the function by requested method"""
@@ -262,10 +258,7 @@ class CERG:
         # TODO(error/warning handling): Check the configuration of the model exist
         self.cutactive = sweet.sweet(x)
         self.y, self.x, self.z = tools.assert_valid_basic_data(y, x, z)
-        self.tau = tau
-        self.cet = cet
-        self.fun = fun
-        self.rts = rts
+        self.tau, self.cet, self.fun, self.rts = tau, cet, fun, rts
 
         # active (added) violated concavity constraint by iterative procedure
         self.active = np.zeros((len(x), len(x)))
@@ -273,8 +266,7 @@ class CERG:
         self.active2 = np.zeros((len(x), len(x)))
 
         # Optimize model
-        self.optimization_status = 0
-        self.problem_status = 0
+        self.optimization_status, self.problem_status = 0, 0
 
     def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
         """Optimize the function by requested method"""

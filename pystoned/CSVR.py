@@ -24,10 +24,7 @@ class CSVR:
         """
         # TODO(error/warning handling): Check the configuration of the model exist
         self.y, self.x, self.z = tools.assert_valid_basic_data(y, x, z=None)
-        self.epsilon = epsilon
-        self.C = C
-        self.cet = CET_ADDI
-        self.fun = fun
+        self.epsilon, self.C, self.cet, self.fun = epsilon, C, CET_ADDI, fun
 
         # Initialize the CNLS model
         self.__model__ = ConcreteModel()
@@ -67,8 +64,7 @@ class CSVR:
                                                 doc='afriat inequality')
 
         # Optimize model
-        self.optimization_status = 0
-        self.problem_status = 0
+        self.optimization_status, self.problem_status = 0, 0
 
     def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
         """Optimize the function by requested method

@@ -59,8 +59,7 @@ class FDH:
             self.__model__.I, rule=self.__vrs_rule(), doc='variable return to scale rule')
 
         # Optimize model
-        self.optimization_status = 0
-        self.problem_status = 0
+        self.optimization_status, self.problem_status = 0, 0
 
     def __objective_rule(self):
         """Return the proper objective function"""

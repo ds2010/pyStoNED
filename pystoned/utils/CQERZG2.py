@@ -26,14 +26,7 @@ class CQRZG2:
             rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
         """
         # TODO(error/warning handling): Check the configuration of the model exist
-        self.x = x
-        self.y = y
-        self.z = z
-        self.tau = tau
-        self.cet = cet
-        self.fun = fun
-        self.rts = rts
-
+        self.x, self.y, self.z, self.tau, self.cet, self.fun, self.rts = x, y, z, tau, cet, fun, rts
         self.cutactive = cutactive
         self.active = to_2d_list(trans_list(active))
 
@@ -88,8 +81,7 @@ class CQRZG2:
                                                 doc='sweet spot-2 approach')
 
         # Optimize model
-        self.optimization_status = 0
-        self.problem_status = 0
+        self.optimization_status, self.problem_status = 0, 0
 
     def optimize(self, email=OPT_LOCAL, solver=OPT_DEFAULT):
         """Optimize the function by requested method
