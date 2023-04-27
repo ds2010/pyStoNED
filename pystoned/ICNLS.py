@@ -102,8 +102,7 @@ class ICNLS(CNLS.CNLS):
         x = np.array(self.x)
 
         # number of DMUs
-        n = len(x)
-        m = len(x[0])
+        n, m = len(x), len(x[0])
 
         # binary matrix P
         p = np.zeros((n, n))
