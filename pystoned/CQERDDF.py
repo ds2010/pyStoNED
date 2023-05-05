@@ -24,9 +24,10 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
             tau (float, optional): quantile. Defaults to 0.5.
         """
         # TODO(error/warning handling): Check the configuration of the model exist
-        self.y, self.x, self.b, self.gy, self.gx, self.gb = tools.assert_valid_direciontal_data(y,x,b,gy,gx,gb)
+        self.y, self.x, self.b, self.gy, self.gx, self.gb = tools.assert_valid_direciontal_data(
+            y, x, b, gy, gx, gb)
         self.tau, self.fun, self.rts = tau, fun, RTS_VRS
-        
+
         # Initialize the CQRDDF model
         self.__model__ = ConcreteModel()
 

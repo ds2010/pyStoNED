@@ -34,7 +34,8 @@ class wCQR(CQER.CQR):
     def __weighted_objective_rule(self):
         def weighted_objective_rule(model):
             return self.tau * sum(self.w[i] * model.epsilon_plus[i] for i in model.I) \
-                + (1 - self.tau) * sum(self.w[i] * model.epsilon_minus[i] for i in model.I)
+                + (1 - self.tau) * \
+                sum(self.w[i] * model.epsilon_minus[i] for i in model.I)
 
         return weighted_objective_rule
 

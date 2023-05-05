@@ -38,11 +38,11 @@ class CSVR:
         self.__model__.beta = Var(self.__model__.I,
                                   self.__model__.J,
                                   doc='beta')
-        self.__model__.ksia = Var(self.__model__.I, 
-                                  bounds=(0.0, None), 
+        self.__model__.ksia = Var(self.__model__.I,
+                                  bounds=(0.0, None),
                                   doc='Ksi a')
-        self.__model__.ksib = Var(self.__model__.I, 
-                                  bounds=(0.0, None), 
+        self.__model__.ksib = Var(self.__model__.I,
+                                  bounds=(0.0, None),
                                   doc='Ksi b')
 
         # Setup the objective function and constraints
@@ -51,12 +51,12 @@ class CSVR:
                                              doc='objective function')
 
         self.__model__.regression_rule1 = Constraint(self.__model__.I,
-                                                    rule=self.__regression_rule1(),
-                                                    doc='regression equation')
+                                                     rule=self.__regression_rule1(),
+                                                     doc='regression equation')
 
         self.__model__.regression_rule2 = Constraint(self.__model__.I,
-                                                    rule=self.__regression_rule2(),
-                                                    doc='regression equation')
+                                                     rule=self.__regression_rule2(),
+                                                     doc='regression equation')
 
         self.__model__.afriat_rule = Constraint(self.__model__.I,
                                                 self.__model__.I,
@@ -82,7 +82,7 @@ class CSVR:
 
         def objective_rule(model):
             return self.C * (sum(model.ksia[i] for i in model.I) + sum(model.ksib[i] for i in model.I)) + \
-                        sum(model.beta[i, j]**2 for i in model.I for j in model.J)
+                sum(model.beta[i, j]**2 for i in model.I for j in model.J)
 
         return objective_rule
 
@@ -116,9 +116,9 @@ class CSVR:
                 return Constraint.Skip
             return __operator(
                 model.alpha[i] + sum(model.beta[i, j] * self.x[i][j]
-                                    for j in model.J),
+                                     for j in model.J),
                 model.alpha[h] + sum(model.beta[h, j] * self.x[i][j]
-                                    for j in model.J))
+                                     for j in model.J))
 
         return afriat_rule
 

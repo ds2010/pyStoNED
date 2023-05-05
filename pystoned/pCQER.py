@@ -36,19 +36,19 @@ class pCQR(CQER.CQR):
                                                      sense=minimize,
                                                      doc='objective function')
         elif penalty == 3:
-            self.__model__.lipschitz_norm = Constraint(self.__model__.I, 
-                                                        rule=self.__lipschitz_rule(), 
-                                                        doc='Lipschitz norm')
+            self.__model__.lipschitz_norm = Constraint(self.__model__.I,
+                                                       rule=self.__lipschitz_rule(),
+                                                       doc='Lipschitz norm')
         else:
             raise ValueError('Penalty must be 1, 2, or 3.')
-                
+
     def __new_objective_rule(self):
         """Return the proper objective function"""
 
         def objective_rule(model):
             return self.tau * sum(model.epsilon_plus[i] for i in model.I) \
-                   + (1 - self.tau) * sum(model.epsilon_minus[i] for i in model.I) \
-                   + self.eta * sum(model.beta[ij] for ij in model.I * model.J)
+                + (1 - self.tau) * sum(model.epsilon_minus[i] for i in model.I) \
+                + self.eta * sum(model.beta[ij] for ij in model.I * model.J)
 
         return objective_rule
 
@@ -57,19 +57,20 @@ class pCQR(CQER.CQR):
 
         def objective_rule(model):
             return self.tau * sum(model.epsilon_plus[i] for i in model.I) \
-                   + (1 - self.tau) * sum(model.epsilon_minus[i] for i in model.I) \
-                   + self.eta * sum(model.beta[ij] ** 2 for ij in model.I * model.J)
+                + (1 - self.tau) * sum(model.epsilon_minus[i] for i in model.I) \
+                + self.eta * sum(model.beta[ij] **
+                                 2 for ij in model.I * model.J)
 
         return objective_rule
 
     def __lipschitz_rule(self):
         """Lipschitz norm"""
-        
+
         def lipschitz_rule(model, i):
             return sum(model.beta[i, j] ** 2 for j in model.J) <= self.eta**2
-    
+
         return lipschitz_rule
-        
+
 
 class pCER(CQER.CER):
     """Penalized convex expectile regression (pCER)
@@ -93,7 +94,7 @@ class pCER(CQER.CER):
         CQER.CER.__init__(self, y, x, tau, z, cet, fun, rts)
         if penalty == 1 or penalty == 2:
             self.__model__.squared_objective.deactivate()
-        
+
         if penalty == 1:
             self.__model__.new_objective = Objective(rule=self.__new_squared_objective_rule(),
                                                      sense=minimize,
@@ -103,19 +104,19 @@ class pCER(CQER.CER):
                                                      sense=minimize,
                                                      doc='objective function')
         elif penalty == 3:
-            self.__model__.lipschitz_norm = Constraint(self.__model__.I, 
-                                                        rule=self.__lipschitz_rule(), 
-                                                        doc='Lipschitz norm')
+            self.__model__.lipschitz_norm = Constraint(self.__model__.I,
+                                                       rule=self.__lipschitz_rule(),
+                                                       doc='Lipschitz norm')
         else:
             raise ValueError('Penalty must be 1, 2, or 3.')
-        
+
     def __new_squared_objective_rule(self):
         """Return the proper objective function"""
 
         def objective_rule(model):
             return self.tau * sum(model.epsilon_plus[i] ** 2 for i in model.I) \
-                   + (1 - self.tau) * sum(model.epsilon_minus[i] ** 2 for i in model.I) \
-                   + self.eta * sum(model.beta[ij] for ij in model.I * model.J)
+                + (1 - self.tau) * sum(model.epsilon_minus[i] ** 2 for i in model.I) \
+                + self.eta * sum(model.beta[ij] for ij in model.I * model.J)
 
         return objective_rule
 
@@ -124,15 +125,16 @@ class pCER(CQER.CER):
 
         def objective_rule(model):
             return self.tau * sum(model.epsilon_plus[i] ** 2 for i in model.I) \
-                   + (1 - self.tau) * sum(model.epsilon_minus[i] ** 2 for i in model.I) \
-                   + self.eta * sum(model.beta[ij] ** 2 for ij in model.I * model.J)
+                + (1 - self.tau) * sum(model.epsilon_minus[i] ** 2 for i in model.I) \
+                + self.eta * sum(model.beta[ij] **
+                                 2 for ij in model.I * model.J)
 
         return objective_rule
 
     def __lipschitz_rule(self):
         """Lipschitz norm"""
-        
+
         def lipschitz_rule(model, i):
             return sum(model.beta[i, j] ** 2 for j in model.J) <= self.eta**2
-    
+
         return lipschitz_rule

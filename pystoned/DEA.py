@@ -30,7 +30,7 @@ class DEA:
                 self.y, self.x, yref, xref)
         else:
             self.yref, self.xref = self.y, self.x
-        
+
         # Initialize DEA model
         self.__model__ = ConcreteModel()
         self.__model__.R = Set(initialize=range(len(self.yref)))
@@ -135,7 +135,7 @@ class DEA:
         """Return lamda value by array"""
         tools.assert_optimized(self.optimization_status)
         lamda = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.lamda),
-                                                          list(self.__model__.lamda[:, :].value))])
+                                                           list(self.__model__.lamda[:, :].value))])
         lamda = pd.DataFrame(lamda, columns=['Name', 'Key', 'Value'])
         lamda = lamda.pivot(index='Name', columns='Key', values='Value')
         return lamda.to_numpy()
@@ -265,7 +265,8 @@ class DUAL(DEA):
         self.__model__.mu = Var(self.__model__.I, self.__model__.K, bounds=(
             0.0, None), doc='multiplier y')
         if self.rts == RTS_VRS:
-            self.__model__.omega = Var(self.__model__.I, doc='variable return to scale')
+            self.__model__.omega = Var(
+                self.__model__.I, doc='variable return to scale')
 
         # Setup the objective function and constraints
         if self.orient == ORIENT_IO:
@@ -288,17 +289,17 @@ class DUAL(DEA):
             def objective_rule(model):
                 if self.rts == RTS_VRS:
                     return sum(sum(model.mu[o, k] * self.y[o][k] for o in model.I) for k in model.K) + sum(model.omega[o] for o in model.I)
-                elif self.rts == RTS_CRS: 
+                elif self.rts == RTS_CRS:
                     return sum(sum(model.mu[o, k] * self.y[o][k] for o in model.I) for k in model.K)
             return objective_rule
         elif self.orient == ORIENT_OO:
             def objective_rule(model):
                 if self.rts == RTS_VRS:
                     return sum(sum(model.nu[o, j] * self.x[o][j] for o in model.I) for j in model.J) + sum(model.omega[o] for o in model.I)
-                elif self.rts == RTS_CRS: 
+                elif self.rts == RTS_CRS:
                     return sum(sum(model.nu[o, j] * self.x[o][j] for o in model.I) for j in model.J)
-            return objective_rule            
- 
+            return objective_rule
+
     def __first_rule(self):
         """Return the proper technology constraint"""
         if self.orient == ORIENT_IO:
@@ -308,8 +309,8 @@ class DUAL(DEA):
                 return first_rule
             elif self.rts == RTS_CRS:
                 def first_rule(model, o, r):
-                    return sum(model.mu[o, k] * self.yref[r][k] for k in model.K) - sum(model.nu[o, j] * self.xref[r][j] for j in model.J)  <= 0
-                return first_rule         
+                    return sum(model.mu[o, k] * self.yref[r][k] for k in model.K) - sum(model.nu[o, j] * self.xref[r][j] for j in model.J) <= 0
+                return first_rule
         elif self.orient == ORIENT_OO:
             if self.rts == RTS_VRS:
                 def first_rule(model, o, r):
@@ -318,7 +319,7 @@ class DUAL(DEA):
             elif self.rts == RTS_CRS:
                 def first_rule(model, o, r):
                     return sum(model.nu[o, j] * self.xref[r][j] for j in model.J) - sum(model.mu[o, k] * self.yref[r][k] for k in model.K) >= 0
-                return first_rule      
+                return first_rule
 
     def __second_rule(self):
         """Return the proper normalization constraint"""
@@ -342,16 +343,16 @@ class DUAL(DEA):
         self.__model__.nu.display()
 
     def display_omega(self):
-         """Display omega value"""
-         tools.assert_optimized(self.optimization_status)
-         tools.assert_various_return_to_scale_omega(self.rts)
-         self.__model__.omega.display()       
+        """Display omega value"""
+        tools.assert_optimized(self.optimization_status)
+        tools.assert_various_return_to_scale_omega(self.rts)
+        self.__model__.omega.display()
 
     def get_mu(self):
         """Return mu value by array"""
         tools.assert_optimized(self.optimization_status)
         mu = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.mu),
-                                                          list(self.__model__.mu[:, :].value))])
+                                                        list(self.__model__.mu[:, :].value))])
         mu = pd.DataFrame(mu, columns=['Name', 'Key', 'Value'])
         mu = mu.pivot(index='Name', columns='Key', values='Value')
         return mu.to_numpy()
@@ -360,7 +361,7 @@ class DUAL(DEA):
         """Return nu value by array"""
         tools.assert_optimized(self.optimization_status)
         nu = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.nu),
-                                                          list(self.__model__.nu[:, :].value))])
+                                                        list(self.__model__.nu[:, :].value))])
         nu = pd.DataFrame(nu, columns=['Name', 'Key', 'Value'])
         nu = nu.pivot(index='Name', columns='Key', values='Value')
         return nu.to_numpy()
@@ -385,4 +386,3 @@ class DUAL(DEA):
                 return (np.sum(self.get_nu()*self.x, axis=1)).reshape(len(self.x), 1)
             elif self.rts == RTS_VRS:
                 return (np.sum(self.get_nu()*self.x, axis=1)).reshape(len(self.x), 1) + self.get_omega().reshape(len(self.x), 1)
-                

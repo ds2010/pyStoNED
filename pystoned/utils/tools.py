@@ -280,7 +280,7 @@ def assert_valid_mupltiple_x_y_data(y, x, z=None):
     if y_shape[0] != x_shape[0]:
         raise ValueError(
             "Number of DMUs must be the same in x and y.")
-    
+
     if type(z) != type(None):
         z = trans_list(z)
         z = to_2d_list(z)
@@ -288,5 +288,5 @@ def assert_valid_mupltiple_x_y_data(y, x, z=None):
         if y_shape[0] != z_shape[0]:
             raise ValueError(
                 "Number of DMUs must be the same in y and z.")
-        
+
     return y, x, z

@@ -23,7 +23,7 @@ class FDH:
         # TODO(error/warning handling): Check the configuration of the model exist
         self.y, self.x = tools.assert_valid_mupltiple_y_data(y, x)
         self.orient = orient
-        
+
         if type(yref) != type(None):
             self.yref, self.xref = tools.assert_valid_reference_data(
                 self.y, self.x, yref, xref)
@@ -135,8 +135,7 @@ class FDH:
         """Return lamda value by array"""
         tools.assert_optimized(self.optimization_status)
         lamda = np.asarray([i + tuple([j]) for i, j in zip(list(self.__model__.lamda),
-                                                          list(self.__model__.lamda[:, :].value))])
+                                                           list(self.__model__.lamda[:, :].value))])
         lamda = pd.DataFrame(lamda, columns=['Name', 'Key', 'Value'])
         lamda = lamda.pivot(index='Name', columns='Key', values='Value')
         return lamda.to_numpy()
-

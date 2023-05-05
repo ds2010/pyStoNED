@@ -326,7 +326,7 @@ class CQR:
         elif self.cet == CET_ADDI:
             frontier = np.asarray(self.y) - self.get_residual()
         return np.asarray(frontier)
-    
+
     def get_predict(self, x_test):
         """Return the estimated function in testing sample"""
         tools.assert_optimized(self.optimization_status)

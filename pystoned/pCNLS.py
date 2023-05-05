@@ -25,7 +25,7 @@ class pCNLS(CNLS.CNLS):
         CNLS.CNLS.__init__(self, y, x, z, cet, fun, rts)
         if penalty == 1 or penalty == 2:
             self.__model__.objective.deactivate()
-        
+
         if penalty == 1:
             self.__model__.new_objective = Objective(rule=self.__new_objective_rule(),
                                                      sense=minimize,
@@ -35,9 +35,9 @@ class pCNLS(CNLS.CNLS):
                                                      sense=minimize,
                                                      doc='objective function')
         elif penalty == 3:
-            self.__model__.lipschitz_norm = Constraint(self.__model__.I, 
-                                                        rule=self.__lipschitz_rule(), 
-                                                        doc='Lipschitz norm')
+            self.__model__.lipschitz_norm = Constraint(self.__model__.I,
+                                                       rule=self.__lipschitz_rule(),
+                                                       doc='Lipschitz norm')
         else:
             raise ValueError('Penalty must be 1, 2, or 3.')
 
@@ -46,7 +46,7 @@ class pCNLS(CNLS.CNLS):
 
         def objective_rule(model):
             return sum(model.epsilon[i] ** 2 for i in model.I) \
-                   + self.eta * sum(model.beta[ij] for ij in model.I * model.J)
+                + self.eta * sum(model.beta[ij] for ij in model.I * model.J)
 
         return objective_rule
 
@@ -55,14 +55,15 @@ class pCNLS(CNLS.CNLS):
 
         def objective_rule(model):
             return sum(model.epsilon[i] ** 2 for i in model.I) \
-                   + self.eta * sum(model.beta[ij] ** 2 for ij in model.I * model.J)
+                + self.eta * sum(model.beta[ij] **
+                                 2 for ij in model.I * model.J)
 
         return objective_rule
 
     def __lipschitz_rule(self):
         """Lipschitz norm"""
-        
+
         def lipschitz_rule(model, i):
             return sum(model.beta[i, j] ** 2 for j in model.J) <= self.eta**2
-    
+
         return lipschitz_rule

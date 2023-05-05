@@ -298,7 +298,7 @@ class CNLS:
         """Return the shifted constatnt(alpha) term by CCNLS"""
         tools.assert_optimized(self.optimization_status)
         return self.get_alpha() + np.amax(self.get_residual())
-    
+
     def get_predict(self, x_test):
         """Return the estimated function in testing sample"""
         tools.assert_optimized(self.optimization_status)

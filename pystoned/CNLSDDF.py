@@ -26,10 +26,11 @@ class CNLSDDF(CNLS.CNLS):
             fun (String, optional): FUN_PROD (production frontier) or FUN_COST (cost frontier). Defaults to FUN_PROD.
         """
         # TODO(error/warning handling): Check the configuration of the model exist
-        self.y, self.x, self.b, self.gy, self.gx, self.gb = tools.assert_valid_direciontal_data(y,x,b,gy,gx,gb)
+        self.y, self.x, self.b, self.gy, self.gx, self.gb = tools.assert_valid_direciontal_data(
+            y, x, b, gy, gx, gb)
         self.fun, self.rts = fun, RTS_VRS
 
-        # Initialize the CNLSDDF model    
+        # Initialize the CNLSDDF model
         self.__model__ = ConcreteModel()
 
         # Initialize the sets

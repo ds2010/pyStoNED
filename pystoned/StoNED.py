@@ -1,6 +1,6 @@
 # import dependencies
 import numpy as np
-from math import sqrt, pi, log 
+from math import sqrt, pi, log
 import scipy.stats as stats
 import scipy.optimize as opt
 from .utils import tools
@@ -51,7 +51,7 @@ class StoNED:
         tools.assert_optimized(self.model.optimization_status)
         self.get_unconditional_expected_inefficiency(method)
         sigma = self.sigma_u * self.sigma_v / sqrt(self.sigma_u ** 2 +
-                                                        self.sigma_v ** 2)
+                                                   self.sigma_v ** 2)
         mu = self.epsilon * self.sigma_u / (
             self.sigma_v * sqrt(self.sigma_u ** 2 + self.sigma_v ** 2))
 
@@ -94,7 +94,8 @@ class StoNED:
         else:
             raise ValueError("Undefined model parameters.")
 
-        self.sigma_v = (M2_mean - ((pi - 2) / pi) * self.sigma_u ** 2) ** (1 / 2)
+        self.sigma_v = (M2_mean - ((pi - 2) / pi) *
+                        self.sigma_u ** 2) ** (1 / 2)
         self.mu = (self.sigma_u ** 2 * 2 / pi) ** (1 / 2)
         if self.model.fun == FUN_PROD:
             self.epsilon = residual - self.mu
@@ -143,7 +144,8 @@ class StoNED:
             # TODO(error/warning handling): Raise error while undefined fun
             return False
         # use estimate of lambda to calculate sigma Eq. (3.26) in Johnson and Kuosmanen (2015)
-        sigma = sqrt(np.mean(residual ** 2) / (1 - (2 * lamda ** 2) / (pi * (1 + lamda ** 2))))
+        sigma = sqrt(np.mean(residual ** 2) /
+                     (1 - (2 * lamda ** 2) / (pi * (1 + lamda ** 2))))
 
         # calculate bias correction
         # (unconditional) mean

@@ -29,11 +29,9 @@ class wCNLS(CNLS.CNLS):
         self.__model__.objective.deactivate()
         self.__model__.weighted_objective = Objective(
             rule=self.__weighted_objective_rule(), sense=minimize, doc='weighted objective rule')
-        
-        
+
     def __weighted_objective_rule(self):
         def weighted_objective_rule(model):
             return sum(self.w[i] * model.epsilon[i] ** 2 for i in model.I)
 
         return weighted_objective_rule
-    

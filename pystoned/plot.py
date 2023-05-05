@@ -114,7 +114,7 @@ def plot3d(model, x_select_1=0, x_select_2=1, fig_name=None, line_transparent=Fa
                                                    fun=model.fun)
 
     ax.plot_surface(XX, YY, ZZ, rstride=1, cstride=1, cmap='viridis',
-                         edgecolor='none', alpha=0.5)
+                    edgecolor='none', alpha=0.5)
 
     # add x, y, z label
     ax.set_xlabel("Input $x1$")

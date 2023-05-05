@@ -20,7 +20,8 @@ class production_data:
             z (Numbers, optional): contextual variables. Defaults to None.
         """
         self.decision_making_unit = dmu
-        self.x, self.y, self.b, self.z  = x, y, b, z
+        self.x, self.y, self.b, self.z = x, y, b, z
+
 
 def load_GHG_abatement_cost(year=None, x_select=['HRSN', 'CPNK'], y_select=['VALK'], b_select=['GHG']):
     """Loading OECD GHG emissions data
