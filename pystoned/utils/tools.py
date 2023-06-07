@@ -6,6 +6,7 @@ from pyomo.opt import SolverFactory, SolverManagerFactory
 from ..constant import CET_ADDI, CET_MULT, CET_Model_Categories, OPT_LOCAL, OPT_DEFAULT, RTS_CRS
 __email_re = compile(r'([^@]+@[^@]+\.[a-zA-Z0-9]+)$')
 
+
 def set_neos_email(address):
     """pass email address to NEOS server 
 
@@ -37,13 +38,14 @@ def optimize_model(model, email, cet, solver=OPT_DEFAULT):
         return solver_instance.solve(model, tee=True), 1
     else:
         if solver is OPT_DEFAULT and cet is CET_ADDI:
-            solvers = ["cplex","cbc","mosek"]
+            solvers = ["cplex", "cbc", "mosek"]
         elif solver is OPT_DEFAULT and cet == CET_MULT:
             solvers = ["knitro"]
         else:
             solvers = [solver]
         for solver in solvers:
-            model, optimization_status = __try_remote_solver(model, cet, solver)
+            model, optimization_status = __try_remote_solver(
+                model, cet, solver)
             if optimization_status == 1:
                 return model, optimization_status
         raise Exception("Remote solvers are temporarily not available.")
