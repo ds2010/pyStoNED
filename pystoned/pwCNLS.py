@@ -1,12 +1,11 @@
 # import dependencies
 from pyomo.environ import Objective, minimize
-
-from . import CNLS
+from . import pCNLS
 from .constant import CET_ADDI, FUN_PROD, RTS_VRS
 from .utils import tools
 
 
-class pwCNLS(CNLS.CNLS):
+class pwCNLS(pCNLS.pCNLS):
     """penalized Weighted Convex Nonparametric Least Square (pwCNLS)
     """
 
@@ -25,38 +24,18 @@ class pwCNLS(CNLS.CNLS):
             penalty (int, optional): penalty=1 (L1 norm) and penalty=2 (L2 norm). Defaults to 1.
         """
         # TODO(error/warning handling): Check the configuration of the model exist
-        self.eta = eta
         self.w = tools.trans_list(tools.to_1d_list(w))
-        CNLS.CNLS.__init__(self, y, x, z, cet, fun, rts)
+        pCNLS.pCNLS.__init__(self, y, x, eta, z, cet, fun, rts, penalty)
 
         self.__model__.objective.deactivate()
-        if penalty == 1:
-            self.__model__.new_objective = Objective(rule=self.__new_objective_rule(),
-                                                     sense=minimize,
-                                                     doc='weighted objective function')
-        elif penalty == 2:
-            self.__model__.new_objective = Objective(rule=self.__new_objective_rule2(),
-                                                     sense=minimize,
-                                                     doc='weighted objective function')
-        else:
-            raise ValueError('Penalty must be 1 or 2.')
+        self.__model__.new_objective = Objective(rule=self.__new_objective_rule(),
+                                                 sense=minimize,
+                                                 doc='weighted objective function')
 
     def __new_objective_rule(self):
         """Return the proper objective function"""
 
         def objective_rule(model):
-            return sum(self.w[i] * model.epsilon[i] ** 2 for i in model.I) \
-                + self.eta * sum(abs(model.beta[ij])
-                                 for ij in model.I * model.J)
-
-        return objective_rule
-
-    def __new_objective_rule2(self):
-        """Return the proper objective function"""
-
-        def objective_rule(model):
-            return sum(self.w[i] * model.epsilon[i] ** 2 for i in model.I) \
-                + self.eta * sum(model.beta[ij] **
-                                 2 for ij in model.I * model.J)
+            return sum(self.w[i] * model.epsilon[i] ** 2 for i in model.I)
 
         return objective_rule
