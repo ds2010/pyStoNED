@@ -12,6 +12,8 @@ from . import FDH
 from . import pCNLS
 from . import pCQER
 from . import pICQER
+from . import pwCNLS
+from . import pwCQER
 from . import plot
 from . import ICNLS
 from . import ICQER
@@ -36,6 +38,8 @@ __all__ = [
     'pCNLS',
     'pCQER',
     'pICQER',
+    'pwCNLS',
+    'pwCQER',
     'plot',
     'ICNLS',
     'ICQER',
