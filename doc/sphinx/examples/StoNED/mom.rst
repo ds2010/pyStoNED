@@ -15,7 +15,7 @@ distribution are given by
         M_3 &= \bigg(\sqrt{\frac{2}{\pi}}\bigg)\bigg[1-\frac{4}{\pi}\bigg]\sigma_u^2
     \end{align*}
 
-    The second and third central moments can be estimated by using the CNLS residuals, i.e.,  :math:`\hat{\varepsilon}_i^{CNLS}`:
+    The second and third central moments can be estimated by using the CNLS residuals, i.e., :math:`\hat{\varepsilon}_i^{CNLS}`
 
 .. math::
     :nowrap:
