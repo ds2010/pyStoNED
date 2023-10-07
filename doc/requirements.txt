@@ -1,11 +1,2 @@
-cloud_sptheme
-nbsphinx
-numpy
-numpydoc
-matplotlib
-pandas
-pyomo
-recommonmark
-scipy
 sphinx
-sphinx_markdown_tables
+sphinxcontrib.jquery
