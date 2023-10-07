@@ -1,0 +1,24 @@
+version: 2
+
+build:
+  os: "ubuntu-20.04"
+  tools:
+    python: "3.10"
+  jobs:
+    post_checkout:
+      # Cancel building pull requests when they do not change main.
+      #
+      # If there are no changes (git diff exits with 0) we force the command to return with 183.
+      # This is a special exit code on Read the Docs that will cancel the build immediately.
+      - |
+        if [ "$READTHEDOCS_VERSION_TYPE" = "external" ] && git diff --quiet origin/monorepo -- main;
+        then
+          exit 183;
+        fi
+
+sphinx:
+  configuration: doc/sphinx/conf.py
+
+python:
+  install:
+    - requirements: doc/requirements.txt
