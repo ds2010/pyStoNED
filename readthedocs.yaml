@@ -16,6 +16,9 @@ build:
           exit 183;
         fi
 
+# Build all formats
+formats: all
+
 sphinx:
   configuration: doc/sphinx/conf.py
 
