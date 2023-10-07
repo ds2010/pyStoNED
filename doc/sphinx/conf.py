@@ -48,7 +48,6 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
-    'sphinxcontrib.jquery',
 ]
 source_suffix = ['.rst', '.md', '.ipynb']
 nbsphinx_execute = 'never'
