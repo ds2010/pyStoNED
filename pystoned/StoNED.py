@@ -166,6 +166,7 @@ class StoNED:
             return (1 / sqrt(2 * pi)) * np.exp(-0.5 * g ** 2)
 
         x = np.array(residual)
+        x = np.sort(x)
 
         # choose a bandwidth (rule-of-thumb, Eq. (3.29) in Silverman (1986))
         if np.std(x, ddof=1) < stats.iqr(x, interpolation='midpoint'):
