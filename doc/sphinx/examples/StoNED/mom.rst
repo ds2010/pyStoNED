@@ -15,7 +15,7 @@ distribution are given by
         M_3 &= \bigg(\sqrt{\frac{2}{\pi}}\bigg)\bigg[1-\frac{4}{\pi}\bigg]\sigma_u^2
     \end{align*}
 
-    The second and third central moments can be estimated by using the CNLS residuals, i.e., :math:`\hat{\varepsilon}_i^{CNLS}`
+The second and third central moments can be estimated by using the CNLS residuals (i.e., :math:`\hat{\varepsilon}_i^{CNLS}`)
 
 .. math::
     :nowrap:
@@ -26,7 +26,7 @@ distribution are given by
     \end{align*}
 
 Note that the third moment :math:`M_3` (which measures the skewness of the distribution) 
-only depends on the standard deviation parameter σu of the inefficiency distribution. 
+only depends on the standard deviation parameter :math:`\sigma_u` of the inefficiency distribution. 
 Thus, given the estimated :math:`\hat{M}_3` (which should be positive in the case of a cost 
 frontier), we can estimate :math:`\sigma_u` and :math:`\sigma_v` by
 
