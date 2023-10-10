@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 from . import CNLS
-from constant import CET_MULT, RDF_DI, RDF_DO, OPT_DEFAULT, RTS_CRS, RTS_VRS, OPT_LOCAL
+from .constant import CET_MULT, RDF_DI, RDF_DO, OPT_DEFAULT, RTS_CRS, RTS_VRS, OPT_LOCAL
 from .utils import tools
 
 
