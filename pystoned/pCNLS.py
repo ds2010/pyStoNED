@@ -1,5 +1,5 @@
 # import dependencies
-from pyomo.environ import Constraint, Var
+from pyomo.environ import Objective, minimize, Constraint
 from . import CNLS
 from .constant import CET_ADDI, FUN_PROD, RTS_VRS
 
@@ -23,23 +23,17 @@ class pCNLS(CNLS.CNLS):
         """
         self.eta = eta
         CNLS.CNLS.__init__(self, y, x, z, cet, fun, rts)
-        self.__model__.zeta = Var(
-            self.__model__.I, self.__model__.J, doc='zeta')
-        if penalty == 1:
-            self.__model__.l1_norm1 = Constraint(self.__model__.I,
-                                                 self.__model__.J,
-                                                 rule=self.__l1_rule1(),
-                                                 doc='L1 norm 1')
-            self.__model__.l1_norm2 = Constraint(self.__model__.I,
-                                                 self.__model__.J,
-                                                 rule=self.__l1_rule2(),
-                                                 doc='L1 norm 2')
-            self.__model__.l1_norm3 = Constraint(rule=self.__l1_rule3(),
-                                                 doc='L1 norm 3')
+        if penalty == 1 or penalty == 2:
+            self.__model__.objective.deactivate()
 
+        if penalty == 1:
+            self.__model__.new_objective = Objective(rule=self.__new_objective_rule(),
+                                                     sense=minimize,
+                                                     doc='objective function')
         elif penalty == 2:
-            self.__model__.l2_norm = Constraint(rule=self.__l2_rule(),
-                                                doc='L2 norm')
+            self.__model__.new_objective = Objective(rule=self.__new_objective_rule2(),
+                                                     sense=minimize,
+                                                     doc='objective function')
         elif penalty == 3:
             self.__model__.lipschitz_norm = Constraint(self.__model__.I,
                                                        rule=self.__lipschitz_rule(),
@@ -47,42 +41,29 @@ class pCNLS(CNLS.CNLS):
         else:
             raise ValueError('Penalty must be 1, 2, or 3.')
 
-    def __l1_rule1(self):
-        """L1 norm #1: right-side equalities"""
+    def __new_objective_rule(self):
+        """Return the proper objective function"""
 
-        def l1_rule1(model, i, j):
-            return model.beta[i, j] <= self.__model__.zeta[i, j]
+        def objective_rule(model):
+            return sum(model.epsilon[i] ** 2 for i in model.I) \
+                + self.eta * sum(model.beta[ij] for ij in model.I * model.J)
 
-        return l1_rule1
+        return objective_rule
 
-    def __l1_rule2(self):
-        """L1 norm #2: left-side equalities"""
+    def __new_objective_rule2(self):
+        """Return the proper objective function"""
 
-        def l1_rule2(model, i, j):
-            return model.beta[i, j] >= -self.__model__.zeta[i, j]
+        def objective_rule(model):
+            return sum(model.epsilon[i] ** 2 for i in model.I) \
+                + self.eta * sum(model.beta[ij] **
+                                 2 for ij in model.I * model.J)
 
-        return l1_rule2
-
-    def __l1_rule3(self):
-        """L1 norm #3: sum of zeta"""
-
-        def l1_rule3(model):
-            return sum(self.__model__.zeta[ij] for ij in model.I * model.J) == self.eta
-
-        return l1_rule3
-
-    def __l2_rule(self):
-        """L2 norm"""
-
-        def l2_rule(model):
-            return sum(model.beta[ij] ** 2 for ij in model.I * model.J) <= self.eta
-
-        return l2_rule
+        return objective_rule
 
     def __lipschitz_rule(self):
         """Lipschitz norm"""
 
         def lipschitz_rule(model, i):
-            return sum(model.beta[i, j] ** 2 for j in model.J) <= self.eta ** 2
+            return sum(model.beta[i, j] ** 2 for j in model.J) <= self.eta**2
 
         return lipschitz_rule
