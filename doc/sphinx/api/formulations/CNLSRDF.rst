@@ -1,5 +1,5 @@
 ===================
-CNLSDDF
+CNLSRDF
 ===================
 
 .. automodule:: pystoned.CNLSRDF
