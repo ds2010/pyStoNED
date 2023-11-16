@@ -19,6 +19,10 @@ def get_remote_solvers():
         )
     )
 
+def check_remote_solver(solver="mosek"):
+    solver_list = get_remote_solvers()
+    return bool(solver in solver_list)
+
 def check_local_solver(solver="mosek"):
     return bool(check_available_solvers(solver))
 
