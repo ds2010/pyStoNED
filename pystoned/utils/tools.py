@@ -2,9 +2,13 @@
 from re import compile
 from os import environ
 import numpy as np
-from pyomo.opt import SolverFactory, SolverManagerFactory
+from pyomo.opt import SolverFactory, SolverManagerFactory, check_available_solvers
+
 from ..constant import CET_ADDI, CET_MULT, CET_Model_Categories, OPT_LOCAL, OPT_DEFAULT, RTS_CRS
 __email_re = compile(r'([^@]+@[^@]+\.[a-zA-Z0-9]+)$')
+
+def check_local_solver(solver="mosek"):
+    return bool(check_available_solvers(solver))
 
 
 def set_neos_email(address):
