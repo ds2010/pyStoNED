@@ -57,7 +57,7 @@ def optimize_model(model, email, cet, solver=OPT_DEFAULT):
         return solver_instance.solve(model, tee=True), 1
     else:
         if solver is OPT_DEFAULT and cet is CET_ADDI:
-            solvers = ["cplex", "cbc", "mosek"]
+            solvers = ["mosek"]
         elif solver is OPT_DEFAULT and cet == CET_MULT:
             solvers = ["knitro"]
         else:
