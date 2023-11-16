@@ -2,10 +2,29 @@
 from re import compile
 from os import environ
 import numpy as np
-from pyomo.opt import SolverFactory, SolverManagerFactory
+from pyomo.opt import SolverFactory, SolverManagerFactory, check_available_solvers
+
 from ..constant import CET_ADDI, CET_MULT, CET_Model_Categories, OPT_LOCAL, OPT_DEFAULT, RTS_CRS
 __email_re = compile(r'([^@]+@[^@]+\.[a-zA-Z0-9]+)$')
 
+def get_remote_solvers():
+    import pyomo.neos.kestrel
+    kestrel = pyomo.neos.kestrel.kestrelAMPL()
+    return list(
+        set(
+            [
+                name.split(":")[0].lower()
+                for name in kestrel.solvers()
+            ]
+        )
+    )
+
+def check_remote_solver(solver="mosek"):
+    solver_list = get_remote_solvers()
+    return bool(solver in solver_list)
+
+def check_local_solver(solver="mosek"):
+    return bool(check_available_solvers(solver))
 
 def set_neos_email(address):
     """pass email address to NEOS server 
@@ -23,6 +42,7 @@ def set_neos_email(address):
 
 
 def optimize_model(model, email, cet, solver=OPT_DEFAULT):
+    optimization_status = 0
     if not set_neos_email(email):
         if solver is not OPT_DEFAULT:
             assert_solver_available_locally(solver)
@@ -37,13 +57,28 @@ def optimize_model(model, email, cet, solver=OPT_DEFAULT):
         return solver_instance.solve(model, tee=True), 1
     else:
         if solver is OPT_DEFAULT and cet is CET_ADDI:
-            solver = "mosek"
+            solvers = ["cplex", "cbc", "mosek"]
         elif solver is OPT_DEFAULT and cet == CET_MULT:
-            solver = "knitro"
-        solver_instance = SolverManagerFactory('neos')
+            solvers = ["knitro"]
+        else:
+            solvers = [solver]
+        for solver in solvers:
+            model, optimization_status = __try_remote_solver(
+                model, cet, solver)
+            if optimization_status == 1:
+                return model, optimization_status
+        raise Exception("Remote solvers are temporarily not available.")
+
+
+def __try_remote_solver(model, cet, solver):
+    solver_instance = SolverManagerFactory('neos')
+    try:
         print("Estimating the {} remotely with {} solver.".format(
             CET_Model_Categories[cet], solver), flush=True)
         return solver_instance.solve(model, tee=True, opt=solver), 1
+    except:
+        print("Remote {} solver is not available now.".format(solver))
+        return model, 0
 
 
 def trans_list(li):
