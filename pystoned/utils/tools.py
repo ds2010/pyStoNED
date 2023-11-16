@@ -7,9 +7,20 @@ from pyomo.opt import SolverFactory, SolverManagerFactory, check_available_solve
 from ..constant import CET_ADDI, CET_MULT, CET_Model_Categories, OPT_LOCAL, OPT_DEFAULT, RTS_CRS
 __email_re = compile(r'([^@]+@[^@]+\.[a-zA-Z0-9]+)$')
 
+def get_remote_solvers():
+    import pyomo.neos.kestrel
+    kestrel = pyomo.neos.kestrel.kestrelAMPL()
+    return list(
+        set(
+            [
+                name.split(":")[0].lower()
+                for name in kestrel.solvers()
+            ]
+        )
+    )
+
 def check_local_solver(solver="mosek"):
     return bool(check_available_solvers(solver))
-
 
 def set_neos_email(address):
     """pass email address to NEOS server 
