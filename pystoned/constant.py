@@ -92,3 +92,19 @@ RED_Categories = {
 # Optimization
 OPT_LOCAL = "local"
 OPT_DEFAULT = None
+
+# Radial distance function
+RDF_DI = "DI"
+"""
+RDF_DI: Input distance function.
+"""
+
+RDF_DO = "DO"
+"""
+RDF_DO: Output distance function.
+"""
+
+FUN_Categories = {
+    RDF_DI: "Input distance function",
+    RDF_DO: "Output distance function"
+}

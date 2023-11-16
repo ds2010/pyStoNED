@@ -1,19 +1,20 @@
 # import dependencies
 from pyomo.environ import Objective, minimize, Constraint
-from . import CNLS
+from . import wCNLS
 from .constant import CET_ADDI, FUN_PROD, RTS_VRS
 
 
-class pCNLS(CNLS.CNLS):
-    """penalized Convex Nonparametric Least Square (pCNLS)
+class pwCNLS(wCNLS.wCNLS):
+    """penalized Weighted Convex Nonparametric Least Square (pwCNLS)
     """
 
-    def __init__(self, y, x, eta, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS, penalty=1):
-        """pCNLS model
+    def __init__(self, y, x, w, eta, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS, penalty=1):
+        """wCNLS model
 
         Args:
             y (float): output variable. 
             x (float): input variables.
+            w (float): weight variable.
             eta (float): regularization parameter.
             z (float, optional): Contextual variable(s). Defaults to None.
             cet (String, optional): CET_ADDI (additive composite error term) or CET_MULT (multiplicative composite error term). Defaults to CET_ADDI.
@@ -21,11 +22,12 @@ class pCNLS(CNLS.CNLS):
             rts (String, optional): RTS_VRS (variable returns to scale) or RTS_CRS (constant returns to scale). Defaults to RTS_VRS.
             penalty (int, optional): penalty=1 (L1 norm), penalty=2 (L2 norm), and penalty=3 (Lipschitz norm). Defaults to 1.
         """
+        # TODO(error/warning handling): Check the configuration of the model exist
         self.eta = eta
-        CNLS.CNLS.__init__(self, y, x, z, cet, fun, rts)
+        wCNLS.wCNLS.__init__(self, y, x, w, z, cet, fun, rts)
         if penalty == 1 or penalty == 2:
-            self.__model__.objective.deactivate()
-
+            self.__model__.weighted_objective.deactivate()
+        
         if penalty == 1:
             self.__model__.new_objective = Objective(rule=self.__new_objective_rule(),
                                                      sense=minimize,
@@ -45,7 +47,7 @@ class pCNLS(CNLS.CNLS):
         """Return the proper objective function"""
 
         def objective_rule(model):
-            return sum(model.epsilon[i] ** 2 for i in model.I) \
+            return sum(self.w[i] * model.epsilon[i] ** 2 for i in model.I) \
                 + self.eta * sum(model.beta[ij] for ij in model.I * model.J)
 
         return objective_rule
@@ -54,9 +56,8 @@ class pCNLS(CNLS.CNLS):
         """Return the proper objective function"""
 
         def objective_rule(model):
-            return sum(model.epsilon[i] ** 2 for i in model.I) \
-                + self.eta * sum(model.beta[ij] **
-                                 2 for ij in model.I * model.J)
+            return sum(self.w[i] * model.epsilon[i] ** 2 for i in model.I) \
+                + self.eta * sum(model.beta[ij] ** 2 for ij in model.I * model.J)
 
         return objective_rule
 

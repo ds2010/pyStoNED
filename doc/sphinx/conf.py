@@ -28,7 +28,7 @@ author = u'Sheng Dai, Yu-Hsueh Fang, Chia-Yen Lee, Timo Kuosmanen'
 # The short X.Y version.
 version = '0.6'
 # The full version, including alpha/beta/rc tags.
-release = '0.6.5'
+release = '0.6.8'
 
 # -- General configuration ---------------------------------------------------
 
@@ -47,7 +47,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
-    'sphinx.ext.autosummary'
+    'sphinx.ext.autosummary',
 ]
 source_suffix = ['.rst', '.md', '.ipynb']
 nbsphinx_execute = 'never'

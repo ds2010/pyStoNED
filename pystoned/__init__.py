@@ -1,6 +1,7 @@
 from . import CNLS
 from . import CNLSDDF
 from . import CNLSG
+from . import CNLSRDF
 from . import constant
 from . import CQER
 from . import CQERDDF
@@ -12,6 +13,8 @@ from . import FDH
 from . import pCNLS
 from . import pCQER
 from . import pICQER
+from . import pwCNLS
+from . import pwCQER
 from . import plot
 from . import ICNLS
 from . import ICQER
@@ -25,6 +28,7 @@ __all__ = [
     'CNLS',
     'CNLSDDF',
     'CNLSG',
+    'CNLSRDF',
     'constant',
     'CQER',
     'CQERDDF',
@@ -36,6 +40,8 @@ __all__ = [
     'pCNLS',
     'pCQER',
     'pICQER',
+    'pwCNLS',
+    'pwCQER',
     'plot',
     'ICNLS',
     'ICQER',

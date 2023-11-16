@@ -13,6 +13,7 @@ Formulations Classes
    formulations/CNLS
    formulations/CNLSDDF
    formulations/CNLSG
+   formulations/CNLSRDF
    formulations/CQER
    formulations/CQERDDF
    formulations/CQERG
@@ -24,6 +25,8 @@ Formulations Classes
    formulations/pCNLS
    formulations/pCQER
    formulations/pICQER
+   formulations/pwCNLS
+   formulations/pwCQER
    formulations/sCQER
    formulations/wCNLS
    formulations/wCQER
