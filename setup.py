@@ -5,7 +5,7 @@ with open('README.md') as readme_file:
 
 setup_args = dict(
     name='pystoned',
-    version='0.7.0',
+    version='0.7.1',
     description='A Python Package for Convex Regression and Frontier Estimation',
     long_description_content_type="text/markdown",
     long_description=README,
@@ -35,6 +35,7 @@ install_requires = [
     'scipy>=1.5.2',
     'matplotlib>=3.5.1',
     'mosek>=10.1.13',
+    'ipopt>=1.0.3',
     'openpyxl>=3.1.2',
     'notebook>=7.0.4',
 ]
