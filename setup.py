@@ -35,7 +35,6 @@ install_requires = [
     'scipy>=1.5.2',
     'matplotlib>=3.5.1',
     'mosek>=10.1.13',
-    'ipopt>=1.0.3',
     'openpyxl>=3.1.2',
     'notebook>=7.0.4',
 ]
