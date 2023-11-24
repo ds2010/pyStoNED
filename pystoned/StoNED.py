@@ -209,7 +209,6 @@ class StoNED:
         self.get_unconditional_expected_inefficiency(method)
 
         gmin = unihyper.gmin(self.x, self.model.get_frontier(), self.model.rts)
-
         if self.model.fun == FUN_PROD:
             if self.model.cet == CET_ADDI:
                 return gmin + self.sigma_u * sqrt(2 / pi)
