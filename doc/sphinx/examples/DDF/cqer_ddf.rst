@@ -54,7 +54,7 @@ Similarly to CNLS with DDF, we present another two approaches integrating DDF to
             &  \boldsymbol{\gamma}_i^{'}\boldsymbol{y_i} = \alpha_i + \boldsymbol{\beta}_i^{'}\boldsymbol{x_i} + \boldsymbol{\delta}_i^{'}\boldsymbol{b}_i + \varepsilon^+_i - \varepsilon^-_i &{\quad}& \forall i \notag \\
             &  \alpha_i + \boldsymbol{\beta}_i^{'}\boldsymbol{x_i} + \boldsymbol{\delta}_i^{'}\boldsymbol{b}_i -\boldsymbol{\gamma}_i^{'}\boldsymbol{y_i} \le \alpha_j + \boldsymbol{\beta}_j^{'}\boldsymbol{x_i} + \boldsymbol{\delta}_j^{'}\boldsymbol{b}_i -\boldsymbol{\gamma}_j^{'}\boldsymbol{y_i} &{\quad}& \forall i, j \notag \\
             &  \boldsymbol{\gamma}_i^{'} g^{y}  + \boldsymbol{\beta}_i^{'} g^{x} + \boldsymbol{\delta}_i^{'}g^{b} = 1 &{\quad}& \forall i \notag \\ 
-            &  \boldsymbol{\beta}_i \ge \boldsymbol{0}, \delta_i \ge \boldsymbol{0}, \boldsymbol{\gamma}_i \ge \boldsymbol{0} &{\quad}&  \forall i \notag \\
+            &  \boldsymbol{\beta}_i \ge \boldsymbol{0}, \boldsymbol{\gamma}_i \ge \boldsymbol{0} &{\quad}&  \forall i \notag \\
             & \varepsilon _i^{+}\ge 0,\ \varepsilon_i^{-} \ge 0 &{\quad}& \forall i \notag
             \end{alignat}
 
@@ -70,7 +70,7 @@ Similarly to CNLS with DDF, we present another two approaches integrating DDF to
             &  \boldsymbol{\gamma}_i^{'}\boldsymbol{y_i} = \alpha_i + \boldsymbol{\beta}_i^{'}\boldsymbol{x_i} + \boldsymbol{\delta}_i^{'}\boldsymbol{b}_i + \varepsilon^+_i - \varepsilon^-_i  &{\quad}& \forall i \notag \\
             &  \alpha_i + \boldsymbol{\beta}_i^{'}\boldsymbol{x_i} + \boldsymbol{\delta}_i^{'}\boldsymbol{b}_i -\boldsymbol{\gamma}_i^{'}\boldsymbol{y_i} \le \alpha_j + \boldsymbol{\beta}_j^{'}\boldsymbol{x_i} + \boldsymbol{\delta}_j^{'}\boldsymbol{b}_i -\boldsymbol{\gamma}_j^{'}\boldsymbol{y_i}  &{\quad}&  \forall i, j  \notag \\
             &  \boldsymbol{\gamma}_i^{'} g^{y}  + \boldsymbol{\beta}_i^{'} g^{x} + \boldsymbol{\delta}_i^{'}g^{b} = 1   &{\quad}& \forall i \notag \\ 
-            &  \boldsymbol{\beta}_i \ge \boldsymbol{0}, \delta_i \ge \boldsymbol{0}, \boldsymbol{\gamma}_i \ge \boldsymbol{0}  &{\quad}&  \forall i  \notag \\
+            &  \boldsymbol{\beta}_i \ge \boldsymbol{0}, \boldsymbol{\gamma}_i \ge \boldsymbol{0}  &{\quad}&  \forall i  \notag \\
             & \varepsilon _i^{+}\ge 0,\ \varepsilon_i^{-} \ge 0  &{\quad}& \forall i \notag
             \end{alignat}
 

@@ -43,7 +43,7 @@ When considering undesirable outputs, the CNLS-DDF problem (2.12) can be reformu
     &  \boldsymbol{\gamma}_i^{'}\boldsymbol{y}_i = \alpha_i + \boldsymbol{\beta}_i^{'}\boldsymbol{x}_i + \boldsymbol{\delta}_i^{'}\boldsymbol{b}_i - \varepsilon_i &{\quad}& \forall i  \notag \\
     &  \alpha_i + \boldsymbol{\beta}_i^{'}\boldsymbol{x}_i + \delta_i^{'}\boldsymbol{b}_i -\boldsymbol{\gamma}_i^{'}\boldsymbol{y}_i \le \alpha_j + \boldsymbol{\beta}_j^{'}\boldsymbol{x}_i + \delta_j^{'}\boldsymbol{b}_i -\boldsymbol{\gamma}_j^{'}\boldsymbol{y}_i &{\quad}&  \forall i, j  \notag \\
     &  \boldsymbol{\gamma}_i^{'} g^{y}  + \boldsymbol{\beta}_i^{'} g^{x} + \boldsymbol{\delta}_i^{'}g^{b} = 1  &{\quad}& \forall i  \notag \\
-    &  \boldsymbol{\beta}_i \ge \boldsymbol{0}, \boldsymbol{\delta}_i \ge \boldsymbol{0}, \boldsymbol{\gamma}_i \ge \boldsymbol{0} &{\quad}&  \forall i  \notag
+    &  \boldsymbol{\beta}_i \ge \boldsymbol{0}, \boldsymbol{\gamma}_i \ge \boldsymbol{0} &{\quad}&  \forall i  \notag
     \end{alignat}
 
 where the coefficients :math:`\boldsymbol{\delta_i}` denotes marginal effects of undesirable outputs to the DDF.

@@ -52,7 +52,7 @@ class CQRDDF(CNLSDDF.CNLSDDF, CQER.CQR):
         if type(self.b) != type(None):
             self.__model__.L = Set(initialize=range(len(self.b[0])))
             self.__model__.delta = Var(
-                self.__model__.I, self.__model__.L, bounds=(0.0, None), doc='delta')
+                self.__model__.I, self.__model__.L, doc='delta')
 
         self.__model__.objective = Objective(rule=self._CQR__objective_rule(),
                                              sense=minimize,
