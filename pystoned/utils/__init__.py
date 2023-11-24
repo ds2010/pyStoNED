@@ -9,3 +9,4 @@ from . import CQERZG2
 from . import interpolation
 from . import sweet
 from . import tools
+from . import unihyper

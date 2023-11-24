@@ -3,7 +3,7 @@ import numpy as np
 from math import sqrt, pi, log
 import scipy.stats as stats
 import scipy.optimize as opt
-from .utils import tools
+from .utils import tools, unihyper
 from .constant import CET_ADDI, CET_MULT, FUN_PROD, FUN_COST, RED_MOM, RED_QLE, RED_KDE
 
 
@@ -198,25 +198,27 @@ class StoNED:
         if self.model.fun == FUN_COST:
             self.mu *= -1
 
-    def get_frontier(self, method=RED_MOM):
+    def get_stoned(self, method=RED_MOM):
         """
         Args:
             method (String, optional): RED_MOM (Method of moments) or RED_QLE (Quassi-likelihood estimation). Defaults to RED_MOM.
 
-        calculate sigma_u, sigma_v, mu, and epsilon value
+        Calculate the StoNED frontier
         """
         tools.assert_optimized(self.model.optimization_status)
         self.get_unconditional_expected_inefficiency(method)
 
+        gmin = unihyper.gmin(self.x, self.model.get_frontier(), self.model.rts)
+
         if self.model.fun == FUN_PROD:
             if self.model.cet == CET_ADDI:
-                return (self.y - self.model.get_residual()) + self.sigma_u * sqrt(2 / pi)
+                return gmin + self.sigma_u * sqrt(2 / pi)
             elif self.model.cet == CET_MULT:
-                return (self.y / np.exp(self.model.get_residual())) * np.exp(self.sigma_u * sqrt(2 / pi))
+                return gmin * np.exp(self.sigma_u * sqrt(2 / pi))
         elif self.model.fun == FUN_COST:
             if self.model.cet == CET_ADDI:
-                return (self.y - self.model.get_residual()) - self.sigma_u * sqrt(2 / pi)
+                return gmin - self.sigma_u * sqrt(2 / pi)
             elif self.model.cet == CET_MULT:
-                return (self.y / np.exp(self.model.get_residual())) * np.exp(-self.sigma_u * sqrt(2 / pi))
+                return gmin * np.exp(-self.sigma_u * sqrt(2 / pi))
 
         raise ValueError("Undefined model parameters.")
