@@ -26,7 +26,7 @@ Example: 2D plot with CNLS and CQR  `[.ipynb] <https://colab.research.google.com
     plot2d(CNLS_model, x_select=0, label_name="CNLS estimated function", fig_name="CNLS_2d")
 
     # define and solve the CQR model
-    CQR_model=CQER.CQR(y=data.y, x=data.x, tau=0.5, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS)
+    CQR_model=CQER.CQR(y=data.y, x=data.x, tau=0.9, z=None, cet=CET_ADDI, fun=FUN_PROD, rts=RTS_VRS)
     CQR_model.optimize(OPT_LOCAL)
 
     # Plot the estimated function 
