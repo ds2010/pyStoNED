@@ -32,21 +32,6 @@ concavity. The third constraint is a normalization constraint that ensures the t
 The last two constraints impose monotonicity in all inputs and outputs. It is straightforward to show 
 that the CNLS estimator of function $d$ satisfies the axioms of free disposability, convexity, and the translation property.
 
-When considering undesirable outputs, the CNLS-DDF problem (2.12) can be reformulated as
-
-.. math::
-    :nowrap:
-
-    \begin{alignat}{2}
-    \underset{\alpha, \boldsymbol{\beta}, \boldsymbol{\gamma}, \boldsymbol{\delta}, \varepsilon}{\mathop{\min}}&\sum_{i=1}^n\varepsilon_i^2 &{\quad}&\\
-    \textit{s.t.}\quad 
-    &  \boldsymbol{\gamma}_i^{'}\boldsymbol{y}_i = \alpha_i + \boldsymbol{\beta}_i^{'}\boldsymbol{x}_i + \boldsymbol{\delta}_i^{'}\boldsymbol{b}_i - \varepsilon_i &{\quad}& \forall i  \notag \\
-    &  \alpha_i + \boldsymbol{\beta}_i^{'}\boldsymbol{x}_i + \delta_i^{'}\boldsymbol{b}_i -\boldsymbol{\gamma}_i^{'}\boldsymbol{y}_i \le \alpha_j + \boldsymbol{\beta}_j^{'}\boldsymbol{x}_i + \delta_j^{'}\boldsymbol{b}_i -\boldsymbol{\gamma}_j^{'}\boldsymbol{y}_i &{\quad}&  \forall i, j  \notag \\
-    &  \boldsymbol{\gamma}_i^{'} g^{y}  + \boldsymbol{\beta}_i^{'} g^{x} + \boldsymbol{\delta}_i^{'}g^{b} = 1  &{\quad}& \forall i  \notag \\
-    &  \boldsymbol{\beta}_i \ge \boldsymbol{0}, \boldsymbol{\gamma}_i \ge \boldsymbol{0} &{\quad}&  \forall i  \notag
-    \end{alignat}
-
-where the coefficients :math:`\boldsymbol{\delta_i}` denotes marginal effects of undesirable outputs to the DDF.
 
 Example: CNLS-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DDF_withoutUndesirableOutput.ipynb>`__
 ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -70,28 +55,4 @@ Example: CNLS-DDF `[.ipynb] <https://colab.research.google.com/github/ds2010/pyS
     model.display_alpha()
     model.display_beta()
     model.display_gamma()
-    model.display_residual()
-
-Example: CNLS-DDF with bad output `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/DDF_UndesirableOutput.ipynb>`__
-------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-.. code:: python
-
-    # import packages
-    from pystoned import CNLSDDF
-    from pystoned.constant import FUN_PROD, OPT_LOCAL
-    from pystoned import dataset as dataset
-    
-    # import the GHG emissions data
-    data = dataset.load_GHG_abatement_cost()
-    
-    # define and solve the CNLS-DDF model
-    model = CNLSDDF.CNLSDDF(y=data.y, x=data.x, b=data.b, fun=FUN_PROD, gx=[0.0, 0.0], gb=-1.0, gy=1.0)
-    model.optimize(OPT_LOCAL)
-
-    # display the estimates (alpha, beta, gamma, delta, and residual)
-    model.display_alpha()
-    model.display_beta()
-    model.display_gamma()
-    model.display_delta()
     model.display_residual()
