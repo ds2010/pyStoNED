@@ -81,6 +81,7 @@ Stochastic Nonparametric Envelopment of Data
    StoNED/mom
    StoNED/qle
    StoNED/kde
+   StoNED/stoned
    StoNED/Jondrow
 
 

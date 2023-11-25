@@ -25,7 +25,7 @@ where
 
 Note that the quasi-likelihood function only consists of a single parameter :math:`\lambda` (i.e., the signal-to-noise ratio :math:`\lambda = \sigma_u/\sigma_v`).  
 The symbol :math:`\Phi` represents the cumulative distribution function of the standard normal distribution. In the `pyStoNED` 
-package, we use the Broyden–Fletcher–Goldfarb–Shanno (BFGS) algorithm to solve the maximum likelihood function.
+package, we use the Broyden-Fletcher-Goldfarb-Shanno (BFGS) algorithm to solve the maximum likelihood function.
 
 
 Example: StoNED with CNLS `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_QLE_CNLS.ipynb>`_
