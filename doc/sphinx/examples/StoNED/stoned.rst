@@ -1,26 +1,26 @@
 Estimating the StoNED frontier
 ===============================
 
-Having estimated the expected inefficiency :math:`\hat{\mu}`, we can shift the conditional mean function estimated by CNLS to the frontier in the case of the additive and multiplicative models under VRS and CRS. Given the fact that the function estimated by CNLS is only unique for the observed points :math:`\bm{x}_i`, we then follow Kuosmanen and Kortelainen (2012) to estimate the unique conditional mean function :math:`\hat{g}_{min}^{CNLS}(\bm{x})` under VRS. 
+Having estimated the expected inefficiency :math:`\hat{\mu}`, we can shift the conditional mean function estimated by CNLS to the frontier in the case of the additive and multiplicative models under VRS and CRS. Given the fact that the function estimated by CNLS is only unique for the observed points :math:`\boldsymbol{x}_i`, we then follow Kuosmanen and Kortelainen (2012) to estimate the unique conditional mean function :math:`\hat{g}_{min}^{CNLS}(\boldsymbol{x})` under VRS. 
 
 .. math::
     :nowrap:
 
     \begin{equation*}
-        \hat{g}_{min}^{CNLS}(\bm{x}) = \underset{\alpha, \boldsymbol{\beta}}{\min}\{\alpha + \boldsymbol{\beta}^{\prime}x \mid \alpha + \boldsymbol{\beta}^{\prime}\bm{x}_i \ge \hat{g}^{CNLS}(\bm{x}_i), \forall i\}
+        \hat{g}_{min}^{CNLS}(\boldsymbol{x}) = \underset{\alpha, \boldsymbol{\beta}}{\min}\{\alpha + \boldsymbol{\beta}^{\prime}x \mid \alpha + \boldsymbol{\beta}^{\prime}\boldsymbol{x}_i \ge \hat{g}^{CNLS}(\boldsymbol{x}_i), \forall i\}
     \end{equation*}
 
-where :math:`\hat{g}^{CNLS}(\bm{x}_i)`` is the conditional mean function estimated by the CNLS estimator. We subsequently shift the conditional mean function :math:`\hat{g}_{min}^{CNLS}(\bm{x})` to the frontier using 
+where :math:`\hat{g}^{CNLS}(\boldsymbol{x}_i)`` is the conditional mean function estimated by the CNLS estimator. We subsequently shift the conditional mean function :math:`\hat{g}_{min}^{CNLS}(\boldsymbol{x})` to the frontier using 
 
 - Production function.
     
-    1. Additive model: :math:`\hat{f}^{StoNED}(\bm{x}) = \hat{g}_{min}^{CNLS}(\bm{x}) + \hat{\mu}`;
-    2. Multiplicative model: :math:`\hat{f}^{StoNED}(\bm{x}) = \hat{g}_{min}^{CNLS}(\bm{x}) \cdot \exp(\hat{\mu})`.
+    1. Additive model: :math:`\hat{f}^{StoNED}(\boldsymbol{x}) = \hat{g}_{min}^{CNLS}(\boldsymbol{x}) + \hat{\mu}`;
+    2. Multiplicative model: :math:`\hat{f}^{StoNED}(\boldsymbol{x}) = \hat{g}_{min}^{CNLS}(\boldsymbol{x}) \cdot \exp(\hat{\mu})`.
 
 - Cost function.
 
-    1. Additive model: :math:`\hat{f}^{StoNED}(\bm{x}) = \hat{g}_{min}^{CNLS}(\bm{x}) - \hat{\mu}`;
-    2. Multiplicative model: :math:`\hat{f}^{StoNED}(\bm{x}) = \hat{g}_{min}^{CNLS}(\bm{x}) \cdot \exp(-\hat{\mu})`.
+    1. Additive model: :math:`\hat{f}^{StoNED}(\boldsymbol{x}) = \hat{g}_{min}^{CNLS}(\boldsymbol{x}) - \hat{\mu}`;
+    2. Multiplicative model: :math:`\hat{f}^{StoNED}(\boldsymbol{x}) = \hat{g}_{min}^{CNLS}(\boldsymbol{x}) \cdot \exp(-\hat{\mu})`.
 
 
 Example: StoNED frontier `[.ipynb] <https://colab.research.google.com/github/ds2010/pyStoNED/blob/master/notebooks/StoNED_frontier.ipynb>`_
