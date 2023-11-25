@@ -3,9 +3,9 @@ CQR/CER with multiple outputs
 ================================
 
 
-Similarly to CNLS with DDF, we present another two approaches integrating DDF to convex quantile/expectile regression and we also consider modeling the undesirable outputs. 
+Similarly to CNLS with DDF, we present another two approaches integrating DDF to convex quantile/expectile regression. 
 
-1. CQR-DDF model
+- CQR-DDF model
 
     .. math::
         :nowrap:
@@ -22,7 +22,7 @@ Similarly to CNLS with DDF, we present another two approaches integrating DDF to
             \end{alignat}
 
 
-2. CER-DDF model
+- CER-DDF model
 
     .. math::
         :nowrap:
