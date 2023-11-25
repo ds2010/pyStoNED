@@ -34,8 +34,8 @@ Example: 2D plot with CNLS and CQR  `[.ipynb] <https://colab.research.google.com
 
 .. image:: ../../../../notebooks/CNLS_2d.png
     :width: 600
-    :alt: CNLS estiamted function
+    :alt: Estiamted CNLS function
 
 .. image:: ../../../../notebooks/CQR_2d.png
     :width: 600
-    :alt: CQR estiamted function (tau = 0.5)
+    :alt: Estiamted CQR function (tau = 0.9)
