@@ -322,7 +322,7 @@ class CQR:
         """Return estimated frontier value by array"""
         tools.assert_optimized(self.optimization_status)
         if self.cet == CET_MULT:
-            frontier = np.asarray(list(self.__model__.frontier[:].value)) + 1
+            frontier = np.exp(np.log(np.asarray(self.y)) - self.get_residual())
         elif self.cet == CET_ADDI:
             frontier = np.asarray(self.y) - self.get_residual()
         return np.asarray(frontier)
