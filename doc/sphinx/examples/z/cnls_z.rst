@@ -19,7 +19,7 @@ characterize operational conditions and practices as contextual variables.
     - Better understanding of the impacts of internal factors can help the firm to improve performance
 
 
-By introducing the contextual variables :math:`\boldsymbol{z}_i=(z_{i1},...,z_{ir})`, the multiplicative model (2.5)
+By introducing the contextual variables :math:`\boldsymbol{z}_i=(z_{i1},...,z_{ir})^{\prime}`, the multiplicative model (2.5)
 is reformulated as an partial log-linear model to take the operational conditions and 
 practices into account.
 
