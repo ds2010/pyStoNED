@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath('../../'))
 # -- Project information -----------------------------------------------------
 
 project = u'pyStoNED'
-copyright = u'2020-2023, The pyStoNED authors'
+copyright = u'2020-2024, The pyStoNED authors'
 author = u'Sheng Dai, Yu-Hsueh Fang, Chia-Yen Lee, Timo Kuosmanen'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -28,7 +28,7 @@ author = u'Sheng Dai, Yu-Hsueh Fang, Chia-Yen Lee, Timo Kuosmanen'
 # The short X.Y version.
 version = '0.7'
 # The full version, including alpha/beta/rc tags.
-release = '0.7.1'
+release = '0.7.2'
 
 # -- General configuration ---------------------------------------------------
 

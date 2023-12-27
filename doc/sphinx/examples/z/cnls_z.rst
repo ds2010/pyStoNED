@@ -2,7 +2,7 @@
 CNLS with Z variables
 ========================
 
-In practice, a firm’s ability to operate efficiently often depends on operational conditions and practices, 
+In practice, a firm's ability to operate efficiently often depends on operational conditions and practices, 
 such as the production environment and the firm specific characteristics for example 
 technology  selection  or  managerial  practices.  Banker  and  Natarajan (2008) refer to both variables that 
 characterize operational conditions and practices as contextual variables.
@@ -19,7 +19,7 @@ characterize operational conditions and practices as contextual variables.
     - Better understanding of the impacts of internal factors can help the firm to improve performance
 
 
-By introducing the contextual variables $z_i$, the multiplicative model (2.5)
+By introducing the contextual variables :math:`z_i`, the multiplicative model (2.5)
 is reformulated as an partial log-linear model to take the operational conditions and 
 practices into account.
 
@@ -27,7 +27,7 @@ practices into account.
     :nowrap:
 
     \begin{align}
-    \ln y_i = \ln f(\boldsymbol{x_i}) + \boldsymbol{\delta}^{'}\boldsymbol{z}_i + v_i - u_i
+    \ln y_i = \ln f(\boldsymbol{x_i}) + \boldsymbol{\delta}^{'}\boldsymbol{z}_i + \varepsilon_i
     \end{align}
     
 where parameter vector :math:`\boldsymbol{\delta}=(\delta_1...\delta_r)` represents the 
