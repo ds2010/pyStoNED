@@ -16,7 +16,7 @@ The [`pyStoNED`](https://pypi.org/project/pystoned/) package is now avaiable on 
 
 # Authors
 
- + [Sheng Dai](https://daisheng.io), PhD, Turku School of Economics, University of Turku.
+ + [Sheng Dai](https://daisheng.org), Associate Professor, School of Economics, Zhongnan University of Economics and Law.
  + [Yu-Hsueh Fang](https://github.com/Fangop), Computer Engineer, Institute of Manufacturing Information and Systems, National Cheng Kung University.
  + [Chia-Yen Lee](http://polab.im.ntu.edu.tw/), Professor, College of Management, National Taiwan University.
  + [Timo Kuosmanen](https://www.researchgate.net/profile/Timo_Kuosmanen), Professor, Turku School of Economics, University of Turku.
