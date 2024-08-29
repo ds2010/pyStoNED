@@ -54,7 +54,7 @@ def plot2d(model, x_select=0, label_name="estimated function", fig_name=None, me
     if fig_name == None:
         plt.show()
     else:
-        plt.savefig(fig_name)
+        plt.savefig(fig_name, dpi=600)
 
 
 def plot3d(model, x_select_1=0, x_select_2=1, fig_name=None, line_transparent=False, pane_transparent=False):
@@ -124,4 +124,4 @@ def plot3d(model, x_select_1=0, x_select_2=1, fig_name=None, line_transparent=Fa
     if fig_name == None:
         plt.show()
     else:
-        plt.savefig(fig_name)
+        plt.savefig(fig_name, dpi=600)
