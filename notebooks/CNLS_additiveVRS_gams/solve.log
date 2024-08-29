@@ -1,0 +1,151 @@
+--- Job MODEL.gms Start 09/24/21 12:57:14 35.1.0 r82a9585 LEX-LEG x86 64bit/Linux
+--- Applying:
+    /opt/gams/35.1.0/gmsprmun.txt
+    /opt/gams/35.1.0/gamsconfig.yaml
+--- GAMS Parameters defined
+    Restart /var/lib/condor/execute/dir_22536/gamsexec/restart.g00
+    Input /var/lib/condor/execute/dir_22536/gamsexec/MODEL.gms
+    Output /var/lib/condor/execute/dir_22536/gamsexec/solve.lst
+    PageWidth 79
+    PageSize 0
+    ScrDir /var/lib/condor/execute/dir_22536/neos-22543/
+    SysDir /opt/gams/35.1.0/
+    CurDir /var/lib/condor/execute/dir_22536/gamsexec/
+    LogOption 4
+    LogFile /var/lib/condor/execute/dir_22536/gamsexec/solve.log
+    AppendOut 1
+    AppendLog 0
+    Suppress 0
+    CErr 10
+    ErrMsg 1
+    ErrorLog 99
+    LimRow 0
+    LimCol 0
+    IDE 1
+    GDX /var/lib/condor/execute/dir_22536/gamsexec/out.gdx
+    ExecMode 3
+    gdxCompress 1
+    Solver coincbc
+    LstTitleLeftAligned 1
+Licensee: NEOS Server License prod-exec-4.neos-server.orgS201022/0001AB-GEN
+          mac@a4:ba:db:38:ec:b8                                      DCE917
+          /opt/gams/35.1.0/gamslice.txt
+          Evaluation license: Not for commercial or production use
+GAMS 35.1.0   Copyright (C) 1987-2021 GAMS Development. All rights reserved
+--- Starting continued compilation
+--- Workfile was generated under GAMS version WEX320-320
+--- MODEL.gms(4) 3 Mb[FIL:"/var/lib/condor/execute/dir_22536/gamsexec/MODEL.gms",4,0]
+--- Starting execution: elapsed 0:00:00.028[LST:10]
+--- MODEL.gms(156) 4 Mb[FIL:"/var/lib/condor/execute/dir_22536/gamsexec/MODEL.gms",156,0]
+--- Generating QCP model cnls[LST:10]
+--- MODEL.gms(158) 10 Mb[FIL:"/var/lib/condor/execute/dir_22536/gamsexec/MODEL.gms",158,0]
+---   7,922 rows  357 columns  47,438 non-zeroes
+---   269 nl-code  89 nl-non-zeroes
+--- MODEL.gms(158) 8 Mb[FIL:"/var/lib/condor/execute/dir_22536/gamsexec/MODEL.gms",158,0]
+--- Executing MOSEK (Solvelink=2): elapsed 0:00:00.228[LST:12]
+
+MOSEK            35.1.0 r82a9585 Released Apr 29, 2021 LEG x86 64bit/Linux    
+
+	M O S E K       version 9.2.41 (Build date: 2021-4-21 23:58:14)
+	Copyright (C)   MOSEK ApS, Fruebjergvej 3, Box 16
+	                DK-2100 Copenhagen, Denmark
+	                https://www.mosek.com
+
+GAMS/MOSEK license detected
+
+Problem
+  Name                   :                 
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 7921            
+  Cones                  : 0               
+  Scalar variables       : 356             
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Quadratic to conic reformulation started.
+Quadratic to conic reformulation terminated. Time: 0.00    
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator started.
+Freed constraints in eliminator : 89
+Eliminator terminated.
+Eliminator started.
+Freed constraints in eliminator : 0
+Eliminator terminated.
+Eliminator - tries                  : 2                 time                   : 0.00            
+Lin. dep.  - tries                  : 1                 time                   : 0.00            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.09    
+Problem
+  Name                   :                 
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 7921            
+  Cones                  : 0               
+  Scalar variables       : 356             
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer  - threads                : 1               
+Optimizer  - solved problem         : the dual        
+Optimizer  - Constraints            : 267
+Optimizer  - Cones                  : 1
+Optimizer  - Scalar variables       : 8100              conic                  : 90              
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.02              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.00            
+Factor     - nonzeros before factor : 3.58e+04          after factor           : 3.58e+04        
+Factor     - dense dim.             : 0                 flops                  : 6.78e+06        
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   9.3e+03  1.0e+00  2.0e+00  0.00e+00   5.000000000e-01   0.000000000e+00   1.0e+00  0.27  
+1   6.4e+03  6.8e-01  1.7e+00  -1.00e+00  1.678188763e+00   8.303743408e-01   6.8e-01  0.30  
+2   3.0e+03  3.3e-01  1.1e+00  -1.00e+00  1.416442735e+01   2.031383533e+01   3.3e-01  0.33  
+3   1.2e+03  1.3e-01  7.0e-01  -9.98e-01  1.579765784e+02   2.777420115e+02   1.3e-01  0.36  
+4   3.9e+02  4.1e-02  4.0e-01  -9.88e-01  2.651882392e+03   4.406844096e+03   4.1e-02  0.39  
+5   1.1e+02  1.2e-02  2.0e-01  -9.49e-01  4.331009999e+04   6.686745776e+04   1.2e-02  0.42  
+6   2.3e+01  2.4e-03  7.1e-02  -8.05e-01  6.068580079e+05   8.624970594e+05   2.4e-03  0.45  
+7   3.9e+00  4.2e-04  1.2e-02  -2.80e-01  2.639214509e+06   3.169301148e+06   4.2e-04  0.48  
+8   2.6e-01  2.8e-05  2.7e-04  5.64e-01   3.958159138e+06   4.027950687e+06   2.8e-05  0.51  
+9   5.8e-02  6.2e-06  2.6e-05  1.05e+00   3.756483405e+06   3.768885188e+06   6.2e-06  0.54  
+10  3.9e-02  4.2e-06  1.4e-05  1.22e+00   3.440202263e+06   3.447054996e+06   4.2e-06  0.57  
+11  3.1e-02  3.3e-06  9.2e-06  1.18e+00   3.382861113e+06   3.387898556e+06   3.3e-06  0.60  
+12  1.6e-02  1.7e-06  3.0e-06  1.26e+00   3.037620848e+06   3.039398943e+06   1.7e-06  0.62  
+13  1.3e-02  1.4e-06  2.0e-06  1.36e+00   2.915842495e+06   2.917070844e+06   1.4e-06  0.65  
+14  9.7e-03  1.0e-06  1.2e-06  1.39e+00   2.831989434e+06   2.832790145e+06   1.0e-06  0.68  
+15  6.2e-03  6.6e-07  5.3e-07  1.43e+00   2.675334823e+06   2.675706632e+06   6.6e-07  0.70  
+16  4.9e-03  5.3e-07  3.7e-07  1.34e+00   2.653361348e+06   2.653649488e+06   5.3e-07  0.76  
+17  3.1e-03  3.3e-07  1.6e-07  1.50e+00   2.559572808e+06   2.559708018e+06   3.3e-07  0.79  
+18  2.1e-03  2.3e-07  9.1e-08  1.27e+00   2.551534573e+06   2.551623251e+06   2.3e-07  0.82  
+19  1.4e-03  1.5e-07  4.4e-08  1.42e+00   2.523243791e+06   2.523291861e+06   1.5e-07  0.86  
+20  1.1e-03  1.2e-07  3.1e-08  1.36e+00   2.515092642e+06   2.515128213e+06   1.2e-07  0.93  
+21  8.5e-04  9.1e-08  1.9e-08  1.34e+00   2.508181177e+06   2.508205239e+06   9.1e-08  1.03  
+22  5.7e-04  6.1e-08  9.6e-09  1.31e+00   2.501656855e+06   2.501670729e+06   6.1e-08  1.15  
+23  2.9e-04  3.1e-08  3.1e-09  1.28e+00   2.496076186e+06   2.496081896e+06   3.1e-08  1.30  
+24  2.3e-04  2.4e-08  2.1e-09  1.24e+00   2.494811143e+06   2.494815343e+06   2.4e-08  1.44  
+25  7.9e-05  8.4e-09  3.7e-10  1.22e+00   2.492013636e+06   2.492014724e+06   8.4e-09  1.50  
+26  3.7e-05  4.0e-09  1.1e-10  1.15e+00   2.491297944e+06   2.491298372e+06   4.0e-09  1.56  
+27  2.2e-05  2.4e-09  5.0e-11  1.10e+00   2.491048239e+06   2.491048478e+06   2.4e-09  1.60  
+28  1.2e-05  1.3e-09  1.8e-11  1.08e+00   2.490869157e+06   2.490869271e+06   1.3e-09  1.65  
+29  9.2e-06  9.9e-10  1.2e-11  1.04e+00   2.490828877e+06   2.490828964e+06   9.9e-10  1.69  
+30  6.9e-06  7.4e-10  7.9e-12  1.04e+00   2.490791117e+06   2.490791179e+06   7.4e-10  1.72  
+31  6.3e-06  6.7e-10  6.8e-12  1.03e+00   2.490780126e+06   2.490780182e+06   6.7e-10  1.75  
+32  1.3e-06  1.5e-10  6.3e-13  1.03e+00   2.490701457e+06   2.490701468e+06   1.5e-10  1.78  
+Optimizer terminated. Time: 1.79    
+
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 2.4906993980e+06    nrm: 7e+03    Viol.  con: 4e-12    var: 0e+00  
+  Dual.    obj: 2.4907035271e+06    nrm: 4e+06    Viol.  con: 1e-04    var: 3e+00  
+
+Return code - 0 [MSK_RES_OK]: No error occurred.
+--- Reading solution for model cnls[LST:24]
+--- Executing after solve: elapsed 0:00:02.791[LST:8364]
+--- MODEL.gms(160) 8 Mb[FIL:"/var/lib/condor/execute/dir_22536/gamsexec/MODEL.gms",160,0]
+--- GDX File /var/lib/condor/execute/dir_22536/gamsexec/out.gdx[FIL:"/var/lib/condor/execute/dir_22536/gamsexec/out.gdx",0,0]
+*** Status: Normal completion[LST:8521]
+--- Job MODEL.gms Stop 09/24/21 12:57:17 elapsed 0:00:02.957

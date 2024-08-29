@@ -1,0 +1,14 @@
+B 3 C o m p i l a t i o n
+B 11 Model Statistics    SOLVE cnls Using QCP From line 158
+B 25 Solution Report     SOLVE cnls Using QCP From line 158
+F 45 obj
+F 49 err
+F 143 conv
+G 7980 alpha
+G 8074 beta
+G 8257 e
+G 8353 sse
+B 8365 E x e c u t i o n
+I 8365 alpha
+I 8388 beta
+I 8483 e

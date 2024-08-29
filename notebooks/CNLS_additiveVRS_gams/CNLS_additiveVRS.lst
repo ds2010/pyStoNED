@@ -1,0 +1,189 @@
+GAMS 35.2.0  r33388c4 Released Jun  2, 2021 WEX-WEI x86 64bit/MS Windows - 09/24/21 20:57:07 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+         Convex Nonparametric Least Squares (CNLS) example
+       
+         by Andy Johnson June 2015
+       
+         Data from:
+            Timo Kuosmanen
+               Finnish Electricity Distribution Data
+       
+      Calculates a production function and overall economic efficiency
+       
+       
+  14   
+  15   
+  16  sets i       "DMU's"  /1*89/
+  17       j       'inputs and outputs' /OPEX, CAPEX, TOTEX, Energy, Length, Customers, PerUndGr/
+  18       inp(j)  'inputs'  /OPEX, CAPEX/
+  19       outp(j) 'outputs' /Energy, Length, Customers/
+  20       cost(j) 'cost' /TOTEX/
+  21       z(j)    'z variables' /PerUndGr/
+  22  ;
+  23   
+  24   
+  25   
+  26  Table data(i,j)
+INCLUDE    C:\Users\dais2\Dropbox (Aalto)\Finnish_electricity_firm.txt
+  28          OPEX    CAPEX   TOTEX   Energy  Length  Customers       PerUndGr
+  29  1       681     729     1612    75      878     4933            0.11
+  30  2       559     673     1659    62      964     6149            0.21
+  31  3       836     851     1708    78      676     6098            0.75
+  32  4       7559    8384    18918   683     12522   55226           0.13
+  33  5       424     562     1167    27      697     1670            0.03
+  34  6       1483    1587    3395    295     953     22949           0.65
+  35  7       658     570     1333    44      917     3599            0.11
+  36  8       1433    1311    3518    171     1580    11081           0.16
+  37  9       850     564     1415    98      116     377             1.00
+  38  10      1155    1108    2469    203     740     10134           0.64
+  39  11      14235   11594   28750   2203    7007    167239          0.61
+  40  12      44481   50321   117554  6600    67611   420473          0.23
+  41  13      1116    766     1925    117     436     7176            0.61
+  42  14      1604    946     2747    135     902     8614            0.46
+  43  15      27723   19818   48605   3601    6007    334757          0.92
+  44  16      2480    2420    5486    409     2773    14953           0.19
+  45  17      494     476     1091    43      506     3156            0.32
+  46  18      801     466     1297    61      541     4296            0.05
+  47  19      875     555     1691    62      1081    6044            0.07
+  48  20      2133    1913    4605    256     2540    23361           0.31
+  49  21      1139    1635    3102    197     1817    6071            0.05
+  50  22      907     1127    2260    200     1106    14936           0.49
+  51  23      120     106     341     17      133     772             0.06
+  52  24      3454    2428    6100    489     1312    44594           0.87
+  53  25      535     479     1440    53      789     3391            0.05
+  54  26      974     754     1958    95      971     6806            0.37
+  55  27      929     853     1976    75      869     5165            0.24
+  56  28      9842    13925   29722   985     25611   95367           0.09
+  57  29      548     412     1254    123     51      24              0.44
+  58  30      1456    1136    2665    165     875     14646           0.71
+  59  31      725     569     1376    73      716     5069            0.39
+  60  32      2525    388     3121    540     70      58              0.31
+  61  33      2002    1442    3864    300     1301    20325           0.47
+  62  34      1846    1112    3221    207     429     16878           0.73
+  63  35      982     1094    2561    99      1618    8566            0.20
+  64  36      2727    2151    5779    164     3330    12231           0.12
+  65  37      1799    2073    4380    171     3736    15217           0.06
+  66  38      604     675     1423    73      989     5711            0.25
+  67  39      400     430     907     40      646     2968            0.20
+  68  40      4092    3173    7915    482     3294    42952           0.40
+  69  41      3362    3078    6639    456     1375    48140           0.66
+  70  42      390     438     868     23      589     2227            0.18
+  71  43      10852   9366    25556   1233    12512   98650           0.13
+  72  44      688     700     1540    85      866     6022            0.36
+  73  45      761     701     1564    100     800     7193            0.40
+  74  46      453     576     1229    25      1078    3342            0.04
+  75  47      4076    4007    9807    494     4696    43911           0.29
+  76  48      308     297     669     17      432     1752            0.03
+  77  49      2746    2529    6097    315     4042    26265           0.20
+  78  50      5614    5509    12154   1042    4296    75870           0.60
+  79  51      400     519     1186    39      614     2211            0.01
+  80  52      1821    1753    4020    223     2117    12945           0.09
+  81  53      794     747     1589    98      418     5146            0.66
+  82  54      2269    2795    6414    348     2127    21072           0.37
+  83  55      711     556     1515    77      762     4513            0.16
+  84  56      4609    5342    10600   993     3205    80702           0.70
+  85  57      1766    2338    5431    402     3207    25994           0.13
+  86  58      813     666     1872    130     905     5394            0.19
+  87  59      884     1104    2206    138     1423    9015            0.26
+  88  60      1662    1358    3767    117     2532    9930            0.24
+  89  61      81      106     268     22      133     1467            0.22
+  90  62      11776   11864   28295   988     20934   84445           0.04
+  91  63      4021    3767    9689    749     3225    47572           0.53
+  92  64      2597    3224    7226    378     3567    30801           0.21
+  93  65      995     848     1871    95      340     7812            0.89
+  94  66      548     587     1280    43      977     4272            0.02
+  95  67      1573    1780    3539    237     882     19455           0.52
+  96  68      4129    4001    9853    440     6330    26798           0.22
+  97  69      2151    1450    3758    266     772     21662           0.83
+  98  70      2438    2496    5499    316     4117    22313           0.28
+  99  71      14064   15175   37368   1601    24485   106336          0.08
+ 100  72      2058    1521    3735    268     928     19899           0.74
+ 101  73      8643    6819    16141   1654    3567    124661          0.59
+ 102  74      483     367     987     37      730     2611            0.08
+ 103  75      1018    939     2067    158     822     10537           0.56
+ 104  76      1593    2326    5105    196     3470    13391           0.09
+ 105  77      7501    4734    12687   1141    2360    67456           0.62
+ 106  78      305     411     861     19      520     1207            0.17
+ 107  79      5426    6446    12831   787     5808    60239           0.41
+ 108  80      2618    2795    6055    293     3741    23446           0.20
+ 109  81      1033    951     2156    137     902     11654           0.39
+ 110  82      6786    6638    13794   1281    3009    93769           0.75
+ 111  83      2169    2172    5054    210     3693    17129           0.16
+ 112  84      40787   45434   108310  4825    60659   378089          0.18
+ 113  85      2741    2475    6162    310     3381    19059           0.16
+ 114  86      307     225     594     28      351     2078            0.07
+ 115  87      321     281     672     30      338     2008            0.32
+ 116  88      300     289     616     15      318     1364            0.01
+ 117  89      891     693     1776    105     575     9084            0.59
+ 118  ;
+ 119   
+ 120  alias(i,h)
+ 121  ;
+ 122   
+ 123  PARAMETERS
+ 124     x(i,inp)  'inputs of firm i'
+ 125     y(i) 'outputs of firm i'
+ 126   
+ 127     alphavalue(i)    'output alpha values'
+ 128     betavalue(i,inp) 'output beta values'
+ 129     residualvalue(i) 'output residual values'
+ 130   
+ 131  ;
+ 132   
+ 133  x(i,inp) = data(i,inp);
+ 134  y(i) = data(i,'Energy');
+ 135   
+ 136  Variables  alpha(i)     intercept term
+ 137              beta(i,j)     input coefficients
+ 138              e(i)     error terms
+ 139              sse      sum of squared errors;
+ 140   
+ 141  Positive Variables beta ;
+ 142   
+ 143  Equations  obj      objective function
+ 144              err(i)   regression equation
+ 145              conv(i,h)   convexity ;
+ 146   
+ 147   
+ 148  obj..  sse =e= sum(i, sqr(e(i)))  ;
+ 149   
+ 150  err(i).. y(i) =e= alpha(i) + sum(inp, beta(i,inp)*x(i,inp)) + e(i) ;
+ 151   
+ 152  conv(i,h).. alpha(i) + sum(inp, beta(i,inp)*x(i,inp)) =l= alpha(h) + sum(inp, beta(h,inp)*x(i,inp));
+ 153   
+ 154  Model cnls model / all / ;
+ 155   
+ 156  OPTION QCP=MOSEK;
+ 157   
+ 158  Solve cnls using QCP minimizing sse ;
+ 159   
+ 160  Display alpha.l,beta.l, e.l;
+ 161   
+GAMS 35.2.0  r33388c4 Released Jun  2, 2021 WEX-WEI x86 64bit/MS Windows - 09/24/21 20:57:07 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Include File Summary
+
+
+   SEQ   GLOBAL TYPE      PARENT   LOCAL  FILENAME
+
+     1        1 INPUT          0       0  C:\Users\dais2\Dropbox (Aalto)\CNLS_additiveVRS.gms
+     2       27 INCLUDE        1      27  .C:\Users\dais2\Dropbox (Aalto)\Finnish_electricity_firm.txt
+
+
+COMPILATION TIME     =        0.016 SECONDS      3 MB  35.2.0 r33388c4 WEX-WEI
+
+
+USER: GAMS Demo license for Sheng Dai                G210917|0002CO-GEN
+      Aalto University School of Business, Finland             DL048614
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\dais2\Dropbox (Aalto)\CNLS_additiveVRS.gms
+Output     C:\Users\dais2\Dropbox (Aalto)\CNLS_additiveVRS.lst
+XSave      C:\Users\dais2\Dropbox (Aalto)\CNLS_additiveVRS.g0?
+
+**** WARNING - COMPILER OPTIONS ARE NON DEFAULT     ONEMPTY
