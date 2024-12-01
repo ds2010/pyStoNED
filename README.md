@@ -25,5 +25,4 @@ The [`pyStoNED`](https://pypi.org/project/pystoned/) package is now avaiable on 
 
 If you use [pyStoNED](https://pypi.org/project/pystoned/) for published work, we encourage you to cite our following paper and other related [works](https://pystoned.readthedocs.io/en/latest/citing/index.html). We appreciate it.
 
-> Dai S, Fang YH, Lee CY, Kuosmanen T. (2021). pyStoNED: A Python Package for Convex Regression and Frontier Estimation. arXiv preprint arXiv:2109.12962.
-
+> Dai S, Fang YH, Lee CY, Kuosmanen T. (2024). pyStoNED: A Python Package for Convex Regression and Frontier Estimation. **Journal of Statistical Software**. 111, 1-43.
