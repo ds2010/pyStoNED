@@ -202,8 +202,11 @@ class CQRG:
     def get_frontier(self):
         """Return estimated frontier value by array"""
         tools.assert_optimized(self.optimization_status)
-        if self.cet == CET_MULT:
-            frontier = np.exp(np.log(np.asarray(self.y)) - self.get_residual())
+        if self.cet == CET_MULT and type(self.z) == type(None):
+            frontier = np.asarray(list(self.__model__.frontier[:].value))+1
+        elif self.cet == CET_MULT and type(self.z) != type(None):
+            frontier = np.multiply( (np.asarray(list(self.__model__.frontier[:].value))+1), 
+                                   np.exp(np.dot(np.asarray(self.z), self.get_lamda())) )
         elif self.cet == CET_ADDI:
             frontier = np.asarray(self.y) - self.get_residual()
         return np.asarray(frontier)
