@@ -49,7 +49,7 @@ class CNLSDDF(CNLS.CNLS):
         if type(self.b) != type(None):
             self.__model__.L = Set(initialize=range(len(self.b[0])))
             self.__model__.delta = Var(
-                self.__model__.I, self.__model__.L, doc='delta')
+                self.__model__.I, self.__model__.L, bounds=(0.0, None), doc='delta')
 
         # Setup the objective function and constraints
         self.__model__.objective = Objective(rule=self._CNLS__objective_rule(),
